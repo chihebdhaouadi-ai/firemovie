@@ -3,6 +3,39 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/theme/app_theme.dart';
 
+class SkeletonShimmer extends StatelessWidget {
+  const SkeletonShimmer({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = ExcludeSemantics(child: child);
+    if (MediaQuery.disableAnimationsOf(context)) return content;
+    return Shimmer.fromColors(
+      baseColor: AppColors.surface,
+      highlightColor: AppColors.surfaceRaised,
+      child: content,
+    );
+  }
+}
+
+class PosterSkeleton extends StatelessWidget {
+  const PosterSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    return AspectRatio(
+      aspectRatio: tokens.posterAspectRatio,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(tokens.radiusMd),
+        child: const ColoredBox(color: AppColors.surfaceRaised),
+      ),
+    );
+  }
+}
+
 class PosterSkeletonRow extends StatelessWidget {
   const PosterSkeletonRow({super.key, required this.tileWidth, this.count = 4});
 
@@ -12,32 +45,20 @@ class PosterSkeletonRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final height = tokens.posterHeight(tileWidth);
-
-    final row = ListView.separated(
-      scrollDirection: Axis.horizontal,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: count,
-      separatorBuilder: (context, index) => SizedBox(width: tokens.spaceSm),
-      itemBuilder: (context, index) => ClipRRect(
-        borderRadius: BorderRadius.circular(tokens.radiusMd),
-        child: ColoredBox(
-          color: AppColors.surfaceRaised,
-          child: SizedBox(width: tileWidth, height: height),
-        ),
-      ),
-    );
-
     return SizedBox(
-      height: height,
-      child: ExcludeSemantics(
-        child: MediaQuery.disableAnimationsOf(context)
-            ? row
-            : Shimmer.fromColors(
-                baseColor: AppColors.surface,
-                highlightColor: AppColors.surfaceRaised,
-                child: row,
-              ),
+      height: tokens.posterHeight(tileWidth),
+      child: SkeletonShimmer(
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsetsDirectional.symmetric(horizontal: tokens.spaceLg),
+          itemCount: count,
+          separatorBuilder: (context, index) => SizedBox(width: tokens.spaceSm),
+          itemBuilder: (context, index) => SizedBox(
+            width: tileWidth,
+            child: const PosterSkeleton(),
+          ),
+        ),
       ),
     );
   }
