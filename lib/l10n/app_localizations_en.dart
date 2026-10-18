@@ -20,9 +20,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTop5Hint => 'Pick five films you love';
 
   @override
-  String get homeTop5SlotEmpty => 'empty';
-
-  @override
   String get homeTop5AddLabel => 'Add a film to your Top 5';
 
   @override
@@ -33,8 +30,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Pick exactly 3 films to generate a recommendation';
 
   @override
-  String homePickSlotLabel(int index, String state) {
-    return 'Pick slot $index, $state';
+  String homePickSlotEmpty(int index) {
+    return 'Empty pick slot $index';
   }
 
   @override

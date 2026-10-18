@@ -62,10 +62,15 @@ class FilmSection extends StatelessWidget {
       ),
     };
 
+    final trailing = switch (state) {
+      SectionContent(films: final films) => l10n.homeFilmCount(films.length),
+      _ => null,
+    };
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: title),
+        SectionHeader(title: title, trailing: trailing),
         body,
       ],
     );
@@ -104,7 +109,6 @@ class _FilmRow extends StatelessWidget {
       height: tokens.posterHeight(tileWidth),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsetsDirectional.symmetric(horizontal: tokens.spaceLg),
         itemCount: itemCount,
         separatorBuilder: (context, index) => SizedBox(width: tokens.spaceSm),
         itemBuilder: (context, index) {

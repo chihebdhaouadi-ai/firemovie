@@ -51,7 +51,6 @@ class PosterSkeletonRow extends StatelessWidget {
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsetsDirectional.symmetric(horizontal: tokens.spaceLg),
           itemCount: count,
           separatorBuilder: (context, index) => SizedBox(width: tokens.spaceSm),
           itemBuilder: (context, index) => SizedBox(

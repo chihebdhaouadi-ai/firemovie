@@ -10,18 +10,14 @@
   },
   "homeTop5Title": "Your Top 5",
   "homeTop5Hint": "Pick five films you love",
-  "homeTop5SlotEmpty": "empty",
   "homeTop5AddLabel": "Add a film to your Top 5",
   "homeRecommendTitle": "Recommend me",
   "homeRecommendHint": "Pick exactly 3 films to generate a recommendation",
-  "homePickSlotLabel": "Pick slot {index}, {state}",
-  "@homePickSlotLabel": {
+  "homePickSlotEmpty": "Empty pick slot {index}",
+  "@homePickSlotEmpty": {
     "placeholders": {
       "index": {
         "type": "int"
-      },
-      "state": {
-        "type": "String"
       }
     }
   },

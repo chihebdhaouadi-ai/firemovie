@@ -112,12 +112,6 @@ abstract class AppLocalizations {
   /// **'Pick five films you love'**
   String get homeTop5Hint;
 
-  /// No description provided for @homeTop5SlotEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'empty'**
-  String get homeTop5SlotEmpty;
-
   /// No description provided for @homeTop5AddLabel.
   ///
   /// In en, this message translates to:
@@ -136,11 +130,11 @@ abstract class AppLocalizations {
   /// **'Pick exactly 3 films to generate a recommendation'**
   String get homeRecommendHint;
 
-  /// No description provided for @homePickSlotLabel.
+  /// No description provided for @homePickSlotEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Pick slot {index}, {state}'**
-  String homePickSlotLabel(int index, String state);
+  /// **'Empty pick slot {index}'**
+  String homePickSlotEmpty(int index);
 
   /// No description provided for @homeGenerateButton.
   ///
