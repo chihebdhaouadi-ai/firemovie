@@ -22,7 +22,7 @@ class FilmPoster extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final height = width / tokens.posterAspectRatio;
+    final height = tokens.posterHeight(width);
     final url = film.posterUrl;
     final heroTagValue = heroTag;
 

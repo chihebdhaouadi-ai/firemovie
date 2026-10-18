@@ -29,16 +29,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.glowShadow,
     required this.durationFast,
     required this.durationBase,
-    required this.durationSlow,
     required this.minTouchTarget,
-    required this.posterWidth,
-    required this.posterHeight,
-    required this.topTileSize,
     required this.topTileGap,
-    required this.recommendCardWidth,
-    required this.recommendCardHeight,
     required this.filmTileWidth,
-    required this.filmTileHeight,
+    required this.recommendCardWidth,
     required this.generateButtonHeight,
     required this.maxContentWidth,
     required this.logoHeight,
@@ -58,16 +52,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
   final List<BoxShadow> glowShadow;
   final Duration durationFast;
   final Duration durationBase;
-  final Duration durationSlow;
   final double minTouchTarget;
-  final double posterWidth;
-  final double posterHeight;
-  final double topTileSize;
   final double topTileGap;
-  final double recommendCardWidth;
-  final double recommendCardHeight;
   final double filmTileWidth;
-  final double filmTileHeight;
+  final double recommendCardWidth;
   final double generateButtonHeight;
   final double maxContentWidth;
   final double logoHeight;
@@ -93,16 +81,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
     ],
     durationFast: Duration(milliseconds: 150),
     durationBase: Duration(milliseconds: 220),
-    durationSlow: Duration(milliseconds: 300),
     minTouchTarget: 48,
-    posterWidth: 78,
-    posterHeight: 100,
-    topTileSize: 64,
     topTileGap: 8,
-    recommendCardWidth: 77,
-    recommendCardHeight: 112,
     filmTileWidth: 78,
-    filmTileHeight: 100,
+    recommendCardWidth: 77,
     generateButtonHeight: 48,
     maxContentWidth: 640,
     logoHeight: 28,
@@ -110,6 +92,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     iconSmall: 16,
     iconLarge: 40,
   );
+
+  double posterHeight(double width) => width / posterAspectRatio;
 
   @override
   AppTokens copyWith({
@@ -124,16 +108,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
     List<BoxShadow>? glowShadow,
     Duration? durationFast,
     Duration? durationBase,
-    Duration? durationSlow,
     double? minTouchTarget,
-    double? posterWidth,
-    double? posterHeight,
-    double? topTileSize,
     double? topTileGap,
-    double? recommendCardWidth,
-    double? recommendCardHeight,
     double? filmTileWidth,
-    double? filmTileHeight,
+    double? recommendCardWidth,
     double? generateButtonHeight,
     double? maxContentWidth,
     double? logoHeight,
@@ -142,10 +120,6 @@ class AppTokens extends ThemeExtension<AppTokens> {
     double? iconLarge,
   }) {
     return AppTokens(
-      logoHeight: logoHeight ?? this.logoHeight,
-      posterAspectRatio: posterAspectRatio ?? this.posterAspectRatio,
-      iconSmall: iconSmall ?? this.iconSmall,
-      iconLarge: iconLarge ?? this.iconLarge,
       spaceXs: spaceXs ?? this.spaceXs,
       spaceSm: spaceSm ?? this.spaceSm,
       spaceMd: spaceMd ?? this.spaceMd,
@@ -157,18 +131,16 @@ class AppTokens extends ThemeExtension<AppTokens> {
       glowShadow: glowShadow ?? this.glowShadow,
       durationFast: durationFast ?? this.durationFast,
       durationBase: durationBase ?? this.durationBase,
-      durationSlow: durationSlow ?? this.durationSlow,
       minTouchTarget: minTouchTarget ?? this.minTouchTarget,
-      posterWidth: posterWidth ?? this.posterWidth,
-      posterHeight: posterHeight ?? this.posterHeight,
-      topTileSize: topTileSize ?? this.topTileSize,
       topTileGap: topTileGap ?? this.topTileGap,
-      recommendCardWidth: recommendCardWidth ?? this.recommendCardWidth,
-      recommendCardHeight: recommendCardHeight ?? this.recommendCardHeight,
       filmTileWidth: filmTileWidth ?? this.filmTileWidth,
-      filmTileHeight: filmTileHeight ?? this.filmTileHeight,
+      recommendCardWidth: recommendCardWidth ?? this.recommendCardWidth,
       generateButtonHeight: generateButtonHeight ?? this.generateButtonHeight,
       maxContentWidth: maxContentWidth ?? this.maxContentWidth,
+      logoHeight: logoHeight ?? this.logoHeight,
+      posterAspectRatio: posterAspectRatio ?? this.posterAspectRatio,
+      iconSmall: iconSmall ?? this.iconSmall,
+      iconLarge: iconLarge ?? this.iconLarge,
     );
   }
 
@@ -187,16 +159,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
       glowShadow: BoxShadow.lerpList(glowShadow, other.glowShadow, t) ?? glowShadow,
       durationFast: t < 0.5 ? durationFast : other.durationFast,
       durationBase: t < 0.5 ? durationBase : other.durationBase,
-      durationSlow: t < 0.5 ? durationSlow : other.durationSlow,
       minTouchTarget: lerpDouble(minTouchTarget, other.minTouchTarget, t),
-      posterWidth: lerpDouble(posterWidth, other.posterWidth, t),
-      posterHeight: lerpDouble(posterHeight, other.posterHeight, t),
-      topTileSize: lerpDouble(topTileSize, other.topTileSize, t),
       topTileGap: lerpDouble(topTileGap, other.topTileGap, t),
-      recommendCardWidth: lerpDouble(recommendCardWidth, other.recommendCardWidth, t),
-      recommendCardHeight: lerpDouble(recommendCardHeight, other.recommendCardHeight, t),
       filmTileWidth: lerpDouble(filmTileWidth, other.filmTileWidth, t),
-      filmTileHeight: lerpDouble(filmTileHeight, other.filmTileHeight, t),
+      recommendCardWidth: lerpDouble(recommendCardWidth, other.recommendCardWidth, t),
       generateButtonHeight: lerpDouble(generateButtonHeight, other.generateButtonHeight, t),
       maxContentWidth: lerpDouble(maxContentWidth, other.maxContentWidth, t),
       logoHeight: lerpDouble(logoHeight, other.logoHeight, t),
