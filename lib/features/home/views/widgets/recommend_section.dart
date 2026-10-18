@@ -10,10 +10,14 @@ class RecommendSection extends StatelessWidget {
     super.key,
     required this.picks,
     required this.onRemovePick,
+    this.onAddPick,
   });
 
   final List<Film> picks;
   final ValueChanged<Film> onRemovePick;
+
+  /// Invoked with the empty pick slot index (0..2) when tapped.
+  final ValueChanged<int>? onAddPick;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +54,7 @@ class RecommendSection extends StatelessWidget {
                 _EmptyPickSlot(
                   index: index + 1,
                   width: tokens.recommendCardWidth,
+                  onAdd: onAddPick == null ? null : () => onAddPick!(index),
                 ),
             ],
           ],
@@ -60,16 +65,23 @@ class RecommendSection extends StatelessWidget {
 }
 
 class _EmptyPickSlot extends StatelessWidget {
-  const _EmptyPickSlot({required this.index, required this.width});
+  const _EmptyPickSlot({
+    required this.index,
+    required this.width,
+    this.onAdd,
+  });
 
   final int index;
   final double width;
+  final VoidCallback? onAdd;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
+    final add = onAdd;
 
     return Semantics(
+      button: add != null,
       label: context.l10n.homePickSlotEmpty(index),
       child: SizedBox(
         width: width,
@@ -83,12 +95,20 @@ class _EmptyPickSlot extends StatelessWidget {
               width: tokens.borderWidth,
             ),
           ),
-          child: ExcludeSemantics(
-            child: Center(
-              child: Icon(
-                Icons.add,
-                color: AppColors.textMuted,
-                size: tokens.iconSmall,
+          child: Material(
+            color: AppColors.transparent,
+            borderRadius: BorderRadius.circular(tokens.radiusMd),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(tokens.radiusMd),
+              onTap: add,
+              child: ExcludeSemantics(
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    color: AppColors.textMuted,
+                    size: tokens.iconSmall,
+                  ),
+                ),
               ),
             ),
           ),

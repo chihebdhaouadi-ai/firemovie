@@ -88,5 +88,161 @@
   "homeUndo": "Undo",
   "homeTop5FullSnackbar": "Your Top 5 is full. Remove a film first.",
   "homeRecommendFullSnackbar": "You can pick up to 3 films.",
-  "homeGenericErrorSnackbar": "Something went wrong. Please try again."
+  "homeGenericErrorSnackbar": "Something went wrong. Please try again.",
+
+  "findTitleTop5": "Add to Top 5",
+  "findTitleWatched": "Add to Watched",
+  "findTitleWatchlist": "Add to Watchlist",
+  "findTitleGenerate": "Pick a film",
+  "findTitleSearch": "Find a film",
+  "findBodySearch": "All films",
+  "findSearchHint": "Name of film…",
+  "findSearchClear": "Clear search",
+  "findSearchSubmit": "Search",
+  "findMinCharsTitle": "Keep typing",
+  "findMinCharsBody": "Type at least 2 characters to search.",
+  "findLoadingTitle": "Searching films…",
+  "findEmptyTitle": "No results for “{query}”",
+  "@findEmptyTitle": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "findEmptyTip1": "Check the spelling or try another title.",
+  "findEmptyTip2": "Try a shorter keyword or a director’s name.",
+  "findErrorTitle": "Couldn’t search right now",
+  "findErrorRetry": "Retry",
+  "findOfflineTitle": "You’re offline",
+  "findOfflineBody": "Search and adding are disabled while offline.",
+  "findNoMoreResults": "End of results",
+  "findLoadMore": "Load more",
+  "findRecentTitle": "Recent searches",
+  "findRecentClear": "Clear",
+  "findRecentSwipeDelete": "Remove recent search",
+  "findRecentEmpty": "No recent searches yet.",
+  "findDirectedBy": "Directed by",
+  "findGenreChip": "Genre",
+  "findAddToTop5": "Add to Top 5",
+  "findAddToWatched": "Add to Watched",
+  "findAddToWatchlist": "Add to Watchlist",
+  "findAddToPick": "Add to picks",
+  "findResultSemantics": "{title}, {year}, directed by {director}. {action}",
+  "@findResultSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      },
+      "director": {
+        "type": "String"
+      },
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "findAddedSemantics": "{title} is already in {target}",
+  "@findAddedSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findResultDetailsAction": "Open details for {title}",
+  "@findResultDetailsAction": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "findViewDetails": "Details",
+  "findSendToFriend": "Send to a friend",
+  "findAddedSnackbar": "Added to {target}",
+  "@findAddedSnackbar": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findUndo": "Undo",
+  "findRemovedSnackbar": "Removed from {target}",
+  "@findRemovedSnackbar": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findMovedToWatched": "Moved to Watched",
+  "findReplaceSlotTitle": "Replace {current}?",
+  "@findReplaceSlotTitle": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      }
+    }
+  },
+  "findReplaceSlotBody": "This spot is already taken by {current}. Replace it with {replacement}?",
+  "@findReplaceSlotBody": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "replacement": {
+        "type": "String"
+      }
+    }
+  },
+  "findReplace": "Replace",
+  "findCancel": "Cancel",
+  "findTop5FullTitle": "Top 5 is full",
+  "findTop5FullBody": "Remove a film before adding to your Top 5.",
+  "findAlreadyWatchedTitle": "Already watched",
+  "findAlreadyWatchedBody": "You can’t add an already-watched film to your Watchlist.",
+  "findAlreadyInListTitle": "Already added",
+  "findAlreadyInListBody": "{title} is already in {target}.",
+  "@findAlreadyInListBody": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findGenericErrorTitle": "Something went wrong",
+  "findGenericErrorBody": "Please try again.",
+  "findDetailsErrorTitle": "Couldn’t load the film",
+  "findDetailsRetry": "Retry",
+  "findDetailsCast": "Cast",
+  "findDetailsOverview": "Overview",
+  "findDetailsRuntime": "{minutes} min",
+  "@findDetailsRuntime": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "findDetailsVote": "{value} stars",
+  "@findDetailsVote": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "findWatchNow": "Watch now",
+  "findAttribution": "Film data and posters via TMDB. Streaming availability via JustWatch."
 }

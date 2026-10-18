@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/l10n_context.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../find/data/movie.dart';
+import '../../find/views/find_film_screen.dart';
+import '../../find/views/find_route_args.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_screen_event.dart';
 import '../bloc/home_screen_state.dart';
@@ -96,7 +99,10 @@ class _HomeBody extends StatelessWidget {
                 state: sections[HomeList.top5] ?? const SectionLoading(),
                 onRetry: () =>
                     bloc.add(const HomeSectionRetryRequested(HomeList.top5)),
-                onAddSlot: () => _openFind(context),
+                onAddSlot: (slot) => _openFind(
+                  context,
+                  args: FindFilmRouteArgs(target: AddTarget.top5, slot: slot),
+                ),
                 onRemove: (film) =>
                     bloc.add(HomeFilmRemoved(HomeList.top5, film)),
               ),
@@ -106,6 +112,13 @@ class _HomeBody extends StatelessWidget {
               RecommendSection(
                 picks: picks,
                 onRemovePick: (film) => bloc.add(HomePickToggled(film)),
+                onAddPick: (index) => _openFind(
+                  context,
+                  args: FindFilmRouteArgs(
+                    target: AddTarget.generatePick,
+                    pickIndex: index,
+                  ),
+                ),
               ),
               SizedBox(height: tokens.spaceLg),
               GenerateButton(
@@ -121,7 +134,10 @@ class _HomeBody extends StatelessWidget {
                 tileWidth: tokens.filmTileWidth,
                 onRetry: () =>
                     bloc.add(const HomeSectionRetryRequested(HomeList.watched)),
-                onAdd: () => _openFind(context),
+                onAdd: () => _openFind(
+                  context,
+                  args: const FindFilmRouteArgs(target: AddTarget.watched),
+                ),
                 onRemove: (film) =>
                     bloc.add(HomeFilmRemoved(HomeList.watched, film)),
                 onTapFilm: (film) => bloc.add(HomePickToggled(film)),
@@ -134,7 +150,10 @@ class _HomeBody extends StatelessWidget {
                 tileWidth: tokens.filmTileWidth,
                 onRetry: () => bloc
                     .add(const HomeSectionRetryRequested(HomeList.watchlist)),
-                onAdd: () => _openFind(context),
+                onAdd: () => _openFind(
+                  context,
+                  args: const FindFilmRouteArgs(target: AddTarget.watchlist),
+                ),
                 onRemove: (film) =>
                     bloc.add(HomeFilmRemoved(HomeList.watchlist, film)),
               ),
@@ -166,11 +185,48 @@ Future<void> _refresh(BuildContext context) {
   return done.future;
 }
 
-Future<void> _openFind(BuildContext context) async {
+Future<void> _openFind(
+  BuildContext context, {
+  FindFilmRouteArgs args = const FindFilmRouteArgs(),
+}) async {
   final bloc = context.read<HomeBloc>();
-  await Navigator.of(context).pushNamed('/find');
+  final result = await Navigator.of(context).push<FindFilmResult>(
+    FindFilmScreen.route(args),
+  );
   if (!context.mounted) return;
-  bloc.add(const HomeRefreshRequested());
+
+  final film = result?.film;
+  final target = result?.target;
+
+  if (film == null || target == null) {
+    // Reflect any activity that may have happened in the find screen.
+    bloc.add(const HomeRefreshRequested());
+    return;
+  }
+
+  switch (target) {
+    case AddTarget.top5:
+      final homeFilm =
+          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
+      bloc.add(HomeFilmAdded(HomeList.top5, homeFilm));
+      bloc.add(HomeSectionRetryRequested(HomeList.top5));
+    case AddTarget.watched:
+      final homeFilm =
+          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
+      bloc.add(HomeFilmAdded(HomeList.watched, homeFilm));
+      bloc.add(HomeSectionRetryRequested(HomeList.watched));
+    case AddTarget.watchlist:
+      final homeFilm =
+          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
+      bloc.add(HomeFilmAdded(HomeList.watchlist, homeFilm));
+      bloc.add(HomeSectionRetryRequested(HomeList.watchlist));
+    case AddTarget.generatePick:
+      final homeFilm =
+          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
+      if (bloc.state is HomeLoaded) {
+        bloc.add(HomePickToggled(homeFilm));
+      }
+  }
 }
 
 void _showNotice(BuildContext context, HomeNotice notice) {

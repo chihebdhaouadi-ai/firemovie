@@ -22,7 +22,9 @@ class Top5Row extends StatelessWidget {
   final String title;
   final SectionState state;
   final VoidCallback onRetry;
-  final VoidCallback onAddSlot;
+
+  /// Invoked with the 1-based slot (1..5) when the user taps an empty slot.
+  final ValueChanged<int> onAddSlot;
   final ValueChanged<Film> onRemove;
 
   @override
@@ -75,7 +77,7 @@ class _Top5Slots extends StatelessWidget {
   final String title;
   final List<Film> films;
   final bool placeholder;
-  final VoidCallback onAddSlot;
+  final ValueChanged<int> onAddSlot;
   final ValueChanged<Film> onRemove;
 
   @override
@@ -109,7 +111,7 @@ class _Top5Slots extends StatelessWidget {
                 return AddTile(
                   width: width,
                   label: l10n.homeTop5AddLabel,
-                  onTap: onAddSlot,
+                  onTap: () => onAddSlot(index + 1),
                 );
               },
             ),
