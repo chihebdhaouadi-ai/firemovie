@@ -30,6 +30,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.durationFast,
     required this.durationBase,
     required this.minTouchTarget,
+    required this.borderWidth,
     required this.topTileGap,
     required this.filmTileWidth,
     required this.recommendCardWidth,
@@ -53,6 +54,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
   final Duration durationFast;
   final Duration durationBase;
   final double minTouchTarget;
+  final double borderWidth;
   final double topTileGap;
   final double filmTileWidth;
   final double recommendCardWidth;
@@ -82,6 +84,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
     durationFast: Duration(milliseconds: 150),
     durationBase: Duration(milliseconds: 220),
     minTouchTarget: 48,
+    borderWidth: 1,
     topTileGap: 8,
     filmTileWidth: 78,
     recommendCardWidth: 77,
@@ -109,6 +112,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
     Duration? durationFast,
     Duration? durationBase,
     double? minTouchTarget,
+    double? borderWidth,
     double? topTileGap,
     double? filmTileWidth,
     double? recommendCardWidth,
@@ -132,6 +136,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
       durationFast: durationFast ?? this.durationFast,
       durationBase: durationBase ?? this.durationBase,
       minTouchTarget: minTouchTarget ?? this.minTouchTarget,
+      borderWidth: borderWidth ?? this.borderWidth,
       topTileGap: topTileGap ?? this.topTileGap,
       filmTileWidth: filmTileWidth ?? this.filmTileWidth,
       recommendCardWidth: recommendCardWidth ?? this.recommendCardWidth,
@@ -160,6 +165,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
       durationFast: t < 0.5 ? durationFast : other.durationFast,
       durationBase: t < 0.5 ? durationBase : other.durationBase,
       minTouchTarget: lerpDouble(minTouchTarget, other.minTouchTarget, t),
+      borderWidth: lerpDouble(borderWidth, other.borderWidth, t),
       topTileGap: lerpDouble(topTileGap, other.topTileGap, t),
       filmTileWidth: lerpDouble(filmTileWidth, other.filmTileWidth, t),
       recommendCardWidth: lerpDouble(recommendCardWidth, other.recommendCardWidth, t),

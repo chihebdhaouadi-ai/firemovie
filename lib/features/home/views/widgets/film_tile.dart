@@ -50,7 +50,7 @@ class FilmPoster extends StatelessWidget {
         boxShadow: selected ? tokens.glowShadow : const [],
         border: Border.all(
           color: selected ? AppColors.accentGlow : AppColors.transparent,
-          width: 1,
+          width: tokens.borderWidth,
         ),
       ),
       child: poster,
