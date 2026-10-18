@@ -1,8 +1,12 @@
 import 'package:film_wise_mobile/account/blocs/login_bloc.dart';
-import 'package:film_wise_mobile/account/blocs/login_event.dart';
 import 'package:film_wise_mobile/account/blocs/login_state.dart';
 import 'package:film_wise_mobile/account/data/login_repo.dart';
-import 'package:film_wise_mobile/core/core.dart';
+import 'package:film_wise_mobile/core/theme/app_theme.dart';
+import 'package:film_wise_mobile/features/home/bloc/home_bloc.dart';
+import 'package:film_wise_mobile/features/home/bloc/home_screen_event.dart';
+import 'package:film_wise_mobile/features/home/data/home_repository.dart';
+import 'package:film_wise_mobile/features/home/views/home_screen.dart';
+import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:film_wise_mobile/firebase_options.dart';
 import 'package:film_wise_mobile/home/blocs/home_bloc.dart';
 import 'package:film_wise_mobile/home/blocs/home_state.dart';
@@ -10,14 +14,12 @@ import 'package:film_wise_mobile/home/data/home_repo.dart';
 import 'package:film_wise_mobile/home/views/pages/add_find_film.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'account/views/pages/login.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'home/views/pages/film_page.dart';
-import 'home/views/pages/home.dart';
 import 'home/views/widgets/custom_dialgo.dart';
 
 void main()  async{
@@ -42,11 +44,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My App',
       initialRoute: '/',
-      theme:ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: ColorScheme.dark(
-        background: Color.fromARGB(255, 30, 30, 30),
-        primary: const Color.fromARGB(255, 246, 238, 227))),
+      theme: AppTheme.dark(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       routes: {
         '/': (context) => RepositoryProvider<LoginRepo>(
           
@@ -100,36 +100,13 @@ class MyApp extends StatelessWidget {
 
             }
             ,child: Login()),)),
-         '/home': (context) => RepositoryProvider<HomeRepo>(
-          
-        create: (context) => HomeRepo(),
-        child: MultiBlocProvider(
-  providers: [
-    BlocProvider<HomeBLoc>(
-      create: (context) => HomeBLoc(context.read<HomeRepo>()),
-    ),
-    BlocProvider<WatchedBLoc>(
-      create: (context) => WatchedBLoc(context.read<HomeRepo>()),
-      child: BlocListener<WatchedBLoc,Top_5_moviesState>(listener: (context, state) {
-        print(state);
-     if ( state is Delete_List_Movies_Done_State )
-                   Navigator.pushReplacementNamed(context, '/home' ,arguments:{'param_load':'top_5_movies_delete','status':'${state.add_List_Movies_Model.status}','message':'${state.add_List_Movies_Model.message}'} );          
-      },),
-    ),
-    BlocProvider<WatchtlistBLoc>(
-      create: (context) => WatchtlistBLoc(context.read<HomeRepo>()),
-    ), 
-    BlocProvider<PopularlistBLoc>(
-      create: (context) => PopularlistBLoc(context.read<HomeRepo>()),
-    ), 
-  ],
-  child: BlocListener<HomeBLoc, Top_5_moviesState>(
-    listener: (context, state) {
-      // Your listener logic here
-    },
-    child: Dashboard(),
-  ),
-)),
+        '/home': (context) => BlocProvider<HomeBloc>(
+          create: (context) => HomeBloc(
+            repository: ApiHomeRepository(),
+            gateway: FakeRecommendationGateway(),
+          )..add(const HomeStarted()),
+          child: const HomeScreen(),
+        ),
              '/find': (context) => RepositoryProvider<HomeRepo>(
           
         create: (context) => HomeRepo(),
