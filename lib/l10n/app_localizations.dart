@@ -94,24 +94,6 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
-  /// No description provided for @homeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Home'**
-  String get homeTitle;
-
-  /// No description provided for @homeSettingsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get homeSettingsTooltip;
-
-  /// No description provided for @homeNotificationsTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
-  String get homeNotificationsTooltip;
-
   /// No description provided for @homePointsLabel.
   ///
   /// In en, this message translates to:
@@ -130,23 +112,11 @@ abstract class AppLocalizations {
   /// **'Pick five films you love'**
   String get homeTop5Hint;
 
-  /// No description provided for @homeTop5SlotLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Top 5 slot {index}, {state}'**
-  String homeTop5SlotLabel(Object index, Object state);
-
   /// No description provided for @homeTop5SlotEmpty.
   ///
   /// In en, this message translates to:
   /// **'empty'**
   String get homeTop5SlotEmpty;
-
-  /// No description provided for @homeTop5SlotFilled.
-  ///
-  /// In en, this message translates to:
-  /// **'{title}'**
-  String homeTop5SlotFilled(String title);
 
   /// No description provided for @homeTop5AddLabel.
   ///
@@ -166,17 +136,17 @@ abstract class AppLocalizations {
   /// **'Pick exactly 3 films to generate a recommendation'**
   String get homeRecommendHint;
 
+  /// No description provided for @homePickSlotLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick slot {index}, {state}'**
+  String homePickSlotLabel(int index, String state);
+
   /// No description provided for @homeGenerateButton.
   ///
   /// In en, this message translates to:
   /// **'GENERATE'**
   String get homeGenerateButton;
-
-  /// No description provided for @homeGenerateButtonSemantics.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate recommendation from 3 picked films'**
-  String get homeGenerateButtonSemantics;
 
   /// No description provided for @homeGenerateDisabledHint.
   ///
@@ -214,18 +184,6 @@ abstract class AppLocalizations {
   /// **'Add film'**
   String get homeQuickActionAddFilm;
 
-  /// No description provided for @homeQuickActionRandom.
-  ///
-  /// In en, this message translates to:
-  /// **'Random'**
-  String get homeQuickActionRandom;
-
-  /// No description provided for @homeQuickActionFriends.
-  ///
-  /// In en, this message translates to:
-  /// **'Friends'**
-  String get homeQuickActionFriends;
-
   /// No description provided for @homeWatchedTitle.
   ///
   /// In en, this message translates to:
@@ -250,18 +208,6 @@ abstract class AppLocalizations {
   /// **'{count} Films'**
   String homeFilmCount(int count);
 
-  /// No description provided for @homeSeeAll.
-  ///
-  /// In en, this message translates to:
-  /// **'See All'**
-  String get homeSeeAll;
-
-  /// No description provided for @homeSeeAllSemantics.
-  ///
-  /// In en, this message translates to:
-  /// **'See all {section}'**
-  String homeSeeAllSemantics(Object section);
-
   /// No description provided for @homeAddTileLabel.
   ///
   /// In en, this message translates to:
@@ -273,6 +219,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{title}, {section}'**
   String homeFilmTileSemantics(String title, String section);
+
+  /// No description provided for @homeRemoveFilm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {title}'**
+  String homeRemoveFilm(String title);
 
   /// No description provided for @homeSectionEmptyTitle.
   ///
@@ -309,12 +261,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Undo'**
   String get homeUndo;
-
-  /// No description provided for @homeRefreshSemantics.
-  ///
-  /// In en, this message translates to:
-  /// **'Pull to refresh'**
-  String get homeRefreshSemantics;
 
   /// No description provided for @homeTop5FullSnackbar.
   ///

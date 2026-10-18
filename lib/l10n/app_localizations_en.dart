@@ -9,15 +9,6 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get homeTitle => 'Home';
-
-  @override
-  String get homeSettingsTooltip => 'Settings';
-
-  @override
-  String get homeNotificationsTooltip => 'Notifications';
-
-  @override
   String homePointsLabel(int points) {
     return '$points Points';
   }
@@ -29,17 +20,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTop5Hint => 'Pick five films you love';
 
   @override
-  String homeTop5SlotLabel(Object index, Object state) {
-    return 'Top 5 slot $index, $state';
-  }
-
-  @override
   String get homeTop5SlotEmpty => 'empty';
-
-  @override
-  String homeTop5SlotFilled(String title) {
-    return '$title';
-  }
 
   @override
   String get homeTop5AddLabel => 'Add a film to your Top 5';
@@ -52,11 +33,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Pick exactly 3 films to generate a recommendation';
 
   @override
-  String get homeGenerateButton => 'GENERATE';
+  String homePickSlotLabel(int index, String state) {
+    return 'Pick slot $index, $state';
+  }
 
   @override
-  String get homeGenerateButtonSemantics =>
-      'Generate recommendation from 3 picked films';
+  String get homeGenerateButton => 'GENERATE';
 
   @override
   String homeGenerateDisabledHint(int remaining) {
@@ -79,12 +61,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeQuickActionAddFilm => 'Add film';
 
   @override
-  String get homeQuickActionRandom => 'Random';
-
-  @override
-  String get homeQuickActionFriends => 'Friends';
-
-  @override
   String get homeWatchedTitle => 'Watched';
 
   @override
@@ -99,14 +75,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeSeeAll => 'See All';
-
-  @override
-  String homeSeeAllSemantics(Object section) {
-    return 'See all $section';
-  }
-
-  @override
   String homeAddTileLabel(String section) {
     return 'Add to $section';
   }
@@ -114,6 +82,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String homeFilmTileSemantics(String title, String section) {
     return '$title, $section';
+  }
+
+  @override
+  String homeRemoveFilm(String title) {
+    return 'Remove $title';
   }
 
   @override
@@ -135,9 +108,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeUndo => 'Undo';
-
-  @override
-  String get homeRefreshSemantics => 'Pull to refresh';
 
   @override
   String get homeTop5FullSnackbar => 'Your Top 5 is full. Remove a film first.';
