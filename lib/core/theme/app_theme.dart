@@ -13,6 +13,7 @@ abstract final class AppColors {
   static const outline = Color(0xFF5D697A);
   static const error = Color(0xFFFF6B6B);
   static const onPrimaryButton = Color(0xFFFFFFFF);
+  static const transparent = Color(0x00000000);
 }
 
 class AppTokens extends ThemeExtension<AppTokens> {
@@ -40,6 +41,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.filmTileHeight,
     required this.generateButtonHeight,
     required this.maxContentWidth,
+    required this.logoHeight,
+    required this.posterAspectRatio,
+    required this.iconSmall,
+    required this.iconLarge,
   });
 
   final double spaceXs;
@@ -65,6 +70,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
   final double filmTileHeight;
   final double generateButtonHeight;
   final double maxContentWidth;
+  final double logoHeight;
+  final double posterAspectRatio;
+  final double iconSmall;
+  final double iconLarge;
 
   static const light = AppTokens(
     spaceXs: 4,
@@ -96,6 +105,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
     filmTileHeight: 100,
     generateButtonHeight: 48,
     maxContentWidth: 640,
+    logoHeight: 28,
+    posterAspectRatio: 0.7,
+    iconSmall: 16,
+    iconLarge: 40,
   );
 
   @override
@@ -123,8 +136,16 @@ class AppTokens extends ThemeExtension<AppTokens> {
     double? filmTileHeight,
     double? generateButtonHeight,
     double? maxContentWidth,
+    double? logoHeight,
+    double? posterAspectRatio,
+    double? iconSmall,
+    double? iconLarge,
   }) {
     return AppTokens(
+      logoHeight: logoHeight ?? this.logoHeight,
+      posterAspectRatio: posterAspectRatio ?? this.posterAspectRatio,
+      iconSmall: iconSmall ?? this.iconSmall,
+      iconLarge: iconLarge ?? this.iconLarge,
       spaceXs: spaceXs ?? this.spaceXs,
       spaceSm: spaceSm ?? this.spaceSm,
       spaceMd: spaceMd ?? this.spaceMd,
@@ -178,6 +199,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
       filmTileHeight: lerpDouble(filmTileHeight, other.filmTileHeight, t),
       generateButtonHeight: lerpDouble(generateButtonHeight, other.generateButtonHeight, t),
       maxContentWidth: lerpDouble(maxContentWidth, other.maxContentWidth, t),
+      logoHeight: lerpDouble(logoHeight, other.logoHeight, t),
+      posterAspectRatio: lerpDouble(posterAspectRatio, other.posterAspectRatio, t),
+      iconSmall: lerpDouble(iconSmall, other.iconSmall, t),
+      iconLarge: lerpDouble(iconLarge, other.iconLarge, t),
     );
   }
 
