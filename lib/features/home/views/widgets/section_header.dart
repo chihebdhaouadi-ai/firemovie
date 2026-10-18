@@ -28,7 +28,8 @@ class SectionHeader extends StatelessWidget {
               child: Text(
                 trailingText,
                 textAlign: TextAlign.end,
-                style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textMuted),
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: AppColors.textMuted),
               ),
             ),
         ],

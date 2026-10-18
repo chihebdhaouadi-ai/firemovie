@@ -161,18 +161,22 @@ class AppTokens extends ThemeExtension<AppTokens> {
       radiusSm: lerpDouble(radiusSm, other.radiusSm, t),
       radiusMd: lerpDouble(radiusMd, other.radiusMd, t),
       radiusLg: lerpDouble(radiusLg, other.radiusLg, t),
-      glowShadow: BoxShadow.lerpList(glowShadow, other.glowShadow, t) ?? glowShadow,
+      glowShadow:
+          BoxShadow.lerpList(glowShadow, other.glowShadow, t) ?? glowShadow,
       durationFast: t < 0.5 ? durationFast : other.durationFast,
       durationBase: t < 0.5 ? durationBase : other.durationBase,
       minTouchTarget: lerpDouble(minTouchTarget, other.minTouchTarget, t),
       borderWidth: lerpDouble(borderWidth, other.borderWidth, t),
       topTileGap: lerpDouble(topTileGap, other.topTileGap, t),
       filmTileWidth: lerpDouble(filmTileWidth, other.filmTileWidth, t),
-      recommendCardWidth: lerpDouble(recommendCardWidth, other.recommendCardWidth, t),
-      generateButtonHeight: lerpDouble(generateButtonHeight, other.generateButtonHeight, t),
+      recommendCardWidth:
+          lerpDouble(recommendCardWidth, other.recommendCardWidth, t),
+      generateButtonHeight:
+          lerpDouble(generateButtonHeight, other.generateButtonHeight, t),
       maxContentWidth: lerpDouble(maxContentWidth, other.maxContentWidth, t),
       logoHeight: lerpDouble(logoHeight, other.logoHeight, t),
-      posterAspectRatio: lerpDouble(posterAspectRatio, other.posterAspectRatio, t),
+      posterAspectRatio:
+          lerpDouble(posterAspectRatio, other.posterAspectRatio, t),
       iconSmall: lerpDouble(iconSmall, other.iconSmall, t),
       iconLarge: lerpDouble(iconLarge, other.iconLarge, t),
     );
@@ -197,14 +201,22 @@ abstract final class AppTheme {
     );
 
     const base = TextTheme(
-      headlineSmall: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, height: 1.3),
-      titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, height: 1.4),
-      titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, height: 1.4),
-      bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 1.5),
-      bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, height: 1.5),
-      bodySmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1.4),
-      labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.5),
-      labelSmall: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, height: 1.3),
+      headlineSmall:
+          TextStyle(fontSize: 22, fontWeight: FontWeight.w600, height: 1.3),
+      titleMedium:
+          TextStyle(fontSize: 16, fontWeight: FontWeight.w600, height: 1.4),
+      titleSmall:
+          TextStyle(fontSize: 14, fontWeight: FontWeight.w600, height: 1.4),
+      bodyLarge:
+          TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 1.5),
+      bodyMedium:
+          TextStyle(fontSize: 14, fontWeight: FontWeight.w400, height: 1.5),
+      bodySmall:
+          TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1.4),
+      labelLarge: TextStyle(
+          fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.5),
+      labelSmall:
+          TextStyle(fontSize: 11, fontWeight: FontWeight.w500, height: 1.3),
     );
 
     return ThemeData(
@@ -227,7 +239,8 @@ abstract final class AppTheme {
       ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: AppColors.surfaceRaised,
-        contentTextStyle: TextStyle(color: AppColors.textPrimary, fontFamily: 'Poppins'),
+        contentTextStyle:
+            TextStyle(color: AppColors.textPrimary, fontFamily: 'Poppins'),
         actionTextColor: AppColors.accentGlow,
         behavior: SnackBarBehavior.floating,
       ),

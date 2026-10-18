@@ -40,26 +40,26 @@ class FilmSection extends StatelessWidget {
     final body = switch (state) {
       SectionLoading() => PosterSkeletonRow(tileWidth: tileWidth),
       SectionEmpty() => SectionStatusCard(
-        message: l10n.homeSectionEmptyTitle,
-        actionIcon: Icons.add,
-        actionLabel: add == null ? null : l10n.homeSectionEmptyAction,
-        onAction: add,
-      ),
+          message: l10n.homeSectionEmptyTitle,
+          actionIcon: Icons.add,
+          actionLabel: add == null ? null : l10n.homeSectionEmptyAction,
+          onAction: add,
+        ),
       SectionError() => SectionStatusCard(
-        message: l10n.homeSectionErrorTitle,
-        actionIcon: Icons.refresh,
-        actionLabel: l10n.homeSectionErrorRetry,
-        onAction: onRetry,
-      ),
+          message: l10n.homeSectionErrorTitle,
+          actionIcon: Icons.refresh,
+          actionLabel: l10n.homeSectionErrorRetry,
+          onAction: onRetry,
+        ),
       SectionContent(films: final films) => _FilmRow(
-        title: title,
-        films: films,
-        tileWidth: tileWidth,
-        onAdd: add,
-        onRemove: onRemove,
-        onTapFilm: onTapFilm,
-        selectedFilms: selectedFilms,
-      ),
+          title: title,
+          films: films,
+          tileWidth: tileWidth,
+          onAdd: add,
+          onRemove: onRemove,
+          onTapFilm: onTapFilm,
+          selectedFilms: selectedFilms,
+        ),
     };
 
     final trailing = switch (state) {
@@ -123,7 +123,8 @@ class _FilmRow extends StatelessWidget {
           return FilmTile(
             film: film,
             width: tileWidth,
-            semanticsLabel: l10n.homeFilmTileSemantics(film.displayTitle, title),
+            semanticsLabel:
+                l10n.homeFilmTileSemantics(film.displayTitle, title),
             removeLabel: l10n.homeRemoveFilm(film.displayTitle),
             selected: selectedFilms.contains(film),
             onTap: tap == null ? null : () => tap(film),

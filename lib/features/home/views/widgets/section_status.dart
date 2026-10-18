@@ -35,8 +35,8 @@ class SectionStatusCard extends StatelessWidget {
           Text(
             message,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.textMuted,
-            ),
+                  color: AppColors.textMuted,
+                ),
           ),
           if (label != null && action != null) ...[
             SizedBox(height: tokens.spaceSm),
@@ -48,7 +48,8 @@ class SectionStatusCard extends StatelessWidget {
                 label: Text(label),
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.accentGlow,
-                  minimumSize: Size(tokens.minTouchTarget, tokens.minTouchTarget),
+                  minimumSize:
+                      Size(tokens.minTouchTarget, tokens.minTouchTarget),
                 ),
               ),
             ),

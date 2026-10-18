@@ -29,7 +29,8 @@ class AddTile extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: radius,
-            border: Border.all(color: AppColors.outline, width: tokens.borderWidth),
+            border:
+                Border.all(color: AppColors.outline, width: tokens.borderWidth),
           ),
           child: Material(
             color: AppColors.transparent,

@@ -31,34 +31,34 @@ class Top5Row extends StatelessWidget {
 
     return switch (state) {
       SectionLoading() => SkeletonShimmer(
-        child: _Top5Slots(
+          child: _Top5Slots(
+            title: title,
+            films: const [],
+            placeholder: true,
+            onAddSlot: onAddSlot,
+            onRemove: onRemove,
+          ),
+        ),
+      SectionEmpty() => _Top5Slots(
           title: title,
           films: const [],
-          placeholder: true,
+          placeholder: false,
           onAddSlot: onAddSlot,
           onRemove: onRemove,
         ),
-      ),
-      SectionEmpty() => _Top5Slots(
-        title: title,
-        films: const [],
-        placeholder: false,
-        onAddSlot: onAddSlot,
-        onRemove: onRemove,
-      ),
       SectionError() => SectionStatusCard(
-        message: l10n.homeSectionErrorTitle,
-        actionIcon: Icons.refresh,
-        actionLabel: l10n.homeSectionErrorRetry,
-        onAction: onRetry,
-      ),
+          message: l10n.homeSectionErrorTitle,
+          actionIcon: Icons.refresh,
+          actionLabel: l10n.homeSectionErrorRetry,
+          onAction: onRetry,
+        ),
       SectionContent(films: final films) => _Top5Slots(
-        title: title,
-        films: films,
-        placeholder: false,
-        onAddSlot: onAddSlot,
-        onRemove: onRemove,
-      ),
+          title: title,
+          films: films,
+          placeholder: false,
+          onAddSlot: onAddSlot,
+          onRemove: onRemove,
+        ),
     };
   }
 }
@@ -97,7 +97,8 @@ class _Top5Slots extends StatelessWidget {
                   return FilmTile(
                     film: film,
                     width: width,
-                    semanticsLabel: l10n.homeFilmTileSemantics(film.displayTitle, title),
+                    semanticsLabel:
+                        l10n.homeFilmTileSemantics(film.displayTitle, title),
                     removeLabel: l10n.homeRemoveFilm(film.displayTitle),
                     onRemove: () => onRemove(film),
                   );

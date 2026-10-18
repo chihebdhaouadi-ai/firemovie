@@ -21,8 +21,8 @@ abstract class RecommendationGateway {
 
 class ApiHomeRepository implements HomeRepository {
   ApiHomeRepository({http.Client? client, String? baseUrl})
-    : _client = client ?? http.Client(),
-      _baseUrl = baseUrl ?? _defaultBaseUrl;
+      : _client = client ?? http.Client(),
+        _baseUrl = baseUrl ?? _defaultBaseUrl;
 
   static const _defaultBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
@@ -80,15 +80,15 @@ class ApiHomeRepository implements HomeRepository {
   }
 
   Map<String, String> get _headers => {
-    'Authorization': 'Token ${Session.token}',
-  };
+        'Authorization': 'Token ${Session.token}',
+      };
 
   String _fetchPath(HomeList list) => switch (list) {
-    HomeList.top5 => 'get_top_5_movies',
-    HomeList.watched => 'get_wathced_list_movies',
-    HomeList.watchlist => 'get_watch_list_movies',
-    HomeList.popular => 'get_popular_friends_list_movies',
-  };
+        HomeList.top5 => 'get_top_5_movies',
+        HomeList.watched => 'get_wathced_list_movies',
+        HomeList.watchlist => 'get_watch_list_movies',
+        HomeList.popular => 'get_popular_friends_list_movies',
+      };
 
   Map<String, dynamic> _decode(http.Response response) {
     if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -106,13 +106,13 @@ class ApiHomeRepository implements HomeRepository {
 // to any server.
 class FakeHomeRepository implements HomeRepository {
   FakeHomeRepository({Map<HomeList, List<Film>>? seed})
-    : _lists = {
-        HomeList.top5: <Film>[],
-        HomeList.watched: <Film>[],
-        HomeList.watchlist: <Film>[],
-        HomeList.popular: <Film>[],
-        ...?seed,
-      };
+      : _lists = {
+          HomeList.top5: <Film>[],
+          HomeList.watched: <Film>[],
+          HomeList.watchlist: <Film>[],
+          HomeList.popular: <Film>[],
+          ...?seed,
+        };
 
   final Map<HomeList, List<Film>> _lists;
 
