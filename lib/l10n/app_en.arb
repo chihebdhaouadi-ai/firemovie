@@ -1,0 +1,95 @@
+{
+  "@@locale": "en",
+  "homeTitle": "Home",
+  "homeSettingsTooltip": "Settings",
+  "homeNotificationsTooltip": "Notifications",
+  "homePointsLabel": "{points} Points",
+  "@homePointsLabel": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTop5Title": "Your Top 5",
+  "homeTop5Hint": "Pick five films you love",
+  "homeTop5SlotLabel": "Top 5 slot {index}, {state}",
+  "homeTop5SlotEmpty": "empty",
+  "homeTop5SlotFilled": "{title}",
+  "@homeTop5SlotFilled": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTop5AddLabel": "Add a film to your Top 5",
+  "homeRecommendTitle": "Recommend me",
+  "homeRecommendHint": "Pick exactly 3 films to generate a recommendation",
+  "homeGenerateButton": "GENERATE",
+  "homeGenerateButtonSemantics": "Generate recommendation from 3 picked films",
+  "homeGenerateDisabledHint": "Pick {remaining} more film(s) to enable",
+  "@homeGenerateDisabledHint": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "homeGenerating": "Generating…",
+  "homeGenerateSuccess": "Recommendation ready",
+  "homeQuickActionsLabel": "Quick actions",
+  "homeQuickActionSearch": "Search",
+  "homeQuickActionAddFilm": "Add film",
+  "homeQuickActionRandom": "Random",
+  "homeQuickActionFriends": "Friends",
+  "homeWatchedTitle": "Watched",
+  "homeWatchlistTitle": "Watchlist",
+  "homePopularTitle": "Popular With Friends",
+  "homeFilmCount": "{count} Films",
+  "@homeFilmCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeSeeAll": "See All",
+  "homeSeeAllSemantics": "See all {section}",
+  "homeAddTileLabel": "Add to {section}",
+  "@homeAddTileLabel": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "homeFilmTileSemantics": "{title}, {section}",
+  "@homeFilmTileSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSectionEmptyTitle": "Nothing here yet",
+  "homeSectionEmptyAction": "Add a film",
+  "homeSectionErrorTitle": "Couldn't load this list",
+  "homeSectionErrorRetry": "Retry",
+  "homeRemovedSnackbar": "Removed {title}",
+  "@homeRemovedSnackbar": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUndo": "Undo",
+  "homeRefreshSemantics": "Pull to refresh",
+  "homeTop5FullSnackbar": "Your Top 5 is full. Remove a film first.",
+  "homeRecommendFullSnackbar": "You can pick up to 3 films.",
+  "homeGenericErrorSnackbar": "Something went wrong. Please try again."
+}
