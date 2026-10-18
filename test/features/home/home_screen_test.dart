@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
+import 'package:film_wise_mobile/features/find/views/find_film_screen.dart';
 import 'package:film_wise_mobile/features/home/bloc/home_bloc.dart';
 import 'package:film_wise_mobile/features/home/bloc/home_screen_event.dart';
 import 'package:film_wise_mobile/features/home/data/home_models.dart';
@@ -229,7 +230,8 @@ void main() {
   });
 
   group('top 5', () {
-    testWidgets('adds a film through Find and refreshes Top 5', (tester) async {
+    testWidgets('tap on a Top 5 slot opens the Find screen for that destination',
+        (tester) async {
       await pumpHome(
         tester,
         repository: FakeHomeRepository(
@@ -242,10 +244,10 @@ void main() {
 
       await tester.tap(_inTop5(find.byType(AddTile)).first);
       await tester.pumpAndSettle();
-      await tester.tap(find.text('CONFIRM_FIND'));
-      await tester.pumpAndSettle();
 
-      expect(_filmLabel(_arrival, _en.homeTop5Title), findsOneWidget);
+      // The Find screen is pushed with the Top 5 destination shown in its title.
+      expect(find.byType(FindFilmScreen), findsOneWidget);
+      expect(find.text(_en.findTitleTop5), findsWidgets);
     });
 
     testWidgets('removes a film optimistically and restores it with Undo',
