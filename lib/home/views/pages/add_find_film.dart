@@ -59,7 +59,7 @@ class _Find extends State<Find> with TickerProviderStateMixin {
 
   Future<Film> fetch_data(ch) async {
     final Map<String, String> headers = {
-      'X-RapidAPI-Key': '2bd1074f16msh88e1b8a33528e93p12330djsnf36f181d64c0',
+      'X-RapidAPI-Key': '',
       'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
     };
     final Map<String, String> params = {

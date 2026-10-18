@@ -2,10 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:film_wise_mobile/core/core.dart';
 import 'package:film_wise_mobile/home/blocs/home_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -39,7 +37,7 @@ double calculateAverageRating(List<Review_Model> ratings) {
 Future<List<String>> get_image_film_by_id(String id) async{
 
      final Map<String, String> headers = {
-   'X-RapidAPI-Key': '2ddf4fb6ffmsh20e88b6623d8ce7p103f38jsn1a63a326177e',
+   'X-RapidAPI-Key': '',
     'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
     };
     final Map<String, String> params = {
@@ -58,39 +56,8 @@ class   HomeRepo {
   final url ="http://127.0.0.1:8000/api/film/get_top_5_movies";
 
      Future<List<Top_5_Movies_Model>> get_top_5_movies(Top_5_Movies_Entity top_5_Movies_Entity)async{
-var k;
-       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('Accounts')
-        .doc(FirebaseAuth.instance.currentUser?.email)
-        .get().then((value) =>k=value
-
-                
-
-        );    
              List<Top_5_Movies_Model> data_return=[];
 
-         for (var item in k["top_movies"]){
-          print(item);
-
-  print("$item");
-  var url= await get_image_film_by_id(item);
-
-  data_return.add(Top_5_Movies_Model(movies_id: item,image_link: "${url[0]}",title: "${url[1]}"));
- }
-
-        print(k["top_movies"]);
-        return data_return;
-
-             var yourList =   documentSnapshot.data();
-             print("kkoppppppppp${  jsonEncode(yourList)}");
-
-               print(yourList.runtimeType);
-
-        if (documentSnapshot.exists) {
-        print(documentSnapshot.data());
-        }
-
-  
     final response =  await get(Uri.parse(url),
     
      headers: <String, String>{
@@ -114,9 +81,7 @@ var k;
     print(services);
     print(data_return);
 
-  
-  //  return data_return ;
- return [];
+    return data_return;
   }
 
 
@@ -124,7 +89,7 @@ var k;
 
 
        final Map<String, String> headers = {
-      'X-RapidAPI-Key': '2ddf4fb6ffmsh20e88b6623d8ce7p103f38jsn1a63a326177e',
+      'X-RapidAPI-Key': '',
       'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
     };
     final Map<String, String> params = {
@@ -202,35 +167,8 @@ Future<Add_List_Movies_Model> add_list_find_movies(Add_List_Movies_Entity add_Li
         String imdbId = match!.group(1)!;
 
      String urllike="";
-     if (add_List_Movies_Entity.come_from == "top_5_movies"){
+     if (add_List_Movies_Entity.come_from == "top_5_movies")
       urllike ="http://127.0.0.1:8000/api/film/add_top_5_movies";
-    
-    print(FirebaseAuth.instance.currentUser?.email);
-    
-var db = FirebaseFirestore.instance;
-
-final Accounts = db.collection("Accounts");
-
-Accounts.doc("${FirebaseAuth.instance.currentUser?.email}").update({
-        'top_movies': FieldValue.arrayUnion(["${imdbId}"])
-      });
-      var x = Add_List_Movies_Model(status: "200", message: "MOVIE ADD IT TO TOP 5");
-
-    return x;
-
- /*
-  FirebaseFirestore.instance
-      .collection('your_collection')
-      .doc(documentId)
-      .update({
-        'your_list_field': FieldValue.arrayRemove([value])
-      })
-      .then((value) => print('Value removed successfully'))
-      .catchError((error) => print('Failed to remove value: $error'));
-}
-  */
-
-     }
           if (add_List_Movies_Entity.come_from == "watched_list")
       urllike ="http://127.0.0.1:8000/api/film/add_watched_movies";
      
@@ -277,8 +215,8 @@ Future<Add_List_Movies_Model> delete_list_find_movies(Add_List_Movies_Entity add
     String url_api=add_List_Movies_Entity.come_from == "top_5_movies"? "http://127.0.0.1:8000/api/film/delete_top_5_movies"
      :
      add_List_Movies_Entity.come_from == "watched_list"?
-     
-      "http://127.0.0.1:8000/api/film/delete_wathced_list_movies": add_List_Movies_Entity.come_from == "watch_list" ?
+
+      "http://127.0.0.1:8000/api/film/delete_wathced_list_movies": add_List_Movies_Entity.come_from == "watchlist" ?
       
       "http://127.0.0.1:8000/api/film/delete_watch_list_movies":
       
@@ -319,29 +257,8 @@ var x = Add_List_Movies_Model(status: "${services["status"]}",message: "TTT");
 
   Future<List<Watched_List_Movies_Model>> get_whatched_list_movies(Top_5_Movies_Entity top_5_Movies_Entity)async{
 
-var k;
-       DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('Accounts')
-        .doc(FirebaseAuth.instance.currentUser?.email)
-        .get().then((value) =>k=value
-
-                
-
-        );    
          List<Watched_List_Movies_Model> data_return=[];
-         for (var item in k["match_movies"]){
-          print(item);
 
-  print("$item");
-  var url= await get_image_film_by_id(item);
-
-  data_return.add(Watched_List_Movies_Model(movies_id: item,image_link: "${url[0]}",title: "${url[1]}",count: "0"));
- }
-
-        print(k["match_movies"]);
-        return data_return;
-
-      
     final response =  await get(Uri.parse("http://127.0.0.1:8000/api/film/get_wathced_list_movies"),
     
      headers: <String, String>{
@@ -444,7 +361,7 @@ var k;
 
 Future<Detail_MoviesModel> loadPageData(id) async {
   final Map<String, String> headers = {
-    'X-RapidAPI-Key': '2ddf4fb6ffmsh20e88b6623d8ce7p103f38jsn1a63a326177e',
+    'X-RapidAPI-Key': '',
     'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com',
   };
 
@@ -467,7 +384,7 @@ Future<Detail_MoviesModel> loadPageData(id) async {
 
     var director = dir;
   final Map<String, String> _headers = {
-    'X-RapidAPI-Key': '2ddf4fb6ffmsh20e88b6623d8ce7p103f38jsn1a63a326177e',
+    'X-RapidAPI-Key': '',
     'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com',
   };
 
@@ -593,7 +510,7 @@ var x = Review_MoviesModel( reviews: [], count: '', moyen: '');
 
 Future<Stream_AvaibilityModel> get_Steam_avaibility(Stream_MoviesTrigerState Review_triger) async {
   final Map<String, String> _headers = {
-    'X-RapidAPI-Key': '4fbf245846msh83419a20a1c1b46p18010bjsna15183e7b84a',
+    'X-RapidAPI-Key': '',
     'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com',
   };
 
