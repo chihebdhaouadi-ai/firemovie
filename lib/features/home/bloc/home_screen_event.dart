@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 
 import '../data/home_models.dart';
@@ -14,7 +16,9 @@ final class HomeStarted extends HomeScreenEvent {
 }
 
 final class HomeRefreshRequested extends HomeScreenEvent {
-  const HomeRefreshRequested();
+  const HomeRefreshRequested({this.done});
+
+  final Completer<void>? done;
 }
 
 final class HomeSectionRetryRequested extends HomeScreenEvent {

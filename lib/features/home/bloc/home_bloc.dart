@@ -45,8 +45,12 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     HomeRefreshRequested event,
     Emitter<HomeScreenState> emit,
   ) async {
-    await _loadPoints(emit);
-    await _loadAll(emit, showLoading: false);
+    try {
+      await _loadPoints(emit);
+      await _loadAll(emit, showLoading: false);
+    } finally {
+      event.done?.complete();
+    }
   }
 
   Future<void> _onRetry(
