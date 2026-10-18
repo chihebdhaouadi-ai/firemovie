@@ -38,7 +38,7 @@
   "homeWatchedTitle": "Watched",
   "homeWatchlistTitle": "Watchlist",
   "homePopularTitle": "Popular With Friends",
-  "homeFilmCount": "{count} Films",
+  "homeFilmCount": "{count, plural, =1{1 film} other{{count} films}}",
   "@homeFilmCount": {
     "placeholders": {
       "count": {

@@ -68,7 +68,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeFilmCount(int count) {
-    return '$count Films';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count films',
+      one: '1 film',
+    );
+    return '$_temp0';
   }
 
   @override

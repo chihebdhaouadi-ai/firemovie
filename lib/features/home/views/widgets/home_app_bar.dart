@@ -20,39 +20,41 @@ class HomeAppBar extends StatelessWidget {
           height: tokens.logoHeight,
           excludeFromSemantics: true,
         ),
-        const Spacer(),
-        Flexible(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(tokens.radiusLg),
-            ),
-            child: Padding(
-              padding: EdgeInsetsDirectional.symmetric(
-                horizontal: tokens.spaceMd,
-                vertical: tokens.spaceXs,
+        Expanded(
+          child: Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(tokens.radiusLg),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ExcludeSemantics(
-                    child: Icon(
-                      Icons.star_rounded,
-                      size: tokens.iconSmall,
-                      color: AppColors.accentGlow,
+              child: Padding(
+                padding: EdgeInsetsDirectional.symmetric(
+                  horizontal: tokens.spaceMd,
+                  vertical: tokens.spaceXs,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ExcludeSemantics(
+                      child: Icon(
+                        Icons.star_rounded,
+                        size: tokens.iconSmall,
+                        color: AppColors.accentGlow,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: tokens.spaceXs),
-                  Flexible(
-                    child: Text(
-                      l10n.homePointsLabel(points),
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: AppColors.textPrimary,
-                          ),
+                    SizedBox(width: tokens.spaceXs),
+                    Flexible(
+                      child: Text(
+                        l10n.homePointsLabel(points),
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: AppColors.textPrimary,
+                            ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

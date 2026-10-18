@@ -199,7 +199,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeFilmCount.
   ///
   /// In en, this message translates to:
-  /// **'{count} Films'**
+  /// **'{count, plural, =1{1 film} other{{count} films}}'**
   String homeFilmCount(int count);
 
   /// No description provided for @homeAddTileLabel.
