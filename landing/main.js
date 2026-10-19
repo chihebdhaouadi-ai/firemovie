@@ -4,6 +4,7 @@
   root.classList.add('js');
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const desktop = window.matchMedia('(min-width: 760px)');
   const INTRO_MS = 2200;
   const SEEN_KEY = 'fw-intro-seen';
 
@@ -11,6 +12,9 @@
   const skip = document.getElementById('intro-skip');
   const page = document.getElementById('page');
   const sticky = document.getElementById('sticky-cta');
+  const header = document.querySelector('.site-header');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const nav = document.getElementById('site-nav');
 
   const readSeen = () => {
     try {
@@ -28,6 +32,8 @@
     }
   };
 
+  const markHeroReady = () => root.classList.add('hero-ready');
+
   let introTimer = 0;
 
   const endIntro = () => {
@@ -37,20 +43,30 @@
     intro.hidden = true;
     page.inert = false;
     writeSeen();
+    markHeroReady();
   };
 
   const onIntroKey = (event) => {
     if (event.key === 'Escape') endIntro();
   };
 
-  if (intro && page && !reduceMotion.matches && !readSeen()) {
+  const introRuns = intro && page && !reduceMotion.matches && !readSeen();
+  if (introRuns) {
     intro.hidden = false;
     page.inert = true;
     skip.focus();
     document.addEventListener('keydown', onIntroKey);
     introTimer = setTimeout(endIntro, INTRO_MS);
     skip.addEventListener('click', endIntro);
+  } else {
+    markHeroReady();
   }
+
+  document.querySelectorAll('[data-stagger]').forEach((list) => {
+    [...list.children].forEach((item, index) => {
+      item.style.setProperty('--stagger', `${index * 90}ms`);
+    });
+  });
 
   const reveals = document.querySelectorAll('[data-reveal]');
   if ('IntersectionObserver' in window && !reduceMotion.matches) {
@@ -64,6 +80,42 @@
     reveals.forEach((el) => revealObserver.observe(el));
   } else {
     reveals.forEach((el) => el.classList.add('is-in'));
+  }
+
+  if (header) {
+    let scrolled = null;
+    const syncHeader = () => {
+      const next = window.scrollY > 8;
+      if (next === scrolled) return;
+      scrolled = next;
+      header.classList.toggle('is-scrolled', next);
+    };
+    window.addEventListener('scroll', syncHeader, { passive: true });
+    syncHeader();
+  }
+
+  if (header && menuToggle && nav) {
+    const setMenu = (open) => {
+      header.classList.toggle('is-open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+    };
+
+    menuToggle.addEventListener('click', () => {
+      setMenu(!header.classList.contains('is-open'));
+    });
+
+    nav.addEventListener('click', (event) => {
+      if (event.target.closest('a')) setMenu(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && header.classList.contains('is-open')) {
+        setMenu(false);
+        menuToggle.focus();
+      }
+    });
+
+    desktop.addEventListener('change', () => setMenu(false));
   }
 
   const hero = document.getElementById('top');

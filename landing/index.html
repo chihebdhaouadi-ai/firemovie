@@ -51,12 +51,18 @@
         <a class="brand" href="#top" aria-label="Film Wise, back to top">
           <img src="assets/logo.webp" alt="Film Wise" width="240" height="55">
         </a>
-        <nav class="site-nav" aria-label="Main">
+        <nav class="site-nav" id="site-nav" aria-label="Main">
           <a href="#lists">Features</a>
           <a href="#how">How it works</a>
           <a href="#faq">FAQ</a>
         </nav>
-        <a class="btn btn--primary btn--small" href="#get-app">Get the app</a>
+        <div class="site-header__actions">
+          <a class="btn btn--primary btn--small site-header__cta" href="#get-app">Get the app</a>
+          <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
+            <span>Menu</span>
+            <span class="menu-toggle__icon" aria-hidden="true"><span></span><span></span></span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -64,14 +70,14 @@
       <section class="hero" id="top" aria-labelledby="hero-title" data-reveal>
         <div class="container hero__grid">
           <div class="hero__copy">
-            <p class="eyebrow">Your film life, in one app</p>
-            <h1 id="hero-title">Track every film you love, and share the ones that matter.</h1>
-            <div class="hero__actions">
+            <p class="eyebrow" data-hero="1">Your film life, in one app</p>
+            <h1 id="hero-title" data-hero="2">Track every film you love, and <span class="accent-text">share the ones that matter.</span></h1>
+            <div class="hero__actions" data-hero="3">
               <a class="btn btn--primary" href="#get-app">Get the app</a>
               <a class="btn btn--ghost" href="#lists">See what it does</a>
             </div>
           </div>
-          <figure class="device device--hero">
+          <figure class="device device--hero" data-hero="4">
             <div class="device__frame">
               <div class="device__screen"><img src="assets/screens/home.webp" alt="" width="540" height="1174" fetchpriority="high"></div>
             </div>
@@ -83,7 +89,7 @@
       <section class="benefits" aria-labelledby="benefits-title" data-reveal>
         <div class="container">
           <h2 class="sr-only" id="benefits-title">Why Film Wise</h2>
-          <ul class="benefit-grid">
+          <ul class="benefit-grid" data-stagger>
             <li class="benefit">
               <h3>Your five favourites, in order</h3>
               <p>Pin the films that define your taste and keep them at the top of your home screen.</p>
@@ -110,7 +116,7 @@
             <p class="eyebrow">01 · Lists</p>
             <h2 id="lists-title">Build your film lists</h2>
             <p class="lead">Three lists cover the whole journey, from your first favourite to your next watch.</p>
-            <ul class="checklist">
+            <ul class="checklist" data-stagger>
               <li><strong>Top 5:</strong> pin your five favourite films, in order.</li>
               <li><strong>Watched:</strong> keep a record of everything you have seen.</li>
               <li><strong>Watchlist:</strong> save the films you want to see next.</li>
@@ -119,7 +125,10 @@
           </div>
           <figure class="device">
             <div class="device__frame">
-              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+              <div class="device__screen device__screen--mock" aria-hidden="true">
+                <div class="mock"><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="device__pending">Screenshot pending</span>
+              </div>
             </div>
             <figcaption class="device__caption">Your lists, one tap away.</figcaption>
           </figure>
@@ -132,7 +141,7 @@
             <p class="eyebrow">02 · Search</p>
             <h2 id="find-title">Find any film</h2>
             <p class="lead">Search by title and get to the film you want in seconds.</p>
-            <ul class="checklist">
+            <ul class="checklist" data-stagger>
               <li>Search films by title.</li>
               <li>Reopen your recent searches.</li>
               <li>Read the synopsis, runtime, genres, director and poster before you decide.</li>
@@ -154,14 +163,17 @@
             <p class="eyebrow">03 · Profile</p>
             <h2 id="profile-title">Make it yours</h2>
             <p class="lead">Set up your profile on day one so friends recognise you.</p>
-            <ul class="checklist">
+            <ul class="checklist" data-stagger>
               <li>Add a photo, a cover image and a short bio during setup.</li>
               <li>See your name, bio and friend count on your profile.</li>
             </ul>
           </div>
           <figure class="device">
             <div class="device__frame">
-              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+              <div class="device__screen device__screen--mock" aria-hidden="true">
+                <div class="mock"><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="device__pending">Screenshot pending</span>
+              </div>
             </div>
             <figcaption class="device__caption">Your profile, your way.</figcaption>
           </figure>
@@ -174,7 +186,7 @@
             <p class="eyebrow">04 · Friends</p>
             <h2 id="friends-title">Connect with friends</h2>
             <p class="lead">Find the people you watch films with and keep your circle in one place.</p>
-            <ul class="checklist">
+            <ul class="checklist" data-stagger>
               <li>Search people by name.</li>
               <li>Send, accept, decline or cancel friend requests.</li>
               <li>See all your friends in one list.</li>
@@ -183,7 +195,10 @@
           </div>
           <figure class="device">
             <div class="device__frame">
-              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+              <div class="device__screen device__screen--mock" aria-hidden="true">
+                <div class="mock"><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="device__pending">Screenshot pending</span>
+              </div>
             </div>
             <figcaption class="device__caption">Find people, keep your circle close.</figcaption>
           </figure>
@@ -196,7 +211,7 @@
             <p class="eyebrow">05 · Recommend</p>
             <h2 id="recommend-title">Recommend films to friends</h2>
             <p class="lead">Send a film you loved with a short note, and see what your friends send you.</p>
-            <ul class="checklist">
+            <ul class="checklist" data-stagger>
               <li>Choose a film, write a note and send it to a friend.</li>
               <li>Find film recommendations in your notifications.</li>
               <li>Mark notifications as read.</li>
@@ -204,7 +219,10 @@
           </div>
           <figure class="device">
             <div class="device__frame">
-              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+              <div class="device__screen device__screen--mock" aria-hidden="true">
+                <div class="mock"><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="device__pending">Screenshot pending</span>
+              </div>
             </div>
             <figcaption class="device__caption">Recommend a film, with a note.</figcaption>
           </figure>
@@ -217,14 +235,17 @@
             <p class="eyebrow">06 · Account</p>
             <h2 id="account-title">Your account, everywhere</h2>
             <p class="lead">Create an account and your lists go with you.</p>
-            <ul class="checklist">
+            <ul class="checklist" data-stagger>
               <li>Create an account or sign in.</li>
               <li>Your lists are saved on the server, not just on one phone.</li>
             </ul>
           </div>
           <figure class="device">
             <div class="device__frame">
-              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+              <div class="device__screen device__screen--mock" aria-hidden="true">
+                <div class="mock"><span></span><span></span><span></span><span></span><span></span></div>
+                <span class="device__pending">Screenshot pending</span>
+              </div>
             </div>
             <figcaption class="device__caption">One account, every phone you use.</figcaption>
           </figure>
@@ -234,7 +255,7 @@
       <section class="how" id="how" aria-labelledby="how-title" data-reveal>
         <div class="container">
           <h2 id="how-title">How it works</h2>
-          <ol class="steps">
+          <ol class="steps" data-stagger>
             <li class="step">
               <span class="step__num" aria-hidden="true">1</span>
               <h3>Create your account</h3>
@@ -277,18 +298,20 @@
       </section>
 
       <section class="final" id="get-app" aria-labelledby="final-title" data-reveal>
-        <div class="container final__inner">
-          <h2 id="final-title">Start your film list today.</h2>
-          <p>Download Film Wise, then build the list that is yours.</p>
-          <div class="store-row">
-            <a class="store" href="#store-app-store-link-needed">
-              <span class="store__small">Download on the</span>
-              <span class="store__big">App Store</span>
-            </a>
-            <a class="store" href="#store-google-play-link-needed">
-              <span class="store__small">Get it on</span>
-              <span class="store__big">Google Play</span>
-            </a>
+        <div class="container">
+          <div class="final__panel final__inner">
+            <h2 id="final-title">Start your film list today.</h2>
+            <p>Download Film Wise, then build the list that is yours.</p>
+            <div class="store-row">
+              <a class="store" href="#store-app-store-link-needed">
+                <span class="store__small">Download on the</span>
+                <span class="store__big">App Store</span>
+              </a>
+              <a class="store" href="#store-google-play-link-needed">
+                <span class="store__small">Get it on</span>
+                <span class="store__big">Google Play</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -303,7 +326,6 @@
         <nav class="site-footer__links" aria-label="Footer">
           <a class="footer-link" href="privacy.html">Privacy policy</a>
           <a class="footer-link" href="mailto:contact@filmwise.example">Contact</a>
-          <a class="footer-link" href="#get-app">Get the app</a>
         </nav>
         <p class="site-footer__copy">© 2026 Film Wise. All rights reserved.</p>
       </div>
