@@ -25,6 +25,7 @@ Brand name: **Film Wise** (one name everywhere).
 - Logo (alt): Film Wise
 - Nav: Features · How it works · FAQ
 - Button: Get the app
+- Menu button (phone widths only): Menu
 
 ## Hero
 
