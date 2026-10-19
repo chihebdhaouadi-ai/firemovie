@@ -14,16 +14,23 @@
   font-display: swap;
 }
 
+/* Colours are taken from the Flutter app (lib/core/theme/app_theme.dart) */
 :root {
-  --bg: #0c0c0f;
-  --bg-2: #14141b;
-  --surface: #1c1c25;
-  --line: #2e2e3a;
-  --text: #f3f3f6;
-  --muted: #bcbcc8;
-  --accent: #e7c069;
-  --accent-ink: #0c0c0f;
-  --silver: linear-gradient(180deg, #ffffff 0%, #d3d8e2 45%, #8d94a3 100%);
+  --bg: #151515;
+  --surface: #1f1f1f;
+  --surface-raised: #2a2a2a;
+  --line: #2a2a2a;
+  --outline: #5d697a;
+  --text: #f2f2f2;
+  --text-2: #d9d9d9;
+  --muted: #a8a8a8;
+  --accent: #1b8ce0;
+  --accent-glow: #35b6ff;
+  --primary-button: #084c7c;
+  --on-primary: #ffffff;
+  --panel-border: #1c6ba8;
+  --star: #d4a21a;
+  --title-gradient: linear-gradient(180deg, #ffffff 0%, #35b6ff 100%);
   --radius: 16px;
   --gutter: 16px;
   --max: 1120px;
@@ -104,8 +111,8 @@ a {
   z-index: 200;
   padding: 12px 16px;
   border-radius: 8px;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--primary-button);
+  color: var(--on-primary);
   font-weight: 600;
   text-decoration: none;
   transform: translateY(-200%);
@@ -116,7 +123,7 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--accent-glow);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -160,7 +167,7 @@ a {
   font-size: clamp(2.6rem, 12vw, 6rem);
   font-weight: 600;
   line-height: 1.1;
-  background: var(--silver);
+  background: var(--title-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -214,7 +221,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(12, 12, 15, 0.92);
+  background: rgba(21, 21, 21, 0.92);
   border-bottom: 1px solid var(--line);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -272,12 +279,12 @@ a {
 }
 
 .btn--primary {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--primary-button);
+  color: var(--on-primary);
 }
 
 .btn--ghost {
-  border-color: var(--line);
+  border-color: var(--outline);
   background: transparent;
   color: var(--text);
 }
@@ -370,8 +377,8 @@ h3 {
   margin-inline: auto;
   padding: 10px;
   border-radius: 42px;
-  background: linear-gradient(160deg, #2c2c36, #101015);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), inset 0 0 0 2px #3a3a46;
+  background: linear-gradient(160deg, #2a2a2a, #151515);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), inset 0 0 0 2px #333333;
 }
 
 .device__frame {
@@ -386,7 +393,7 @@ h3 {
   height: 100%;
   overflow: hidden;
   border-radius: 32px;
-  background: radial-gradient(120% 80% at 50% 0%, #22222c 0%, var(--bg-2) 70%);
+  background: radial-gradient(120% 80% at 50% 0%, var(--surface-raised) 0%, var(--surface) 70%);
 }
 
 .device__screen::before {
@@ -498,7 +505,7 @@ h3 {
 .step {
   padding: 24px;
   border-radius: var(--radius);
-  background: var(--bg-2);
+  background: var(--surface);
   border: 1px solid var(--line);
 }
 
@@ -509,8 +516,8 @@ h3 {
   height: 44px;
   margin-bottom: 12px;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--primary-button);
+  color: var(--on-primary);
   font-weight: 600;
 }
 
@@ -600,7 +607,7 @@ h3 {
   min-width: 200px;
   min-height: 56px;
   padding: 10px 22px;
-  border: 1px solid #5a5a68;
+  border: 1px solid var(--outline);
   border-radius: 12px;
   background: #000;
   color: var(--text);
@@ -629,7 +636,7 @@ h3 {
 .site-footer {
   padding: 48px 0 calc(48px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--line);
-  background: var(--bg-2);
+  background: var(--surface);
   color: var(--muted);
 }
 
@@ -674,7 +681,7 @@ h3 {
   left: 0;
   z-index: 60;
   padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
-  background: rgba(12, 12, 15, 0.96);
+  background: rgba(21, 21, 21, 0.96);
   border-top: 1px solid var(--line);
   transform: translateY(110%);
   transition: transform 0.3s var(--ease-out);
