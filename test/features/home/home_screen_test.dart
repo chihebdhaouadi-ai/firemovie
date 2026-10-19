@@ -10,6 +10,7 @@ import 'package:film_wise_mobile/features/home/views/home_screen.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/add_tile.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/skeletons.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/top5_row.dart';
+import 'package:film_wise_mobile/features/overview/views/movie_overview_screen.dart';
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -287,15 +288,15 @@ void main() {
       expect(_generatePressed(tester), isNull);
       expect(find.text(_en.homeGenerateDisabledHint(3)), findsOneWidget);
 
-      await tester.tap(_filmLabel(_interstellar, _en.homeWatchedTitle));
+      await tester.longPress(_filmLabel(_interstellar, _en.homeWatchedTitle));
       await tester.pumpAndSettle();
-      await tester.tap(_filmLabel(_blade, _en.homeWatchedTitle));
+      await tester.longPress(_filmLabel(_blade, _en.homeWatchedTitle));
       await tester.pumpAndSettle();
 
       expect(_generatePressed(tester), isNull);
       expect(find.text(_en.homeGenerateDisabledHint(1)), findsOneWidget);
 
-      await tester.tap(_filmLabel(_matrix, _en.homeWatchedTitle));
+      await tester.longPress(_filmLabel(_matrix, _en.homeWatchedTitle));
       await tester.pumpAndSettle();
 
       expect(_generatePressed(tester), isNotNull);
@@ -306,6 +307,47 @@ void main() {
 
       expect(find.text(_en.homeGenerateSuccess), findsOneWidget);
       expect(find.text(_en.homePointsLabel(100)), findsOneWidget);
+    });
+  });
+
+  group('overview', () {
+    testWidgets('tapping a Top 5 film opens its overview', (tester) async {
+      await pumpHome(
+        tester,
+        repository: FakeHomeRepository(
+          seed: {
+            HomeList.top5: [_dune],
+          },
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // The remove button's 48dp target covers the top of a narrow Top 5 tile,
+      // so tap the lower part of the poster.
+      final tile = tester.getRect(_filmLabel(_dune, _en.homeTop5Title));
+      await tester.tapAt(tile.bottomCenter.translate(0, -10));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.byType(MovieOverviewScreen), findsOneWidget);
+      await tester.pump(const Duration(seconds: 13));
+    });
+
+    testWidgets('tapping a Watched film opens its overview without picking it',
+        (tester) async {
+      await pumpHome(
+        tester,
+        repository: FakeHomeRepository(seed: _contentSeed()),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(_filmLabel(_blade, _en.homeWatchedTitle));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.byType(MovieOverviewScreen), findsOneWidget);
+      expect(find.text(_en.homeGenerateDisabledHint(3)), findsOneWidget);
+      await tester.pump(const Duration(seconds: 13));
     });
   });
 

@@ -634,6 +634,756 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Film data and posters via TMDB. Streaming availability via JustWatch.'**
   String get findAttribution;
+
+  /// No description provided for @overviewBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get overviewBack;
+
+  /// No description provided for @overviewRating.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / 10'**
+  String overviewRating(String value);
+
+  /// No description provided for @overviewNoRating.
+  ///
+  /// In en, this message translates to:
+  /// **'No rating yet'**
+  String get overviewNoRating;
+
+  /// No description provided for @overviewWhereToWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to watch?'**
+  String get overviewWhereToWatch;
+
+  /// No description provided for @overviewNoStreaming.
+  ///
+  /// In en, this message translates to:
+  /// **'No streaming providers found'**
+  String get overviewNoStreaming;
+
+  /// No description provided for @overviewRatingsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Ratings: {count} filmwiser'**
+  String overviewRatingsCount(int count);
+
+  /// No description provided for @overviewStarsValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} out of 5 stars'**
+  String overviewStarsValue(String value);
+
+  /// No description provided for @overviewTrailer.
+  ///
+  /// In en, this message translates to:
+  /// **'Trailer'**
+  String get overviewTrailer;
+
+  /// No description provided for @overviewStreamLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stream'**
+  String get overviewStreamLabel;
+
+  /// No description provided for @overviewRentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get overviewRentLabel;
+
+  /// No description provided for @overviewBuyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get overviewBuyLabel;
+
+  /// No description provided for @overviewNoGenres.
+  ///
+  /// In en, this message translates to:
+  /// **'No genres listed'**
+  String get overviewNoGenres;
+
+  /// No description provided for @overviewTabGenres.
+  ///
+  /// In en, this message translates to:
+  /// **'GENRES'**
+  String get overviewTabGenres;
+
+  /// No description provided for @overviewTabCast.
+  ///
+  /// In en, this message translates to:
+  /// **'CAST'**
+  String get overviewTabCast;
+
+  /// No description provided for @overviewTabCrew.
+  ///
+  /// In en, this message translates to:
+  /// **'CREW'**
+  String get overviewTabCrew;
+
+  /// No description provided for @overviewTabProd.
+  ///
+  /// In en, this message translates to:
+  /// **'PROD'**
+  String get overviewTabProd;
+
+  /// No description provided for @overviewActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity From Friends'**
+  String get overviewActivityTitle;
+
+  /// No description provided for @overviewWantsToWatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Wants to watch'**
+  String get overviewWantsToWatch;
+
+  /// No description provided for @overviewReviewsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get overviewReviewsTitle;
+
+  /// No description provided for @overviewAddReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a review...'**
+  String get overviewAddReviewHint;
+
+  /// No description provided for @overviewYourReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Review'**
+  String get overviewYourReview;
+
+  /// No description provided for @overviewFriendsReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends Reviews'**
+  String get overviewFriendsReviews;
+
+  /// No description provided for @overviewPopularReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular Reviews'**
+  String get overviewPopularReviews;
+
+  /// No description provided for @overviewSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get overviewSeeAll;
+
+  /// No description provided for @overviewReviewBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Review by {name} on {date}'**
+  String overviewReviewBy(String name, String date);
+
+  /// No description provided for @homeOpenProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open profile'**
+  String get homeOpenProfile;
+
+  /// No description provided for @profileBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get profileBack;
+
+  /// No description provided for @profileSearchTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get profileSearchTooltip;
+
+  /// No description provided for @profileMoreTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get profileMoreTooltip;
+
+  /// No description provided for @profileFollowers.
+  ///
+  /// In en, this message translates to:
+  /// **'Followers'**
+  String get profileFollowers;
+
+  /// No description provided for @profileFollowing.
+  ///
+  /// In en, this message translates to:
+  /// **'Following'**
+  String get profileFollowing;
+
+  /// No description provided for @profileBioHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your bio..'**
+  String get profileBioHint;
+
+  /// No description provided for @profileChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get profileChat;
+
+  /// No description provided for @profileFollow.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow'**
+  String get profileFollow;
+
+  /// No description provided for @profileSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get profileSend;
+
+  /// No description provided for @profileAchievementsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get profileAchievementsTitle;
+
+  /// No description provided for @profileAchievementRookie.
+  ///
+  /// In en, this message translates to:
+  /// **'CINEPHILE ROOKIE'**
+  String get profileAchievementRookie;
+
+  /// No description provided for @profileAchievementMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'CINEPHILE MASTER'**
+  String get profileAchievementMaster;
+
+  /// No description provided for @profileAchievementLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'CINEPHILE LEGEND'**
+  String get profileAchievementLegend;
+
+  /// No description provided for @profileAchievementFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} films'**
+  String profileAchievementFilms(int count);
+
+  /// No description provided for @profileClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim'**
+  String get profileClaim;
+
+  /// No description provided for @profileStatisticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get profileStatisticsTitle;
+
+  /// No description provided for @profileStatWatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Watched'**
+  String get profileStatWatched;
+
+  /// No description provided for @profileStatWatchlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Watchlist'**
+  String get profileStatWatchlist;
+
+  /// No description provided for @profileStatReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get profileStatReviews;
+
+  /// No description provided for @profileStatRewards.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewards'**
+  String get profileStatRewards;
+
+  /// No description provided for @profileBlockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You want to block this user?'**
+  String get profileBlockTitle;
+
+  /// No description provided for @profileBlockReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Why?..'**
+  String get profileBlockReasonHint;
+
+  /// No description provided for @profileBlockYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get profileBlockYes;
+
+  /// No description provided for @profileBlockNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get profileBlockNo;
+
+  /// No description provided for @profileErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load your profile.'**
+  String get profileErrorTitle;
+
+  /// No description provided for @profileRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get profileRetry;
+
+  /// No description provided for @onboardingFinishLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish later'**
+  String get onboardingFinishLater;
+
+  /// No description provided for @onboardingStepCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String onboardingStepCounter(int current, int total);
+
+  /// No description provided for @onboardingContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingContinue;
+
+  /// No description provided for @onboardingFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get onboardingFinish;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save that. Check your connection and try again.'**
+  String get onboardingSaveFailed;
+
+  /// No description provided for @onboardingAvatarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a profile photo'**
+  String get onboardingAvatarTitle;
+
+  /// No description provided for @onboardingAvatarBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a picture so people can recognise you. JPG, PNG or WebP, up to 5 MB.'**
+  String get onboardingAvatarBody;
+
+  /// No description provided for @onboardingChoosePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose photo'**
+  String get onboardingChoosePhoto;
+
+  /// No description provided for @onboardingPhotoSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile photo saved'**
+  String get onboardingPhotoSaved;
+
+  /// No description provided for @onboardingCoverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a cover photo'**
+  String get onboardingCoverTitle;
+
+  /// No description provided for @onboardingCoverBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A wide image behind your profile header.'**
+  String get onboardingCoverBody;
+
+  /// No description provided for @onboardingChooseCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose cover'**
+  String get onboardingChooseCover;
+
+  /// No description provided for @onboardingCoverSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover saved'**
+  String get onboardingCoverSaved;
+
+  /// No description provided for @onboardingBioTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a short bio'**
+  String get onboardingBioTitle;
+
+  /// No description provided for @onboardingBioBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell people what kind of films you love.'**
+  String get onboardingBioBody;
+
+  /// No description provided for @onboardingBioHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A few words about your taste in film'**
+  String get onboardingBioHint;
+
+  /// No description provided for @onboardingTop5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your top 5 movies'**
+  String get onboardingTop5Title;
+
+  /// No description provided for @onboardingTop5Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Your favourite films, shown first on your profile.'**
+  String get onboardingTop5Body;
+
+  /// No description provided for @onboardingTop5Progress.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 5 chosen'**
+  String onboardingTop5Progress(int count);
+
+  /// No description provided for @onboardingWatchedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add movies you\'ve watched'**
+  String get onboardingWatchedTitle;
+
+  /// No description provided for @onboardingWatchedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Log the films you have already seen.'**
+  String get onboardingWatchedBody;
+
+  /// No description provided for @onboardingWatchlistTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add movies to watch'**
+  String get onboardingWatchlistTitle;
+
+  /// No description provided for @onboardingWatchlistBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Save the films you plan to watch next.'**
+  String get onboardingWatchlistBody;
+
+  /// No description provided for @onboardingFilmsAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 film added} other{{count} films added}}'**
+  String onboardingFilmsAdded(int count);
+
+  /// No description provided for @onboardingSearchFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'Search films'**
+  String get onboardingSearchFilms;
+
+  /// No description provided for @profileNotificationsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get profileNotificationsTooltip;
+
+  /// No description provided for @profileEditPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit photo'**
+  String get profileEditPhoto;
+
+  /// No description provided for @profileEditCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit cover'**
+  String get profileEditCover;
+
+  /// No description provided for @profileEditBio.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit bio'**
+  String get profileEditBio;
+
+  /// No description provided for @profileEditBioTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your bio'**
+  String get profileEditBioTitle;
+
+  /// No description provided for @profileSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get profileSave;
+
+  /// No description provided for @profileCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get profileCancel;
+
+  /// No description provided for @profileSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save that. Try again.'**
+  String get profileSaveFailed;
+
+  /// No description provided for @profileNoConnections.
+  ///
+  /// In en, this message translates to:
+  /// **'No one here yet.'**
+  String get profileNoConnections;
+
+  /// No description provided for @friendAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friend'**
+  String get friendAdd;
+
+  /// No description provided for @friendCancelRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get friendCancelRequest;
+
+  /// No description provided for @friendAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get friendAccept;
+
+  /// No description provided for @friendDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get friendDecline;
+
+  /// No description provided for @friendFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends'**
+  String get friendFriends;
+
+  /// No description provided for @friendRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend request sent.'**
+  String get friendRequestSent;
+
+  /// No description provided for @friendActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update the friend request. Try again.'**
+  String get friendActionFailed;
+
+  /// No description provided for @friendRequestGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This request is no longer available.'**
+  String get friendRequestGone;
+
+  /// No description provided for @friendAlreadyConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re already friends or have a pending request.'**
+  String get friendAlreadyConnected;
+
+  /// No description provided for @searchPeopleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find people'**
+  String get searchPeopleTitle;
+
+  /// No description provided for @searchPeopleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by username'**
+  String get searchPeopleHint;
+
+  /// No description provided for @searchPeopleMinChars.
+  ///
+  /// In en, this message translates to:
+  /// **'Type at least 2 characters.'**
+  String get searchPeopleMinChars;
+
+  /// No description provided for @searchPeopleEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No users found.'**
+  String get searchPeopleEmpty;
+
+  /// No description provided for @searchPeopleFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t search right now. Try again.'**
+  String get searchPeopleFailed;
+
+  /// No description provided for @suggestMovieAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a movie'**
+  String get suggestMovieAction;
+
+  /// No description provided for @suggestionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a movie'**
+  String get suggestionTitle;
+
+  /// No description provided for @suggestionSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search a movie title'**
+  String get suggestionSearchHint;
+
+  /// No description provided for @suggestionSearchMinChars.
+  ///
+  /// In en, this message translates to:
+  /// **'Type at least 2 characters.'**
+  String get suggestionSearchMinChars;
+
+  /// No description provided for @suggestionSearchEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No movies found.'**
+  String get suggestionSearchEmpty;
+
+  /// No description provided for @suggestionSearchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t search right now. Try again.'**
+  String get suggestionSearchFailed;
+
+  /// No description provided for @suggestionMovieSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie'**
+  String get suggestionMovieSection;
+
+  /// No description provided for @suggestionPickMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a movie to suggest.'**
+  String get suggestionPickMovie;
+
+  /// No description provided for @suggestionChangeMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'Change movie'**
+  String get suggestionChangeMovie;
+
+  /// No description provided for @suggestionRecipientsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to'**
+  String get suggestionRecipientsSection;
+
+  /// No description provided for @suggestionSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get suggestionSelectAll;
+
+  /// No description provided for @suggestionNoFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friends first to send them suggestions.'**
+  String get suggestionNoFriends;
+
+  /// No description provided for @suggestionFriendsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your friends.'**
+  String get suggestionFriendsFailed;
+
+  /// No description provided for @suggestionCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment (optional)'**
+  String get suggestionCommentHint;
+
+  /// No description provided for @suggestionSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send suggestion'**
+  String get suggestionSend;
+
+  /// No description provided for @suggestionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion sent.'**
+  String get suggestionSent;
+
+  /// No description provided for @suggestionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the suggestion. Try again.'**
+  String get suggestionFailed;
+
+  /// No description provided for @suggestionNotFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'You can only suggest movies to friends. Update your selection and try again.'**
+  String get suggestionNotFriends;
+
+  /// No description provided for @notificationMovieSuggestion.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} suggested {title} to you.'**
+  String notificationMovieSuggestion(String name, String title);
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet.'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load notifications.'**
+  String get notificationsFailed;
+
+  /// No description provided for @notificationFriendRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} sent you a friend request.'**
+  String notificationFriendRequest(String name);
+
+  /// No description provided for @notificationFriendAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} accepted your friend request.'**
+  String notificationFriendAccepted(String name);
 }
 
 class _AppLocalizationsDelegate

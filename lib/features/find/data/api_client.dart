@@ -34,8 +34,24 @@ class ApiClient {
     String path, {
     Map<String, String>? query,
   }) async {
-    final response = await _send(() => _inner.get(_uri(path, query)));
+    final response =
+        await _send(() => _inner.get(_uri(path, query), headers: _headers));
     return _decodeObject(response);
+  }
+
+  Future<List<Map<String, dynamic>>> getList(
+    String path, {
+    Map<String, String>? query,
+  }) async {
+    final response =
+        await _send(() => _inner.get(_uri(path, query), headers: _headers));
+    final decoded = _decodeAny(response);
+    if (decoded is List) return decoded.cast<Map<String, dynamic>>();
+    throw ServerFailure('bad_response', 'Unexpected response from server.');
+  }
+
+  Future<void> postNoContent(String path) async {
+    await _send(() => _inner.post(_uri(path), headers: _headers));
   }
 
   Future<Map<String, dynamic>> postJson(
@@ -55,6 +71,23 @@ class ApiClient {
   }) async {
     final response = await _send(() =>
         _inner.patch(_uri(path), headers: _headers, body: jsonEncode(body)));
+    return _decodeObject(response);
+  }
+
+  Future<Map<String, dynamic>> patchMultipart(
+    String path, {
+    required String fileField,
+    required String filePath,
+  }) async {
+    final response = await _send(() async {
+      final request = http.MultipartRequest('PATCH', _uri(path))
+        ..files.add(await http.MultipartFile.fromPath(fileField, filePath));
+      if (ApiConfig.authorization case final auth?) {
+        request.headers['Authorization'] = auth;
+      }
+      final streamed = await _inner.send(request);
+      return http.Response.fromStream(streamed);
+    });
     return _decodeObject(response);
   }
 
@@ -106,10 +139,14 @@ class ApiClient {
   }
 
   Map<String, dynamic>? _tryDecode(http.Response response) {
+    final decoded = _decodeAny(response);
+    return decoded is Map<String, dynamic> ? decoded : null;
+  }
+
+  Object? _decodeAny(http.Response response) {
     if (response.bodyBytes.isEmpty) return null;
     try {
-      final decoded = jsonDecode(utf8.decode(response.bodyBytes));
-      return decoded is Map<String, dynamic> ? decoded : null;
+      return jsonDecode(utf8.decode(response.bodyBytes));
     } on FormatException {
       return null;
     }

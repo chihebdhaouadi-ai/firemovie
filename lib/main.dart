@@ -7,6 +7,7 @@ import 'package:film_wise_mobile/features/home/bloc/home_bloc.dart';
 import 'package:film_wise_mobile/features/home/bloc/home_screen_event.dart';
 import 'package:film_wise_mobile/features/home/data/home_repository.dart';
 import 'package:film_wise_mobile/features/home/views/home_screen.dart';
+import 'package:film_wise_mobile/features/onboarding/views/onboarding_screen.dart';
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:film_wise_mobile/core/session.dart';
 import 'package:flutter/material.dart';
@@ -63,18 +64,9 @@ class MyApp extends StatelessWidget {
                           }
                         } else if (state.services.feature == "register") {
                           if (state.services.status == 200) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return CustomDialog(
-                                  message: "${state.services.message}",
-                                  textColor: Color.fromARGB(255, 96, 255, 22),
-                                  buttonText: "Login",
-                                );
-                              },
-                            );
-                            Navigator.pushReplacementNamed(context, '/',
-                                arguments: {'come_from': 'register'});
+                            Session.token = state.services.token;
+                            Navigator.pushReplacementNamed(
+                                context, '/onboarding');
                           }
                           if (state.services.status == 400)
                             showDialog(
@@ -99,6 +91,7 @@ class MyApp extends StatelessWidget {
                 )..add(const HomeStarted()),
                 child: const HomeScreen(),
               ),
+          '/onboarding': (context) => const OnboardingScreen(),
           '/find': (context) => const FindFilmScreen(),
         });
   }

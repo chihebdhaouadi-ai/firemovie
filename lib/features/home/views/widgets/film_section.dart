@@ -19,7 +19,8 @@ class FilmSection extends StatelessWidget {
     required this.onRetry,
     this.onAdd,
     this.onRemove,
-    this.onTapFilm,
+    this.onOpenFilm,
+    this.onLongPressFilm,
     this.selectedFilms = const {},
   });
 
@@ -29,7 +30,8 @@ class FilmSection extends StatelessWidget {
   final VoidCallback onRetry;
   final VoidCallback? onAdd;
   final ValueChanged<Film>? onRemove;
-  final ValueChanged<Film>? onTapFilm;
+  final ValueChanged<Film>? onOpenFilm;
+  final ValueChanged<Film>? onLongPressFilm;
   final Set<Film> selectedFilms;
 
   @override
@@ -57,7 +59,8 @@ class FilmSection extends StatelessWidget {
           tileWidth: tileWidth,
           onAdd: add,
           onRemove: onRemove,
-          onTapFilm: onTapFilm,
+          onOpenFilm: onOpenFilm,
+          onLongPressFilm: onLongPressFilm,
           selectedFilms: selectedFilms,
         ),
     };
@@ -84,7 +87,8 @@ class _FilmRow extends StatelessWidget {
     required this.tileWidth,
     required this.onAdd,
     required this.onRemove,
-    required this.onTapFilm,
+    required this.onOpenFilm,
+    required this.onLongPressFilm,
     required this.selectedFilms,
   });
 
@@ -93,7 +97,8 @@ class _FilmRow extends StatelessWidget {
   final double tileWidth;
   final VoidCallback? onAdd;
   final ValueChanged<Film>? onRemove;
-  final ValueChanged<Film>? onTapFilm;
+  final ValueChanged<Film>? onOpenFilm;
+  final ValueChanged<Film>? onLongPressFilm;
   final Set<Film> selectedFilms;
 
   @override
@@ -102,7 +107,8 @@ class _FilmRow extends StatelessWidget {
     final l10n = context.l10n;
     final add = onAdd;
     final remove = onRemove;
-    final tap = onTapFilm;
+    final open = onOpenFilm;
+    final longPress = onLongPressFilm;
     final itemCount = add == null ? films.length : films.length + 1;
 
     return SizedBox(
@@ -127,7 +133,8 @@ class _FilmRow extends StatelessWidget {
                 l10n.homeFilmTileSemantics(film.displayTitle, title),
             removeLabel: l10n.homeRemoveFilm(film.displayTitle),
             selected: selectedFilms.contains(film),
-            onTap: tap == null ? null : () => tap(film),
+            onTap: open == null ? null : () => open(film),
+            onLongPress: longPress == null ? null : () => longPress(film),
             onRemove: remove == null ? null : () => remove(film),
           );
         },

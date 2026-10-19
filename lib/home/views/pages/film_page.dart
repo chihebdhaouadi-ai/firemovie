@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/core.dart';
+import '../../../core/session.dart';
 import 'package:film_wise_mobile/home/views/pages/home.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _Movie_Page extends State<Movie_Page> with TickerProviderStateMixin {
 
          BlocProvider
        .of<ReviewBLoc>(context)
-       .Get_Review_movies_movies(Review_MoviesTrigerState(token: "2aa9f42aa6410495d105594d4e872613c710839b",imdbid: "${widget.arg}"));
+       .Get_Review_movies_movies(Review_MoviesTrigerState(token: Session.token,imdbid: "${widget.arg}"));
    BlocProvider
        .of<StreamBLoc>(context)
        .Get_Stream_movies(Stream_MoviesTrigerState(imdbid: "${widget.arg}"));

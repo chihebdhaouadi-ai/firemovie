@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:film_wise_mobile/core/session.dart';
 import 'package:film_wise_mobile/features/find/data/api_client.dart';
 import 'package:film_wise_mobile/features/find/data/find_repository.dart';
 import 'package:film_wise_mobile/features/find/data/movie.dart';
@@ -9,6 +10,36 @@ import 'package:http/testing.dart';
 
 void main() {
   group('FindRepository', () {
+    test('search sends the Authorization header when logged in', () async {
+      final previous = Session.token;
+      Session.token = 'secret-token';
+      try {
+        late http.Request captured;
+        final client = MockClient((request) async {
+          captured = request;
+          return http.Response(
+            jsonEncode({
+              'page': 1,
+              'total_pages': 1,
+              'total_results': 1,
+              'results': [
+                {'film_id': '278', 'title': 'The Shawshank Redemption'},
+              ],
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        });
+
+        final repo = FindRepository(client: ApiClient(httpClient: client));
+        await repo.search('shaw');
+
+        expect(captured.headers['authorization'], 'Token secret-token');
+      } finally {
+        Session.token = previous;
+      }
+    });
+
     test('search hits /api/films/search with query and page', () async {
       late Uri captured;
       final client = MockClient((request) async {

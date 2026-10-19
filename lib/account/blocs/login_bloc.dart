@@ -42,7 +42,7 @@ class LoginBLoc extends Bloc<LoginEvent,LoginState>{
    emit(LoginLoadingState());
     print("testt");
     final login =  await repo.getToken(event.loginEntity);
-if (login.message !=" wrong")
+if (login.message !="wrong")
      emit(LoginLoadedState(services: login));
       else
         emit(LoginErrorState(msg: 'wronng'));

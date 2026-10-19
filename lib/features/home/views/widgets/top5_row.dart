@@ -16,6 +16,7 @@ class Top5Row extends StatelessWidget {
     required this.state,
     required this.onRetry,
     required this.onAddSlot,
+    required this.onOpenFilm,
     required this.onRemove,
   });
 
@@ -25,6 +26,7 @@ class Top5Row extends StatelessWidget {
 
   /// Invoked with the 1-based slot (1..5) when the user taps an empty slot.
   final ValueChanged<int> onAddSlot;
+  final ValueChanged<Film> onOpenFilm;
   final ValueChanged<Film> onRemove;
 
   @override
@@ -38,6 +40,7 @@ class Top5Row extends StatelessWidget {
             films: const [],
             placeholder: true,
             onAddSlot: onAddSlot,
+            onOpenFilm: onOpenFilm,
             onRemove: onRemove,
           ),
         ),
@@ -46,6 +49,7 @@ class Top5Row extends StatelessWidget {
           films: const [],
           placeholder: false,
           onAddSlot: onAddSlot,
+          onOpenFilm: onOpenFilm,
           onRemove: onRemove,
         ),
       SectionError() => SectionStatusCard(
@@ -59,6 +63,7 @@ class Top5Row extends StatelessWidget {
           films: films,
           placeholder: false,
           onAddSlot: onAddSlot,
+          onOpenFilm: onOpenFilm,
           onRemove: onRemove,
         ),
     };
@@ -71,6 +76,7 @@ class _Top5Slots extends StatelessWidget {
     required this.films,
     required this.placeholder,
     required this.onAddSlot,
+    required this.onOpenFilm,
     required this.onRemove,
   });
 
@@ -78,6 +84,7 @@ class _Top5Slots extends StatelessWidget {
   final List<Film> films;
   final bool placeholder;
   final ValueChanged<int> onAddSlot;
+  final ValueChanged<Film> onOpenFilm;
   final ValueChanged<Film> onRemove;
 
   @override
@@ -102,6 +109,7 @@ class _Top5Slots extends StatelessWidget {
                     semanticsLabel:
                         l10n.homeFilmTileSemantics(film.displayTitle, title),
                     removeLabel: l10n.homeRemoveFilm(film.displayTitle),
+                    onTap: () => onOpenFilm(film),
                     onRemove: () => onRemove(film),
                   );
                 }

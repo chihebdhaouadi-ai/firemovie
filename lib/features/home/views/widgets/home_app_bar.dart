@@ -4,9 +4,14 @@ import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({super.key, required this.points});
+  const HomeAppBar({
+    super.key,
+    required this.points,
+    required this.onOpenProfile,
+  });
 
   final int points;
+  final VoidCallback onOpenProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +63,11 @@ class HomeAppBar extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        IconButton(
+          tooltip: l10n.homeOpenProfile,
+          onPressed: onOpenProfile,
+          icon: const Icon(Icons.account_circle_outlined),
         ),
       ],
     );

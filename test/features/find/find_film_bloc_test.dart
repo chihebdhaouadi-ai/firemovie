@@ -3,7 +3,6 @@ import 'package:film_wise_mobile/features/find/bloc/find_film_event.dart';
 import 'package:film_wise_mobile/features/find/bloc/find_film_state.dart';
 import 'package:film_wise_mobile/features/find/data/find_repository.dart';
 import 'package:film_wise_mobile/features/find/data/in_memory_lists_repository.dart';
-import 'package:film_wise_mobile/features/find/data/lists_repository.dart';
 import 'package:film_wise_mobile/features/find/data/movie.dart';
 import 'package:film_wise_mobile/features/find/data/recent_searches_store.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,10 +19,11 @@ const _in = Movie(id: '27205', title: 'Inception', year: 2010);
 const _arr = Movie(id: '603', title: 'Arrival', year: 2016);
 
 class _StubFindRepository extends FindRepository {
-  _StubFindRepository({this.results = const [], this.failFirst = false});
+  _StubFindRepository({this.results = const []});
 
   final List<Movie> results;
-  bool failFirst;
+  bool failFirst = false;
+  Duration searchDelay = Duration.zero;
   int calls = 0;
   final List<int> requestedPages = [];
 
@@ -31,6 +31,7 @@ class _StubFindRepository extends FindRepository {
   Future<MovieSearchPage> search(String query, {int page = 1}) async {
     calls++;
     requestedPages.add(page);
+    if (searchDelay > Duration.zero) await Future.delayed(searchDelay);
     if (failFirst) {
       failFirst = false;
       throw const NetworkFailure('down');
@@ -132,6 +133,24 @@ void main() {
       expect(state, isA<FindFilmResults>());
       expect((state as FindFilmResults).results.map((m) => m.title),
           contains('Inception'));
+    });
+
+    test('a keystroke during an in-flight search cancels it without erroring',
+        () async {
+      final h = _Harness();
+      h.find.searchDelay = const Duration(milliseconds: 300);
+      final bloc = h.build();
+      addTearDown(bloc.close);
+
+      bloc.add(const QueryChanged('matrix'));
+      await Future.delayed(
+          debounceDuration + const Duration(milliseconds: 50));
+      bloc.add(const QueryChanged('inception'));
+      await Future.delayed(
+          debounceDuration + const Duration(milliseconds: 400));
+
+      expect(bloc.state, isA<FindFilmResults>());
+      expect((bloc.state as FindFilmResults).query, 'inception');
     });
 
     test('network failure surfaces an error with the query preserved',

@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/core.dart';
+import '../../../core/session.dart';
 import '../../blocs/home_state.dart';
 import '../../data/top_5_movies_entity.dart';
 
@@ -119,7 +120,7 @@ class _FilmcardState extends State<Filmcard> with TickerProviderStateMixin  {
               Text(
                 (widget.come_from == "top_5_movies") ? " DELETE ${widget.filmname} from your top 5 movies ":
                  (widget.come_from == "watched_list") 
-                 ? " DELETE ${widget.filmname} from your watched list movies " : (widget.come_from =="watch_list")? "DELETE ${widget.filmname} from your watch list movies ":"",
+                 ? " DELETE ${widget.filmname} from your watched list movies " : (widget.come_from =="watchlist")? "DELETE ${widget.filmname} from your watch list movies ":"",
                 style: TextStyle(color: const Color.fromARGB(255, 217, 217, 217), fontSize: 13),
               ),
               SizedBox(height: 20),
@@ -133,7 +134,7 @@ print("top_5_movies");
 if (widget.come_from == "top_5_movies")
 BlocProvider
        .of<HomeBLoc>(context)
-       .Delete_List_movies_movies(Delete_List_MoviesTrigerState(add_List_Movies_Entity: Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${widget.film_id}",come_from: "${widget.come_from}")  ));
+       .Delete_List_movies_movies(Delete_List_MoviesTrigerState(add_List_Movies_Entity: Add_List_Movies_Entity(token: Session.token,movie_id: "${widget.film_id}",come_from: "${widget.come_from}")  ));
 
 
 
@@ -141,15 +142,15 @@ BlocProvider
 if (widget.come_from == "watched_list")
 BlocProvider
        .of<WatchedBLoc>(context)
-       .Delete_List_movies_movies(Delete_List_MoviesTrigerState(add_List_Movies_Entity: Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${widget.film_id}",come_from: "${widget.come_from}")  ));
+       .Delete_List_movies_movies(Delete_List_MoviesTrigerState(add_List_Movies_Entity: Add_List_Movies_Entity(token: Session.token,movie_id: "${widget.film_id}",come_from: "${widget.come_from}")  ));
 
 
 
 
-if (widget.come_from == "watch_list")
+if (widget.come_from == "watchlist")
 BlocProvider
        .of<WatchtlistBLoc>(context)
-       .Delete_List_movies_movies(Delete_List_MoviesTrigerState(add_List_Movies_Entity: Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${widget.film_id}",come_from: "${widget.come_from}")  ));
+       .Delete_List_movies_movies(Delete_List_MoviesTrigerState(add_List_Movies_Entity: Add_List_Movies_Entity(token: Session.token,movie_id: "${widget.film_id}",come_from: "${widget.come_from}")  ));
 
 
 

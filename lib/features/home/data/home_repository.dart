@@ -45,7 +45,11 @@ class ApiHomeRepository implements HomeRepository {
     }
     return data
         .whereType<Map<String, dynamic>>()
-        .map((item) => Film(imdbId: '${item['imdp_id']}'))
+        .map((item) => Film(
+              imdbId: '${item['imdp_id']}',
+              title: item['title'] as String?,
+              posterUrl: item['poster_url'] as String?,
+            ))
         .toList(growable: false);
   }
 

@@ -639,27 +639,56 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
 
   static EventTransformer<E> _debounce<E extends FindFilmEvent>(
       Duration duration) {
-    Timer? timer;
-    E? pending;
     return (events, mapper) {
       final out = StreamController<E>();
-      void emitNext() {
-        final toSend = pending;
-        pending = null;
-        if (toSend != null) {
-          out.addStream(mapper(toSend));
-        }
+      Timer? timer;
+      E? pending;
+      StreamSubscription<E>? running;
+      var sourceDone = false;
+
+      void closeWhenIdle() {
+        if (sourceDone && timer == null && running == null) out.close();
       }
 
-      events.listen((event) {
+      void dispatch(E event) {
+        running?.cancel();
+        running = mapper(event).listen(
+          out.add,
+          onError: out.addError,
+          onDone: () {
+            running = null;
+            closeWhenIdle();
+          },
+        );
+      }
+
+      void flushPending() {
+        final toSend = pending;
+        pending = null;
+        if (toSend != null) dispatch(toSend);
+      }
+
+      final subscription = events.listen((event) {
         pending = event;
         timer?.cancel();
-        timer = Timer(duration, emitNext);
+        timer = Timer(duration, () {
+          timer = null;
+          flushPending();
+          closeWhenIdle();
+        });
       }, onDone: () {
+        sourceDone = true;
         timer?.cancel();
-        emitNext();
-        out.close();
+        timer = null;
+        flushPending();
+        closeWhenIdle();
       });
+
+      out.onCancel = () {
+        timer?.cancel();
+        running?.cancel();
+        return subscription.cancel();
+      };
       return out.stream;
     };
   }

@@ -15,6 +15,7 @@ import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'dart:convert';
 
 import '../../../core/core.dart';
+import '../../../core/session.dart';
 import '../widgets/add_film_card.dart';
 import '../widgets/app_bar_action_items.dart';
 import '../widgets/film_card.dart';
@@ -79,20 +80,20 @@ if (!callint){
        BlocProvider
        .of<HomeBLoc>(context)
        .load_top_5_movies(Top_5_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
 //
 
        BlocProvider
        .of<WatchedBLoc>(context)
        .watched_list_movies(Watched_list_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
 
       BlocProvider
        .of<WatchtlistBLoc>(context)
        .watch_list_movies(Watched_list_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
          setState(() {
            callint=true;
@@ -100,7 +101,7 @@ if (!callint){
            BlocProvider
        .of<PopularlistBLoc>(context)
        .get_popular_list_list_movies(Watched_list_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
          setState(() {
            callint=true;
@@ -1535,7 +1536,7 @@ SizedBox(height: 2,),
                                         child: Transform(
                                           alignment: Alignment.center,
                                           transform: Matrix4.identity()..scale(1.0, 1.0),
-                                          child:  Filmcard(come_from:'watch_list',film_id:"${character.movies_id}",filmname:"${character.title}",
+                                          child:  Filmcard(come_from:'watchlist',film_id:"${character.movies_id}",filmname:"${character.title}",
                                             key: null,
                                             imagePath: '${character.image_link}',
                                             loaded: true,

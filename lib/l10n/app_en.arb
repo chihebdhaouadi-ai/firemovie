@@ -244,5 +244,216 @@
     }
   },
   "findWatchNow": "Watch now",
-  "findAttribution": "Film data and posters via TMDB. Streaming availability via JustWatch."
+  "findAttribution": "Film data and posters via TMDB. Streaming availability via JustWatch.",
+  "overviewBack": "Back",
+  "overviewRating": "{value} / 10",
+  "@overviewRating": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewNoRating": "No rating yet",
+  "overviewWhereToWatch": "Where to watch?",
+  "overviewNoStreaming": "No streaming providers found",
+  "overviewRatingsCount": "Ratings: {count} filmwiser",
+  "@overviewRatingsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewStarsValue": "{value} out of 5 stars",
+  "@overviewStarsValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewTrailer": "Trailer",
+  "overviewStreamLabel": "Stream",
+  "overviewRentLabel": "Rent",
+  "overviewBuyLabel": "Buy",
+  "overviewNoGenres": "No genres listed",
+  "overviewTabGenres": "GENRES",
+  "overviewTabCast": "CAST",
+  "overviewTabCrew": "CREW",
+  "overviewTabProd": "PROD",
+  "overviewActivityTitle": "Activity From Friends",
+  "overviewWantsToWatch": "Wants to watch",
+  "overviewReviewsTitle": "Reviews",
+  "overviewAddReviewHint": "Add a review...",
+  "overviewYourReview": "Your Review",
+  "overviewFriendsReviews": "Friends Reviews",
+  "overviewPopularReviews": "Popular Reviews",
+  "overviewSeeAll": "See All",
+  "overviewReviewBy": "Review by {name} on {date}",
+  "@overviewReviewBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeOpenProfile": "Open profile",
+  "profileBack": "Back",
+  "profileSearchTooltip": "Search",
+  "profileMoreTooltip": "More options",
+  "profileFollowers": "Followers",
+  "profileFollowing": "Following",
+  "profileBioHint": "Edit your bio..",
+  "profileChat": "Chat",
+  "profileFollow": "Follow",
+  "profileSend": "Send",
+  "profileAchievementsTitle": "Achievements",
+  "profileAchievementRookie": "CINEPHILE ROOKIE",
+  "profileAchievementMaster": "CINEPHILE MASTER",
+  "profileAchievementLegend": "CINEPHILE LEGEND",
+  "profileAchievementFilms": "{count} films",
+  "@profileAchievementFilms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileClaim": "Claim",
+  "profileStatisticsTitle": "Statistics",
+  "profileStatWatched": "Watched",
+  "profileStatWatchlist": "Watchlist",
+  "profileStatReviews": "Reviews",
+  "profileStatRewards": "Rewards",
+  "profileBlockTitle": "You want to block this user?",
+  "profileBlockReasonHint": "Why?..",
+  "profileBlockYes": "Yes",
+  "profileBlockNo": "No",
+  "profileErrorTitle": "We couldn't load your profile.",
+  "profileRetry": "Try again",
+  "onboardingFinishLater": "Finish later",
+  "onboardingStepCounter": "Step {current} of {total}",
+  "@onboardingStepCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingContinue": "Continue",
+  "onboardingFinish": "Finish",
+  "onboardingSkip": "Skip for now",
+  "onboardingSaveFailed": "Couldn't save that. Check your connection and try again.",
+  "onboardingAvatarTitle": "Add a profile photo",
+  "onboardingAvatarBody": "Pick a picture so people can recognise you. JPG, PNG or WebP, up to 5 MB.",
+  "onboardingChoosePhoto": "Choose photo",
+  "onboardingPhotoSaved": "Profile photo saved",
+  "onboardingCoverTitle": "Add a cover photo",
+  "onboardingCoverBody": "A wide image behind your profile header.",
+  "onboardingChooseCover": "Choose cover",
+  "onboardingCoverSaved": "Cover saved",
+  "onboardingBioTitle": "Write a short bio",
+  "onboardingBioBody": "Tell people what kind of films you love.",
+  "onboardingBioHint": "A few words about your taste in film",
+  "onboardingTop5Title": "Choose your top 5 movies",
+  "onboardingTop5Body": "Your favourite films, shown first on your profile.",
+  "onboardingTop5Progress": "{count} of 5 chosen",
+  "@onboardingTop5Progress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingWatchedTitle": "Add movies you've watched",
+  "onboardingWatchedBody": "Log the films you have already seen.",
+  "onboardingWatchlistTitle": "Add movies to watch",
+  "onboardingWatchlistBody": "Save the films you plan to watch next.",
+  "onboardingFilmsAdded": "{count, plural, =1{1 film added} other{{count} films added}}",
+  "@onboardingFilmsAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingSearchFilms": "Search films",
+  "profileNotificationsTooltip": "Notifications",
+  "profileEditPhoto": "Edit photo",
+  "profileEditCover": "Edit cover",
+  "profileEditBio": "Edit bio",
+  "profileEditBioTitle": "Edit your bio",
+  "profileSave": "Save",
+  "profileCancel": "Cancel",
+  "profileSaveFailed": "Couldn't save that. Try again.",
+  "profileNoConnections": "No one here yet.",
+  "friendAdd": "Add friend",
+  "friendCancelRequest": "Cancel request",
+  "friendAccept": "Accept",
+  "friendDecline": "Decline",
+  "friendFriends": "Friends",
+  "friendRequestSent": "Friend request sent.",
+  "friendActionFailed": "Couldn't update the friend request. Try again.",
+  "friendRequestGone": "This request is no longer available.",
+  "friendAlreadyConnected": "You're already friends or have a pending request.",
+  "searchPeopleTitle": "Find people",
+  "searchPeopleHint": "Search by username",
+  "searchPeopleMinChars": "Type at least 2 characters.",
+  "searchPeopleEmpty": "No users found.",
+  "searchPeopleFailed": "Couldn't search right now. Try again.",
+  "suggestMovieAction": "Suggest a movie",
+  "suggestionTitle": "Suggest a movie",
+  "suggestionSearchHint": "Search a movie title",
+  "suggestionSearchMinChars": "Type at least 2 characters.",
+  "suggestionSearchEmpty": "No movies found.",
+  "suggestionSearchFailed": "Couldn't search right now. Try again.",
+  "suggestionMovieSection": "Movie",
+  "suggestionPickMovie": "Pick a movie to suggest.",
+  "suggestionChangeMovie": "Change movie",
+  "suggestionRecipientsSection": "Send to",
+  "suggestionSelectAll": "Select all",
+  "suggestionNoFriends": "Add friends first to send them suggestions.",
+  "suggestionFriendsFailed": "Couldn't load your friends.",
+  "suggestionCommentHint": "Add a comment (optional)",
+  "suggestionSend": "Send suggestion",
+  "suggestionSent": "Suggestion sent.",
+  "suggestionFailed": "Couldn't send the suggestion. Try again.",
+  "suggestionNotFriends": "You can only suggest movies to friends. Update your selection and try again.",
+  "notificationMovieSuggestion": "{name} suggested {title} to you.",
+  "@notificationMovieSuggestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "No notifications yet.",
+  "notificationsFailed": "Couldn't load notifications.",
+  "notificationFriendRequest": "{name} sent you a friend request.",
+  "@notificationFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFriendAccepted": "{name} accepted your friend request.",
+  "@notificationFriendAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

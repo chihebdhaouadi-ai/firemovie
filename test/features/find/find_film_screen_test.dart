@@ -1,13 +1,10 @@
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
-import 'package:film_wise_mobile/features/find/bloc/find_film_bloc.dart';
 import 'package:film_wise_mobile/features/find/data/find_repository.dart';
 import 'package:film_wise_mobile/features/find/data/in_memory_lists_repository.dart';
 import 'package:film_wise_mobile/features/find/data/lists_repository.dart';
 import 'package:film_wise_mobile/features/find/data/movie.dart';
 import 'package:film_wise_mobile/features/find/data/recent_searches_store.dart';
 import 'package:film_wise_mobile/features/find/views/find_film_screen.dart';
-import 'package:film_wise_mobile/features/find/views/find_route_args.dart';
-import 'package:film_wise_mobile/features/find/views/widgets/add_button.dart';
 import 'package:film_wise_mobile/features/find/views/widgets/empty_error_views.dart';
 import 'package:film_wise_mobile/features/find/views/widgets/result_tile.dart';
 import 'package:film_wise_mobile/features/find/views/widgets/skeletons.dart';

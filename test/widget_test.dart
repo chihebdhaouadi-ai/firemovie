@@ -28,7 +28,7 @@ class FindMoviesModel {
 
 Future<FindMoviesModel> loadPageData(id) async {
   final Map<String, String> headers = {
-    'X-RapidAPI-Key': '2ddf4fb6ffmsh20e88b6623d8ce7p103f38jsn1a63a326177e',
+    'X-RapidAPI-Key': 'test-key',
     'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com',
   };
 
@@ -53,7 +53,7 @@ Future<FindMoviesModel> loadPageData(id) async {
 
     var director = dir;
   final Map<String, String> _headers = {
-    'X-RapidAPI-Key': '2ddf4fb6ffmsh20e88b6623d8ce7p103f38jsn1a63a326177e',
+    'X-RapidAPI-Key': 'test-key',
     'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com',
   };
 

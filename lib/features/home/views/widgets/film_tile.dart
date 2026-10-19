@@ -89,6 +89,7 @@ class FilmTile extends StatelessWidget {
     this.heroTag,
     this.selected = false,
     this.onTap,
+    this.onLongPress,
     this.onRemove,
   });
 
@@ -99,18 +100,26 @@ class FilmTile extends StatelessWidget {
   final Object? heroTag;
   final bool selected;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final VoidCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
     final tap = onTap;
+    final longPress = onLongPress;
     final remove = onRemove;
 
     return Semantics(
       button: tap != null,
       selected: selected,
       label: semanticsLabel,
+      onLongPress: longPress == null
+          ? null
+          : () {
+              HapticFeedback.mediumImpact();
+              longPress();
+            },
       child: SizedBox(
         width: width,
         child: Stack(
@@ -122,6 +131,12 @@ class FilmTile extends StatelessWidget {
                   : () {
                       HapticFeedback.selectionClick();
                       tap();
+                    },
+              onLongPress: longPress == null
+                  ? null
+                  : () {
+                      HapticFeedback.mediumImpact();
+                      longPress();
                     },
               child: ExcludeSemantics(
                 child: FilmPoster(

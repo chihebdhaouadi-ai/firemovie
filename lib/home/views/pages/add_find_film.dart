@@ -199,7 +199,6 @@ class _Find extends State<Find> with TickerProviderStateMixin {
         Uri.parse(apiUrl),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Token 33f856b083f6c1c85f466dd0c382e770b9e1b5ba'
         },
         body: jsonBody,
       );

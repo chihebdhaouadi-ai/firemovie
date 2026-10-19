@@ -143,10 +143,9 @@ _animationController_popup.addStatusListener((AnimationStatus status)  {
   }
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: ListView(
-          scrollDirection: Axis.vertical,
+        body: Stack(
           children: [
-            Expanded(
+            Positioned.fill(
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -1032,10 +1031,10 @@ class _Logo extends StatelessWidget {
             "Welcome to Flutter!",
             textAlign: TextAlign.center,
             style: isSmallScreen
-                ? Theme.of(context).textTheme.headline5
+                ? Theme.of(context).textTheme.headlineMedium
                 : Theme.of(context)
                     .textTheme
-                    .headline4
+                    .headlineLarge
                     ?.copyWith(color: Colors.black),
           ),
         )

@@ -8,6 +8,8 @@ import '../../../core/theme/app_theme.dart';
 import '../../find/data/movie.dart';
 import '../../find/views/find_film_screen.dart';
 import '../../find/views/find_route_args.dart';
+import '../../overview/views/movie_overview_screen.dart';
+import '../../profile/views/profile_screen.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_screen_event.dart';
 import '../bloc/home_screen_state.dart';
@@ -82,7 +84,10 @@ class _HomeBody extends StatelessWidget {
               vertical: tokens.spaceLg,
             ),
             children: [
-              HomeAppBar(points: state.points),
+              HomeAppBar(
+                points: state.points,
+                onOpenProfile: () => _openProfile(context),
+              ),
               SizedBox(height: tokens.spaceXl),
               QuickActionsBar(
                 onSearch: () => _openFind(context),
@@ -103,6 +108,7 @@ class _HomeBody extends StatelessWidget {
                   context,
                   args: FindFilmRouteArgs(target: AddTarget.top5, slot: slot),
                 ),
+                onOpenFilm: (film) => _openOverview(context, film),
                 onRemove: (film) =>
                     bloc.add(HomeFilmRemoved(HomeList.top5, film)),
               ),
@@ -140,7 +146,8 @@ class _HomeBody extends StatelessWidget {
                 ),
                 onRemove: (film) =>
                     bloc.add(HomeFilmRemoved(HomeList.watched, film)),
-                onTapFilm: (film) => bloc.add(HomePickToggled(film)),
+                onOpenFilm: (film) => _openOverview(context, film),
+                onLongPressFilm: (film) => bloc.add(HomePickToggled(film)),
                 selectedFilms: picks.toSet(),
               ),
               SizedBox(height: tokens.spaceXl),
@@ -156,6 +163,7 @@ class _HomeBody extends StatelessWidget {
                 ),
                 onRemove: (film) =>
                     bloc.add(HomeFilmRemoved(HomeList.watchlist, film)),
+                onOpenFilm: (film) => _openOverview(context, film),
               ),
               SizedBox(height: tokens.spaceXl),
               FilmSection(
@@ -183,6 +191,18 @@ Future<void> _refresh(BuildContext context) {
   final done = Completer<void>();
   bloc.add(HomeRefreshRequested(done: done));
   return done.future;
+}
+
+void _openProfile(BuildContext context) {
+  Navigator.of(context).push<void>(
+    MaterialPageRoute<void>(builder: (_) => const ProfileScreen()),
+  );
+}
+
+void _openOverview(BuildContext context, Film film) {
+  Navigator.of(context).push<void>(
+    MaterialPageRoute<void>(builder: (_) => MovieOverviewScreen(film: film)),
+  );
 }
 
 Future<void> _openFind(

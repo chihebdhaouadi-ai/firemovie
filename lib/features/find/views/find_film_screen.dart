@@ -89,6 +89,8 @@ class _FindFilmView extends StatefulWidget {
 }
 
 class _FindFilmViewState extends State<_FindFilmView> {
+  bool _resultPopped = false;
+
   late final TextEditingController _controller;
 
   @override
@@ -498,16 +500,18 @@ class _FindFilmViewState extends State<_FindFilmView> {
       ),
       duration: const Duration(seconds: 4),
       onVisible: () {
-        if (fixedArgs != null && fixedArgs.target != null) {
-          final navigator = Navigator.of(context);
-          Future.delayed(const Duration(milliseconds: 450), () {
-            if (mounted) {
-              navigator.pop(
-                FindFilmResult(film: film, target: fixedArgs.target),
-              );
-            }
-          });
+        if (fixedArgs == null || fixedArgs.target == null || _resultPopped) {
+          return;
         }
+        _resultPopped = true;
+        final navigator = Navigator.of(context);
+        Future.delayed(const Duration(milliseconds: 450), () {
+          if (mounted) {
+            navigator.pop(
+              FindFilmResult(film: film, target: fixedArgs.target),
+            );
+          }
+        });
       },
     );
   }

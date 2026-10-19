@@ -11,6 +11,8 @@ abstract final class AppColors {
   static const accentGlow = Color(0xFF35B6FF);
   static const primaryButton = Color(0xFF084C7C);
   static const outline = Color(0xFF5D697A);
+  static const panelBorder = Color(0xFF1C6BA8);
+  static const star = Color(0xFFD4A21A);
   static const error = Color(0xFFFF6B6B);
   static const onPrimaryButton = Color(0xFFFFFFFF);
   static const transparent = Color(0x00000000);

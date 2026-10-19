@@ -4,6 +4,7 @@ import 'package:film_wise_mobile/home/blocs/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/core.dart';
+import '../../../core/session.dart';
 import '../../blocs/home_state.dart';
 import '../../data/top_5_movies_entity.dart';
 import '../pages/film_page.dart';
@@ -138,7 +139,7 @@ if(widget.come_from == "watchlist")
   BlocProvider
        .of<HomeBLoc>(context)
        .Add_List_movies_movies(Add_List_MoviesTrigerState(
-        add_List_Movies_Entity:Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${widget.film_id}",come_from: "top_5_movies",)
+        add_List_Movies_Entity:Add_List_Movies_Entity(token: Session.token,movie_id: "${widget.film_id}",come_from: "top_5_movies",)
          ));
                   }
                   
