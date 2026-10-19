@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Film Wise: track the films you love, share them with friends</title>
+  <meta name="description" content="Film Wise helps you build your Top 5, a watched list and a watchlist, search any film and recommend films to your friends.">
+  <meta name="theme-color" content="#0c0c0f">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://www.filmwise.example/">
+  <link rel="icon" href="assets/favicon.png" type="image/png" sizes="256x256">
+  <link rel="preload" href="assets/fonts/Poppins-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/Poppins-SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Film Wise">
+  <meta property="og:title" content="Film Wise: track the films you love">
+  <meta property="og:description" content="Build your Top 5, keep your watched list and watchlist, and recommend films to friends.">
+  <meta property="og:url" content="https://www.filmwise.example/">
+  <meta property="og:image" content="https://www.filmwise.example/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "Film Wise",
+    "description": "Film Wise helps you build your Top 5, a watched list and a watchlist, search any film and recommend films to your friends.",
+    "applicationCategory": "EntertainmentApplication",
+    "operatingSystem": "iOS, Android",
+    "url": "https://www.filmwise.example/",
+    "image": "https://www.filmwise.example/assets/og-image.jpg"
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="intro" id="intro" role="region" aria-label="Introduction" hidden>
+    <p class="intro__kicker">Media GCP Production presents</p>
+    <p class="intro__title">Film Wise</p>
+    <button type="button" class="intro__skip" id="intro-skip">Skip intro</button>
+  </div>
+
+  <div class="page" id="page">
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="#top" aria-label="Film Wise, back to top">
+          <img src="assets/logo.webp" alt="Film Wise" width="240" height="55">
+        </a>
+        <nav class="site-nav" aria-label="Main">
+          <a href="#lists">Features</a>
+          <a href="#how">How it works</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a class="btn btn--primary btn--small" href="#get-app">Get the app</a>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero" id="top" aria-labelledby="hero-title" data-reveal>
+        <div class="container hero__grid">
+          <div class="hero__copy">
+            <p class="eyebrow">Your film life, in one app</p>
+            <h1 id="hero-title">Track every film you love, and share the ones that matter.</h1>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="#get-app">Get the app</a>
+              <a class="btn btn--ghost" href="#lists">See what it does</a>
+            </div>
+          </div>
+          <figure class="device device--hero">
+            <div class="device__frame">
+              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+            </div>
+            <figcaption class="device__caption">Your Top 5, watched list and watchlist on the home screen.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="benefits" aria-labelledby="benefits-title" data-reveal>
+        <div class="container">
+          <h2 class="sr-only" id="benefits-title">Why Film Wise</h2>
+          <ul class="benefit-grid">
+            <li class="benefit">
+              <h3>Your five favourites, in order</h3>
+              <p>Pin the films that define your taste and keep them at the top of your home screen.</p>
+            </li>
+            <li class="benefit">
+              <h3>Lists that stay with you</h3>
+              <p>Your watched films and watchlist are saved to your account, so they follow you to any phone where you sign in.</p>
+            </li>
+            <li class="benefit">
+              <h3>Find any film fast</h3>
+              <p>Search by title, open the details and add a film to a list without leaving search.</p>
+            </li>
+            <li class="benefit">
+              <h3>Friends who share your taste</h3>
+              <p>Find friends, send a film with a note, and see what they send you.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="feature" id="lists" aria-labelledby="lists-title" data-reveal>
+        <div class="container feature__grid">
+          <div class="feature__copy">
+            <p class="eyebrow">01 · Lists</p>
+            <h2 id="lists-title">Build your film lists</h2>
+            <p class="lead">Three lists cover the whole journey, from your first favourite to your next watch.</p>
+            <ul class="checklist">
+              <li><strong>Top 5:</strong> pin your five favourite films, in order.</li>
+              <li><strong>Watched:</strong> keep a record of everything you have seen.</li>
+              <li><strong>Watchlist:</strong> save the films you want to see next.</li>
+              <li>Add or remove a film from any list in one tap.</li>
+            </ul>
+          </div>
+          <figure class="device">
+            <div class="device__frame">
+              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+            </div>
+            <figcaption class="device__caption">Your lists, one tap away.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="feature feature--reverse" id="find" aria-labelledby="find-title" data-reveal>
+        <div class="container feature__grid">
+          <div class="feature__copy">
+            <p class="eyebrow">02 · Search</p>
+            <h2 id="find-title">Find any film</h2>
+            <p class="lead">Search by title and get to the film you want in seconds.</p>
+            <ul class="checklist">
+              <li>Search films by title.</li>
+              <li>Reopen your recent searches.</li>
+              <li>Read the synopsis, runtime, genres, director and poster before you decide.</li>
+              <li>Add a result to a list straight from search.</li>
+            </ul>
+          </div>
+          <figure class="device">
+            <div class="device__frame">
+              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+            </div>
+            <figcaption class="device__caption">Search, check, add.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="feature" id="profile" aria-labelledby="profile-title" data-reveal>
+        <div class="container feature__grid">
+          <div class="feature__copy">
+            <p class="eyebrow">03 · Profile</p>
+            <h2 id="profile-title">Make it yours</h2>
+            <p class="lead">Set up your profile on day one so friends recognise you.</p>
+            <ul class="checklist">
+              <li>Add a photo, a cover image and a short bio during setup.</li>
+              <li>See your name, bio and friend count on your profile.</li>
+            </ul>
+          </div>
+          <figure class="device">
+            <div class="device__frame">
+              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+            </div>
+            <figcaption class="device__caption">Your profile, your way.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="feature feature--reverse" id="friends" aria-labelledby="friends-title" data-reveal>
+        <div class="container feature__grid">
+          <div class="feature__copy">
+            <p class="eyebrow">04 · Friends</p>
+            <h2 id="friends-title">Connect with friends</h2>
+            <p class="lead">Find the people you watch films with and keep your circle in one place.</p>
+            <ul class="checklist">
+              <li>Search people by name.</li>
+              <li>Send, accept, decline or cancel friend requests.</li>
+              <li>See all your friends in one list.</li>
+              <li>Get notified when a friend asks to connect or sends you a film.</li>
+            </ul>
+          </div>
+          <figure class="device">
+            <div class="device__frame">
+              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+            </div>
+            <figcaption class="device__caption">Find people, keep your circle close.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="feature" id="recommend" aria-labelledby="recommend-title" data-reveal>
+        <div class="container feature__grid">
+          <div class="feature__copy">
+            <p class="eyebrow">05 · Recommend</p>
+            <h2 id="recommend-title">Recommend films to friends</h2>
+            <p class="lead">Send a film you loved with a short note, and see what your friends send you.</p>
+            <ul class="checklist">
+              <li>Choose a film, write a note and send it to a friend.</li>
+              <li>Find film recommendations in your notifications.</li>
+              <li>Mark notifications as read.</li>
+            </ul>
+          </div>
+          <figure class="device">
+            <div class="device__frame">
+              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+            </div>
+            <figcaption class="device__caption">Recommend a film, with a note.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="feature feature--reverse" id="account" aria-labelledby="account-title" data-reveal>
+        <div class="container feature__grid">
+          <div class="feature__copy">
+            <p class="eyebrow">06 · Account</p>
+            <h2 id="account-title">Your account, everywhere</h2>
+            <p class="lead">Create an account and your lists go with you.</p>
+            <ul class="checklist">
+              <li>Create an account or sign in.</li>
+              <li>Your lists are saved on the server, not just on one phone.</li>
+            </ul>
+          </div>
+          <figure class="device">
+            <div class="device__frame">
+              <div class="device__screen" aria-hidden="true"><span class="device__pending">Screenshot pending</span></div>
+            </div>
+            <figcaption class="device__caption">One account, every phone you use.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="how" id="how" aria-labelledby="how-title" data-reveal>
+        <div class="container">
+          <h2 id="how-title">How it works</h2>
+          <ol class="steps">
+            <li class="step">
+              <span class="step__num" aria-hidden="true">1</span>
+              <h3>Create your account</h3>
+              <p>Sign up and set up your profile with a photo and a short bio.</p>
+            </li>
+            <li class="step">
+              <span class="step__num" aria-hidden="true">2</span>
+              <h3>Build your lists</h3>
+              <p>Search for films and add them to your Top 5, your watched list or your watchlist.</p>
+            </li>
+            <li class="step">
+              <span class="step__num" aria-hidden="true">3</span>
+              <h3>Share with friends</h3>
+              <p>Connect with friends and send them the films you think they will love.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="faq" id="faq" aria-labelledby="faq-title" data-reveal>
+        <div class="container faq__inner">
+          <h2 id="faq-title">Questions</h2>
+          <details class="faq__item">
+            <summary>Do I need an account?</summary>
+            <p>Yes. Your account keeps your lists and your friends connected to you, on any phone you sign in on.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Where do film details come from?</summary>
+            <p>Film search and details come from a film data service. Details such as the poster, synopsis and cast come from that service.</p>
+          </details>
+          <details class="faq__item">
+            <summary>How do friends connect?</summary>
+            <p>Search for a friend by name and send a request. They can accept or decline it, and you can cancel a request you sent.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Can I remove a film from a list?</summary>
+            <p>Yes. Change any list in one tap, and take a film off it whenever you like.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="final" id="get-app" aria-labelledby="final-title" data-reveal>
+        <div class="container final__inner">
+          <h2 id="final-title">Start your film list today.</h2>
+          <p>Download Film Wise, then build the list that is yours.</p>
+          <div class="store-row">
+            <a class="store" href="#store-app-store-link-needed">
+              <span class="store__small">Download on the</span>
+              <span class="store__big">App Store</span>
+            </a>
+            <a class="store" href="#store-google-play-link-needed">
+              <span class="store__small">Get it on</span>
+              <span class="store__big">Google Play</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <div class="site-footer__brand">
+          <img src="assets/logo.webp" alt="Film Wise" width="180" height="41" loading="lazy">
+          <p>Film Wise, presented by Media GCP Production.</p>
+        </div>
+        <nav class="site-footer__links" aria-label="Footer">
+          <a class="footer-link" href="privacy.html">Privacy policy</a>
+          <a class="footer-link" href="mailto:contact@filmwise.example">Contact</a>
+          <a class="footer-link" href="#get-app">Get the app</a>
+        </nav>
+        <p class="site-footer__copy">© 2026 Film Wise. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <aside class="sticky-cta" id="sticky-cta" aria-label="Get the app">
+      <a class="btn btn--primary btn--block" href="#get-app">Get the app</a>
+    </aside>
+  </div>
+
+  <script src="main.js" defer></script>
+</body>
+</html>
