@@ -1,1043 +1,622 @@
-import 'dart:developer';
-import 'dart:ffi';
+import 'dart:async';
+import 'dart:ui' show ImageFilter;
 
-import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:film_wise_mobile/account/blocs/login_bloc.dart';
-import 'package:film_wise_mobile/account/blocs/login_event.dart';
+import 'package:film_wise_mobile/account/blocs/login_state.dart';
 import 'package:film_wise_mobile/account/data/auth_entity.dart';
-import 'package:film_wise_mobile/core/core.dart';
+import 'package:film_wise_mobile/account/views/widgets/social_auth_button.dart';
+import 'package:film_wise_mobile/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-
-import 'dart:ui' as ui;
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../home/views/pages/home.dart';
-import '../../../home/views/widgets/custom_dialgo.dart';
-import '../../blocs/login_state.dart';
+const _loginError = 'Incorrect email or password. Please try again.';
+const _emailPattern = r'^[^@\s]+@[^@\s]+\.[^@\s]+$';
+const _successColor = Color(0xFF31FC2A);
+const _fieldTextStyle = TextStyle(color: AppColors.textPrimary, fontSize: 15);
 
+double _unit(double value) => value < 0 ? 0 : (value > 1 ? 1 : value);
+
+final _backdropBlur = ImageFilter.blur(sigmaX: 3, sigmaY: 3);
 
 class Login extends StatefulWidget {
+  const Login({super.key});
+
   @override
-  _Login createState() => _Login();
+  State<Login> createState() => _Login();
 }
 
 class _Login extends State<Login> with TickerProviderStateMixin {
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  List<bool> d = [false, false, false];
-  List<bool> g = [false, false, false, false, false, false];
-  bool next = false;
-  bool show = false;
-  bool loginload = true;
-  String value = 'Initial Value';
- late bool showanimationpopup=false;
-late bool AccountCreationstate=false;
-late bool showanimationpopup_ster=false;
+  final _formKey = GlobalKey<FormState>();
+  final _registerFormKey = GlobalKey<FormState>();
+  final _pageController = PageController();
 
-  int _currentPage = 0;
+  late final AnimationController _entranceController;
+  late final Animation<double> _entrance;
+  late final AnimationController _popupController;
+  Timer? _popupTimer;
 
-  var _pageController = PageController(initialPage: 0);
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _registerEmailController = TextEditingController();
+  final _registerPasswordController = TextEditingController();
+  final _repeatPasswordController = TextEditingController();
+
   bool _isPasswordVisible = false;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
- final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-
- final TextEditingController usernameregisterControler= TextEditingController();
- final TextEditingController emailregisterControler= TextEditingController();
- final TextEditingController passwordregisterControler= TextEditingController();
- final TextEditingController passwordreapetregisterControler= TextEditingController();
-
-late final AnimationController _animationController_popup;
-
-  void handleValueChanged(String newValue) {
-    setState(() {
-      value = newValue;
-    });
-  }
-
-  bool isImage1 = true;
-  
-  void _toggleImage() {
-    setState(() {
-      isImage1 = !isImage1;
-    });
-  }
+  bool _accountCreated = false;
+  bool _showPopup = false;
+  bool _popupShown = false;
+  bool _imagesPrecached = false;
 
   @override
   void initState() {
     super.initState();
-
-    _animationController_popup=AnimationController(      duration: const Duration(milliseconds: 3000),
-vsync: this);
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+    _entranceController = AnimationController(
       vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..forward();
+    _entrance = CurvedAnimation(
+      parent: _entranceController,
+      curve: Curves.easeOutCubic,
     );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
+    _popupController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
     );
-    _controller.forward();
+  }
 
-_animationController_popup.addStatusListener((AnimationStatus status)  {
-      if (status == AnimationStatus.forward) {
-     print('Animation Started');
-     Future.delayed(Duration(seconds: 5), () {
-        print('Code executed after 2 seconds');
-
-        // Code here will execute after the delay
-
-   setState(() {
-      showanimationpopup = false;
-    });
-
-
-        // Additional code if needed after setting showanimationpopup to false
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_imagesPrecached) {
+      _imagesPrecached = true;
+      precacheImage(const AssetImage('assets/loginbg.png'), context);
+      precacheImage(const AssetImage('assets/createbg.png'), context);
+    }
+    if (_popupShown) return;
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Map && args['come_from'] != null) {
+      _popupShown = true;
+      _accountCreated = true;
+      _showPopup = true;
+      _popupController.forward(from: 0);
+      _popupTimer = Timer(const Duration(seconds: 5), () {
+        if (mounted) setState(() => _showPopup = false);
       });
- 
-    
-      }
-    });
-
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _popupTimer?.cancel();
+    _entranceController.dispose();
+    _popupController.dispose();
+    _pageController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _usernameController.dispose();
+    _registerEmailController.dispose();
+    _registerPasswordController.dispose();
+    _repeatPasswordController.dispose();
     super.dispose();
   }
 
+  void _goToPage(int page) {
+    _pageController.animateToPage(
+      page,
+      duration: context.motion(const Duration(milliseconds: 500)),
+      curve: Curves.easeInOut,
+    );
+  }
 
+  void _submitLogin() {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    BlocProvider.of<LoginBLoc>(context).mapEventToState(
+      LoginTrigerState(
+        loginEntity: LoginEntity(
+          email: _emailController.text.trim(),
+          passowrd: _passwordController.text,
+        ),
+      ),
+    );
+  }
 
+  void _submitRegister() {
+    if (!(_registerFormKey.currentState?.validate() ?? false)) return;
+    BlocProvider.of<LoginBLoc>(context).createaccount(
+      RegisterTrigerState(
+        registerEntity: RegisterEntity(
+          username: _usernameController.text.trim(),
+          email: _registerEmailController.text.trim(),
+          passowrd: _registerPasswordController.text,
+        ),
+      ),
+    );
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) return 'Please enter your email';
+    if (!RegExp(_emailPattern).hasMatch(value.trim())) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter your password';
+    if (value.length < 6) return 'Password must be at least 6 characters';
+    return null;
+  }
 
   @override
- Widget build(BuildContext context) {
-  Map<String, dynamic>? arguments =
-      ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final imageHeight = size.height * 480 / 792;
 
-  if (arguments != null) {
-    String? comeFrom = arguments['come_from'] as String?;
-
-    if (comeFrom != null) {
-      print('come_from: $comeFrom');
-
-      AccountCreationstate = true;
-      if(showanimationpopup_ster == false){
-      showanimationpopup = true;
-      showanimationpopup_ster=true;
-
-      }
-      
-
-      _animationController_popup.forward();
-
-      // You don't need 'await' here since build method cannot be marked as 'async'
-
-    }
-  }
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: Stack(
+      backgroundColor: AppColors.background,
+      body: BlocListener<LoginBLoc, LoginState>(
+        listenWhen: (_, state) => state is LoginErrorState,
+        listener: (context, _) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(const SnackBar(content: Text(_loginError)));
+        },
+        child: Stack(
+          fit: StackFit.expand,
           children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: imageHeight,
+              child: _backdrop(),
+            ),
             Positioned.fill(
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Stack(
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
-                          child: Column(
-                            children: [
-                              AnimatedContainer(
-                                padding: EdgeInsets.only(
-                                    bottom: (MediaQuery.of(context).size.height *
-                                            130) /
-                                        792),
-                                duration: Duration(microseconds: 1),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: isImage1
-                                        ? AssetImage("assets/loginbg.png")
-                                        : AssetImage("assets/createbg.png"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                height:
-                                    (MediaQuery.of(context).size.height * 480) /
-                                        792,
-                              ),
-                              Stack(
-                                children: [
-                                  Container(
-                                    color: Color.fromARGB(250, 30, 30, 30),
-                                    height: (MediaQuery.of(context).size.height *
-                                            200) /
-                                        792,
-                                  ),
-                                  Positioned(
-                                    top: 0,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Color.fromARGB(250, 30, 30, 30),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Color.fromARGB(255, 28, 20, 77),
-              
-                                            // Shadow color
-                                            spreadRadius: 12, // Spread radius
-                                            blurRadius: 8, // Blur radius
-                                            offset: Offset(0,
-                                                -4), // Offset to the top (negative y value)
-                                          ),
-                                        ],
-                                      ),
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          bottom:
-                              (MediaQuery.of(context).size.height * 200) / 792,
-                          child: Container(
-                            height:
-                                (MediaQuery.of(context).size.height * 600) / 792,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color.fromARGB(10, 24, 20, 136),
-                                  Color.fromARGB(20, 24, 20, 136),
-                                  Color.fromARGB(30, 24, 20, 136),
-                                  Color.fromARGB(70, 24, 20, 136),
-                                  Color.fromARGB(110, 24, 20, 136),
-                                  Color.fromARGB(130, 24, 20, 136),
-                                  Color.fromARGB(130, 24, 20, 136),
-                                  Color.fromARGB(70, 24, 20, 136),
-                                  Color.fromARGB(10, 24, 20, 136),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    PageView(
-                      allowImplicitScrolling: false,
-                      scrollDirection: Axis.horizontal,
-                      controller: _pageController,
-                      onPageChanged: (int page) {
-                        setState(() {
-                          _currentPage = page;
-                        });
-                      },
-                      children: [
-                        ListView(
-                          children: [
-                            SizedBox(
-                              height: (MediaQuery.of(context).size.height * 220) /
-                                  792,
-                            ),
-                             Center(
-                                         child: BlocBuilder<LoginBLoc, LoginState>(
-                                            builder: (context, state)  {
-          if (state is LoginLoadingState) {
-            return CircularProgressIndicator(color: Colors.white);
-          } else if (state is LoginErrorState) {
-              // Show a pop-up dialog when there is a login error
-          
-            }
-      return SizedBox();
-    },
-                                                     ),
-                                       ),
-                            Center(
-                              
-                            
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(25, 0, 25, 25),
-                                child: Form(
-                                  key: _formKey,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        height: 8,
-                                      ), AccountCreationstate?
-                                      Text(
-                                      "Account created successfully",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(199, 49, 252, 42), // Set the text color
-                                        // Set the text color
-                                        fontFamily:
-                                            'Poppins', // Set the font family
-                                        fontWeight: FontWeight
-                                            .w400, // Set the font weight
-                                        fontSize: 12,
-                                        // Set the font size
-                                      ),
-                                    ):SizedBox(),
-                                      Text(
-                                        "SIGN IN AND",
-                                        style: TextStyle(
-                                          color: Color.fromARGB(200, 217, 217,
-                                              217), // Set the text color
-                                          // Set the text color
-                                          fontFamily:
-                                              'Poppins', // Set the font family
-                                          fontWeight: FontWeight
-                                              .w400, // Set the font weight
-                                          fontSize: 12,
-                                          // Set the font size
-                                        ),
-                                      ),
-                                      Text(
-                                        "UNLOCK YOUR INNER FILM BUFF",
-                                        style: TextStyle(
-                                          color: Color.fromARGB(200, 217, 217,
-                                              217), // Set the text color
-              // Set the text color
-                                          fontFamily:
-                                              'Poppins', // Set the font family
-                                          fontWeight: FontWeight
-                                              .w400, // Set the font weight
-                                          fontSize: 12,
-                                          // Set the font size
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Container(
-                                        color: Color.fromARGB(250, 6, 94, 153),
-                                        height: 1,
-                                        width: MediaQuery.of(context).size.width *
-                                            0.9,
-                                      ),
-                                      SizedBox(
-                                        height: 14,
-                                      ),
-                                      TextFormField(
-                                        controller: emailController,
-                                        validator: (value) {
-                                          // add email validation
-                                          if (value == null || value.isEmpty) {
-                                            return 'Please enter some text';
-                                          }
-              
-                                          bool emailValid = RegExp(
-                                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                              .hasMatch(value);
-                                          if (!emailValid) {
-                                            return 'Please enter a valid email';
-                                          }
-              
-                                          return null;
-                                        },
-                                        decoration: InputDecoration(
-                                          labelText: 'Email',
-                                          hintText: 'Enter youremail',
-                                          prefixIcon: Icon(
-                                            Icons.email_outlined,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                          border: OutlineInputBorder(),
-                                          labelStyle: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-              
-                                          // Customize the border color
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color.fromARGB(255, 217, 217,
-                                                  217), // Change the color to your desired color
-                                            ),
-                                          ),
-                                          contentPadding: EdgeInsets.symmetric(
-                                            vertical:
-                                                15.0, // Adjust the vertical padding as needed
-                                          ),
-                                        ),
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                      ),
-                                      SizedBox(height: 16),
-                                      TextFormField(
-                                        controller: passwordController,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Please enter some text';
-                                          }
-              
-                                          if (value.length < 6) {
-                                            return 'Password must be at least 6 characters';
-                                          }
-                                          return null;
-                                        },
-                                        obscureText: !_isPasswordVisible,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
-                                            vertical:
-                                                15.0, // Adjust the vertical padding as needed
-                                          ),
-                                          labelText: 'Password',
-                                          hintText: 'Enter your password',
-                                          prefixIcon: Icon(
-                                            Icons.lock_outline_rounded,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color.fromARGB(255, 0, 217,
-                                                  217), // Change the color to your desired color
-                                            ),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color.fromARGB(255, 217, 217,
-                                                  217), // Change the color to your desired color
-                                            ),
-                                          ),
-                                          suffixIcon: IconButton(
-                                            icon: Icon(
-                                              _isPasswordVisible
-                                                  ? Icons.visibility_off
-                                                  : Icons.visibility,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                _isPasswordVisible =
-                                                    !_isPasswordVisible;
-                                              });
-                                            },
-                                          ),
-                                          labelStyle: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 16),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "Forget Password?",
-                                            style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              decorationThickness: 2.0,
-                                              color: Color.fromARGB(255, 12, 85,
-                                                  155), // Set the text color
-                                              fontFamily:
-                                                  'Poppins', // Set the font family
-                                              fontWeight: FontWeight
-                                                  .w500, // Set the font weight
-                                              fontSize: 14,
-              
-                                              // Set the font size
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 16),
-                                     
-                                     
-                                     
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Color.fromARGB(255, 12, 85, 155),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Text(
-                                              'LOGIN',
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            if (_formKey.currentState
-                                                    ?.validate() ??
-                                                false) {
-                                              /// do something
-                                              if (_currentPage < 1) {
-                                                
-                                             
-                                             
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  _loginPage(context),
+                  _registerPage(context),
+                ],
+              ),
+            ),
+            if (_showPopup)
+              Positioned.fill(
+                child: Center(
+                  child: Lottie.network(
+                    'https://lottie.host/2041a391-2eeb-4eac-bf8b-a9fc2a5d7b62/Ygg9wslNj9.json',
+                    controller: _popupController,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 
-
-
-                                                             BlocProvider.of<LoginBLoc>(context).mapEventToState(LoginTrigerState(loginEntity:LoginEntity(email: "${emailController.text}"
-                                                             ,passowrd:'${passwordController.text}' ) ));
-                                             
-                                             
-                                             
-                                              }
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(height: 15),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Don’t have an account?",
-                                            style: TextStyle(
-                                              decorationThickness: 2.0,
-                                              color: Color.fromARGB(255, 217, 217,
-                                                  217), // Set the text color
-                                              // Set the text color
-                                              fontFamily:
-                                                  'Poppins', // Set the font family
-                                              fontWeight: FontWeight
-                                                  .w500, // Set the font weight
-                                              fontSize: 13,
-              
-                                              // Set the font size
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              if (_currentPage < 1) {
-                                                _toggleImage();
-                                                _pageController.nextPage(
-                                                  duration:
-                                                      Duration(milliseconds: 500),
-                                                  curve: Curves.easeInOut,
-                                                );
-                                              }
-                                            },
-                                            child: Text(
-                                              "Signup",
-                                              style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                decorationThickness: 2.0,
-                                                color: Color.fromARGB(255, 12, 85,
-                                                    155), // Set the text color
-                                                // Set the text color
-                                                fontFamily:
-                                                    'Poppins', // Set the font family
-                                                fontWeight: FontWeight
-                                                    .w500, // Set the font weight
-                                                fontSize: 13,
-              
-                                                // Set the font size
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        ListView(
-                          children: [
-                            SizedBox(
-                              height: (MediaQuery.of(context).size.height * 240) /
-                                  792,
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                              child: Form(
-                                key: _formKey1,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(height: 16),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                   
-                                    Text(
-                                      "SIGN IN AND ",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(200, 217, 217,
-                                            217), // Set the text color
-                                        // Set the text color
-                                        fontFamily:
-                                            'Poppins', // Set the font family
-                                        fontWeight: FontWeight
-                                            .w400, // Set the font weight
-                                        fontSize: 12,
-                                        // Set the font size
-                                      ),
-                                    ),
-                                    Text(
-                                      "UNLOCK YOUR INNER FILM BUFF",
-                                      style: TextStyle(
-                                        color: Color.fromARGB(200, 217, 217,
-                                            217), // Set the text color
-                                        // Set the text color
-                                        fontFamily:
-                                            'Poppins', // Set the font family
-                                        fontWeight: FontWeight
-                                            .w400, // Set the font weight
-                                        fontSize: 12,
-                                        // Set the font size
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Container(
-                                      color: Color.fromARGB(250, 6, 94, 153),
-                                      height: 1,
-                                      width:
-                                          MediaQuery.of(context).size.width * 0.9,
-                                    ),
-                                    SizedBox(
-                                      height: 14,
-                                    ),
-                                    TextFormField(
-                                      controller: usernameregisterControler,
-                                    validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-              
-                                        if (value.length < 6) {
-                                          return 'Username must be at least 6 characters';
-                                        }
-                                        return null;
-                                      },
-                                      
-                                      decoration: InputDecoration(
-                                        labelText: 'Username',
-                                        hintText: 'Enter your username',
-                                        prefixIcon: Icon(
-                                          Icons.email_outlined,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        border: OutlineInputBorder(),
-                                        labelStyle: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-              
-                                        // Customize the border color
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          vertical:
-                                              15.0, // Adjust the vertical padding as needed
-                                        ),
-                                      ),
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
-                                    SizedBox(height: 16),
-                                    TextFormField(
-                                      controller: emailregisterControler,
-                                      validator: (value) {
-                                        // add email validation
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-              
-                                        bool emailValid = RegExp(
-                                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                            .hasMatch(value);
-                                        if (!emailValid) {
-                                          return 'Please enter a valid email';
-                                        }
-              
-                                        return null;
-                                      },
-                                      decoration: InputDecoration(
-                                        labelText: 'Email',
-                                        hintText: 'Enter your email',
-                                        prefixIcon: Icon(
-                                          Icons.email_outlined,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        border: OutlineInputBorder(),
-                                        labelStyle: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-              
-                                        // Customize the border color
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          vertical:
-                                              15.0, // Adjust the vertical padding as needed
-                                        ),
-                                      ),
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
-                                    SizedBox(height: 16),
-                                    TextFormField(
-                                      controller: passwordregisterControler,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-              
-                                        if (value.length < 6) {
-                                          return 'Password must be at least 6 characters';
-                                        }
-                                                                if (value != passwordreapetregisterControler.text) {
-      return 'Passwords do not match';
-    }
-                     
-                                        return null;
-                                      },
-                                      obscureText: !_isPasswordVisible,
-                                      decoration: InputDecoration(
-                                        labelText: 'Password',
-                                        hintText: 'Enter your password',
-                                        prefixIcon: Icon(
-                                          Icons.lock_outline_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        border: const OutlineInputBorder(),
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            _isPasswordVisible
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              _isPasswordVisible =
-                                                  !_isPasswordVisible;
-                                            });
-                                          },
-                                        ),
-                                        labelStyle: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          vertical:
-                                              15.0, // Adjust the vertical padding as needed
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 16),
-                                    TextFormField(
-                                      controller: passwordreapetregisterControler,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
-              
-                                        if (value.length < 6) {
-                                          return 'Password must be at least 6 characters';
-                                        }
-                                        if (value != passwordregisterControler.text) {
-      return 'Passwords do not match';
-    }
-                                        return null;
-                                      },
-                                      obscureText: !_isPasswordVisible,
-                                      decoration: InputDecoration(
-                                        labelText: ' Repeat Password',
-                                        hintText: 'Enter your  repeat password',
-                                        prefixIcon: Icon(
-                                          Icons.lock_outline_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        border: const OutlineInputBorder(),
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            _isPasswordVisible
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              _isPasswordVisible =
-                                                  !_isPasswordVisible;
-                                            });
-                                          },
-                                        ),
-                                        labelStyle: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          vertical:
-                                              15.0, // Adjust the vertical padding as needed
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 16),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              Color.fromARGB(255, 12, 85, 155),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(4)),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10.0),
-                                          child: Text(
-                                            'CREATE',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          if (_formKey1.currentState?.validate() ??
-                                              false) {
-                                            /// do something
-                                          
-                                             
-                                                             BlocProvider.of<LoginBLoc>(context).createaccount(RegisterTrigerState(registerEntity:RegisterEntity(
-                                                              username: "${usernameregisterControler.text}",
-                                                              email: "${emailregisterControler.text}"
-                                                             ,passowrd:'${passwordregisterControler.text}' ) ));
-                                            
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(height: 16),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "You have an account?",
-                                          style: TextStyle(
-                                            decorationThickness: 2.0,
-                                            color: Color.fromARGB(255, 217, 217,
-                                                217), // Set the text color
-                                            // Set the text color
-                                            fontFamily:
-                                                'Poppins', // Set the font family
-                                            fontWeight: FontWeight
-                                                .w500, // Set the font weight
-                                            fontSize: 13,
-              
-                                            // Set the font size
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            _toggleImage();
-              
-                                            if (_currentPage >= 1) {
-                                              _pageController.previousPage(
-                                                duration:
-                                                    Duration(milliseconds: 500),
-                                                curve: Curves.easeInOut,
-                                              );
-                                            }
-                                          },
-                                          child: Text(
-                                            "Login",
-                                            style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              decorationThickness: 2.0,
-                                              color: Color.fromARGB(
-                                                  255, 0, 122, 204),
-                                              // Set the text color
-                                              fontFamily:
-                                                  'Poppins', // Set the font family
-                                              fontWeight: FontWeight
-                                                  .w500, // Set the font weight
-                                              fontSize: 13,
-              
-                                              // Set the font size
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-               
-          showanimationpopup?     Center(
-                child: Lottie.network("https://lottie.host/2041a391-2eeb-4eac-bf8b-a9fc2a5d7b62/Ygg9wslNj9.json",controller: _animationController_popup),
-               ):SizedBox()
-               
-                  ],
+  Widget _backdrop() {
+    return ListenableBuilder(
+      listenable: _pageController,
+      builder: (context, _) {
+        final page = _pageController.hasClients ? (_pageController.page ?? 0) : 0.0;
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Opacity(
+              opacity: _unit(1 - page),
+              child: ImageFiltered(
+                imageFilter: _backdropBlur,
+                child: Image.asset(
+                  'assets/loginbg.png',
+                  fit: BoxFit.cover,
+                  excludeFromSemantics: true,
+                ),
+              ),
+            ),
+            Opacity(
+              opacity: _unit(page),
+              child: ImageFiltered(
+                imageFilter: _backdropBlur,
+                child: Image.asset(
+                  'assets/createbg.png',
+                  fit: BoxFit.cover,
+                  excludeFromSemantics: true,
+                ),
+              ),
+            ),
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.4, 1],
+                  colors: [AppColors.transparent, AppColors.background],
                 ),
               ),
             ),
           ],
-        ));
+        );
+      },
+    );
   }
-}
 
-class _Logo extends StatelessWidget {
-  const _Logo({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+  Widget _loginPage(BuildContext context) {
+    return _authPage(
+      context,
+      title: 'Sign in',
+      formKey: _formKey,
       children: [
-        FlutterLogo(size: isSmallScreen ? 100 : 200),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            "Welcome to Flutter!",
-            textAlign: TextAlign.center,
-            style: isSmallScreen
-                ? Theme.of(context).textTheme.headlineMedium
-                : Theme.of(context)
-                    .textTheme
-                    .headlineLarge
-                    ?.copyWith(color: Colors.black),
+        if (_accountCreated) ...[
+          _successBanner(context),
+          const SizedBox(height: 20),
+        ],
+        _socialButtons(),
+        const SizedBox(height: 24),
+        _divider(),
+        const SizedBox(height: 24),
+        TextFormField(
+          controller: _emailController,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
+          autofillHints: const [AutofillHints.email],
+          validator: _validateEmail,
+          cursorColor: AppColors.accentGlow,
+          style: _fieldTextStyle,
+          decoration: _fieldDecoration(
+            context,
+            label: 'Email',
+            icon: Icons.email_outlined,
           ),
-        )
+        ),
+        const SizedBox(height: 16),
+        _passwordField(
+          context,
+          controller: _passwordController,
+          label: 'Password',
+          validator: _validatePassword,
+          action: TextInputAction.done,
+          autofillHints: const [AutofillHints.password],
+          onFieldSubmitted: (_) => _submitLogin(),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () {},
+            child: const Text('Forgot password?'),
+          ),
+        ),
+        const SizedBox(height: 8),
+        _submitButton(context, label: 'Sign in', onPressed: _submitLogin),
+        const SizedBox(height: 24),
+        _switchPrompt(
+          context,
+          prompt: "Don't have an account?",
+          action: 'Sign up',
+          onTap: () => _goToPage(1),
+        ),
+      ],
+    );
+  }
+
+  Widget _registerPage(BuildContext context) {
+    return _authPage(
+      context,
+      title: 'Create account',
+      formKey: _registerFormKey,
+      children: [
+        _socialButtons(),
+        const SizedBox(height: 24),
+        _divider(),
+        const SizedBox(height: 24),
+        TextFormField(
+          controller: _usernameController,
+          textInputAction: TextInputAction.next,
+          autofillHints: const [AutofillHints.username],
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Please enter a username';
+            }
+            if (value.trim().length < 6) {
+              return 'Username must be at least 6 characters';
+            }
+            return null;
+          },
+          cursorColor: AppColors.accentGlow,
+          style: _fieldTextStyle,
+          decoration: _fieldDecoration(
+            context,
+            label: 'Username',
+            icon: Icons.person_outline_rounded,
+          ),
+        ),
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _registerEmailController,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
+          autofillHints: const [AutofillHints.email],
+          validator: _validateEmail,
+          cursorColor: AppColors.accentGlow,
+          style: _fieldTextStyle,
+          decoration: _fieldDecoration(
+            context,
+            label: 'Email',
+            icon: Icons.email_outlined,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _passwordField(
+          context,
+          controller: _registerPasswordController,
+          label: 'Password',
+          validator: (value) {
+            final error = _validatePassword(value);
+            if (error != null) return error;
+            if (value != _repeatPasswordController.text) {
+              return 'Passwords do not match';
+            }
+            return null;
+          },
+          action: TextInputAction.next,
+          autofillHints: const [AutofillHints.newPassword],
+        ),
+        const SizedBox(height: 16),
+        _passwordField(
+          context,
+          controller: _repeatPasswordController,
+          label: 'Repeat password',
+          validator: (value) {
+            final error = _validatePassword(value);
+            if (error != null) return error;
+            if (value != _registerPasswordController.text) {
+              return 'Passwords do not match';
+            }
+            return null;
+          },
+          action: TextInputAction.done,
+          autofillHints: const [AutofillHints.newPassword],
+          onFieldSubmitted: (_) => _submitRegister(),
+        ),
+        const SizedBox(height: 24),
+        _submitButton(context, label: 'Create account', onPressed: _submitRegister),
+        const SizedBox(height: 24),
+        _switchPrompt(
+          context,
+          prompt: 'Already have an account?',
+          action: 'Sign in',
+          onTap: () => _goToPage(0),
+        ),
+      ],
+    );
+  }
+
+  Widget _authPage(
+    BuildContext context, {
+    required String title,
+    required GlobalKey<FormState> formKey,
+    required List<Widget> children,
+  }) {
+    final size = MediaQuery.sizeOf(context);
+    final tokens = context.tokens;
+    return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: EdgeInsets.fromLTRB(24, size.height * 0.12, 24, 24),
+      child: FadeTransition(
+        opacity: _entrance,
+        child: Form(
+          key: formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Image.asset(
+                  'assets/LogoWise.png',
+                  height: 28,
+                  excludeFromSemantics: true,
+                ),
+              ),
+              SizedBox(height: tokens.spaceLg),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'UNLOCK YOUR INNER FILM BUFF',
+                style: TextStyle(
+                  color: AppColors.textMuted,
+                  fontSize: 12,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 24),
+              ...children,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _successBanner(BuildContext context) {
+    final tokens = context.tokens;
+    return Container(
+      padding: EdgeInsets.all(tokens.spaceMd),
+      decoration: BoxDecoration(
+        color: const Color(0x1A31FC2A),
+        borderRadius: BorderRadius.circular(tokens.radiusSm),
+        border: Border.all(color: const Color(0x6631FC2A)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.check_circle_outline, color: _successColor, size: tokens.iconSmall),
+          SizedBox(width: tokens.spaceSm),
+          const Expanded(
+            child: Text(
+              'Account created successfully. Sign in to continue.',
+              style: TextStyle(color: _successColor, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  InputDecoration _fieldDecoration(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    Widget? suffixIcon,
+  }) {
+    final tokens = context.tokens;
+    OutlineInputBorder border(Color color, double width) => OutlineInputBorder(
+          borderRadius: BorderRadius.circular(tokens.radiusMd),
+          borderSide: BorderSide(color: color, width: width),
+        );
+
+    return InputDecoration(
+      labelText: label,
+      filled: true,
+      fillColor: AppColors.surface,
+      prefixIcon: Icon(icon, color: AppColors.textMuted),
+      suffixIcon: suffixIcon,
+      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      floatingLabelStyle: const TextStyle(color: AppColors.accentGlow),
+      errorStyle: const TextStyle(color: AppColors.error),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: tokens.spaceLg,
+        vertical: tokens.spaceLg,
+      ),
+      border: border(AppColors.outline, tokens.borderWidth),
+      enabledBorder: border(AppColors.outline, tokens.borderWidth),
+      focusedBorder: border(AppColors.accentGlow, 1.5),
+      errorBorder: border(AppColors.error, tokens.borderWidth),
+      focusedErrorBorder: border(AppColors.error, 1.5),
+    );
+  }
+
+  Widget _passwordField(
+    BuildContext context, {
+    required TextEditingController controller,
+    required String label,
+    required FormFieldValidator<String> validator,
+    required TextInputAction action,
+    required Iterable<String> autofillHints,
+    ValueChanged<String>? onFieldSubmitted,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: !_isPasswordVisible,
+      textInputAction: action,
+      autofillHints: autofillHints,
+      validator: validator,
+      onFieldSubmitted: onFieldSubmitted,
+      cursorColor: AppColors.accentGlow,
+      style: _fieldTextStyle,
+      decoration: _fieldDecoration(
+        context,
+        label: label,
+        icon: Icons.lock_outline_rounded,
+        suffixIcon: IconButton(
+          tooltip: _isPasswordVisible ? 'Hide password' : 'Show password',
+          icon: Icon(
+            _isPasswordVisible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+            color: AppColors.textMuted,
+          ),
+          onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+        ),
+      ),
+    );
+  }
+
+  Widget _submitButton(
+    BuildContext context, {
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    final radius = BorderRadius.circular(context.tokens.radiusMd);
+    return BlocBuilder<LoginBLoc, LoginState>(
+      buildWhen: (previous, current) =>
+          (previous is LoginLoadingState) != (current is LoginLoadingState),
+      builder: (context, state) {
+        final loading = state is LoginLoadingState;
+        return FilledButton(
+          onPressed: loading ? null : onPressed,
+          style: FilledButton.styleFrom(
+            backgroundColor: AppColors.primaryButton,
+            foregroundColor: AppColors.onPrimaryButton,
+            disabledBackgroundColor: AppColors.surfaceRaised,
+            disabledForegroundColor: AppColors.textMuted,
+            minimumSize: const Size.fromHeight(52),
+            shape: RoundedRectangleBorder(borderRadius: radius),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          child: loading
+              ? const SizedBox.square(
+                  dimension: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: AppColors.onPrimaryButton,
+                  ),
+                )
+              : Text(label),
+        );
+      },
+    );
+  }
+
+  Widget _divider() {
+    return const Row(
+      children: [
+        Expanded(child: Divider(color: AppColors.outline)),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            'or',
+            style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+          ),
+        ),
+        Expanded(child: Divider(color: AppColors.outline)),
+      ],
+    );
+  }
+
+  Widget _socialButtons() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SocialAuthButton(provider: SocialProvider.google, onPressed: () {}),
+        const SizedBox(height: 12),
+        SocialAuthButton(provider: SocialProvider.apple, onPressed: () {}),
+      ],
+    );
+  }
+
+  Widget _switchPrompt(
+    BuildContext context, {
+    required String prompt,
+    required String action,
+    required VoidCallback onTap,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          prompt,
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+        ),
+        TextButton(
+          onPressed: onTap,
+          child: Text(action),
+        ),
       ],
     );
   }
