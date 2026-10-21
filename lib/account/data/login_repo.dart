@@ -3,12 +3,13 @@ import 'dart:developer';
 
 import 'package:http/http.dart';
 
+import '../../core/api_config.dart';
 import 'auth_entity.dart';
 import 'login_model.dart';
 
 class LoginRepo {
-  final url = "http://127.0.0.1:8000/api/account/login";
-  final url_login = "http://127.0.0.1:8000/api/account/register";
+  String get url => '${ApiConfig.baseUrl}/api/account/login';
+  String get url_login => '${ApiConfig.baseUrl}/api/account/register';
 
   Future<Login> getToken(LoginEntity loginEntity) async {
     final response = await post(Uri.parse(url), body: {

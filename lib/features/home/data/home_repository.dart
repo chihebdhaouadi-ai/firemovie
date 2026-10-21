@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../../core/api_config.dart';
 import '../../../core/session.dart';
 import 'home_models.dart';
 
@@ -22,12 +23,7 @@ abstract class RecommendationGateway {
 class ApiHomeRepository implements HomeRepository {
   ApiHomeRepository({http.Client? client, String? baseUrl})
       : _client = client ?? http.Client(),
-        _baseUrl = baseUrl ?? _defaultBaseUrl;
-
-  static const _defaultBaseUrl = String.fromEnvironment(
-    'API_BASE_URL',
-    defaultValue: 'http://127.0.0.1:8000/api/film/',
-  );
+        _baseUrl = baseUrl ?? '${ApiConfig.baseUrl}/api/film/';
 
   final http.Client _client;
   final String _baseUrl;

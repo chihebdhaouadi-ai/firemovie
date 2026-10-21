@@ -17,15 +17,6 @@ abstract final class OverviewPlaceholders {
   static const ratingsCount = 128;
   static const userStars = 4;
 
-  static const cast = [
-    'Timothée Chalamet',
-    'Zendaya',
-    'Oscar Isaac',
-    'Rebecca Ferguson',
-  ];
-  static const crew = ['Denis Villeneuve', 'Hans Zimmer', 'Greig Fraser'];
-  static const production = ['Legendary Pictures', 'Warner Bros.'];
-
   static const friends = ['Maya', 'Youssef', 'Lina'];
 
   static const friendReviews = [

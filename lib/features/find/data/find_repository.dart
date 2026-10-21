@@ -20,4 +20,9 @@ class FindRepository {
     final json = await _client.getJson('/api/films/$filmId/');
     return MovieParser.detail(json);
   }
+
+  Future<List<String>> fetchStills(String filmId) async {
+    final json = await _client.getJson('/api/films/$filmId/stills/');
+    return MovieParser.stills(json);
+  }
 }

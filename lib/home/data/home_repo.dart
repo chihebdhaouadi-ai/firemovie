@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:film_wise_mobile/core/api_config.dart';
 import 'package:film_wise_mobile/core/core.dart';
 import 'package:film_wise_mobile/home/blocs/home_state.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ return [jsonDecode(response.body)['image']['url'], jsonDecode(response.body)['ti
 
 class   HomeRepo {
 
-  final url ="http://127.0.0.1:8000/api/film/get_top_5_movies";
+  final url ="${ApiConfig.baseUrl}/api/film/get_top_5_movies";
 
      Future<List<Top_5_Movies_Model>> get_top_5_movies(Top_5_Movies_Entity top_5_Movies_Entity)async{
              List<Top_5_Movies_Model> data_return=[];
@@ -168,12 +169,12 @@ Future<Add_List_Movies_Model> add_list_find_movies(Add_List_Movies_Entity add_Li
 
      String urllike="";
      if (add_List_Movies_Entity.come_from == "top_5_movies")
-      urllike ="http://127.0.0.1:8000/api/film/add_top_5_movies";
+      urllike ="${ApiConfig.baseUrl}/api/film/add_top_5_movies";
           if (add_List_Movies_Entity.come_from == "watched_list")
-      urllike ="http://127.0.0.1:8000/api/film/add_watched_movies";
+      urllike ="${ApiConfig.baseUrl}/api/film/add_watched_movies";
      
        if (add_List_Movies_Entity.come_from == "watchlist")
-      urllike ="http://127.0.0.1:8000/api/film/add_watchlist_movies";
+      urllike ="${ApiConfig.baseUrl}/api/film/add_watchlist_movies";
 
   final response = await http.post(
     Uri.parse("$urllike"),
@@ -212,13 +213,13 @@ Future<Add_List_Movies_Model> delete_list_find_movies(Add_List_Movies_Entity add
 
     print("test_delete${add_List_Movies_Entity.come_from}");
     
-    String url_api=add_List_Movies_Entity.come_from == "top_5_movies"? "http://127.0.0.1:8000/api/film/delete_top_5_movies"
+    String url_api=add_List_Movies_Entity.come_from == "top_5_movies"? "${ApiConfig.baseUrl}/api/film/delete_top_5_movies"
      :
      add_List_Movies_Entity.come_from == "watched_list"?
 
-      "http://127.0.0.1:8000/api/film/delete_wathced_list_movies": add_List_Movies_Entity.come_from == "watchlist" ?
+      "${ApiConfig.baseUrl}/api/film/delete_wathced_list_movies": add_List_Movies_Entity.come_from == "watchlist" ?
       
-      "http://127.0.0.1:8000/api/film/delete_watch_list_movies":
+      "${ApiConfig.baseUrl}/api/film/delete_watch_list_movies":
       
       
       
@@ -259,7 +260,7 @@ var x = Add_List_Movies_Model(status: "${services["status"]}",message: "TTT");
 
          List<Watched_List_Movies_Model> data_return=[];
 
-    final response =  await get(Uri.parse("http://127.0.0.1:8000/api/film/get_wathced_list_movies"),
+    final response =  await get(Uri.parse("${ApiConfig.baseUrl}/api/film/get_wathced_list_movies"),
     
      headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -293,7 +294,7 @@ var x = Add_List_Movies_Model(status: "${services["status"]}",message: "TTT");
     Future<List<Watched_List_Movies_Model>> get_watch_list_movies(Top_5_Movies_Entity top_5_Movies_Entity)async{
 
       
-    final response =  await get(Uri.parse("http://127.0.0.1:8000/api/film/get_watch_list_movies"),
+    final response =  await get(Uri.parse("${ApiConfig.baseUrl}/api/film/get_watch_list_movies"),
     
      headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -327,7 +328,7 @@ var x = Add_List_Movies_Model(status: "${services["status"]}",message: "TTT");
     Future<List<Watched_List_Movies_Model>> get_popular_list_watch_list_movies(Top_5_Movies_Entity top_5_Movies_Entity)async{
 
       
-    final response =  await get(Uri.parse("http://127.0.0.1:8000/api/film/get_popular_friends_list_movies"),
+    final response =  await get(Uri.parse("${ApiConfig.baseUrl}/api/film/get_popular_friends_list_movies"),
     
      headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -460,11 +461,8 @@ Future<Review_MoviesModel> get_review_movies(Review_MoviesTrigerState Review_tri
   final Map<String, String> __params = {
     "imdbid": "${Review_triger.imdbid}",
   };
-  final __uri = Uri.http(
-    '127.0.0.1:8000',
-    '/api/review/get_review',
-    __params,
-  );
+  final __uri = Uri.parse('${ApiConfig.baseUrl}/api/review/get_review')
+      .replace(queryParameters: __params);
 
   final response = await http.get(__uri, headers: _headers);  
 

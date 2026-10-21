@@ -4,11 +4,12 @@ import 'session.dart';
 
 /// Central place for API configuration.
 ///
-/// The default base URL is pointed at the local Django backend for development.
-/// It can be overridden at build time with `--dart-define=API_BASE_URL=...`.
+/// The default base URL is the hosted Heroku backend.
+/// For local backend development, pass
+/// `--dart-define=API_BASE_URL=http://127.0.0.1:8000`.
 /// Never put secrets, API keys, or credentials here.
 abstract final class ApiConfig {
-  static const String _defaultBaseUrl = 'http://127.0.0.1:8000';
+  static const String _defaultBaseUrl = 'https://filwise-7a4ee29afcff.herokuapp.com';
 
   /// The base URL of the Django backend, without a trailing slash.
   static String get baseUrl {

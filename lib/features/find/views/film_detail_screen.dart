@@ -6,6 +6,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
 import '../data/find_repository.dart';
 import '../data/movie.dart';
+import 'widgets/film_hero_header.dart';
 
 /// A full film detail screen backed by the backend TMDB proxy.
 ///
@@ -18,11 +19,13 @@ class FilmDetailScreen extends StatefulWidget {
     required this.movie,
     this.repository,
     this.heroTag,
+    this.footer,
   });
 
   final Movie movie;
   final FindRepository? repository;
   final Object? heroTag;
+  final Widget? footer;
 
   @override
   State<FilmDetailScreen> createState() => _FilmDetailScreenState();
@@ -31,12 +34,14 @@ class FilmDetailScreen extends StatefulWidget {
 class _FilmDetailScreenState extends State<FilmDetailScreen> {
   late FindRepository _repository;
   Movie? _detail;
+  List<String> _stills = const [];
 
   @override
   void initState() {
     super.initState();
     _repository = widget.repository ?? FindRepository();
     _load();
+    _loadStills();
   }
 
   Future<void> _load() async {
@@ -48,6 +53,15 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
     }
   }
 
+  Future<void> _loadStills() async {
+    try {
+      final stills = await _repository.fetchStills(widget.movie.id);
+      if (mounted) setState(() => _stills = stills);
+    } catch (_) {
+      // The header keeps the poster until stills are available.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
@@ -56,156 +70,55 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              expandedHeight: 260,
-              backgroundColor: AppColors.background,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Hero(
-                  tag: widget.heroTag ?? 'detail-${movie.id}',
-                  child: _backdrop(movie),
-                ),
-              ),
-              leading: IconButton(
-                tooltip: 'Back',
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(Icons.arrow_back),
-              ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: FilmHeroHeader(
+              movie: movie,
+              heroTag: widget.heroTag,
+              stills: _stills,
             ),
-            SliverPadding(
-              padding: EdgeInsetsDirectional.fromSTEB(
-                tokens.spaceLg,
-                tokens.spaceLg,
-                tokens.spaceLg,
-                tokens.spaceXl,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      movie.title,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: AppColors.textPrimary,
-                              ),
-                    ),
-                    SizedBox(height: tokens.spaceXs),
-                    Text(
-                      _subtitle(movie),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textMuted,
-                          ),
-                    ),
-                    if (movie.genres.isNotEmpty) ...[
-                      SizedBox(height: tokens.spaceSm),
-                      Wrap(
-                        spacing: tokens.spaceXs,
-                        children: [
-                          for (final genre in movie.genres)
-                            _chip(context, genre),
-                        ],
-                      ),
-                    ],
-                    if (movie.overview != null) ...[
-                      SizedBox(height: tokens.spaceLg),
-                      Text(
-                        l10n.findDetailsOverview,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                      ),
-                      SizedBox(height: tokens.spaceXs),
-                      Text(
-                        movie.overview!,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                      ),
-                    ],
-                    if (movie.watchProviders != null) ...[
-                      SizedBox(height: tokens.spaceLg),
-                      _WatchWhere(
-                        providers: movie.watchProviders!,
-                        l10n: l10n,
-                      ),
-                    ],
-                    SizedBox(height: tokens.spaceLg),
-                    Text(
-                      l10n.findAttribution,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textMuted,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _backdrop(Movie movie) {
-    final url = movie.backdropUrl ?? movie.posterUrl;
-    if (url == null) {
-      return ColoredBox(
-        color: AppColors.surface,
-        child: Center(
-          child: Icon(
-            Icons.movie_outlined,
-            size: 64,
-            color: AppColors.textMuted,
           ),
-        ),
-      );
-    }
-    return CachedNetworkImage(
-      imageUrl: url,
-      fit: BoxFit.cover,
-      placeholder: (_, __) => const ColoredBox(color: AppColors.surface),
-      errorWidget: (_, __, ___) => const ColoredBox(color: AppColors.surface),
-    );
-  }
-
-  Widget _chip(BuildContext context, String label) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceRaised,
-        borderRadius: BorderRadius.circular(context.tokens.radiusSm),
-      ),
-      child: Padding(
-        padding: EdgeInsetsDirectional.symmetric(
-          horizontal: context.tokens.spaceSm,
-          vertical: 4,
-        ),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: AppColors.accentGlow,
+          SliverToBoxAdapter(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: tokens.maxContentWidth),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(
+                    tokens.spaceLg,
+                    tokens.spaceLg,
+                    tokens.spaceLg,
+                    tokens.spaceXl,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (movie.watchProviders != null) ...[
+                        _WatchWhere(
+                          providers: movie.watchProviders!,
+                          l10n: l10n,
+                        ),
+                        SizedBox(height: tokens.spaceLg),
+                      ],
+                      if (widget.footer != null) ...[
+                        widget.footer!,
+                        SizedBox(height: tokens.spaceLg),
+                      ],
+                      Text(
+                        l10n.findAttribution,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.textMuted,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-        ),
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  String _subtitle(Movie movie) {
-    final parts = <String>[
-      if (movie.year != null) '${movie.year}',
-      if (movie.director != null)
-        '${context.l10n.findDirectedBy} ${movie.director}',
-      if (movie.runtime != null)
-        context.l10n.findDetailsRuntime(movie.runtime!),
-      if (movie.voteAverage != null)
-        context.l10n.findDetailsVote(movie.voteAverage!.toStringAsFixed(1)),
-    ];
-    return parts.join(' · ');
   }
 }
 

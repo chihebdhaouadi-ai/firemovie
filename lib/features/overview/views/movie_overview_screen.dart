@@ -4,9 +4,9 @@ import '../../../core/l10n_context.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../find/data/find_repository.dart';
 import '../../find/data/movie.dart';
+import '../../find/views/widgets/film_hero_header.dart';
 import '../../home/data/home_models.dart';
 import 'widgets/friend_activity.dart';
-import 'widgets/overview_header.dart';
 import 'widgets/overview_panel.dart';
 import 'widgets/reviews_section.dart';
 import 'widgets/status_row.dart';
@@ -27,12 +27,23 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
   Movie? _detail;
   bool _loading = true;
   bool _failed = false;
+  List<String> _stills = const [];
 
   @override
   void initState() {
     super.initState();
     _repository = widget.repository ?? FindRepository();
     _load();
+    _loadStills();
+  }
+
+  Future<void> _loadStills() async {
+    try {
+      final stills = await _repository.fetchStills(widget.film.imdbId);
+      if (mounted) setState(() => _stills = stills);
+    } catch (_) {
+      // The header keeps the poster until stills are available.
+    }
   }
 
   Future<void> _load() async {
@@ -63,7 +74,6 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final l10n = context.l10n;
     final detail = _detail;
     final summary = Movie(
       id: widget.film.imdbId,
@@ -73,44 +83,39 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          tooltip: l10n.overviewBack,
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: tokens.maxContentWidth),
-            child: ListView(
-              padding: EdgeInsetsDirectional.fromSTEB(
-                tokens.spaceLg,
-                0,
-                tokens.spaceLg,
-                tokens.spaceXl,
-              ),
-              children: [
-                OverviewHeader(
-                  movie: detail ?? summary,
-                  loaded: detail != null,
-                ),
-                SizedBox(height: tokens.spaceLg),
-                if (_loading)
-                  const LinearProgressIndicator(
-                    color: AppColors.accentGlow,
-                    backgroundColor: AppColors.surfaceRaised,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: FilmHeroHeader(movie: detail ?? summary, stills: _stills),
+          ),
+          SliverToBoxAdapter(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: tokens.maxContentWidth),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(
+                    tokens.spaceLg,
+                    tokens.spaceLg,
+                    tokens.spaceLg,
+                    tokens.spaceXl,
                   ),
-                if (detail != null) ..._loadedSections(detail),
-                if (_failed) _ErrorCard(onRetry: _retry),
-              ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (_loading)
+                        const LinearProgressIndicator(
+                          color: AppColors.accentGlow,
+                          backgroundColor: AppColors.surfaceRaised,
+                        ),
+                      if (detail != null) ..._loadedSections(detail),
+                      if (_failed) _ErrorCard(onRetry: _retry),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

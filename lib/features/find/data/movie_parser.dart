@@ -17,6 +17,16 @@ abstract final class MovieParser {
     return movie;
   }
 
+  static List<String> stills(Map<String, dynamic> json) {
+    final out = <String>[];
+    if (json['stills'] case final List urls) {
+      for (final url in urls) {
+        if (url is String && url.isNotEmpty) out.add(url);
+      }
+    }
+    return out;
+  }
+
   static Movie _base(Map<String, dynamic> json) {
     final id = json['film_id'] is String
         ? json['film_id'] as String
