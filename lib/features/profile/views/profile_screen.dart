@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/l10n_context.dart';
+import '../../../core/session.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../find/data/find_repository.dart';
 import '../../find/data/movie.dart';
@@ -28,7 +29,7 @@ class ProfileScreen extends StatefulWidget {
   final int? userId;
   final ProfileRepository? repository;
   final SocialRepository? socialRepository;
-  final Future<String?> Function()? pickImage;
+  final Future<XFile?> Function()? pickImage;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -171,15 +172,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (mounted) _loadSocial();
   }
 
+  void _logout() {
+    Session.clear();
+    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+  }
+
   Future<void> _editImage({required bool avatar}) async {
     final l10n = context.l10n;
-    final path = await (widget.pickImage ?? _defaultPickImage)();
-    if (path == null || !mounted) return;
+    final file = await (widget.pickImage ?? _defaultPickImage)();
+    if (file == null || !mounted) return;
     try {
       if (avatar) {
-        await _repository.uploadAvatar(path);
+        await _repository.uploadAvatar(file);
       } else {
-        await _repository.uploadCover(path);
+        await _repository.uploadCover(file);
       }
       await _refreshProfile();
     } catch (_) {
@@ -187,13 +193,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  static Future<String?> _defaultPickImage() async {
-    final file = await ImagePicker().pickImage(
+  static Future<XFile?> _defaultPickImage() {
+    return ImagePicker().pickImage(
       source: ImageSource.gallery,
       maxWidth: 2048,
       imageQuality: 85,
     );
-    return file?.path;
   }
 
   Future<void> _editBio() async {
@@ -336,6 +341,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     label: Text('$_unreadCount'),
                     child: const Icon(Icons.notifications_outlined),
                   ),
+                ),
+                IconButton(
+                  tooltip: l10n.profileLogout,
+                  onPressed: _logout,
+                  icon: const Icon(Icons.logout),
                 ),
               ]
             : null,

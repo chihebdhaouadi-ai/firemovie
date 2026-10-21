@@ -1,31 +1,18 @@
 class LoginEntity {
-    String email;
-        String passowrd;
+  const LoginEntity({required this.email, required this.password});
 
-
-    LoginEntity({
-        required this.email,
-        required this.passowrd,
-
-    });
-
+  final String email;
+  final String password;
 }
-
 
 class RegisterEntity {
-      String username;
+  const RegisterEntity({
+    required this.username,
+    required this.email,
+    required this.password,
+  });
 
-    String email;
-      String passowrd;
-
-
-    RegisterEntity({
-        required this.username,
-
-        required this.email,
-        required this.passowrd,
-
-    });
-
+  final String username;
+  final String email;
+  final String password;
 }
-

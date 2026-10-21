@@ -11,6 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
+import '../film_reviews/review_test_support.dart';
+
 final _en = lookupAppLocalizations(const Locale('en'));
 
 const _dune = Film(imdbId: 'tt0000001', title: 'Dune');
@@ -45,16 +47,30 @@ final _sparseBody = jsonEncode({
 
 const _json = {'content-type': 'application/json'};
 
-FindRepository _repository(http.Client client) =>
-    FindRepository(client: ApiClient(httpClient: client));
+typedef _Handler = Future<http.Response> Function(http.Request request);
 
-Future<void> _pump(WidgetTester tester, FindRepository repository) {
+http.Client _client(_Handler detail, ReviewApi review) {
+  return MockClient((request) {
+    final path = request.url.path;
+    if (path.startsWith('/api/takes/')) return review.handle(request);
+    if (path.endsWith('/stills/')) {
+      return Future.value(http.Response('not found', 404));
+    }
+    return detail(request);
+  });
+}
+
+Future<void> _pump(WidgetTester tester, http.Client client) {
   return tester.pumpWidget(
     MaterialApp(
       theme: AppTheme.dark(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: MovieOverviewScreen(film: _dune, repository: repository),
+      home: MovieOverviewScreen(
+        film: _dune,
+        repository: FindRepository(client: ApiClient(httpClient: client)),
+        reviewRepository: reviewRepositoryFor(client),
+      ),
     ),
   );
 }
@@ -70,10 +86,11 @@ Future<void> _scrollTo(WidgetTester tester, String text) {
 void main() {
   testWidgets('loaded overview shows rating, synopsis, providers and sections',
       (tester) async {
-    final client = MockClient(
+    final client = _client(
       (_) async => http.Response(_detailBody, 200, headers: _json),
+      ReviewApi(),
     );
-    await _pump(tester, _repository(client));
+    await _pump(tester, client);
     await tester.pumpAndSettle();
 
     expect(find.text(_en.overviewRating('7.8')), findsOneWidget);
@@ -94,21 +111,18 @@ void main() {
     );
     await _scrollTo(tester, _en.overviewActivityTitle);
     expect(find.text(_en.overviewActivityTitle), findsOneWidget);
-    await _scrollTo(tester, _en.overviewReviewsTitle);
-    expect(find.text(_en.overviewReviewsTitle), findsOneWidget);
-    await _scrollTo(tester, _en.overviewFriendsReviews);
-    expect(find.text(_en.overviewFriendsReviews), findsOneWidget);
-    await _scrollTo(tester, _en.overviewPopularReviews);
-    expect(find.text(_en.overviewPopularReviews), findsOneWidget);
+    await _scrollTo(tester, _en.reviewReactionTitle);
+    expect(find.text(_en.reviewReactionTitle), findsOneWidget);
     await _scrollTo(tester, _en.findAttribution);
     expect(find.text(_en.findAttribution), findsOneWidget);
   });
 
   testWidgets('missing rating and providers show fallbacks', (tester) async {
-    final client = MockClient(
+    final client = _client(
       (_) async => http.Response(_sparseBody, 200, headers: _json),
+      ReviewApi(),
     );
-    await _pump(tester, _repository(client));
+    await _pump(tester, client);
     await tester.pumpAndSettle();
 
     expect(find.text(_en.overviewNoRating), findsOneWidget);
@@ -117,13 +131,13 @@ void main() {
 
   testWidgets('a failed load shows an error and retry reloads the overview',
       (tester) async {
-    var calls = 0;
-    final client = MockClient((_) async {
-      calls++;
-      if (calls == 1) return http.Response('unavailable', 500);
+    var detailCalls = 0;
+    final client = _client((_) async {
+      detailCalls++;
+      if (detailCalls == 1) return http.Response('unavailable', 500);
       return http.Response(_detailBody, 200, headers: _json);
-    });
-    await _pump(tester, _repository(client));
+    }, ReviewApi());
+    await _pump(tester, client);
     await tester.pumpAndSettle();
 
     expect(find.text(_en.findDetailsErrorTitle), findsOneWidget);
@@ -133,6 +147,6 @@ void main() {
 
     expect(find.text(_en.findDetailsErrorTitle), findsNothing);
     expect(find.text(_en.overviewRating('7.8')), findsOneWidget);
-    expect(calls, 2);
+    expect(detailCalls, 2);
   });
 }

@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '../../find/data/api_client.dart';
 import 'profile_models.dart';
 
@@ -20,19 +22,19 @@ class ProfileRepository {
     await _client.patchJson('/api/account/profile', body: {'bio': bio});
   }
 
-  Future<void> uploadAvatar(String filePath) async {
+  Future<void> uploadAvatar(XFile file) async {
     await _client.patchMultipart(
       '/api/account/profile',
       fileField: 'avatar',
-      filePath: filePath,
+      file: file,
     );
   }
 
-  Future<void> uploadCover(String filePath) async {
+  Future<void> uploadCover(XFile file) async {
     await _client.patchMultipart(
       '/api/account/profile',
       fileField: 'cover',
-      filePath: filePath,
+      file: file,
     );
   }
 }

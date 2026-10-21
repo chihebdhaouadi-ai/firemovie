@@ -1,76 +1,46 @@
-
-
-
-
-
-import 'package:film_wise_mobile/account/data/auth_entity.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../data/login_model.dart';
 import '../data/login_repo.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
-class LoginBLoc extends Bloc<LoginEvent,LoginState>{
- final LoginRepo  repo;
-  LoginBLoc(this.repo) : super(LogincalmState()){
+const _invalidCredentials = 'Incorrect email or password. Please try again.';
+const _registerFailed = 'Could not create your account. Please try again.';
+const _networkError = 'Could not reach the server. Check your connection and try again.';
 
-
-
-  on<LoadLoginEvent>((event,emit) async{
-     emit(LoginLoadingState());
-
-     
-
-     //final login =  await repo.getToken();
-
-  /*  if (login.message !=" wrong")
-     emit(LoginLoadedState(services: login));
-      else{
-        emit(LoginErrorState(msg: 'wronng'));
-      }*/
-
-
-  });
-
+class LoginBLoc extends Bloc<LoginEvent, LoginState> {
+  LoginBLoc(this._repo) : super(const LoginIdle()) {
+    on<LoginSubmitted>(_onLogin);
+    on<RegisterSubmitted>(_onRegister);
   }
 
+  final LoginRepo _repo;
 
+  Future<void> _onLogin(LoginSubmitted event, Emitter<LoginState> emit) async {
+    emit(const LoginInProgress());
+    try {
+      final result = await _repo.login(event.entity);
+      if (result.token.isEmpty) {
+        emit(const LoginFailed(_invalidCredentials));
+      } else {
+        emit(LoginSucceeded(token: result.token, isNewAccount: false));
+      }
+    } catch (_) {
+      emit(const LoginFailed(_networkError));
+    }
+  }
 
-  @override
- Future<Login> mapEventToState(LoginTrigerState event)   async {
-   emit(LoginLoadingState());
-    print("testt");
-    final login =  await repo.getToken(event.loginEntity);
-if (login.message !="wrong")
-     emit(LoginLoadedState(services: login));
-      else
-        emit(LoginErrorState(msg: 'wronng'));
- 
-    
-  return login;
-
-
-}
-
-
-  @override
- Future<Login> createaccount(RegisterTrigerState event)   async {
-
-    print("register");
-    
-    final RegisterEntity =  await repo.Registerrepo(event.registerEntity);
-     emit(LoginLoadedState(services: RegisterEntity));
-
-    
-  return RegisterEntity;
-
-
-
-
-
-}
-
-
-
+  Future<void> _onRegister(RegisterSubmitted event, Emitter<LoginState> emit) async {
+    emit(const LoginInProgress());
+    try {
+      final result = await _repo.register(event.entity);
+      if (result.status == 200 && result.token.isNotEmpty) {
+        emit(LoginSucceeded(token: result.token, isNewAccount: true));
+      } else {
+        emit(LoginFailed(result.message.isEmpty ? _registerFailed : result.message));
+      }
+    } catch (_) {
+      emit(const LoginFailed(_networkError));
+    }
+  }
 }

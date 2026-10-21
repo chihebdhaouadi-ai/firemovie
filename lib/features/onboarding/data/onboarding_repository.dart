@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '../../find/data/api_client.dart';
 
 class OnboardingCounts {
@@ -33,19 +35,19 @@ class OnboardingRepository {
     await _client.patchJson(_profilePath, body: {'bio': bio});
   }
 
-  Future<void> uploadAvatar(String filePath) async {
+  Future<void> uploadAvatar(XFile file) async {
     await _client.patchMultipart(
       _profilePath,
       fileField: 'avatar',
-      filePath: filePath,
+      file: file,
     );
   }
 
-  Future<void> uploadCover(String filePath) async {
+  Future<void> uploadCover(XFile file) async {
     await _client.patchMultipart(
       _profilePath,
       fileField: 'cover',
-      filePath: filePath,
+      file: file,
     );
   }
 }

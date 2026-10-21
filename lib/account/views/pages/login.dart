@@ -1,34 +1,32 @@
 import 'dart:async';
-import 'dart:ui' show ImageFilter;
 
 import 'package:film_wise_mobile/account/blocs/login_bloc.dart';
+import 'package:film_wise_mobile/account/blocs/login_event.dart';
 import 'package:film_wise_mobile/account/blocs/login_state.dart';
 import 'package:film_wise_mobile/account/data/auth_entity.dart';
 import 'package:film_wise_mobile/account/views/widgets/social_auth_button.dart';
+import 'package:film_wise_mobile/core/session.dart';
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
-const _loginError = 'Incorrect email or password. Please try again.';
 const _emailPattern = r'^[^@\s]+@[^@\s]+\.[^@\s]+$';
+final _emailRegExp = RegExp(_emailPattern);
 const _successColor = Color(0xFF31FC2A);
 const _fieldTextStyle = TextStyle(color: AppColors.textPrimary, fontSize: 15);
-
-double _unit(double value) => value < 0 ? 0 : (value > 1 ? 1 : value);
-
-final _backdropBlur = ImageFilter.blur(sigmaX: 3, sigmaY: 3);
+const _backdropHeightRatio = 480 / 792;
+const _popupUrl =
+    'https://lottie.host/2041a391-2eeb-4eac-bf8b-a9fc2a5d7b62/Ygg9wslNj9.json';
 
 class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  State<Login> createState() => _Login();
+  State<Login> createState() => _LoginState();
 }
 
-class _Login extends State<Login> with TickerProviderStateMixin {
-  final _formKey = GlobalKey<FormState>();
-  final _registerFormKey = GlobalKey<FormState>();
+class _LoginState extends State<Login> with TickerProviderStateMixin {
   final _pageController = PageController();
 
   late final AnimationController _entranceController;
@@ -36,14 +34,6 @@ class _Login extends State<Login> with TickerProviderStateMixin {
   late final AnimationController _popupController;
   Timer? _popupTimer;
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _registerEmailController = TextEditingController();
-  final _registerPasswordController = TextEditingController();
-  final _repeatPasswordController = TextEditingController();
-
-  bool _isPasswordVisible = false;
   bool _accountCreated = false;
   bool _showPopup = false;
   bool _popupShown = false;
@@ -93,12 +83,6 @@ class _Login extends State<Login> with TickerProviderStateMixin {
     _entranceController.dispose();
     _popupController.dispose();
     _pageController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _usernameController.dispose();
-    _registerEmailController.dispose();
-    _registerPasswordController.dispose();
-    _repeatPasswordController.dispose();
     super.dispose();
   }
 
@@ -110,59 +94,30 @@ class _Login extends State<Login> with TickerProviderStateMixin {
     );
   }
 
-  void _submitLogin() {
-    if (!(_formKey.currentState?.validate() ?? false)) return;
-    BlocProvider.of<LoginBLoc>(context).mapEventToState(
-      LoginTrigerState(
-        loginEntity: LoginEntity(
-          email: _emailController.text.trim(),
-          passowrd: _passwordController.text,
-        ),
-      ),
-    );
-  }
-
-  void _submitRegister() {
-    if (!(_registerFormKey.currentState?.validate() ?? false)) return;
-    BlocProvider.of<LoginBLoc>(context).createaccount(
-      RegisterTrigerState(
-        registerEntity: RegisterEntity(
-          username: _usernameController.text.trim(),
-          email: _registerEmailController.text.trim(),
-          passowrd: _registerPasswordController.text,
-        ),
-      ),
-    );
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Please enter your email';
-    if (!RegExp(_emailPattern).hasMatch(value.trim())) {
-      return 'Please enter a valid email';
+  void _handleAuthState(BuildContext context, LoginState state) {
+    switch (state) {
+      case LoginSucceeded(:final token, :final isNewAccount):
+        Session.token = token;
+        Navigator.of(context).pushReplacementNamed(
+          isNewAccount ? '/onboarding' : '/home',
+        );
+      case LoginFailed(:final message):
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(message)));
+      case LoginIdle() || LoginInProgress():
+        break;
     }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return 'Please enter your password';
-    if (value.length < 6) return 'Password must be at least 6 characters';
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final imageHeight = size.height * 480 / 792;
+    final height = MediaQuery.sizeOf(context).height * _backdropHeightRatio;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: BlocListener<LoginBLoc, LoginState>(
-        listenWhen: (_, state) => state is LoginErrorState,
-        listener: (context, _) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(const SnackBar(content: Text(_loginError)));
-        },
+        listener: _handleAuthState,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -170,15 +125,22 @@ class _Login extends State<Login> with TickerProviderStateMixin {
               top: 0,
               left: 0,
               right: 0,
-              height: imageHeight,
-              child: _backdrop(),
+              child: _AuthBackdrop(
+                  pageController: _pageController, height: height),
             ),
             Positioned.fill(
               child: PageView(
                 controller: _pageController,
                 children: [
-                  _loginPage(context),
-                  _registerPage(context),
+                  _SignInForm(
+                    entrance: _entrance,
+                    accountCreated: _accountCreated,
+                    onSwitchToSignUp: () => _goToPage(1),
+                  ),
+                  _SignUpForm(
+                    entrance: _entrance,
+                    onSwitchToSignIn: () => _goToPage(0),
+                  ),
                 ],
               ),
             ),
@@ -186,7 +148,7 @@ class _Login extends State<Login> with TickerProviderStateMixin {
               Positioned.fill(
                 child: Center(
                   child: Lottie.network(
-                    'https://lottie.host/2041a391-2eeb-4eac-bf8b-a9fc2a5d7b62/Ygg9wslNj9.json',
+                    _popupUrl,
                     controller: _popupController,
                   ),
                 ),
@@ -196,90 +158,243 @@ class _Login extends State<Login> with TickerProviderStateMixin {
       ),
     );
   }
+}
 
-  Widget _backdrop() {
-    return ListenableBuilder(
-      listenable: _pageController,
-      builder: (context, _) {
-        final page = _pageController.hasClients ? (_pageController.page ?? 0) : 0.0;
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            Opacity(
-              opacity: _unit(1 - page),
-              child: ImageFiltered(
-                imageFilter: _backdropBlur,
-                child: Image.asset(
-                  'assets/loginbg.png',
-                  fit: BoxFit.cover,
-                  excludeFromSemantics: true,
+class _AuthBackdrop extends StatelessWidget {
+  const _AuthBackdrop({required this.pageController, required this.height});
+
+  final PageController pageController;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: context.tokens.maxContentWidth,
+        ),
+        child: SizedBox(
+          height: height,
+          child: RepaintBoundary(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _PageFade(
+                  controller: pageController,
+                  asset: 'assets/loginbg.png',
+                  fadesOut: true,
                 ),
-              ),
-            ),
-            Opacity(
-              opacity: _unit(page),
-              child: ImageFiltered(
-                imageFilter: _backdropBlur,
-                child: Image.asset(
-                  'assets/createbg.png',
-                  fit: BoxFit.cover,
-                  excludeFromSemantics: true,
+                _PageFade(
+                  controller: pageController,
+                  asset: 'assets/createbg.png',
+                  fadesOut: false,
                 ),
-              ),
-            ),
-            const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.4, 1],
-                  colors: [AppColors.transparent, AppColors.background],
+                const DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0.4, 1],
+                      colors: [AppColors.transparent, AppColors.background],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        );
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PageFade extends StatelessWidget {
+  const _PageFade({
+    required this.controller,
+    required this.asset,
+    required this.fadesOut,
+  });
+
+  final PageController controller;
+  final String asset;
+  final bool fadesOut;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      child: Image.asset(
+        asset,
+        fit: BoxFit.cover,
+        gaplessPlayback: true,
+        excludeFromSemantics: true,
+      ),
+      builder: (context, child) {
+        final page = controller.hasClients ? (controller.page ?? 0) : 0.0;
+        final opacity = (fadesOut ? 1 - page : page).clamp(0.0, 1.0);
+        return Opacity(opacity: opacity, child: child);
       },
     );
   }
+}
 
-  Widget _loginPage(BuildContext context) {
-    return _authPage(
-      context,
-      title: 'Sign in',
-      formKey: _formKey,
-      children: [
-        if (_accountCreated) ...[
-          _successBanner(context),
-          const SizedBox(height: 20),
-        ],
-        _socialButtons(),
-        const SizedBox(height: 24),
-        _divider(),
-        const SizedBox(height: 24),
-        TextFormField(
-          controller: _emailController,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          autofillHints: const [AutofillHints.email],
-          validator: _validateEmail,
-          cursorColor: AppColors.accentGlow,
-          style: _fieldTextStyle,
-          decoration: _fieldDecoration(
-            context,
-            label: 'Email',
-            icon: Icons.email_outlined,
+class _AuthLayout extends StatelessWidget {
+  const _AuthLayout({
+    required this.title,
+    required this.entrance,
+    required this.formKey,
+    required this.children,
+  });
+
+  final String title;
+  final Animation<double> entrance;
+  final GlobalKey<FormState> formKey;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    final size = MediaQuery.sizeOf(context);
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: tokens.maxContentWidth),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          padding: EdgeInsets.fromLTRB(
+            tokens.spaceXl,
+            size.height * 0.12,
+            tokens.spaceXl,
+            tokens.spaceXl,
+          ),
+          child: FadeTransition(
+            opacity: entrance,
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Image.asset(
+                      'assets/LogoWise.png',
+                      height: 28,
+                      excludeFromSemantics: true,
+                    ),
+                  ),
+                  SizedBox(height: tokens.spaceLg),
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'UNLOCK YOUR INNER FILM BUFF',
+                    style: TextStyle(
+                      color: AppColors.textMuted,
+                      fontSize: 12,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ...children,
+                ],
+              ),
+            ),
           ),
         ),
-        const SizedBox(height: 16),
-        _passwordField(
+      ),
+    );
+  }
+}
+
+class _SignInForm extends StatefulWidget {
+  const _SignInForm({
+    required this.entrance,
+    required this.accountCreated,
+    required this.onSwitchToSignUp,
+  });
+
+  final Animation<double> entrance;
+  final bool accountCreated;
+  final VoidCallback onSwitchToSignUp;
+
+  @override
+  State<_SignInForm> createState() => _SignInFormState();
+}
+
+class _SignInFormState extends State<_SignInForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  bool _submitted = false;
+  bool _passwordVisible = false;
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    setState(() => _submitted = true);
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    context.read<LoginBLoc>().add(
+          LoginSubmitted(
+            LoginEntity(email: _email.text.trim(), password: _password.text),
+          ),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    final autovalidate = _autovalidateMode(_submitted);
+
+    return _AuthLayout(
+      title: 'Sign in',
+      entrance: widget.entrance,
+      formKey: _formKey,
+      children: [
+        if (widget.accountCreated) ...[
+          const _SuccessBanner(),
+          const SizedBox(height: 20),
+        ],
+        const _SocialButtons(),
+        const SizedBox(height: 24),
+        const _OrDivider(),
+        const SizedBox(height: 24),
+        _authField(
           context,
-          controller: _passwordController,
+          controller: _email,
+          label: 'Email',
+          icon: Icons.email_outlined,
+          keyboardType: TextInputType.emailAddress,
+          autofillHints: const [AutofillHints.email],
+          validator: _validateEmail,
+          autovalidateMode: autovalidate,
+        ),
+        SizedBox(height: tokens.spaceLg),
+        _authField(
+          context,
+          controller: _password,
           label: 'Password',
-          validator: _validatePassword,
+          icon: Icons.lock_outline_rounded,
+          obscure: !_passwordVisible,
+          suffixIcon: _visibilityToggle(
+            visible: _passwordVisible,
+            onPressed: () =>
+                setState(() => _passwordVisible = !_passwordVisible),
+          ),
           action: TextInputAction.done,
           autofillHints: const [AutofillHints.password],
-          onFieldSubmitted: (_) => _submitLogin(),
+          validator: _validatePassword,
+          autovalidateMode: autovalidate,
+          onFieldSubmitted: (_) => _submit(),
         ),
         Align(
           alignment: Alignment.centerRight,
@@ -289,265 +404,263 @@ class _Login extends State<Login> with TickerProviderStateMixin {
           ),
         ),
         const SizedBox(height: 8),
-        _submitButton(context, label: 'Sign in', onPressed: _submitLogin),
+        _SubmitButton(label: 'Sign in', onPressed: _submit),
         const SizedBox(height: 24),
-        _switchPrompt(
-          context,
+        _SwitchPrompt(
           prompt: "Don't have an account?",
           action: 'Sign up',
-          onTap: () => _goToPage(1),
+          onTap: widget.onSwitchToSignUp,
         ),
       ],
     );
   }
+}
 
-  Widget _registerPage(BuildContext context) {
-    return _authPage(
-      context,
-      title: 'Create account',
-      formKey: _registerFormKey,
-      children: [
-        _socialButtons(),
-        const SizedBox(height: 24),
-        _divider(),
-        const SizedBox(height: 24),
-        TextFormField(
-          controller: _usernameController,
-          textInputAction: TextInputAction.next,
-          autofillHints: const [AutofillHints.username],
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Please enter a username';
-            }
-            if (value.trim().length < 6) {
-              return 'Username must be at least 6 characters';
-            }
-            return null;
-          },
-          cursorColor: AppColors.accentGlow,
-          style: _fieldTextStyle,
-          decoration: _fieldDecoration(
-            context,
-            label: 'Username',
-            icon: Icons.person_outline_rounded,
-          ),
-        ),
-        const SizedBox(height: 16),
-        TextFormField(
-          controller: _registerEmailController,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          autofillHints: const [AutofillHints.email],
-          validator: _validateEmail,
-          cursorColor: AppColors.accentGlow,
-          style: _fieldTextStyle,
-          decoration: _fieldDecoration(
-            context,
-            label: 'Email',
-            icon: Icons.email_outlined,
-          ),
-        ),
-        const SizedBox(height: 16),
-        _passwordField(
-          context,
-          controller: _registerPasswordController,
-          label: 'Password',
-          validator: (value) {
-            final error = _validatePassword(value);
-            if (error != null) return error;
-            if (value != _repeatPasswordController.text) {
-              return 'Passwords do not match';
-            }
-            return null;
-          },
-          action: TextInputAction.next,
-          autofillHints: const [AutofillHints.newPassword],
-        ),
-        const SizedBox(height: 16),
-        _passwordField(
-          context,
-          controller: _repeatPasswordController,
-          label: 'Repeat password',
-          validator: (value) {
-            final error = _validatePassword(value);
-            if (error != null) return error;
-            if (value != _registerPasswordController.text) {
-              return 'Passwords do not match';
-            }
-            return null;
-          },
-          action: TextInputAction.done,
-          autofillHints: const [AutofillHints.newPassword],
-          onFieldSubmitted: (_) => _submitRegister(),
-        ),
-        const SizedBox(height: 24),
-        _submitButton(context, label: 'Create account', onPressed: _submitRegister),
-        const SizedBox(height: 24),
-        _switchPrompt(
-          context,
-          prompt: 'Already have an account?',
-          action: 'Sign in',
-          onTap: () => _goToPage(0),
-        ),
-      ],
-    );
+class _SignUpForm extends StatefulWidget {
+  const _SignUpForm({required this.entrance, required this.onSwitchToSignIn});
+
+  final Animation<double> entrance;
+  final VoidCallback onSwitchToSignIn;
+
+  @override
+  State<_SignUpForm> createState() => _SignUpFormState();
+}
+
+class _SignUpFormState extends State<_SignUpForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _username = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  final _repeatPassword = TextEditingController();
+  bool _submitted = false;
+  bool _passwordVisible = false;
+
+  @override
+  void dispose() {
+    _username.dispose();
+    _email.dispose();
+    _password.dispose();
+    _repeatPassword.dispose();
+    super.dispose();
   }
 
-  Widget _authPage(
-    BuildContext context, {
-    required String title,
-    required GlobalKey<FormState> formKey,
-    required List<Widget> children,
-  }) {
-    final size = MediaQuery.sizeOf(context);
-    final tokens = context.tokens;
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      padding: EdgeInsets.fromLTRB(24, size.height * 0.12, 24, 24),
-      child: FadeTransition(
-        opacity: _entrance,
-        child: Form(
-          key: formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  'assets/LogoWise.png',
-                  height: 28,
-                  excludeFromSemantics: true,
-                ),
-              ),
-              SizedBox(height: tokens.spaceLg),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                'UNLOCK YOUR INNER FILM BUFF',
-                style: TextStyle(
-                  color: AppColors.textMuted,
-                  fontSize: 12,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              const SizedBox(height: 24),
-              ...children,
-            ],
-          ),
-        ),
-      ),
-    );
+  String? _validateRepeat(String? value) {
+    final error = _validatePassword(value);
+    if (error != null) return error;
+    return value == _password.text ? null : 'Passwords do not match';
   }
 
-  Widget _successBanner(BuildContext context) {
-    final tokens = context.tokens;
-    return Container(
-      padding: EdgeInsets.all(tokens.spaceMd),
-      decoration: BoxDecoration(
-        color: const Color(0x1A31FC2A),
-        borderRadius: BorderRadius.circular(tokens.radiusSm),
-        border: Border.all(color: const Color(0x6631FC2A)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.check_circle_outline, color: _successColor, size: tokens.iconSmall),
-          SizedBox(width: tokens.spaceSm),
-          const Expanded(
-            child: Text(
-              'Account created successfully. Sign in to continue.',
-              style: TextStyle(color: _successColor, fontSize: 13),
+  void _submit() {
+    setState(() => _submitted = true);
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    context.read<LoginBLoc>().add(
+          RegisterSubmitted(
+            RegisterEntity(
+              username: _username.text.trim(),
+              email: _email.text.trim(),
+              password: _password.text,
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  InputDecoration _fieldDecoration(
-    BuildContext context, {
-    required String label,
-    required IconData icon,
-    Widget? suffixIcon,
-  }) {
-    final tokens = context.tokens;
-    OutlineInputBorder border(Color color, double width) => OutlineInputBorder(
-          borderRadius: BorderRadius.circular(tokens.radiusMd),
-          borderSide: BorderSide(color: color, width: width),
         );
-
-    return InputDecoration(
-      labelText: label,
-      filled: true,
-      fillColor: AppColors.surface,
-      prefixIcon: Icon(icon, color: AppColors.textMuted),
-      suffixIcon: suffixIcon,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
-      floatingLabelStyle: const TextStyle(color: AppColors.accentGlow),
-      errorStyle: const TextStyle(color: AppColors.error),
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: tokens.spaceLg,
-        vertical: tokens.spaceLg,
-      ),
-      border: border(AppColors.outline, tokens.borderWidth),
-      enabledBorder: border(AppColors.outline, tokens.borderWidth),
-      focusedBorder: border(AppColors.accentGlow, 1.5),
-      errorBorder: border(AppColors.error, tokens.borderWidth),
-      focusedErrorBorder: border(AppColors.error, 1.5),
-    );
   }
 
-  Widget _passwordField(
-    BuildContext context, {
-    required TextEditingController controller,
-    required String label,
-    required FormFieldValidator<String> validator,
-    required TextInputAction action,
-    required Iterable<String> autofillHints,
-    ValueChanged<String>? onFieldSubmitted,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: !_isPasswordVisible,
-      textInputAction: action,
-      autofillHints: autofillHints,
-      validator: validator,
-      onFieldSubmitted: onFieldSubmitted,
-      cursorColor: AppColors.accentGlow,
-      style: _fieldTextStyle,
-      decoration: _fieldDecoration(
-        context,
-        label: label,
-        icon: Icons.lock_outline_rounded,
-        suffixIcon: IconButton(
-          tooltip: _isPasswordVisible ? 'Hide password' : 'Show password',
-          icon: Icon(
-            _isPasswordVisible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-            color: AppColors.textMuted,
-          ),
-          onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    final autovalidate = _autovalidateMode(_submitted);
+
+    return _AuthLayout(
+      title: 'Create account',
+      entrance: widget.entrance,
+      formKey: _formKey,
+      children: [
+        const _SocialButtons(),
+        const SizedBox(height: 24),
+        const _OrDivider(),
+        const SizedBox(height: 24),
+        _authField(
+          context,
+          controller: _username,
+          label: 'Username',
+          icon: Icons.person_outline_rounded,
+          autofillHints: const [AutofillHints.username],
+          validator: _validateUsername,
+          autovalidateMode: autovalidate,
         ),
-      ),
+        SizedBox(height: tokens.spaceLg),
+        _authField(
+          context,
+          controller: _email,
+          label: 'Email',
+          icon: Icons.email_outlined,
+          keyboardType: TextInputType.emailAddress,
+          autofillHints: const [AutofillHints.email],
+          validator: _validateEmail,
+          autovalidateMode: autovalidate,
+        ),
+        SizedBox(height: tokens.spaceLg),
+        _authField(
+          context,
+          controller: _password,
+          label: 'Password',
+          icon: Icons.lock_outline_rounded,
+          obscure: !_passwordVisible,
+          suffixIcon: _visibilityToggle(
+            visible: _passwordVisible,
+            onPressed: () =>
+                setState(() => _passwordVisible = !_passwordVisible),
+          ),
+          autofillHints: const [AutofillHints.newPassword],
+          validator: _validatePassword,
+          autovalidateMode: autovalidate,
+        ),
+        SizedBox(height: tokens.spaceLg),
+        _authField(
+          context,
+          controller: _repeatPassword,
+          label: 'Repeat password',
+          icon: Icons.lock_outline_rounded,
+          obscure: !_passwordVisible,
+          suffixIcon: _visibilityToggle(
+            visible: _passwordVisible,
+            onPressed: () =>
+                setState(() => _passwordVisible = !_passwordVisible),
+          ),
+          action: TextInputAction.done,
+          autofillHints: const [AutofillHints.newPassword],
+          validator: _validateRepeat,
+          autovalidateMode: autovalidate,
+          onFieldSubmitted: (_) => _submit(),
+        ),
+        const SizedBox(height: 24),
+        _SubmitButton(label: 'Create account', onPressed: _submit),
+        const SizedBox(height: 24),
+        _SwitchPrompt(
+          prompt: 'Already have an account?',
+          action: 'Sign in',
+          onTap: widget.onSwitchToSignIn,
+        ),
+      ],
     );
   }
+}
 
-  Widget _submitButton(
-    BuildContext context, {
-    required String label,
-    required VoidCallback onPressed,
-  }) {
+AutovalidateMode _autovalidateMode(bool submitted) =>
+    submitted ? AutovalidateMode.onUserInteraction : AutovalidateMode.onUnfocus;
+
+String? _validateEmail(String? value) {
+  final trimmed = value?.trim() ?? '';
+  if (trimmed.isEmpty) return 'Please enter your email';
+  if (!_emailRegExp.hasMatch(trimmed)) return 'Please enter a valid email';
+  return null;
+}
+
+String? _validatePassword(String? value) {
+  if (value == null || value.isEmpty) return 'Please enter your password';
+  if (value.length < 6) return 'Password must be at least 6 characters';
+  return null;
+}
+
+String? _validateUsername(String? value) {
+  final trimmed = value?.trim() ?? '';
+  if (trimmed.isEmpty) return 'Please enter a username';
+  if (trimmed.length < 6) return 'Username must be at least 6 characters';
+  return null;
+}
+
+Widget _authField(
+  BuildContext context, {
+  required TextEditingController controller,
+  required String label,
+  required IconData icon,
+  required FormFieldValidator<String> validator,
+  required AutovalidateMode autovalidateMode,
+  TextInputType? keyboardType,
+  TextInputAction action = TextInputAction.next,
+  required Iterable<String> autofillHints,
+  bool obscure = false,
+  Widget? suffixIcon,
+  ValueChanged<String>? onFieldSubmitted,
+}) {
+  return TextFormField(
+    controller: controller,
+    keyboardType: keyboardType,
+    obscureText: obscure,
+    textInputAction: action,
+    autofillHints: autofillHints,
+    validator: validator,
+    autovalidateMode: autovalidateMode,
+    onFieldSubmitted: onFieldSubmitted,
+    cursorColor: AppColors.accentGlow,
+    style: _fieldTextStyle,
+    decoration: _fieldDecoration(
+      context,
+      label: label,
+      icon: icon,
+      suffixIcon: suffixIcon,
+    ),
+  );
+}
+
+InputDecoration _fieldDecoration(
+  BuildContext context, {
+  required String label,
+  required IconData icon,
+  Widget? suffixIcon,
+}) {
+  final tokens = context.tokens;
+  OutlineInputBorder border(Color color, double width) => OutlineInputBorder(
+        borderRadius: BorderRadius.circular(tokens.radiusMd),
+        borderSide: BorderSide(color: color, width: width),
+      );
+
+  return InputDecoration(
+    labelText: label,
+    filled: true,
+    fillColor: AppColors.surface,
+    prefixIcon: Icon(icon, color: AppColors.textMuted),
+    suffixIcon: suffixIcon,
+    labelStyle: const TextStyle(color: AppColors.textSecondary),
+    floatingLabelStyle: const TextStyle(color: AppColors.accentGlow),
+    errorStyle: const TextStyle(color: AppColors.error),
+    contentPadding: EdgeInsets.symmetric(
+      horizontal: tokens.spaceLg,
+      vertical: tokens.spaceLg,
+    ),
+    border: border(AppColors.outline, tokens.borderWidth),
+    enabledBorder: border(AppColors.outline, tokens.borderWidth),
+    focusedBorder: border(AppColors.accentGlow, 1.5),
+    errorBorder: border(AppColors.error, tokens.borderWidth),
+    focusedErrorBorder: border(AppColors.error, 1.5),
+  );
+}
+
+Widget _visibilityToggle({
+  required bool visible,
+  required VoidCallback onPressed,
+}) {
+  return IconButton(
+    tooltip: visible ? 'Hide password' : 'Show password',
+    onPressed: onPressed,
+    icon: Icon(
+      visible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+      color: AppColors.textMuted,
+    ),
+  );
+}
+
+class _SubmitButton extends StatelessWidget {
+  const _SubmitButton({required this.label, required this.onPressed});
+
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
     final radius = BorderRadius.circular(context.tokens.radiusMd);
-    return BlocBuilder<LoginBLoc, LoginState>(
-      buildWhen: (previous, current) =>
-          (previous is LoginLoadingState) != (current is LoginLoadingState),
-      builder: (context, state) {
-        final loading = state is LoginLoadingState;
+    return BlocSelector<LoginBLoc, LoginState, bool>(
+      selector: (state) => state is LoginInProgress,
+      builder: (context, loading) {
         return FilledButton(
           onPressed: loading ? null : onPressed,
           style: FilledButton.styleFrom(
@@ -557,7 +670,8 @@ class _Login extends State<Login> with TickerProviderStateMixin {
             disabledForegroundColor: AppColors.textMuted,
             minimumSize: const Size.fromHeight(52),
             shape: RoundedRectangleBorder(borderRadius: radius),
-            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            textStyle:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
           child: loading
               ? const SizedBox.square(
@@ -572,8 +686,43 @@ class _Login extends State<Login> with TickerProviderStateMixin {
       },
     );
   }
+}
 
-  Widget _divider() {
+class _SuccessBanner extends StatelessWidget {
+  const _SuccessBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    return Container(
+      padding: EdgeInsets.all(tokens.spaceMd),
+      decoration: BoxDecoration(
+        color: const Color(0x1A31FC2A),
+        borderRadius: BorderRadius.circular(tokens.radiusSm),
+        border: Border.all(color: const Color(0x6631FC2A)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.check_circle_outline,
+              color: _successColor, size: tokens.iconSmall),
+          SizedBox(width: tokens.spaceSm),
+          const Expanded(
+            child: Text(
+              'Account created successfully. Sign in to continue.',
+              style: TextStyle(color: _successColor, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OrDivider extends StatelessWidget {
+  const _OrDivider();
+
+  @override
+  Widget build(BuildContext context) {
     return const Row(
       children: [
         Expanded(child: Divider(color: AppColors.outline)),
@@ -588,8 +737,13 @@ class _Login extends State<Login> with TickerProviderStateMixin {
       ],
     );
   }
+}
 
-  Widget _socialButtons() {
+class _SocialButtons extends StatelessWidget {
+  const _SocialButtons();
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -599,13 +753,21 @@ class _Login extends State<Login> with TickerProviderStateMixin {
       ],
     );
   }
+}
 
-  Widget _switchPrompt(
-    BuildContext context, {
-    required String prompt,
-    required String action,
-    required VoidCallback onTap,
-  }) {
+class _SwitchPrompt extends StatelessWidget {
+  const _SwitchPrompt({
+    required this.prompt,
+    required this.action,
+    required this.onTap,
+  });
+
+  final String prompt;
+  final String action;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

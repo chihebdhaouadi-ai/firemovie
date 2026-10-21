@@ -1,45 +1,48 @@
 import 'dart:convert';
-import 'dart:developer';
 
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 import '../../core/api_config.dart';
 import 'auth_entity.dart';
 import 'login_model.dart';
 
 class LoginRepo {
-  String get url => '${ApiConfig.baseUrl}/api/account/login';
-  String get url_login => '${ApiConfig.baseUrl}/api/account/register';
+  static const _timeout = Duration(seconds: 30);
 
-  Future<Login> getToken(LoginEntity loginEntity) async {
-    final response = await post(Uri.parse(url), body: {
-      'email': '${loginEntity.email}',
-      'password': '${loginEntity.passowrd}'
+  Future<Login> login(LoginEntity entity) {
+    return _post('/api/account/login', {
+      'email': entity.email,
+      'password': entity.password,
     });
-    final services = jsonDecode(response.body);
-    print(services["message"]);
-
-    return Login(
-        message: services["message"],
-        feature: services["feature"],
-        status: services["status"],
-        token: '${services["token"] ?? ""}');
   }
 
-  Future<Login> Registerrepo(RegisterEntity registerEntity) async {
-    final response = await post(Uri.parse(url_login), body: {
-      'username': '${registerEntity.username}',
-      'email': '${registerEntity.email}',
-      'password': '${registerEntity.passowrd}'
+  Future<Login> register(RegisterEntity entity) {
+    return _post('/api/account/register', {
+      'username': entity.username,
+      'email': entity.email,
+      'password': entity.password,
     });
-    final services = jsonDecode(response.body) as Map<String, dynamic>;
-    print(services["message"]);
+  }
+
+  Future<Login> _post(String path, Map<String, String> body) async {
+    final response = await http
+        .post(Uri.parse('${ApiConfig.baseUrl}$path'), body: body)
+        .timeout(_timeout);
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    final status = json['status'];
 
     return Login(
-      message: '${services["message"]}',
-      feature: '${services["feature"]}',
-      status: services["status"] as int,
-      token: '${services["token"] ?? ""}',
+      message: _text(json['message']),
+      feature: _text(json['feature']),
+      status: status is int ? status : response.statusCode,
+      token: _text(json['token']),
     );
+  }
+
+  /// Field-level validation errors arrive as a map of lists; surface the first.
+  static String _text(Object? value) {
+    if (value is Map && value.isNotEmpty) return _text(value.values.first);
+    if (value is List && value.isNotEmpty) return _text(value.first);
+    return value?.toString() ?? '';
   }
 }

@@ -19,7 +19,7 @@ class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, this.repository, this.pickImage});
 
   final OnboardingRepository? repository;
-  final Future<String?> Function()? pickImage;
+  final Future<XFile?> Function()? pickImage;
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -110,12 +110,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> _pickAndUpload({required bool avatar}) async {
-    final path = await (widget.pickImage ?? _defaultPickImage)();
-    if (path == null || !mounted) return;
+    final file = await (widget.pickImage ?? _defaultPickImage)();
+    if (file == null || !mounted) return;
     final saved = await _run(
       () => avatar
-          ? _repository.uploadAvatar(path)
-          : _repository.uploadCover(path),
+          ? _repository.uploadAvatar(file)
+          : _repository.uploadCover(file),
     );
     if (!saved || !mounted) return;
     setState(() {
@@ -127,13 +127,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
   }
 
-  static Future<String?> _defaultPickImage() async {
-    final file = await ImagePicker().pickImage(
+  static Future<XFile?> _defaultPickImage() {
+    return ImagePicker().pickImage(
       source: ImageSource.gallery,
       maxWidth: 2048,
       imageQuality: 85,
     );
-    return file?.path;
   }
 
   Future<void> _openFind(AddTarget target) async {

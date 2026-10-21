@@ -779,6 +779,258 @@ abstract class AppLocalizations {
   /// **'See All'**
   String get overviewSeeAll;
 
+  /// No description provided for @reviewTrustedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'from trusted viewers'**
+  String get reviewTrustedLabel;
+
+  /// No description provided for @reviewEveryoneTogether.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone together: {value}'**
+  String reviewEveryoneTogether(String value);
+
+  /// No description provided for @reviewMostFelt.
+  ///
+  /// In en, this message translates to:
+  /// **'Most felt:'**
+  String get reviewMostFelt;
+
+  /// No description provided for @reviewWhatIsTrusted.
+  ///
+  /// In en, this message translates to:
+  /// **'What is “trusted”?'**
+  String get reviewWhatIsTrusted;
+
+  /// No description provided for @reviewTrustedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewers earn trust when others find their takes well argued. Their votes count a little more, so the score feels fair and thoughtful.'**
+  String get reviewTrustedNote;
+
+  /// No description provided for @reviewReactionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How did it make you feel?'**
+  String get reviewReactionTitle;
+
+  /// No description provided for @reviewReactionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the one that fits best.'**
+  String get reviewReactionHint;
+
+  /// No description provided for @reviewReactionLoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Loved it'**
+  String get reviewReactionLoved;
+
+  /// No description provided for @reviewReactionBrokeHeart.
+  ///
+  /// In en, this message translates to:
+  /// **'Broke my heart'**
+  String get reviewReactionBrokeHeart;
+
+  /// No description provided for @reviewReactionBlewMind.
+  ///
+  /// In en, this message translates to:
+  /// **'Blew my mind'**
+  String get reviewReactionBlewMind;
+
+  /// No description provided for @reviewReactionMadeCry.
+  ///
+  /// In en, this message translates to:
+  /// **'Made me cry'**
+  String get reviewReactionMadeCry;
+
+  /// No description provided for @reviewReactionShocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Shocked me'**
+  String get reviewReactionShocked;
+
+  /// No description provided for @reviewReactionMadeLaugh.
+  ///
+  /// In en, this message translates to:
+  /// **'Made me laugh'**
+  String get reviewReactionMadeLaugh;
+
+  /// No description provided for @reviewReactionBored.
+  ///
+  /// In en, this message translates to:
+  /// **'Bored me'**
+  String get reviewReactionBored;
+
+  /// No description provided for @reviewReactionDisappointed.
+  ///
+  /// In en, this message translates to:
+  /// **'Disappointed me'**
+  String get reviewReactionDisappointed;
+
+  /// No description provided for @reviewReactionMadeThink.
+  ///
+  /// In en, this message translates to:
+  /// **'Made me think'**
+  String get reviewReactionMadeThink;
+
+  /// No description provided for @reviewReactionMasterpiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Masterpiece'**
+  String get reviewReactionMasterpiece;
+
+  /// No description provided for @reviewWhyPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Want to add a line about why? It\'s optional.'**
+  String get reviewWhyPrompt;
+
+  /// No description provided for @reviewWhyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What stayed with you?'**
+  String get reviewWhyHint;
+
+  /// No description provided for @reviewShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get reviewShare;
+
+  /// No description provided for @reviewNoThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'No thanks'**
+  String get reviewNoThanks;
+
+  /// No description provided for @reviewSharedThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for sharing your take!'**
+  String get reviewSharedThanks;
+
+  /// No description provided for @reviewCountedThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks! Your reaction is counted.'**
+  String get reviewCountedThanks;
+
+  /// No description provided for @reviewReactionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your reaction. Try again.'**
+  String get reviewReactionFailed;
+
+  /// No description provided for @reviewSummaryFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the reactions.'**
+  String get reviewSummaryFailed;
+
+  /// No description provided for @reviewTakesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What people said'**
+  String get reviewTakesTitle;
+
+  /// No description provided for @reviewTakesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Short takes from other viewers.'**
+  String get reviewTakesHint;
+
+  /// No description provided for @reviewMostHelpful.
+  ///
+  /// In en, this message translates to:
+  /// **'Most helpful take'**
+  String get reviewMostHelpful;
+
+  /// No description provided for @reviewWriterBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Writer'**
+  String get reviewWriterBadge;
+
+  /// No description provided for @reviewCommentsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Comment} other{Comments {count}}}'**
+  String reviewCommentsButton(int count);
+
+  /// No description provided for @reviewCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment'**
+  String get reviewCommentHint;
+
+  /// No description provided for @reviewSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get reviewSend;
+
+  /// No description provided for @reviewCommentsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load comments.'**
+  String get reviewCommentsFailed;
+
+  /// No description provided for @reviewCommentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t post that comment. Try again.'**
+  String get reviewCommentFailed;
+
+  /// No description provided for @reviewVoteChangedMyMind.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed my mind'**
+  String get reviewVoteChangedMyMind;
+
+  /// No description provided for @reviewVoteWellArgued.
+  ///
+  /// In en, this message translates to:
+  /// **'Well argued'**
+  String get reviewVoteWellArgued;
+
+  /// No description provided for @reviewVoteDisagreeFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Disagree but fair'**
+  String get reviewVoteDisagreeFair;
+
+  /// No description provided for @reviewVoteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update that vote. Try again.'**
+  String get reviewVoteFailed;
+
+  /// No description provided for @reviewTakeFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t post that. Try again.'**
+  String get reviewTakeFailed;
+
+  /// No description provided for @reviewTakesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No takes here yet.'**
+  String get reviewTakesEmpty;
+
+  /// No description provided for @reviewTakesFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load takes.'**
+  String get reviewTakesFailed;
+
+  /// No description provided for @reviewRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get reviewRetry;
+
   /// No description provided for @overviewReviewBy.
   ///
   /// In en, this message translates to:
@@ -808,6 +1060,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More options'**
   String get profileMoreTooltip;
+
+  /// No description provided for @profileLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get profileLogout;
 
   /// No description provided for @profileFollowers.
   ///

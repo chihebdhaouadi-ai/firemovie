@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../account/views/pages/login.dart';
 import '../../../core/core.dart';
+import '../../../core/session.dart';
 
 
 class SideMenu extends StatelessWidget {
@@ -255,8 +256,11 @@ class SideMenu extends StatelessWidget {
                     ),
                     child: GestureDetector(
                         onTap: () {
-                          if (element["option_name"] == "logout")
-                                         Navigator.pushReplacementNamed(context, '/');          
+                          if (element["option_name"] == "logout") {
+                            Session.clear();
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/', (route) => false);
+                          }
 
 
                        /*   if (element["option_name"] == "Settings")

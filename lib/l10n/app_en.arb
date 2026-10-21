@@ -290,6 +290,62 @@
   "overviewFriendsReviews": "Friends Reviews",
   "overviewPopularReviews": "Popular Reviews",
   "overviewSeeAll": "See All",
+  "reviewTrustedLabel": "from trusted viewers",
+  "reviewEveryoneTogether": "Everyone together: {value}",
+  "@reviewEveryoneTogether": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewMostFelt": "Most felt:",
+  "reviewWhatIsTrusted": "What is “trusted”?",
+  "reviewTrustedNote": "Viewers earn trust when others find their takes well argued. Their votes count a little more, so the score feels fair and thoughtful.",
+  "reviewReactionTitle": "How did it make you feel?",
+  "reviewReactionHint": "Tap the one that fits best.",
+  "reviewReactionLoved": "Loved it",
+  "reviewReactionBrokeHeart": "Broke my heart",
+  "reviewReactionBlewMind": "Blew my mind",
+  "reviewReactionMadeCry": "Made me cry",
+  "reviewReactionShocked": "Shocked me",
+  "reviewReactionMadeLaugh": "Made me laugh",
+  "reviewReactionBored": "Bored me",
+  "reviewReactionDisappointed": "Disappointed me",
+  "reviewReactionMadeThink": "Made me think",
+  "reviewReactionMasterpiece": "Masterpiece",
+  "reviewWhyPrompt": "Want to add a line about why? It's optional.",
+  "reviewWhyHint": "What stayed with you?",
+  "reviewShare": "Share",
+  "reviewNoThanks": "No thanks",
+  "reviewSharedThanks": "Thanks for sharing your take!",
+  "reviewCountedThanks": "Thanks! Your reaction is counted.",
+  "reviewReactionFailed": "Couldn't save your reaction. Try again.",
+  "reviewSummaryFailed": "Couldn't load the reactions.",
+  "reviewTakesTitle": "What people said",
+  "reviewTakesHint": "Short takes from other viewers.",
+  "reviewMostHelpful": "Most helpful take",
+  "reviewWriterBadge": "Writer",
+  "reviewCommentsButton": "{count, plural, =0{Comment} other{Comments {count}}}",
+  "@reviewCommentsButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewCommentHint": "Add a comment",
+  "reviewSend": "Send",
+  "reviewCommentsFailed": "Couldn't load comments.",
+  "reviewCommentFailed": "Couldn't post that comment. Try again.",
+  "reviewVoteChangedMyMind": "Changed my mind",
+  "reviewVoteWellArgued": "Well argued",
+  "reviewVoteDisagreeFair": "Disagree but fair",
+  "reviewVoteFailed": "Couldn't update that vote. Try again.",
+  "reviewTakeFailed": "Couldn't post that. Try again.",
+  "reviewTakesEmpty": "No takes here yet.",
+  "reviewTakesFailed": "Couldn't load takes.",
+  "reviewRetry": "Try again",
   "overviewReviewBy": "Review by {name} on {date}",
   "@overviewReviewBy": {
     "placeholders": {
@@ -305,6 +361,7 @@
   "profileBack": "Back",
   "profileSearchTooltip": "Search",
   "profileMoreTooltip": "More options",
+  "profileLogout": "Log out",
   "profileFollowers": "Followers",
   "profileFollowing": "Following",
   "profileBioHint": "Edit your bio..",

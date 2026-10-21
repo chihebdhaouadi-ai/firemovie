@@ -406,6 +406,143 @@ class AppLocalizationsEn extends AppLocalizations {
   String get overviewSeeAll => 'See All';
 
   @override
+  String get reviewTrustedLabel => 'from trusted viewers';
+
+  @override
+  String reviewEveryoneTogether(String value) {
+    return 'Everyone together: $value';
+  }
+
+  @override
+  String get reviewMostFelt => 'Most felt:';
+
+  @override
+  String get reviewWhatIsTrusted => 'What is “trusted”?';
+
+  @override
+  String get reviewTrustedNote =>
+      'Viewers earn trust when others find their takes well argued. Their votes count a little more, so the score feels fair and thoughtful.';
+
+  @override
+  String get reviewReactionTitle => 'How did it make you feel?';
+
+  @override
+  String get reviewReactionHint => 'Tap the one that fits best.';
+
+  @override
+  String get reviewReactionLoved => 'Loved it';
+
+  @override
+  String get reviewReactionBrokeHeart => 'Broke my heart';
+
+  @override
+  String get reviewReactionBlewMind => 'Blew my mind';
+
+  @override
+  String get reviewReactionMadeCry => 'Made me cry';
+
+  @override
+  String get reviewReactionShocked => 'Shocked me';
+
+  @override
+  String get reviewReactionMadeLaugh => 'Made me laugh';
+
+  @override
+  String get reviewReactionBored => 'Bored me';
+
+  @override
+  String get reviewReactionDisappointed => 'Disappointed me';
+
+  @override
+  String get reviewReactionMadeThink => 'Made me think';
+
+  @override
+  String get reviewReactionMasterpiece => 'Masterpiece';
+
+  @override
+  String get reviewWhyPrompt => 'Want to add a line about why? It\'s optional.';
+
+  @override
+  String get reviewWhyHint => 'What stayed with you?';
+
+  @override
+  String get reviewShare => 'Share';
+
+  @override
+  String get reviewNoThanks => 'No thanks';
+
+  @override
+  String get reviewSharedThanks => 'Thanks for sharing your take!';
+
+  @override
+  String get reviewCountedThanks => 'Thanks! Your reaction is counted.';
+
+  @override
+  String get reviewReactionFailed => 'Couldn\'t save your reaction. Try again.';
+
+  @override
+  String get reviewSummaryFailed => 'Couldn\'t load the reactions.';
+
+  @override
+  String get reviewTakesTitle => 'What people said';
+
+  @override
+  String get reviewTakesHint => 'Short takes from other viewers.';
+
+  @override
+  String get reviewMostHelpful => 'Most helpful take';
+
+  @override
+  String get reviewWriterBadge => 'Writer';
+
+  @override
+  String reviewCommentsButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Comments $count',
+      zero: 'Comment',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get reviewCommentHint => 'Add a comment';
+
+  @override
+  String get reviewSend => 'Send';
+
+  @override
+  String get reviewCommentsFailed => 'Couldn\'t load comments.';
+
+  @override
+  String get reviewCommentFailed => 'Couldn\'t post that comment. Try again.';
+
+  @override
+  String get reviewVoteChangedMyMind => 'Changed my mind';
+
+  @override
+  String get reviewVoteWellArgued => 'Well argued';
+
+  @override
+  String get reviewVoteDisagreeFair => 'Disagree but fair';
+
+  @override
+  String get reviewVoteFailed => 'Couldn\'t update that vote. Try again.';
+
+  @override
+  String get reviewTakeFailed => 'Couldn\'t post that. Try again.';
+
+  @override
+  String get reviewTakesEmpty => 'No takes here yet.';
+
+  @override
+  String get reviewTakesFailed => 'Couldn\'t load takes.';
+
+  @override
+  String get reviewRetry => 'Try again';
+
+  @override
   String overviewReviewBy(String name, String date) {
     return 'Review by $name on $date';
   }
@@ -421,6 +558,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileMoreTooltip => 'More options';
+
+  @override
+  String get profileLogout => 'Log out';
 
   @override
   String get profileFollowers => 'Followers';

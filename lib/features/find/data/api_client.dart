@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 import '../../../core/api_config.dart';
 import 'movie.dart';
@@ -74,14 +75,26 @@ class ApiClient {
     return _decodeObject(response);
   }
 
+  Future<Map<String, dynamic>> putJson(
+    String path, {
+    required Map<String, dynamic> body,
+  }) async {
+    final response = await _send(() =>
+        _inner.put(_uri(path), headers: _headers, body: jsonEncode(body)));
+    return _decodeObject(response);
+  }
+
   Future<Map<String, dynamic>> patchMultipart(
     String path, {
     required String fileField,
-    required String filePath,
+    required XFile file,
   }) async {
+    final bytes = await file.readAsBytes();
     final response = await _send(() async {
       final request = http.MultipartRequest('PATCH', _uri(path))
-        ..files.add(await http.MultipartFile.fromPath(fileField, filePath));
+        ..files.add(
+          http.MultipartFile.fromBytes(fileField, bytes, filename: file.name),
+        );
       if (ApiConfig.authorization case final auth?) {
         request.headers['Authorization'] = auth;
       }

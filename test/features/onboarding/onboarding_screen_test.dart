@@ -8,6 +8,7 @@ import 'package:film_wise_mobile/features/onboarding/views/onboarding_screen.dar
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
@@ -30,7 +31,7 @@ OnboardingRepository _repository(http.Client client) =>
 Future<void> _pump(
   WidgetTester tester, {
   required OnboardingRepository repository,
-  Future<String?> Function()? pickImage,
+  Future<XFile?> Function()? pickImage,
 }) {
   return tester.pumpWidget(
     MaterialApp(
@@ -163,7 +164,7 @@ void main() {
     await _pump(
       tester,
       repository: _repository(client),
-      pickImage: () async => file.path,
+      pickImage: () async => XFile(file.path),
     );
     await tester.pumpAndSettle();
 

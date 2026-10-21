@@ -5,18 +5,25 @@ import '../../../core/theme/app_theme.dart';
 import '../../find/data/find_repository.dart';
 import '../../find/data/movie.dart';
 import '../../find/views/widgets/film_hero_header.dart';
+import '../../film_reviews/data/review_repository.dart';
+import '../../film_reviews/presentation/review_section.dart';
 import '../../home/data/home_models.dart';
 import 'widgets/friend_activity.dart';
 import 'widgets/overview_panel.dart';
-import 'widgets/reviews_section.dart';
 import 'widgets/status_row.dart';
 import 'widgets/where_to_watch_card.dart';
 
 class MovieOverviewScreen extends StatefulWidget {
-  const MovieOverviewScreen({super.key, required this.film, this.repository});
+  const MovieOverviewScreen({
+    super.key,
+    required this.film,
+    this.repository,
+    this.reviewRepository,
+  });
 
   final Film film;
   final FindRepository? repository;
+  final ReviewRepository? reviewRepository;
 
   @override
   State<MovieOverviewScreen> createState() => _MovieOverviewScreenState();
@@ -73,7 +80,7 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.tokens;
+    final l10n = context.l10n;
     final detail = _detail;
     final summary = Movie(
       id: widget.film.imdbId,
@@ -88,41 +95,59 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
           SliverToBoxAdapter(
             child: FilmHeroHeader(movie: detail ?? summary, stills: _stills),
           ),
-          SliverToBoxAdapter(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: tokens.maxContentWidth),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(
-                    tokens.spaceLg,
-                    tokens.spaceLg,
-                    tokens.spaceLg,
-                    tokens.spaceXl,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (_loading)
-                        const LinearProgressIndicator(
-                          color: AppColors.accentGlow,
-                          backgroundColor: AppColors.surfaceRaised,
-                        ),
-                      if (detail != null) ..._loadedSections(detail),
-                      if (_failed) _ErrorCard(onRetry: _retry),
-                    ],
-                  ),
-                ),
+          _contentSliver([
+            if (_loading)
+              const LinearProgressIndicator(
+                color: AppColors.accentGlow,
+                backgroundColor: AppColors.surfaceRaised,
               ),
+            if (detail != null) ..._loadedSections(detail),
+            if (_failed) _ErrorCard(onRetry: _retry),
+          ]),
+          if (detail != null)
+            ReviewSection(
+              movieId: widget.film.imdbId,
+              repository: widget.reviewRepository,
+            ),
+          _contentSliver([
+            Text(
+              l10n.findAttribution,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.textMuted,
+                  ),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _contentSliver(List<Widget> children) {
+    final tokens = context.tokens;
+
+    return SliverToBoxAdapter(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: tokens.maxContentWidth),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(
+              tokens.spaceLg,
+              tokens.spaceLg,
+              tokens.spaceLg,
+              tokens.spaceMd,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   List<Widget> _loadedSections(Movie detail) {
     final tokens = context.tokens;
-    final l10n = context.l10n;
 
     return [
       StatusRow(movie: detail),
@@ -132,15 +157,6 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
       WhereToWatchCard(providers: detail.watchProviders),
       SizedBox(height: tokens.spaceMd),
       const FriendActivity(),
-      SizedBox(height: tokens.spaceMd),
-      const ReviewsSection(),
-      SizedBox(height: tokens.spaceLg),
-      Text(
-        l10n.findAttribution,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: AppColors.textMuted,
-            ),
-      ),
     ];
   }
 }
