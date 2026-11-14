@@ -1,0 +1,12 @@
+{
+  "name": "filmsage-functions",
+  "private": true,
+  "description": "Server-side cinema metadata proxy for FilmSage",
+  "main": "index.js",
+  "engines": { "node": "20" },
+  "scripts": { "test": "node --test" },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.0.0"
+  }
+}
