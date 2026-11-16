@@ -1872,4 +1872,304 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get authGuestPromptBody =>
       'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.';
+
+  @override
+  String get browseSectionDiscover => 'Обзор';
+
+  @override
+  String get browseTopTakes => 'Топ-100 отзывов';
+
+  @override
+  String get browsePopularFilms => 'Самые популярные фильмы';
+
+  @override
+  String get browseByYear => 'По году выхода';
+
+  @override
+  String get browseByStreaming => 'По стриминговому сервису';
+
+  @override
+  String get browseSectionTopics => 'Популярные темы';
+
+  @override
+  String get browsePolls => 'Опросы';
+
+  @override
+  String get browseConversations => 'Обсуждения';
+
+  @override
+  String get browseScenes => 'Сцены';
+
+  @override
+  String get browseQuestions => 'Вопросы';
+
+  @override
+  String get browseHotTakes => 'Смелые мнения';
+
+  @override
+  String get browseSectionFilmSage => 'FilmSage';
+
+  @override
+  String get browseNewHere => 'Впервые здесь?';
+
+  @override
+  String get browseSocialMedia => 'Соцсети';
+
+  @override
+  String get browseFollowUs => 'Подписывайтесь на нас';
+
+  @override
+  String get browseGifts => 'Подарки';
+
+  @override
+  String get browseContact => 'Контакты';
+
+  @override
+  String get browseTerms => 'Условия использования / Правила сообщества';
+
+  @override
+  String get browseYearsTitle => 'Выберите год';
+
+  @override
+  String browseDecade(String decade) {
+    return '$decade-е';
+  }
+
+  @override
+  String get browseServicesTitle => 'Выберите сервис';
+
+  @override
+  String get browseServicesEmpty => 'Нет доступных сервисов.';
+
+  @override
+  String get browseFilmsEmpty => 'Здесь пока нет фильмов.';
+
+  @override
+  String get browseTakesEmpty => 'Здесь пока ничего нет.';
+
+  @override
+  String get browseComingSoonTitle => 'Скоро';
+
+  @override
+  String get browseComingSoonBody =>
+      'Мы ещё работаем над этой страницей. Загляните позже.';
+
+  @override
+  String get browseByGenre => 'По жанру';
+
+  @override
+  String get browseByCountry => 'По стране';
+
+  @override
+  String get browseByLanguage => 'По языку';
+
+  @override
+  String get browseGenresTitle => 'Выберите жанр';
+
+  @override
+  String get browseCountriesTitle => 'Выберите страну';
+
+  @override
+  String get browseCountriesHint =>
+      'Популярные фильмы, доступные для просмотра в каждой стране.';
+
+  @override
+  String browseStreamingIn(String country) {
+    return 'Смотреть в стране: $country';
+  }
+
+  @override
+  String get browseLanguagesTitle => 'Выберите язык';
+
+  @override
+  String get browsePickEmpty => 'Пока выбрать не из чего.';
+
+  @override
+  String get browseLanguageEn => 'Английский';
+
+  @override
+  String get browseLanguageFr => 'Французский';
+
+  @override
+  String get browseLanguageEs => 'Испанский';
+
+  @override
+  String get browseLanguageIt => 'Итальянский';
+
+  @override
+  String get browseLanguageDe => 'Немецкий';
+
+  @override
+  String get browseLanguagePt => 'Португальский';
+
+  @override
+  String get browseLanguageRu => 'Русский';
+
+  @override
+  String get browseLanguageAr => 'Арабский';
+
+  @override
+  String get browseLanguageTr => 'Турецкий';
+
+  @override
+  String get browseLanguageHi => 'Хинди';
+
+  @override
+  String get browseLanguageKo => 'Корейский';
+
+  @override
+  String get browseLanguageJa => 'Японский';
+
+  @override
+  String get browseLanguageZh => 'Китайский';
+
+  @override
+  String get browseLanguageSv => 'Шведский';
+
+  @override
+  String get overviewPlayTrailer => 'Смотреть трейлер';
+
+  @override
+  String get overviewTrailerUnavailable => 'Не удалось открыть трейлер.';
+
+  @override
+  String get overviewLoading => 'Загрузка…';
+
+  @override
+  String get overviewNoCastCrew =>
+      'Пока нет данных об актёрах и съёмочной группе.';
+
+  @override
+  String get overviewOfferStream => 'Подписка';
+
+  @override
+  String get overviewOfferFree => 'Бесплатно';
+
+  @override
+  String get overviewOfferTvProvider => 'С ТВ-провайдером';
+
+  @override
+  String get overviewOfferRent => 'Аренда';
+
+  @override
+  String get overviewOfferBuy => 'Покупка';
+
+  @override
+  String get overviewCloseTrailer => 'Закрыть трейлер';
+
+  @override
+  String get filmSuggest => 'Посоветовать';
+
+  @override
+  String get filmListFailed =>
+      'Не удалось обновить список. Попробуйте ещё раз.';
+
+  @override
+  String get filmFeelingsEmpty =>
+      'Нажмите, чтобы рассказать, что вы почувствовали';
+
+  @override
+  String get filmFeelingsHint => 'Выберите до 3 чувств.';
+
+  @override
+  String filmFeelingsCount(String count) {
+    return 'Выбрано $count из 3';
+  }
+
+  @override
+  String get filmFeelingsSave => 'Сохранить';
+
+  @override
+  String get filmFeelingsClear => 'Очистить';
+
+  @override
+  String get filmAudienceTitle => 'Зрители';
+
+  @override
+  String get filmAudienceEmpty =>
+      'Реакций пока нет. Будьте первым, кто расскажет о своих чувствах.';
+
+  @override
+  String get filmAudiencePositive => 'понравилось';
+
+  @override
+  String filmAudiencePeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Отреагировали $count человека',
+      many: 'Отреагировали $count человек',
+      few: 'Отреагировали $count человека',
+      one: 'Отреагировал 1 человек',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmYourTakeTitle => 'Ваше мнение';
+
+  @override
+  String filmTakeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count мнения',
+      many: '$count мнений',
+      few: '$count мнения',
+      one: '1 мнение',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmTopTake => 'ЛУЧШЕЕ МНЕНИЕ';
+
+  @override
+  String filmShowMoreTakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ещё $count мнения',
+      many: 'Ещё $count мнений',
+      few: 'Ещё $count мнения',
+      one: 'Ещё 1 мнение',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmShowLessTakes => 'Свернуть';
+
+  @override
+  String get filmShareYourTake => 'Поделиться мнением';
+
+  @override
+  String get filmAddTake => 'Добавить мнение';
+
+  @override
+  String get personBiography => 'Биография';
+
+  @override
+  String get personFilmography => 'Фильмы';
+
+  @override
+  String get personHeight => 'Рост';
+
+  @override
+  String get personBorn => 'Дата рождения';
+
+  @override
+  String get personDied => 'Дата смерти';
+
+  @override
+  String get personNoFilms => 'Фильмы этого человека пока не найдены.';
+
+  @override
+  String get personLoadFailed =>
+      'Не удалось загрузить страницу этого человека.';
+
+  @override
+  String personAsCharacter(String character) {
+    return 'в роли $character';
+  }
 }

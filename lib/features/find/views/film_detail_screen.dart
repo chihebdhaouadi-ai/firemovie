@@ -1,20 +1,48 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/auth/auth_gate.dart';
 import '../../../core/l10n_context.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/luxe_palette.dart';
+import '../../../core/widgets/pill_tabs.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../film_reviews/data/api_review_repository.dart';
+import '../../film_reviews/data/reactions_repository.dart';
+import '../../film_reviews/data/review_repository.dart';
+import '../../film_reviews/domain/film_reaction.dart';
+import '../../film_reviews/domain/movie_review_summary.dart';
+import '../../film_reviews/domain/take.dart';
+import '../../film_reviews/domain/take_tag.dart';
+import '../../film_reviews/presentation/state/movie_reviews_cubit.dart';
+import '../../film_reviews/presentation/state/movie_reviews_state.dart';
+import '../../film_reviews/presentation/widgets/feeling_chip.dart';
+import '../../film_reviews/presentation/widgets/people_takes.dart';
+import '../../overview/views/widgets/friend_activity.dart';
+import '../../social/data/social_repository.dart';
+import '../../social/views/movie_suggestion_screen.dart';
+import '../data/api_lists_repository.dart';
 import '../data/find_repository.dart';
+import '../data/lists_repository.dart';
+import '../../person/views/person_screen.dart';
 import '../data/movie.dart';
 import 'widgets/streaming_provider_logo.dart';
+import 'widgets/trailer_player_dialog.dart';
 
-const _pageBackground = Color(0xFF111111);
-const _pageCard = Color(0xFF1B1E27);
-const _pageChip = Color(0xFF1B2030);
-const _pageBlue = Color(0xFF2F7BF5);
-const _pageMuted = Color(0xFF9A9CA5);
-const _pageLine = Color(0x33FFFFFF);
+// Same palette as Home (LuxeColors): matte surfaces, hairlines, one blue accent.
+const _pageBackground = LuxeColors.bg;
+const _pageCard = LuxeColors.surface;
+const _pageChip = LuxeColors.surface2;
+const _pageBlue = LuxeColors.accent;
+const _pageMuted = LuxeColors.muted;
+const _pageLine = LuxeColors.hair;
+const _cardRadius = 28.0;
 
+/// The film page: hero with trailer, overview (lists, suggest, feelings,
+/// audience, friends, takes), cast & crew, and where to watch.
 class FilmDetailScreen extends StatefulWidget {
   const FilmDetailScreen({
     super.key,
@@ -22,12 +50,20 @@ class FilmDetailScreen extends StatefulWidget {
     this.repository,
     this.heroTag,
     this.footer,
+    this.listsRepository,
+    this.reviewRepository,
+    this.reactionsRepository,
+    this.socialRepository,
   });
 
   final Movie movie;
   final FindRepository? repository;
   final Object? heroTag;
   final Widget? footer;
+  final ListsRepository? listsRepository;
+  final ReviewRepository? reviewRepository;
+  final ReactionsRepository? reactionsRepository;
+  final SocialRepository? socialRepository;
 
   @override
   State<FilmDetailScreen> createState() => _FilmDetailScreenState();
@@ -35,54 +71,40 @@ class FilmDetailScreen extends StatefulWidget {
 
 class _FilmDetailScreenState extends State<FilmDetailScreen> {
   late final FindRepository _repository;
-  final _takeController = TextEditingController();
+  late final ListsRepository _lists;
+  late final MovieReviewsCubit _reviews;
   Movie? _detail;
+  late final Future<void> _detailLoad;
   List<String> _stills = const [];
   int _selectedTab = 0;
   bool _overviewExpanded = false;
-  bool? _watchedPreview;
-  bool? _watchlistPreview;
-  List<int> _selectedMoods = [0, 1, 2];
 
-  final List<_DemoTake> _myTakes = [];
-  final List<_DemoTake> _friendsTakes = [
-    _DemoTake(
-      author: 'Cinema fan',
-      date: 'Oct 21, 2026',
-      text:
-          'The atmosphere and sound design make this one worth seeing on a big screen.',
-      reactedMoods: [6, 1],
-      counts: [2, 9, 0],
-    ),
-  ];
-  final List<_DemoTake> _popularTakes = [
-    _DemoTake(
-      author: 'Film lover',
-      date: 'Nov 2, 2026',
-      text: 'A few scenes stayed with me long after the credits.',
-      reactedMoods: [2, 0],
-      counts: [31, 210, 18],
-    ),
-    _DemoTake(
-      author: 'Movie watcher',
-      date: 'Nov 8, 2026',
-      text: 'Not for everyone, but I enjoyed its slower moments.',
-      reactedMoods: [7],
-      counts: [7, 64, 22],
-    ),
-  ];
+  /// Feelings tapped but not yet saved; saves run one at a time.
+  List<FilmReaction>? _draftFeelings;
+  bool _savingFeelings = false;
+
+  /// The viewer's lists for this film once changed here; null means "use the
+  /// film's own membership flags".
+  Set<String>? _inLists;
+  final Set<FilmListId> _listBusy = {};
 
   @override
   void initState() {
     super.initState();
     _repository = widget.repository ?? FindRepository();
-    _load();
+    _lists = widget.listsRepository ?? ApiListsRepository();
+    _reviews = MovieReviewsCubit(
+      filmId: widget.movie.id,
+      repository: widget.reviewRepository ?? ApiReviewRepository(),
+      reactions: widget.reactionsRepository,
+    )..load();
+    _detailLoad = _load();
     _loadStills();
   }
 
   @override
   void dispose() {
-    _takeController.dispose();
+    _reviews.close();
     super.dispose();
   }
 
@@ -104,139 +126,156 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
     }
   }
 
-  void _postTake() {
-    final text = _takeController.text.trim();
-    if (text.isEmpty) return;
+  static const _listKeys = {
+    FilmListId.watched: 'watched',
+    FilmListId.watchlist: 'watchlist',
+  };
 
-    setState(() {
-      _myTakes.insert(
-        0,
-        _DemoTake(
-          author: 'You',
-          date: 'Today',
-          text: text,
-          reactedMoods: List<int>.of(_selectedMoods),
-        ),
-      );
-      _takeController.clear();
-    });
-    FocusScope.of(context).unfocus();
+  Set<String> _membership(Movie movie) => _inLists ?? movie.inLists.toSet();
+
+  void _snack(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void _vote(_DemoTake take, int index) {
-    setState(() {
-      if (take.vote == index) {
-        take.counts[index] = (take.counts[index] - 1).clamp(0, 1 << 30);
-        take.vote = null;
-        return;
-      }
-
-      if (take.vote case final previous?) {
-        take.counts[previous] = (take.counts[previous] - 1).clamp(0, 1 << 30);
-      }
-      take.counts[index]++;
-      take.vote = index;
-    });
+  /// Adds or removes the film from Watched / Watchlist. The button changes at
+  /// once and rolls back if the server refuses.
+  Future<void> _toggleList(Movie movie, FilmListId list) async {
+    if (_listBusy.contains(list)) return;
+    final l10n = context.l10n;
+    await requireAuth(
+      context,
+      reason: l10n.authReasonFilm,
+      action: () async {
+        final key = _listKeys[list]!;
+        final before = _membership(movie);
+        final adding = !before.contains(key);
+        setState(() {
+          _listBusy.add(list);
+          _inLists = {...before}..toggle(key, adding);
+        });
+        try {
+          if (adding) {
+            final entry = await _lists.add(list, movie.id);
+            if (entry.removedFromWatchlist && mounted) {
+              setState(() => _inLists = {..._inLists!}..remove('watchlist'));
+            }
+          } else {
+            await _lists.remove(list, movie.id);
+          }
+        } catch (_) {
+          if (!mounted) return;
+          setState(() => _inLists = before);
+          _snack(l10n.filmListFailed);
+        } finally {
+          if (mounted) setState(() => _listBusy.remove(list));
+        }
+      },
+    );
   }
 
-  Future<void> _pickMoods(
-    BuildContext context,
-    List<_Mood> moods,
-  ) async {
-    final temporary = List<int>.of(_selectedMoods);
-    await showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: _pageCard,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (sheetContext) => StatefulBuilder(
-        builder: (sheetContext, setSheetState) => SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  context.l10n.reviewReactionTitle,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Choose up to 3 (${temporary.length}/3)',
-                  style: const TextStyle(color: _pageMuted, fontSize: 12),
-                ),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  alignment: WrapAlignment.center,
-                  children: [
-                    for (var index = 0; index < moods.length; index++)
-                      _MoodChoice(
-                        mood: moods[index],
-                        selected: temporary.contains(index),
-                        onTap: () => setSheetState(() {
-                          if (temporary.contains(index)) {
-                            temporary.remove(index);
-                          } else if (temporary.length < 3) {
-                            temporary.add(index);
-                          }
-                        }),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(backgroundColor: _pageBlue),
-                    onPressed: () {
-                      setState(() => _selectedMoods = List<int>.of(temporary));
-                      Navigator.of(sheetContext).pop();
-                    },
-                    child: const Text('Done'),
-                  ),
-                ),
-              ],
+  Future<void> _openSuggest(Movie movie) async {
+    final l10n = context.l10n;
+    await requireAuth(
+      context,
+      reason: l10n.authReasonFilm,
+      action: () async {
+        final sent = await Navigator.of(context).push<bool>(
+          MaterialPageRoute<bool>(
+            builder: (_) => MovieSuggestionScreen(
+              socialRepository: widget.socialRepository ?? SocialRepository(),
+              findRepository: _repository,
+              initialMovie: movie,
             ),
           ),
-        ),
-      ),
+        );
+        if (sent == true && mounted) _snack(l10n.suggestionSent);
+      },
     );
+  }
+
+  /// Picks or drops one feeling (up to three). The chip lights at once; the
+  /// save follows, and taps made while it runs are sent together after it.
+  void _toggleFeeling(List<FilmReaction> current, FilmReaction feeling) {
+    final next = List.of(_draftFeelings ?? current);
+    if (!next.remove(feeling)) {
+      if (next.length >= MovieReviewSummary.maxFeelings) return;
+      next.add(feeling);
+    }
+    setState(() => _draftFeelings = next);
+    _saveFeelings();
+  }
+
+  void _clearFeelings() {
+    setState(() => _draftFeelings = const []);
+    _saveFeelings();
+  }
+
+  Future<void> _saveFeelings() async {
+    if (_savingFeelings) return;
+    _savingFeelings = true;
+    try {
+      while (mounted && _draftFeelings != null) {
+        final sending = _draftFeelings!;
+        final saved = await _reviews.setFeelings(sending);
+        if (!mounted) return;
+        if (!saved) {
+          setState(() => _draftFeelings = null);
+          _snack(context.l10n.reviewReactionFailed);
+          return;
+        }
+        if (listEquals(_draftFeelings, sending)) {
+          setState(() => _draftFeelings = null);
+        }
+      }
+    } finally {
+      _savingFeelings = false;
+    }
+  }
+
+  Future<void> _openTakeComposer() async {
+    final l10n = context.l10n;
+    final shared = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: _pageCard,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(_cardRadius)),
+      ),
+      builder: (_) => _TakeComposerSheet(onShare: _reviews.shareTake),
+    );
+    if (shared == null || !mounted) return;
+    _snack(shared ? l10n.reviewSharedThanks : l10n.reviewTakeFailed);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final movie = _detail ?? widget.movie;
-    final moods = _moods(l10n);
 
-    return Scaffold(
-      backgroundColor: _pageBackground,
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          _hero(context, movie, l10n),
-          if (_selectedTab == 0) _overview(context, movie, l10n, moods),
-          if (_selectedTab == 1 || _selectedTab == 3)
-            _comingSoon(context, l10n),
-          if (_selectedTab == 2) _watchProviders(context, movie, l10n),
-          if (_selectedTab == 0 && widget.footer != null)
-            _constrained(
-              context,
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                child: widget.footer!,
+    return BlocProvider.value(
+      value: _reviews,
+      child: Scaffold(
+        backgroundColor: _pageBackground,
+        body: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            _hero(context, movie, l10n),
+            if (_selectedTab == 0) _overview(context, movie, l10n),
+            if (_selectedTab == 1) _castAndCrew(context, movie, l10n),
+            if (_selectedTab == 2) _watchProviders(context, movie, l10n),
+            if (_selectedTab == 0 && widget.footer != null)
+              _constrained(
+                context,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: widget.footer!,
+                ),
               ),
-            ),
-          const SizedBox(height: 40),
-        ],
+            const SizedBox(height: 40),
+          ],
+        ),
       ),
     );
   }
@@ -249,7 +288,6 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
       l10n.findDetailsOverview.toUpperCase(),
       '${l10n.overviewTabCast} & ${l10n.overviewTabCrew}',
       l10n.overviewWhereToWatch.toUpperCase(),
-      'ARTICLES',
     ];
 
     return Center(
@@ -273,20 +311,25 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Color(0x00000000), Color(0xEE111111)],
+                      colors: [Color(0x00000000), Color(0xF20E0F12)],
                     ),
                   ),
                 ),
               ),
-              const Center(
-                child: Icon(
-                  Icons.play_circle_outline,
-                  size: 60,
-                  color: Colors.white70,
+              Center(
+                child: IconButton(
+                  tooltip: l10n.overviewPlayTrailer,
+                  iconSize: 60,
+                  onPressed: () => _openTrailer(movie),
+                  icon: const Icon(
+                    Icons.play_circle_outline,
+                    color: Colors.white70,
+                  ),
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).padding.top + 8,
+                // viewPadding: the ListView strips the top inset from padding.
+                top: MediaQuery.viewPaddingOf(context).top + 8,
                 left: 8,
                 child: IconButton(
                   tooltip: l10n.overviewBack,
@@ -309,6 +352,39 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
         ),
       ),
     );
+  }
+
+  /// Plays the trailer in the in-app pop-up player. Without a known YouTube
+  /// video, falls back to the trailer link or a YouTube search in the browser.
+  Future<void> _openTrailer(Movie shown) async {
+    // The trailer id arrives with the details; wait if they are still loading.
+    await _detailLoad;
+    if (!mounted) return;
+    final movie = _detail ?? shown;
+    final videoId = movie.trailerYoutubeId;
+    if (videoId != null) {
+      await TrailerPlayerDialog.show(
+        context,
+        videoId: videoId,
+        title: movie.displayTitle,
+      );
+      return;
+    }
+    final direct = movie.trailerUrl;
+    final query = [
+      movie.displayTitle,
+      if (movie.year != null) '${movie.year}',
+      'official trailer',
+    ].join(' ');
+    final uri = direct != null
+        ? Uri.parse(direct)
+        : Uri.https('www.youtube.com', '/results', {'search_query': query});
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.overviewTrailerUnavailable)),
+      );
+    }
   }
 
   Widget _coverImage(String? url) {
@@ -334,119 +410,76 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
   }
 
   Widget _tabBar(List<String> labels) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          key: const ValueKey('film-detail-tabs'),
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minWidth: constraints.maxWidth - 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var index = 0; index < labels.length; index++)
-                  InkWell(
-                    onTap: () => setState(() => _selectedTab = index),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color:
-                                _selectedTab == index ? _pageBlue : _pageLine,
-                            width: _selectedTab == index ? 2.5 : 1,
-                          ),
-                        ),
-                      ),
-                      child: Text(
-                        labels[index],
-                        style: TextStyle(
-                          color: _selectedTab == index
-                              ? Colors.white
-                              : Colors.white70,
-                          fontSize: 12,
-                          letterSpacing: .3,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        );
-      },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: PillTabs(
+        key: const ValueKey('film-detail-tabs'),
+        labels: labels,
+        selected: _selectedTab,
+        onSelected: (index) => setState(() => _selectedTab = index),
+      ),
     );
   }
 
-  Widget _overview(
-    BuildContext context,
-    Movie movie,
-    AppLocalizations l10n,
-    List<_Mood> moods,
-  ) {
-    final selectedWatchlist = _watchlistPreview ?? movie.isWatchlist;
-    final selectedWatched = _watchedPreview ?? movie.isWatched;
+  Widget _overview(BuildContext context, Movie movie, AppLocalizations l10n) {
+    final membership = _membership(movie);
+    final watched = membership.contains('watched');
+    final watchlist = membership.contains('watchlist');
 
     return _constrained(
       context,
       Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _movieSummary(context, movie, l10n),
-            const SizedBox(height: 14),
-            Wrap(
-            
-              spacing: 10,
-              runSpacing: 8,
-              children: [
-                _ActionPill(
-                  icon: selectedWatched
-                      ? Icons.visibility
-                      : Icons.visibility_outlined,
-                  label: l10n.homeWatchedTitle,
-                  active: selectedWatched,
-                  onTap: () => setState(
-                    () => _watchedPreview = !selectedWatched,
+        child: BlocBuilder<MovieReviewsCubit, MovieReviewsState>(
+          builder: (context, state) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _movieSummary(context, movie, l10n),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _ActionPill(
+                    icon:
+                        watched ? Icons.visibility : Icons.visibility_outlined,
+                    label: l10n.homeWatchedTitle,
+                    active: watched,
+                    busy: _listBusy.contains(FilmListId.watched),
+                    onTap: () => _toggleList(movie, FilmListId.watched),
                   ),
-                ),
-                _ActionPill(
-                  icon: selectedWatchlist
-                      ? Icons.bookmark
-                      : Icons.bookmark_border,
-                  label: l10n.homeWatchlistTitle,
-                  active: selectedWatchlist,
-                  onTap: () => setState(
-                    () => _watchlistPreview = !selectedWatchlist,
+                  const SizedBox(width: 8),
+                  _ActionPill(
+                    icon: watchlist ? Icons.bookmark : Icons.bookmark_border,
+                    label: l10n.homeWatchlistTitle,
+                    active: watchlist,
+                    busy: _listBusy.contains(FilmListId.watchlist),
+                    onTap: () => _toggleList(movie, FilmListId.watchlist),
                   ),
-                ),
-                _ActionPill(
-                  icon: Icons.send_outlined,
-                  label: 'SAGE',
-                  onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.homeComingSoon)),
+                  const SizedBox(width: 8),
+                  _ActionPill(
+                    icon: Icons.send_outlined,
+                    label: l10n.filmSuggest,
+                    onTap: () => _openSuggest(movie),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2),
-              child: Text(
-                'List buttons are a local preview.',
-                style: TextStyle(color: _pageMuted, fontSize: 10),
+                ],
               ),
-            ),
-            const SizedBox(height: 12),
-            _experience(context, l10n, moods),
-            const SizedBox(height: 20),
-            _audience(context, l10n, moods),
-            const SizedBox(height: 20),
-            _takes(context, l10n, moods),
-          ],
+              const SizedBox(height: 26),
+              _feelings(context, l10n, state.summary),
+              const SizedBox(height: 26),
+              _audience(context, l10n, state.summary),
+              const SizedBox(height: 26),
+              _section(
+                context,
+                l10n.overviewActivityTitle,
+                FriendActivity(
+                  movieId: movie.id,
+                  repository: widget.reviewRepository,
+                  embedded: true,
+                ),
+              ),
+              const SizedBox(height: 26),
+              _takesSection(context, l10n, state),
+            ],
+          ),
         ),
       ),
     );
@@ -624,208 +657,168 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
     );
   }
 
-  Widget _experience(
+  Widget _feelings(
     BuildContext context,
     AppLocalizations l10n,
-    List<_Mood> moods,
+    AsyncView<MovieReviewSummary> summary,
   ) {
+    final saved = switch (summary) {
+      AsyncReady(:final value) => value.feelings,
+      _ => const <FilmReaction>[],
+    };
+    final feelings = _draftFeelings ?? saved;
+
     return _section(
       context,
       l10n.reviewReactionTitle,
-      Column(
-        children: [
-          Row(
-            children: [
-              const SizedBox(width: 40),
-              Expanded(
-                child: Text(
-                  l10n.reviewReactionHint,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white70, fontSize: 13),
-                ),
-              ),
-              IconButton(
-                tooltip: 'Choose up to 3 feelings',
-                icon: const Icon(Icons.info_outline, color: Colors.white54),
-                onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Pick up to 3 feelings for this demo.'),
-                  ),
-                ),
-              ),
-            ],
+      hint: feelings.isEmpty
+          ? l10n.filmFeelingsHint
+          : l10n.filmFeelingsCount('${feelings.length}'),
+      trailing: feelings.isEmpty
+          ? null
+          : _SectionLink(label: l10n.filmFeelingsClear, onTap: _clearFeelings),
+      switch (summary) {
+        AsyncLoading() => const LinearProgressIndicator(
+            color: _pageBlue,
+            backgroundColor: _pageChip,
           ),
-          InkWell(
-            onTap: () => _pickMoods(context, moods),
-            borderRadius: BorderRadius.circular(40),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
-              child: Icon(
-                Icons.sentiment_satisfied_alt,
-                color: _pageBlue,
-                size: 54,
-              ),
-            ),
+        AsyncFailed() => _RetryRow(
+            message: l10n.reviewSummaryFailed,
+            label: l10n.reviewRetry,
+            onRetry: _reviews.load,
           ),
-          TextButton(
-            onPressed: () => _pickMoods(context, moods),
-            child: Text(
-              '${l10n.reviewReactionChange} · ${_selectedMoods.length}/3',
-              style: const TextStyle(color: _pageMuted, fontSize: 11),
-            ),
+        AsyncReady() => FeelingPicker(
+            picked: feelings,
+            onToggle: (feeling) => _toggleFeeling(saved, feeling),
           ),
-          const Divider(color: _pageLine, height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _selectedMoods.isEmpty
-                    ? const Text(
-                        'No feelings picked yet.',
-                        style: TextStyle(color: _pageMuted, fontSize: 12),
-                      )
-                    : Wrap(
-                        spacing: 16,
-                        runSpacing: 8,
-                        children: [
-                          for (final index in _selectedMoods)
-                            _SelectedMood(mood: moods[index]),
-                        ],
-                      ),
-              ),
-              IconButton(
-                tooltip: l10n.reviewReactionChange,
-                icon: const Icon(Icons.edit_outlined, color: _pageBlue),
-                onPressed: () => _pickMoods(context, moods),
-              ),
-            ],
-          ),
-        ],
-      ),
+      },
     );
   }
 
   Widget _audience(
     BuildContext context,
     AppLocalizations l10n,
-    List<_Mood> moods,
+    AsyncView<MovieReviewSummary> summary,
   ) {
-    const reactions = [(0, '8.1K'), (1, '3.2K'), (2, '1.8K')];
+    if (summary is! AsyncReady<MovieReviewSummary>) {
+      return const SizedBox.shrink();
+    }
+    final value = summary.value;
+    final percent = value.everyonePercent;
+    final hasCounts = value.allCounts.any((item) => item.count > 0);
 
     return _section(
       context,
-      'The Audience',
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _DemoBadge(),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 22,
-            runSpacing: 12,
-            children: [
-              for (final (index, count) in reactions)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(moods[index].emoji,
-                        style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 6),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          moods[index].label,
-                          style: const TextStyle(
-                            color: _pageBlue,
-                            fontSize: 10,
-                          ),
+      l10n.filmAudienceTitle,
+      trailingText:
+          value.total == 0 ? null : l10n.filmAudiencePeople(value.total),
+      value.total == 0 || !hasCounts
+          ? Text(
+              l10n.filmAudienceEmpty,
+              style: const TextStyle(color: _pageMuted, fontSize: 14),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (percent != null) ...[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        '$percent%',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
                         ),
-                        Text(
-                          count,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          l10n.filmAudiencePositive,
                           style: const TextStyle(
                             color: _pageMuted,
-                            fontSize: 10,
+                            fontSize: 14,
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-            ],
-          ),
-        ],
-      ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                ],
+                AudienceBar(counts: value.allCounts),
+              ],
+            ),
     );
   }
 
-  Widget _takes(
+  Widget _takesSection(
     BuildContext context,
     AppLocalizations l10n,
-    List<_Mood> moods,
+    MovieReviewsState state,
   ) {
+    final takes = state.takes;
+    // One review per person: once the viewer has shared theirs, the button goes.
+    final hasOwnReview = takes is AsyncReady<List<Take>> &&
+        takes.value.any((take) => take.isMine && take.tag == TakeTag.review);
+    final canShare = takes is AsyncReady<List<Take>> && !hasOwnReview;
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _section(
           context,
           l10n.reviewTakesTitle,
-          TextField(
-            controller: _takeController,
-            onSubmitted: (_) => _postTake(),
-            textInputAction: TextInputAction.send,
-            style: const TextStyle(color: Colors.white, fontSize: 13),
-            decoration: InputDecoration(
-              isDense: true,
-              hintText: l10n.overviewAddReviewHint,
-              hintStyle: const TextStyle(color: _pageBlue, fontSize: 11),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: _pageBlue),
+          hint: l10n.reviewTakesHint,
+          trailing: canShare
+              ? _SectionLink(
+                  icon: Icons.edit_outlined,
+                  label: l10n.filmAddTake,
+                  onTap: _openTakeComposer,
+                )
+              : null,
+          switch (takes) {
+            AsyncLoading() => const LinearProgressIndicator(
+                color: _pageBlue,
+                backgroundColor: _pageChip,
               ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: _pageBlue, width: 2),
+            AsyncFailed() => _RetryRow(
+                message: l10n.reviewTakesFailed,
+                label: l10n.reviewRetry,
+                onRetry: _reviews.load,
               ),
-              suffixIcon: IconButton(
-                tooltip: 'Post take',
-                onPressed: _postTake,
-                icon: const Icon(Icons.send, color: _pageBlue, size: 20),
+            AsyncReady(:final value) when value.isEmpty => Text(
+                l10n.reviewTakesEmpty,
+                style: const TextStyle(color: _pageMuted, fontSize: 14),
               ),
-            ),
+            AsyncReady(:final value) => PeopleTakes(
+                takes: value,
+                movieId: widget.movie.id,
+                repository: widget.reviewRepository,
+              ),
+          },
+        ),
+        if (canShare) ...[
+          const SizedBox(height: 14),
+          _ShareTakeButton(
+            label: l10n.filmShareYourTake,
+            onTap: _openTakeComposer,
           ),
-        ),
-        _takeGroup(
-          context,
-          l10n.overviewYourReview,
-          _myTakes,
-          moods,
-          l10n,
-        ),
-        _takeGroup(
-          context,
-          l10n.overviewFriendsReviews,
-          _friendsTakes,
-          moods,
-          l10n,
-          demo: true,
-        ),
-        _takeGroup(
-          context,
-          l10n.overviewPopularReviews,
-          _popularTakes,
-          moods,
-          l10n,
-          demo: true,
-        ),
+        ],
       ],
     );
   }
 
-  Widget _takeGroup(
+  /// One section pattern: title (and optional link or note) outside a dark
+  /// rounded card that fills the width.
+  Widget _section(
     BuildContext context,
     String title,
-    List<_DemoTake> takes,
-    List<_Mood> moods,
-    AppLocalizations l10n, {
-    bool demo = false,
+    Widget child, {
+    String? hint,
+    Widget? trailing,
+    String? trailingText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -833,44 +826,28 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
         _sectionHeading(
           context,
           title,
-          trailing: demo ? const _DemoBadge() : null,
+          trailing: trailing ??
+              (trailingText == null
+                  ? null
+                  : Text(
+                      trailingText,
+                      style: const TextStyle(color: _pageMuted, fontSize: 14),
+                    )),
         ),
-        if (takes.isEmpty)
+        if (hint != null)
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 6, 20, 14),
+            padding: const EdgeInsetsDirectional.fromSTEB(6, 0, 6, 12),
             child: Text(
-              l10n.reviewTakesEmpty,
-              style: const TextStyle(color: _pageMuted, fontSize: 12),
+              hint,
+              style: const TextStyle(color: _pageMuted, fontSize: 14),
             ),
-          )
-        else
-          for (final take in takes)
-            _TakeCard(
-              take: take,
-              moods: moods,
-              l10n: l10n,
-              onVote: (index) => _vote(take, index),
-            ),
-      ],
-    );
-  }
-
-  Widget _section(
-    BuildContext context,
-    String title,
-    Widget child, {
-    Widget? trailing,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionHeading(context, title, trailing: trailing),
+          ),
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: _pageCard,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(_cardRadius),
             border: Border.all(color: _pageLine),
           ),
           child: child,
@@ -885,28 +862,150 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
     Widget? trailing,
   }) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-      child: Column(
+      padding: const EdgeInsetsDirectional.fromSTEB(6, 0, 6, 12),
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Colors.white70,
-                      ),
-                ),
-              ),
-              if (trailing != null) trailing,
-            ],
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: LuxeColors.text,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
           ),
-          const SizedBox(height: 7),
-          const Divider(height: 1, thickness: 1, color: _pageLine),
+          if (trailing != null) ...[const SizedBox(width: 12), trailing],
         ],
       ),
     );
   }
+
+  Widget _castAndCrew(
+    BuildContext context,
+    Movie movie,
+    AppLocalizations l10n,
+  ) {
+    Widget person(String name, String detail, String? personId) {
+      final row = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: _pageChip,
+              child: Text(
+                name.characters.first.toUpperCase(),
+                style: const TextStyle(
+                  color: _pageBlue,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (detail.isNotEmpty)
+                    Text(
+                      detail,
+                      style: const TextStyle(color: _pageMuted, fontSize: 13),
+                    ),
+                ],
+              ),
+            ),
+            if (personId != null)
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: _pageMuted,
+                size: 20,
+              ),
+          ],
+        ),
+      );
+      if (personId == null) return row;
+      return InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(
+            builder: (_) => PersonScreen(
+              personId: personId,
+              name: name,
+              subtitle: detail,
+            ),
+          ),
+        ),
+        child: row,
+      );
+    }
+
+    final empty = movie.cast.isEmpty && movie.crew.isEmpty;
+    return _constrained(
+      context,
+      Padding(
+        padding: const EdgeInsets.fromLTRB(20, 22, 20, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (empty)
+              _section(
+                context,
+                '${l10n.overviewTabCast} & ${l10n.overviewTabCrew}',
+                Text(
+                  _detail == null
+                      ? l10n.overviewLoading
+                      : l10n.overviewNoCastCrew,
+                  style: const TextStyle(color: _pageMuted, fontSize: 13),
+                ),
+              ),
+            if (movie.cast.isNotEmpty) ...[
+              _section(
+                context,
+                l10n.overviewTabCast,
+                Column(
+                  children: [
+                    for (final member in movie.cast)
+                      person(member.name, member.role, member.personId),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+            ],
+            if (movie.crew.isNotEmpty)
+              _section(
+                context,
+                l10n.overviewTabCrew,
+                Column(
+                  children: [
+                    for (final member in movie.crew)
+                      person(member.name, member.job, member.personId),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _offerLabel(AppLocalizations l10n, ProviderOffer? offer) =>
+      switch (offer) {
+        ProviderOffer.subscription => l10n.overviewOfferStream,
+        ProviderOffer.free => l10n.overviewOfferFree,
+        ProviderOffer.tvProvider => l10n.overviewOfferTvProvider,
+        ProviderOffer.rent => l10n.overviewOfferRent,
+        ProviderOffer.buy => l10n.overviewOfferBuy,
+        null => l10n.overviewWhereToWatch,
+      };
 
   Widget _watchProviders(
     BuildContext context,
@@ -915,6 +1014,10 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
   ) {
     final providers = movie.watchProviders;
     final available = providers?.available ?? const <StreamingProvider>[];
+    final groups = <ProviderOffer?, List<StreamingProvider>>{};
+    for (final provider in available) {
+      groups.putIfAbsent(provider.offer, () => []).add(provider);
+    }
 
     return _constrained(
       context,
@@ -932,24 +1035,35 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
                   style: const TextStyle(color: _pageMuted, fontSize: 13),
                 )
               else
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final width = constraints.maxWidth >= 460
-                        ? (constraints.maxWidth - 8) / 2
-                        : constraints.maxWidth;
-                    return Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        for (final provider in available)
-                          SizedBox(
-                            width: width,
-                            child: StreamingProviderLogo(provider: provider),
-                          ),
-                      ],
-                    );
-                  },
-                ),
+                for (final entry in groups.entries) ...[
+                  if (entry.key != groups.keys.first)
+                    const SizedBox(height: 16),
+                  Text(
+                    _offerLabel(l10n, entry.key),
+                    style: const TextStyle(
+                      color: _pageMuted,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = (constraints.maxWidth - 8) / 2;
+                      return Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final provider in entry.value)
+                            SizedBox(
+                              width: width,
+                              child: StreamingProviderLogo(provider: provider),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               if (providers?.link case final link?) ...[
                 const SizedBox(height: 12),
                 SelectableText(
@@ -964,25 +1078,6 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
     );
   }
 
-  Widget _comingSoon(BuildContext context, AppLocalizations l10n) {
-    final label = _selectedTab == 1
-        ? '${l10n.overviewTabCast} & ${l10n.overviewTabCrew}'
-        : 'Articles';
-
-    return _constrained(
-      context,
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 80),
-        child: Center(
-          child: Text(
-            '$label · ${l10n.homeComingSoon.toLowerCase()}',
-            style: const TextStyle(color: _pageMuted),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _constrained(BuildContext context, Widget child) {
     return Center(
       child: ConstrainedBox(
@@ -991,66 +1086,10 @@ class _FilmDetailScreenState extends State<FilmDetailScreen> {
       ),
     );
   }
-
-  List<_Mood> _moods(AppLocalizations l10n) => [
-        _Mood('❤️', l10n.reviewReactionLoved),
-        _Mood('🤯', l10n.reviewReactionBlewMind),
-        _Mood('🧠', l10n.reviewReactionMadeThink),
-        _Mood('😂', l10n.reviewReactionMadeLaugh),
-        _Mood('😢', l10n.reviewReactionMadeCry),
-        _Mood('😱', l10n.reviewReactionShocked),
-        _Mood('😍', l10n.reviewReactionMasterpiece),
-        _Mood('🤔', l10n.reviewReactionBored),
-      ];
 }
 
-class _Mood {
-  const _Mood(this.emoji, this.label);
-
-  final String emoji;
-  final String label;
-}
-
-class _DemoTake {
-  _DemoTake({
-    required this.author,
-    required this.date,
-    required this.text,
-    this.reactedMoods = const [],
-    List<int>? counts,
-  }) : counts = counts ?? [0, 0, 0];
-
-  final String author;
-  final String date;
-  final String text;
-  final List<int> reactedMoods;
-  final List<int> counts;
-  int? vote;
-}
-
-class _DemoBadge extends StatelessWidget {
-  const _DemoBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: _pageChip,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: _pageLine),
-      ),
-      child: const Text(
-        'DEMO',
-        style: TextStyle(
-          color: _pageMuted,
-          fontSize: 9,
-          fontWeight: FontWeight.w700,
-          letterSpacing: .5,
-        ),
-      ),
-    );
-  }
+extension on Set<String> {
+  void toggle(String value, bool add) => add ? this.add(value) : remove(value);
 }
 
 class _ActionPill extends StatelessWidget {
@@ -1059,221 +1098,296 @@ class _ActionPill extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.active = false,
+    this.busy = false,
   });
 
   final IconData icon;
   final String label;
   final bool active;
+  final bool busy;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = active ? _pageBlue : Colors.white;
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
-      onTap: onTap,
-      child: Container(
-        height: 36,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        decoration: BoxDecoration(
-          border: Border.all(color: active ? _pageBlue : Colors.white70),
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 18, color: color),
-            const SizedBox(width: 6),
-            Text(label, style: TextStyle(color: color, fontSize: 12)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _MoodChoice extends StatelessWidget {
-  const _MoodChoice({
-    required this.mood,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final _Mood mood;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: onTap,
-      child: Container(
-        width: 84,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-        decoration: BoxDecoration(
-          color: selected ? const Color(0x332F7BF5) : const Color(0xFF242836),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? _pageBlue : Colors.transparent,
-          ),
-        ),
-        child: Column(
-          children: [
-            Text(mood.emoji, style: const TextStyle(fontSize: 28)),
-            const SizedBox(height: 4),
-            Text(
-              mood.label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white, fontSize: 10),
+    const color = Colors.white;
+    // Three equal buttons on one row, so they never wrap on a phone.
+    return Expanded(
+      child: Semantics(
+        button: true,
+        selected: active,
+        label: label,
+        excludeSemantics: true,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(21),
+          onTap: busy ? null : onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            // Same look as the Home tabs: blue gradient pill when on, matte
+            // surface with a hairline when off.
+            decoration: BoxDecoration(
+              color: active ? null : LuxeColors.surface2,
+              gradient: active ? LuxeColors.accentGradient : null,
+              border: active ? null : Border.all(color: LuxeColors.hair),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: active
+                  ? [
+                      BoxShadow(
+                        color: LuxeColors.accent.withValues(alpha: .35),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                  : null,
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SelectedMood extends StatelessWidget {
-  const _SelectedMood({required this.mood});
-
-  final _Mood mood;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(mood.emoji, style: const TextStyle(fontSize: 30)),
-        const SizedBox(height: 3),
-        Text(
-          mood.label,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: _pageBlue, fontSize: 10),
-        ),
-      ],
-    );
-  }
-}
-
-class _TakeCard extends StatelessWidget {
-  const _TakeCard({
-    required this.take,
-    required this.moods,
-    required this.l10n,
-    required this.onVote,
-  });
-
-  final _DemoTake take;
-  final List<_Mood> moods;
-  final AppLocalizations l10n;
-  final ValueChanged<int> onVote;
-
-  @override
-  Widget build(BuildContext context) {
-    final voteLabels = [
-      l10n.reviewVoteChangedMyMind,
-      l10n.reviewVoteWellArgued,
-      l10n.reviewVoteDisagreeFair,
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 14),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 18,
-            backgroundColor: const Color(0xFF2B3550),
-            child: Text(
-              take.author.isEmpty ? '?' : take.author[0].toUpperCase(),
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 4,
-                  runSpacing: 4,
-                  children: [
-                    Text(
-                      l10n.overviewReviewBy(take.author, take.date),
-                      style: const TextStyle(color: _pageMuted, fontSize: 10),
+                if (busy)
+                  SizedBox.square(
+                    dimension: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: color,
                     ),
-                    for (final index in take.reactedMoods)
-                      Text(
-                        moods[index].emoji,
-                        style: const TextStyle(fontSize: 13),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  take.text,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    height: 1.35,
+                  )
+                else
+                  Icon(icon, size: 18, color: color),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: color, fontSize: 13),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 6,
-                  children: [
-                    for (var index = 0; index < voteLabels.length; index++)
-                      InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () => onVote(index),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 7,
-                          ),
-                          decoration: BoxDecoration(
-                            color: take.vote == index
-                                ? const Color(0x442F7BF5)
-                                : _pageChip,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: take.vote == index
-                                  ? _pageBlue
-                                  : Colors.transparent,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '${take.counts[index]}',
-                                style: const TextStyle(
-                                  color: _pageBlue,
-                                  fontSize: 11,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                voteLabels[index],
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                  ],
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Blue text link on the right of a section title ("Clear", "Add take").
+class _SectionLink extends StatelessWidget {
+  const _SectionLink({required this.label, required this.onTap, this.icon});
+
+  final String label;
+  final IconData? icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final icon = this.icon;
+    return TextButton(
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+        foregroundColor: _pageBlue,
+        minimumSize: const Size(44, 44),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 16),
+            const SizedBox(width: 4),
+          ],
+          Text(label),
         ],
       ),
+    );
+  }
+}
+
+/// Full-width gradient call to action under "What people said".
+class _ShareTakeButton extends StatelessWidget {
+  const _ShareTakeButton({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  static const _radius = BorderRadius.all(Radius.circular(20));
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: label,
+      excludeSemantics: true,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LuxeColors.accentGradient,
+          borderRadius: _radius,
+          boxShadow: [
+            BoxShadow(
+              color: LuxeColors.accent.withValues(alpha: .35),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            borderRadius: _radius,
+            onTap: onTap,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 54),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Bottom sheet to write a take (280 characters). Pops true once shared,
+/// false if sharing failed, null when dismissed.
+class _TakeComposerSheet extends StatefulWidget {
+  const _TakeComposerSheet({required this.onShare});
+
+  final Future<bool> Function(String body) onShare;
+
+  @override
+  State<_TakeComposerSheet> createState() => _TakeComposerSheetState();
+}
+
+class _TakeComposerSheetState extends State<_TakeComposerSheet> {
+  final _controller = TextEditingController();
+  bool _sending = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _share() async {
+    final body = _controller.text.trim();
+    if (body.isEmpty || _sending) return;
+    setState(() => _sending = true);
+    final shared = await widget.onShare(body);
+    if (!mounted) return;
+    Navigator.of(context).pop(shared);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final insets = MediaQuery.viewInsetsOf(context).bottom;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: insets),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                l10n.filmYourTakeTitle,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _controller,
+                enabled: !_sending,
+                autofocus: true,
+                minLines: 2,
+                maxLines: 5,
+                maxLength: 280,
+                textInputAction: TextInputAction.send,
+                onSubmitted: (_) => _share(),
+                style: const TextStyle(color: Colors.white, fontSize: 16),
+                decoration: InputDecoration(
+                  hintText: l10n.reviewWhyHint,
+                  hintStyle: const TextStyle(color: _pageMuted, fontSize: 15),
+                  counterStyle:
+                      const TextStyle(color: _pageMuted, fontSize: 11),
+                  filled: true,
+                  fillColor: _pageChip,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(18)),
+                    borderSide: BorderSide.none,
+                  ),
+                  suffixIcon: _sending
+                      ? const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: SizedBox.square(
+                            dimension: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        )
+                      : IconButton(
+                          tooltip: l10n.reviewShare,
+                          onPressed: _share,
+                          icon: const Icon(
+                            Icons.send,
+                            color: _pageBlue,
+                            size: 22,
+                          ),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RetryRow extends StatelessWidget {
+  const _RetryRow({
+    required this.message,
+    required this.label,
+    required this.onRetry,
+  });
+
+  final String message;
+  final String label;
+  final Future<void> Function() onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            message,
+            style: const TextStyle(color: _pageMuted, fontSize: 13),
+          ),
+        ),
+        TextButton(onPressed: onRetry, child: Text(label)),
+      ],
     );
   }
 }

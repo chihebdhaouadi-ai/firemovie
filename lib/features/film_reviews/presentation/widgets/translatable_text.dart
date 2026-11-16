@@ -13,12 +13,16 @@ class TranslatableText extends StatefulWidget {
     this.style,
     this.format,
     this.repository,
+    this.linkStyle,
   });
 
   final String text;
   final TextStyle? style;
   final String Function(String text)? format;
   final TranslationRepository? repository;
+
+  /// Style of the Translate / Show original link; underlined blue if null.
+  final TextStyle? linkStyle;
 
   @override
   State<TranslatableText> createState() => _TranslatableTextState();
@@ -122,11 +126,12 @@ class _TranslatableTextState extends State<TranslatableText> {
                     showingTranslation
                         ? l10n.reviewShowOriginal
                         : l10n.reviewTranslate,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: AppColors.accentGlow,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColors.accentGlow,
-                    ),
+                    style: widget.linkStyle ??
+                        theme.textTheme.labelSmall?.copyWith(
+                          color: AppColors.accentGlow,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.accentGlow,
+                        ),
                   ),
                 ),
               ),

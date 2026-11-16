@@ -1832,4 +1832,293 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authGuestPromptBody =>
       'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.';
+
+  @override
+  String get browseSectionDiscover => 'Discover';
+
+  @override
+  String get browseTopTakes => 'Top 100 takes';
+
+  @override
+  String get browsePopularFilms => 'Most popular films';
+
+  @override
+  String get browseByYear => 'Browse by year';
+
+  @override
+  String get browseByStreaming => 'Browse by streaming service';
+
+  @override
+  String get browseSectionTopics => 'Most popular topics';
+
+  @override
+  String get browsePolls => 'Polls';
+
+  @override
+  String get browseConversations => 'Conversations';
+
+  @override
+  String get browseScenes => 'Scenes';
+
+  @override
+  String get browseQuestions => 'Questions';
+
+  @override
+  String get browseHotTakes => 'Hot takes';
+
+  @override
+  String get browseSectionFilmSage => 'FilmSage';
+
+  @override
+  String get browseNewHere => 'New here?';
+
+  @override
+  String get browseSocialMedia => 'Social media';
+
+  @override
+  String get browseFollowUs => 'Follow us';
+
+  @override
+  String get browseGifts => 'Gifts';
+
+  @override
+  String get browseContact => 'Contact';
+
+  @override
+  String get browseTerms => 'Terms of use / Community policy';
+
+  @override
+  String get browseYearsTitle => 'Pick a year';
+
+  @override
+  String browseDecade(String decade) {
+    return '${decade}s';
+  }
+
+  @override
+  String get browseServicesTitle => 'Pick a streaming service';
+
+  @override
+  String get browseServicesEmpty => 'No streaming services available.';
+
+  @override
+  String get browseFilmsEmpty => 'No films here yet.';
+
+  @override
+  String get browseTakesEmpty => 'Nothing posted here yet.';
+
+  @override
+  String get browseComingSoonTitle => 'Coming soon';
+
+  @override
+  String get browseComingSoonBody =>
+      'We\'re still working on this page. Check back soon.';
+
+  @override
+  String get browseByGenre => 'Browse by genre';
+
+  @override
+  String get browseByCountry => 'Browse by country';
+
+  @override
+  String get browseByLanguage => 'Browse by language';
+
+  @override
+  String get browseGenresTitle => 'Pick a genre';
+
+  @override
+  String get browseCountriesTitle => 'Pick a country';
+
+  @override
+  String get browseCountriesHint => 'Popular films streaming in each country.';
+
+  @override
+  String browseStreamingIn(String country) {
+    return 'Streaming in $country';
+  }
+
+  @override
+  String get browseLanguagesTitle => 'Pick a language';
+
+  @override
+  String get browsePickEmpty => 'Nothing to pick from right now.';
+
+  @override
+  String get browseLanguageEn => 'English';
+
+  @override
+  String get browseLanguageFr => 'French';
+
+  @override
+  String get browseLanguageEs => 'Spanish';
+
+  @override
+  String get browseLanguageIt => 'Italian';
+
+  @override
+  String get browseLanguageDe => 'German';
+
+  @override
+  String get browseLanguagePt => 'Portuguese';
+
+  @override
+  String get browseLanguageRu => 'Russian';
+
+  @override
+  String get browseLanguageAr => 'Arabic';
+
+  @override
+  String get browseLanguageTr => 'Turkish';
+
+  @override
+  String get browseLanguageHi => 'Hindi';
+
+  @override
+  String get browseLanguageKo => 'Korean';
+
+  @override
+  String get browseLanguageJa => 'Japanese';
+
+  @override
+  String get browseLanguageZh => 'Chinese';
+
+  @override
+  String get browseLanguageSv => 'Swedish';
+
+  @override
+  String get overviewPlayTrailer => 'Play trailer';
+
+  @override
+  String get overviewTrailerUnavailable => 'Couldn\'t open the trailer.';
+
+  @override
+  String get overviewLoading => 'Loading…';
+
+  @override
+  String get overviewNoCastCrew => 'No cast and crew information yet.';
+
+  @override
+  String get overviewOfferStream => 'Stream';
+
+  @override
+  String get overviewOfferFree => 'Free';
+
+  @override
+  String get overviewOfferTvProvider => 'With a TV provider';
+
+  @override
+  String get overviewOfferRent => 'Rent';
+
+  @override
+  String get overviewOfferBuy => 'Buy';
+
+  @override
+  String get overviewCloseTrailer => 'Close trailer';
+
+  @override
+  String get filmSuggest => 'Suggest';
+
+  @override
+  String get filmListFailed => 'Couldn\'t update your list. Try again.';
+
+  @override
+  String get filmFeelingsEmpty => 'Tap to say how it made you feel';
+
+  @override
+  String get filmFeelingsHint => 'Pick up to 3 feelings.';
+
+  @override
+  String filmFeelingsCount(String count) {
+    return '$count of 3 picked';
+  }
+
+  @override
+  String get filmFeelingsSave => 'Save';
+
+  @override
+  String get filmFeelingsClear => 'Clear';
+
+  @override
+  String get filmAudienceTitle => 'The audience';
+
+  @override
+  String get filmAudienceEmpty =>
+      'No reactions yet. Be the first to say how it made you feel.';
+
+  @override
+  String get filmAudiencePositive => 'enjoyed it';
+
+  @override
+  String filmAudiencePeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people reacted',
+      one: '1 person reacted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmYourTakeTitle => 'Your take';
+
+  @override
+  String filmTakeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count takes',
+      one: '1 take',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmTopTake => 'TOP TAKE';
+
+  @override
+  String filmShowMoreTakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Show $count more takes',
+      one: 'Show 1 more take',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmShowLessTakes => 'Show less';
+
+  @override
+  String get filmShareYourTake => 'Share your take';
+
+  @override
+  String get filmAddTake => 'Add take';
+
+  @override
+  String get personBiography => 'Biography';
+
+  @override
+  String get personFilmography => 'Movies';
+
+  @override
+  String get personHeight => 'Height';
+
+  @override
+  String get personBorn => 'Born';
+
+  @override
+  String get personDied => 'Died';
+
+  @override
+  String get personNoFilms => 'No movies found for this person yet.';
+
+  @override
+  String get personLoadFailed => 'Couldn\'t load this person\'s page.';
+
+  @override
+  String personAsCharacter(String character) {
+    return 'as $character';
+  }
 }

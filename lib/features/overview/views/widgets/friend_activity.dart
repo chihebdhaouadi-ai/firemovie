@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/luxe_palette.dart';
 import '../../../film_reviews/data/api_review_repository.dart';
 import '../../../film_reviews/data/review_repository.dart';
 import '../../../film_reviews/domain/take.dart';
@@ -11,10 +12,18 @@ import '../../../profile/views/profile_screen.dart';
 import 'overview_panel.dart';
 
 class FriendActivity extends StatefulWidget {
-  const FriendActivity({super.key, required this.movieId, this.repository});
+  const FriendActivity({
+    super.key,
+    required this.movieId,
+    this.repository,
+    this.embedded = false,
+  });
 
   final String movieId;
   final ReviewRepository? repository;
+
+  /// True when the caller draws the title and card around it (film page).
+  final bool embedded;
 
   @override
   State<FriendActivity> createState() => _FriendActivityState();
@@ -32,6 +41,42 @@ class _FriendActivityState extends State<FriendActivity> {
     final l10n = context.l10n;
     final theme = Theme.of(context);
 
+    final body = FutureBuilder<List<FriendFilmActivity>>(
+      future: _future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const LinearProgressIndicator(
+            color: AppColors.accentGlow,
+            backgroundColor: AppColors.surfaceRaised,
+          );
+        }
+        if (snapshot.hasError) {
+          return Text(
+            l10n.findDetailsErrorTitle,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: AppColors.textMuted,
+            ),
+          );
+        }
+        final items = snapshot.data ?? const <FriendFilmActivity>[];
+        if (items.isEmpty) return const _NoFriendActivity();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = 0; i < items.length; i++) ...[
+              if (i > 0) SizedBox(height: tokens.spaceSm),
+              _FriendRow(
+                activity: items[i],
+                movieId: widget.movieId,
+                repository: widget.repository,
+              ),
+            ],
+          ],
+        );
+      },
+    );
+    if (widget.embedded) return body;
+
     return OverviewPanel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,49 +88,47 @@ class _FriendActivityState extends State<FriendActivity> {
             ),
           ),
           SizedBox(height: tokens.spaceMd),
-          FutureBuilder<List<FriendFilmActivity>>(
-            future: _future,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                return const LinearProgressIndicator(
-                  color: AppColors.accentGlow,
-                  backgroundColor: AppColors.surfaceRaised,
-                );
-              }
-              if (snapshot.hasError) {
-                return Text(
-                  l10n.findDetailsErrorTitle,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.textMuted,
-                  ),
-                );
-              }
-              final items = snapshot.data ?? const <FriendFilmActivity>[];
-              if (items.isEmpty) {
-                return Text(
-                  l10n.overviewNoFriendActivity,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.textMuted,
-                  ),
-                );
-              }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (var i = 0; i < items.length; i++) ...[
-                    if (i > 0) SizedBox(height: tokens.spaceSm),
-                    _FriendRow(
-                      activity: items[i],
-                      movieId: widget.movieId,
-                      repository: widget.repository,
-                    ),
-                  ],
-                ],
-              );
-            },
-          ),
+          body,
         ],
       ),
+    );
+  }
+}
+
+/// Empty state: a people icon beside the message.
+class _NoFriendActivity extends StatelessWidget {
+  const _NoFriendActivity();
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    final theme = Theme.of(context);
+
+    return Row(
+      children: [
+        Container(
+          width: tokens.minTouchTarget,
+          height: tokens.minTouchTarget,
+          decoration: const BoxDecoration(
+            color: LuxeColors.surface2,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.group_outlined,
+            size: 22,
+            color: LuxeColors.muted,
+          ),
+        ),
+        SizedBox(width: tokens.spaceMd),
+        Expanded(
+          child: Text(
+            context.l10n.overviewNoFriendActivity,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: LuxeColors.muted,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -148,11 +191,18 @@ class _FriendRow extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  Text(
-                    reactionChipLabel(l10n, activity.reaction),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppColors.textMuted,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      reactionIcon(activity.reaction, size: 14),
+                      SizedBox(width: tokens.spaceXs),
+                      Text(
+                        reactionLabel(l10n, activity.reaction),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: AppColors.textMuted,
+                        ),
+                      ),
+                    ],
                   ),
                   if (takeBody != null) ...[
                     SizedBox(height: tokens.spaceXs),

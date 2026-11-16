@@ -23,8 +23,13 @@ Any take ─► Take / topic detail ─► comments, votes, translate
 | Explore | `features/home/views/explore_page.dart` | Nav bar compass, SAGE menu | Filter chips, open take, vote in polls, + create | "No replies yet / Be the first to respond" |
 | Feed list | `features/home/views/feed_list_screen.dart` | "Popular takes" list toggle | Scroll, open take | |
 | Create topic | `features/create_topic/views/create_topic_screen.dart` | Header +, Explore + | Choose type, pick film, write, poll options, spoiler flag | Validation errors |
-| All films (search) | `features/find/views/find_film_screen.dart` | Nav bar search, `/find` | Type a title, open result, recent searches | "No recent searches yet." |
-| Film detail | `features/find/views/film_detail_screen.dart` | Any poster | Watched, Watchlist, Trailer, where to watch, friends' activity, takes | Backdrop/poster placeholders; "No streaming providers found"; "No activity from your friends yet." |
+| All films (search) | `features/find/views/find_film_screen.dart` | Nav bar search, `/find` | Type a title, open result, recent searches; browse menu (`features/browse/views/browse_menu.dart`) while the field is empty | "No recent searches yet." |
+| Browse films | `features/browse/views/browse_films_screen.dart` | Browse menu: Most popular films, a year, a streaming service, a genre, a country, a language | Poster grid, infinite scroll, open film detail | "No films here yet."; error with retry |
+| Pick a year / Pick a streaming service | `features/browse/views/browse_years_screen.dart`, `streaming_services_screen.dart` | Browse menu | Step 1 of browse by year / service | "No streaming services available." |
+| Pick a genre / country / language | `features/browse/views/browse_pick_screen.dart` | Browse menu | Step 1 of browse by genre, country (films streaming there) or language | "Nothing to pick from right now." |
+| Browse takes | `features/browse/views/browse_takes_screen.dart` | Browse menu: Top 100 takes, Polls, Conversations, Scenes, Questions, Hot takes | Take cards | "Nothing posted here yet." |
+| Info page | `features/browse/views/info_page_screen.dart` | Browse menu: New here?, Social media, Follow us, Gifts, Contact, Terms | Placeholder | "Coming soon" |
+| Film detail | `features/find/views/film_detail_screen.dart` | Any poster | Watched, Watchlist, Suggest, trailer (in-app pop-up player), feelings (up to 3, tap chips on the page), audience bar, friends' activity, "What people said" (takes grouped per person) with a "Share your take" sheet; tabs Overview / Cast & crew / Where to watch (Articles tab removed) | Backdrop/poster placeholders; "No cast and crew information yet."; "No streaming providers found"; "No activity from your friends yet." |
 | Movie overview | `features/overview/views/movie_overview_screen.dart` | Angel bird, overview panel | Read synopsis panels | |
 | Take detail | `features/film_reviews/presentation/review_detail_screen.dart` | Take card | Comment, reply, vote, translate | |
 | Topic detail | `features/film_reviews/presentation/topic_detail_screen.dart` | Trending topic card | Vote like/dislike, comment | |
@@ -48,4 +53,3 @@ Any take ─► Take / topic detail ─► comments, votes, translate
   director lines wrap under it.
 - Mixed typefaces in one screen (Space Mono for badge names and the trailer button, Space
   Grotesk and Inter elsewhere) without a clear rule.
-- Trailer button appears disabled with no explanation.

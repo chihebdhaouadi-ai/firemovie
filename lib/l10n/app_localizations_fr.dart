@@ -1858,4 +1858,299 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get authGuestPromptBody =>
       'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.';
+
+  @override
+  String get browseSectionDiscover => 'Découvrir';
+
+  @override
+  String get browseTopTakes => 'Top 100 des critiques';
+
+  @override
+  String get browsePopularFilms => 'Films les plus populaires';
+
+  @override
+  String get browseByYear => 'Parcourir par année';
+
+  @override
+  String get browseByStreaming => 'Parcourir par plateforme de streaming';
+
+  @override
+  String get browseSectionTopics => 'Sujets les plus populaires';
+
+  @override
+  String get browsePolls => 'Sondages';
+
+  @override
+  String get browseConversations => 'Conversations';
+
+  @override
+  String get browseScenes => 'Scènes';
+
+  @override
+  String get browseQuestions => 'Questions';
+
+  @override
+  String get browseHotTakes => 'Avis tranchés';
+
+  @override
+  String get browseSectionFilmSage => 'FilmSage';
+
+  @override
+  String get browseNewHere => 'Nouveau ici ?';
+
+  @override
+  String get browseSocialMedia => 'Réseaux sociaux';
+
+  @override
+  String get browseFollowUs => 'Suivez-nous';
+
+  @override
+  String get browseGifts => 'Cadeaux';
+
+  @override
+  String get browseContact => 'Contact';
+
+  @override
+  String get browseTerms =>
+      'Conditions d\'utilisation / Règles de la communauté';
+
+  @override
+  String get browseYearsTitle => 'Choisissez une année';
+
+  @override
+  String browseDecade(String decade) {
+    return 'Années $decade';
+  }
+
+  @override
+  String get browseServicesTitle => 'Choisissez une plateforme';
+
+  @override
+  String get browseServicesEmpty => 'Aucune plateforme disponible.';
+
+  @override
+  String get browseFilmsEmpty => 'Aucun film ici pour l\'instant.';
+
+  @override
+  String get browseTakesEmpty => 'Rien de publié ici pour l\'instant.';
+
+  @override
+  String get browseComingSoonTitle => 'Bientôt disponible';
+
+  @override
+  String get browseComingSoonBody =>
+      'Nous travaillons encore sur cette page. Revenez bientôt.';
+
+  @override
+  String get browseByGenre => 'Parcourir par genre';
+
+  @override
+  String get browseByCountry => 'Parcourir par pays';
+
+  @override
+  String get browseByLanguage => 'Parcourir par langue';
+
+  @override
+  String get browseGenresTitle => 'Choisissez un genre';
+
+  @override
+  String get browseCountriesTitle => 'Choisissez un pays';
+
+  @override
+  String get browseCountriesHint =>
+      'Les films populaires en streaming dans chaque pays.';
+
+  @override
+  String browseStreamingIn(String country) {
+    return 'En streaming : $country';
+  }
+
+  @override
+  String get browseLanguagesTitle => 'Choisissez une langue';
+
+  @override
+  String get browsePickEmpty => 'Rien à choisir pour l\'instant.';
+
+  @override
+  String get browseLanguageEn => 'Anglais';
+
+  @override
+  String get browseLanguageFr => 'Français';
+
+  @override
+  String get browseLanguageEs => 'Espagnol';
+
+  @override
+  String get browseLanguageIt => 'Italien';
+
+  @override
+  String get browseLanguageDe => 'Allemand';
+
+  @override
+  String get browseLanguagePt => 'Portugais';
+
+  @override
+  String get browseLanguageRu => 'Russe';
+
+  @override
+  String get browseLanguageAr => 'Arabe';
+
+  @override
+  String get browseLanguageTr => 'Turc';
+
+  @override
+  String get browseLanguageHi => 'Hindi';
+
+  @override
+  String get browseLanguageKo => 'Coréen';
+
+  @override
+  String get browseLanguageJa => 'Japonais';
+
+  @override
+  String get browseLanguageZh => 'Chinois';
+
+  @override
+  String get browseLanguageSv => 'Suédois';
+
+  @override
+  String get overviewPlayTrailer => 'Lire la bande-annonce';
+
+  @override
+  String get overviewTrailerUnavailable =>
+      'Impossible d\'ouvrir la bande-annonce.';
+
+  @override
+  String get overviewLoading => 'Chargement…';
+
+  @override
+  String get overviewNoCastCrew =>
+      'Pas encore d\'informations sur la distribution et l\'équipe.';
+
+  @override
+  String get overviewOfferStream => 'Streaming';
+
+  @override
+  String get overviewOfferFree => 'Gratuit';
+
+  @override
+  String get overviewOfferTvProvider => 'Avec un fournisseur TV';
+
+  @override
+  String get overviewOfferRent => 'Location';
+
+  @override
+  String get overviewOfferBuy => 'Achat';
+
+  @override
+  String get overviewCloseTrailer => 'Fermer la bande-annonce';
+
+  @override
+  String get filmSuggest => 'Suggérer';
+
+  @override
+  String get filmListFailed =>
+      'Impossible de mettre à jour ta liste. Réessaie.';
+
+  @override
+  String get filmFeelingsEmpty => 'Touche pour dire ce que tu as ressenti';
+
+  @override
+  String get filmFeelingsHint => 'Choisis jusqu\'à 3 émotions.';
+
+  @override
+  String filmFeelingsCount(String count) {
+    return '$count sur 3 choisies';
+  }
+
+  @override
+  String get filmFeelingsSave => 'Enregistrer';
+
+  @override
+  String get filmFeelingsClear => 'Effacer';
+
+  @override
+  String get filmAudienceTitle => 'Le public';
+
+  @override
+  String get filmAudienceEmpty =>
+      'Aucune réaction pour l\'instant. Sois le premier à dire ce que tu as ressenti.';
+
+  @override
+  String get filmAudiencePositive => 'ont aimé';
+
+  @override
+  String filmAudiencePeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count personnes ont réagi',
+      one: '1 personne a réagi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmYourTakeTitle => 'Ton avis';
+
+  @override
+  String filmTakeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count avis',
+      one: '1 avis',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmTopTake => 'MEILLEUR AVIS';
+
+  @override
+  String filmShowMoreTakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Voir $count avis de plus',
+      one: 'Voir 1 avis de plus',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmShowLessTakes => 'Voir moins';
+
+  @override
+  String get filmShareYourTake => 'Partage ton avis';
+
+  @override
+  String get filmAddTake => 'Ajouter un avis';
+
+  @override
+  String get personBiography => 'Biographie';
+
+  @override
+  String get personFilmography => 'Films';
+
+  @override
+  String get personHeight => 'Taille';
+
+  @override
+  String get personBorn => 'Né(e) le';
+
+  @override
+  String get personDied => 'Décès';
+
+  @override
+  String get personNoFilms => 'Aucun film trouvé pour cette personne.';
+
+  @override
+  String get personLoadFailed =>
+      'Impossible de charger la page de cette personne.';
+
+  @override
+  String personAsCharacter(String character) {
+    return 'dans le rôle de $character';
+  }
 }

@@ -1822,4 +1822,292 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get authGuestPromptBody =>
       'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.';
+
+  @override
+  String get browseSectionDiscover => 'اكتشف';
+
+  @override
+  String get browseTopTakes => 'أفضل 100 رأي';
+
+  @override
+  String get browsePopularFilms => 'الأفلام الأكثر شعبية';
+
+  @override
+  String get browseByYear => 'تصفح حسب السنة';
+
+  @override
+  String get browseByStreaming => 'تصفح حسب منصة البث';
+
+  @override
+  String get browseSectionTopics => 'المواضيع الأكثر شعبية';
+
+  @override
+  String get browsePolls => 'استطلاعات';
+
+  @override
+  String get browseConversations => 'محادثات';
+
+  @override
+  String get browseScenes => 'مشاهد';
+
+  @override
+  String get browseQuestions => 'أسئلة';
+
+  @override
+  String get browseHotTakes => 'آراء جريئة';
+
+  @override
+  String get browseSectionFilmSage => 'FilmSage';
+
+  @override
+  String get browseNewHere => 'جديد هنا؟';
+
+  @override
+  String get browseSocialMedia => 'وسائل التواصل الاجتماعي';
+
+  @override
+  String get browseFollowUs => 'تابعنا';
+
+  @override
+  String get browseGifts => 'هدايا';
+
+  @override
+  String get browseContact => 'اتصل بنا';
+
+  @override
+  String get browseTerms => 'شروط الاستخدام / سياسة المجتمع';
+
+  @override
+  String get browseYearsTitle => 'اختر سنة';
+
+  @override
+  String browseDecade(String decade) {
+    return 'عقد $decade';
+  }
+
+  @override
+  String get browseServicesTitle => 'اختر منصة بث';
+
+  @override
+  String get browseServicesEmpty => 'لا توجد منصات بث متاحة.';
+
+  @override
+  String get browseFilmsEmpty => 'لا توجد أفلام هنا بعد.';
+
+  @override
+  String get browseTakesEmpty => 'لم يُنشر شيء هنا بعد.';
+
+  @override
+  String get browseComingSoonTitle => 'قريبًا';
+
+  @override
+  String get browseComingSoonBody => 'ما زلنا نعمل على هذه الصفحة. عد قريبًا.';
+
+  @override
+  String get browseByGenre => 'تصفح حسب النوع';
+
+  @override
+  String get browseByCountry => 'تصفح حسب البلد';
+
+  @override
+  String get browseByLanguage => 'تصفح حسب اللغة';
+
+  @override
+  String get browseGenresTitle => 'اختر نوعًا';
+
+  @override
+  String get browseCountriesTitle => 'اختر بلدًا';
+
+  @override
+  String get browseCountriesHint => 'الأفلام الشائعة المتاحة للبث في كل بلد.';
+
+  @override
+  String browseStreamingIn(String country) {
+    return 'متاح للبث في $country';
+  }
+
+  @override
+  String get browseLanguagesTitle => 'اختر لغة';
+
+  @override
+  String get browsePickEmpty => 'لا توجد خيارات حاليًا.';
+
+  @override
+  String get browseLanguageEn => 'الإنجليزية';
+
+  @override
+  String get browseLanguageFr => 'الفرنسية';
+
+  @override
+  String get browseLanguageEs => 'الإسبانية';
+
+  @override
+  String get browseLanguageIt => 'الإيطالية';
+
+  @override
+  String get browseLanguageDe => 'الألمانية';
+
+  @override
+  String get browseLanguagePt => 'البرتغالية';
+
+  @override
+  String get browseLanguageRu => 'الروسية';
+
+  @override
+  String get browseLanguageAr => 'العربية';
+
+  @override
+  String get browseLanguageTr => 'التركية';
+
+  @override
+  String get browseLanguageHi => 'الهندية';
+
+  @override
+  String get browseLanguageKo => 'الكورية';
+
+  @override
+  String get browseLanguageJa => 'اليابانية';
+
+  @override
+  String get browseLanguageZh => 'الصينية';
+
+  @override
+  String get browseLanguageSv => 'السويدية';
+
+  @override
+  String get overviewPlayTrailer => 'تشغيل الإعلان';
+
+  @override
+  String get overviewTrailerUnavailable => 'تعذّر فتح الإعلان.';
+
+  @override
+  String get overviewLoading => 'جارٍ التحميل…';
+
+  @override
+  String get overviewNoCastCrew => 'لا توجد معلومات عن طاقم العمل بعد.';
+
+  @override
+  String get overviewOfferStream => 'بث';
+
+  @override
+  String get overviewOfferFree => 'مجانًا';
+
+  @override
+  String get overviewOfferTvProvider => 'مع مزوّد تلفزيون';
+
+  @override
+  String get overviewOfferRent => 'استئجار';
+
+  @override
+  String get overviewOfferBuy => 'شراء';
+
+  @override
+  String get overviewCloseTrailer => 'إغلاق الإعلان';
+
+  @override
+  String get filmSuggest => 'اقترح';
+
+  @override
+  String get filmListFailed => 'تعذّر تحديث قائمتك. حاول مجددًا.';
+
+  @override
+  String get filmFeelingsEmpty => 'اضغط لتخبرنا بما شعرت';
+
+  @override
+  String get filmFeelingsHint => 'اختر حتى 3 مشاعر.';
+
+  @override
+  String filmFeelingsCount(String count) {
+    return 'تم اختيار $count من 3';
+  }
+
+  @override
+  String get filmFeelingsSave => 'حفظ';
+
+  @override
+  String get filmFeelingsClear => 'مسح';
+
+  @override
+  String get filmAudienceTitle => 'الجمهور';
+
+  @override
+  String get filmAudienceEmpty =>
+      'لا توجد تفاعلات بعد. كن أول من يخبرنا بما شعر.';
+
+  @override
+  String get filmAudiencePositive => 'استمتعوا به';
+
+  @override
+  String filmAudiencePeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تفاعل $count أشخاص',
+      one: 'تفاعل شخص واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmYourTakeTitle => 'رأيك';
+
+  @override
+  String filmTakeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count آراء',
+      one: 'رأي واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmTopTake => 'أفضل رأي';
+
+  @override
+  String filmShowMoreTakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'عرض $count آراء أخرى',
+      one: 'عرض رأي آخر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmShowLessTakes => 'عرض أقل';
+
+  @override
+  String get filmShareYourTake => 'شارك رأيك';
+
+  @override
+  String get filmAddTake => 'أضف رأيًا';
+
+  @override
+  String get personBiography => 'السيرة الذاتية';
+
+  @override
+  String get personFilmography => 'الأفلام';
+
+  @override
+  String get personHeight => 'الطول';
+
+  @override
+  String get personBorn => 'تاريخ الميلاد';
+
+  @override
+  String get personDied => 'تاريخ الوفاة';
+
+  @override
+  String get personNoFilms => 'لا توجد أفلام لهذا الشخص بعد.';
+
+  @override
+  String get personLoadFailed => 'تعذّر تحميل صفحة هذا الشخص.';
+
+  @override
+  String personAsCharacter(String character) {
+    return 'بدور $character';
+  }
 }

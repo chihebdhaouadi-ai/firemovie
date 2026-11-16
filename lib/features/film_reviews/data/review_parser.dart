@@ -26,6 +26,20 @@ class ReviewParser {
       ],
       everyonePercent: (json['everyone_percent'] as num?)?.toInt(),
       trustedPercent: (json['trusted_percent'] as num?)?.toInt(),
+      myReactions: [
+        for (final value
+            in (json['my_reactions'] as List<dynamic>? ?? const []))
+          for (final reaction in FilmReaction.values)
+            if (reaction.apiValue == value) reaction,
+      ],
+      total: (json['total'] as num?)?.toInt() ?? 0,
+      counts: [
+        if (json['counts'] case final Map<String, dynamic> counts)
+          for (final reaction in FilmReaction.values)
+            if ((counts[reaction.apiValue] as num?)?.toInt() case final count?
+                when count > 0)
+              ReactionCount(reaction: reaction, count: count),
+      ],
     );
   }
 

@@ -46,10 +46,15 @@ Legend: ✅ implemented and verified · 🟡 partial or unverified · 🧪 mock 
 | Feature | Status | Notes |
 |---|---|---|
 | Search films ("All films") with recent searches | ✅ | `/api/films/search` (RapidAPI / OMDb via backend) |
-| Film detail: hero header, overview, genres, runtime, director | ✅ | Verified on *Joker* |
+| Browse menu on the search page before typing: top 100 takes, most popular films, by year (2 steps), by streaming service, genre, country (streaming there) and original language (each 2 steps), takes by kind (polls, conversations, scenes, questions, hot takes), FilmSage info pages (placeholders) | 🟡 | `/api/films/browse/`, `/providers/`, `/genres/`, `/countries/` (Watchmode, needs `WATCHMODE_API_KEY` on the backend; posters from OMDb), `/api/takes/top/` |
+| Film detail: hero header, overview, genres, runtime, director | ✅ | Verified on *Joker*; one film page for every entry point (home lists and Angel Bird now open it too) |
+| Film page actions: Watched / Watchlist (saved to the lists API, roll back on failure), Suggest to a friend | ✅ | `/api/lists/…`; Suggest opens "Suggest a movie" with the film picked. Verified on *The Dark Knight Rises* |
+| Feelings: pick up to 3 ("How did it make you feel?") straight from coloured chips (each feeling has its own gradient), audience % and a static bar of every feeling's share ([details](film-reactions-takes.md)) | ✅ | `PUT /api/takes/films/<id>/reaction/` with `reactions`, `GET …/summary/`. Icons instead of emoji (emoji draw as boxes on the iOS 26 simulator) |
+| Film page takes: "What people said" grouped per person on a thread (top take, translate, vote chips, comments, two takes then "Show more"), "Share your take" sheet (one review each), friends' activity ([details](film-reactions-takes.md)) | ✅ | `/api/takes/films/<id>/takes/`, `…/friends/` |
 | Add to Watched / Watchlist / Top 5 | 🟡 | Buttons render with state; toggling not exercised |
-| Where to watch | 🟡 | Showed "No streaming providers found" locally |
-| Trailer | 🟡 | Button rendered disabled in the run |
+| Cast & crew tab: main cast (billing order) and key crew | ✅ | Watchmode via `/api/films/<id>/` (`cast`, `crew`); verified on *The Dark Knight Rises* |
+| Where to watch, grouped Stream / Free / TV provider / Rent / Buy with logos and prices | ✅ | Watchmode sources (US) via `watch_providers`; verified on *The Dark Knight Rises* |
+| Trailer (play button on the hero) | ✅ | Opens the Watchmode trailer link, or a YouTube search for "<title> <year> official trailer" when there is none (common on the free plan) |
 | Activity from friends | ✅ | Empty state shown |
 | Film reactions and takes on the film | 🟡 | `/api/takes/films/<id>/takes/` 200 |
 

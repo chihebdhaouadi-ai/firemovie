@@ -3252,6 +3252,516 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.'**
   String get authGuestPromptBody;
+
+  /// No description provided for @browseSectionDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get browseSectionDiscover;
+
+  /// No description provided for @browseTopTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Top 100 takes'**
+  String get browseTopTakes;
+
+  /// No description provided for @browsePopularFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'Most popular films'**
+  String get browsePopularFilms;
+
+  /// No description provided for @browseByYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by year'**
+  String get browseByYear;
+
+  /// No description provided for @browseByStreaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by streaming service'**
+  String get browseByStreaming;
+
+  /// No description provided for @browseSectionTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Most popular topics'**
+  String get browseSectionTopics;
+
+  /// No description provided for @browsePolls.
+  ///
+  /// In en, this message translates to:
+  /// **'Polls'**
+  String get browsePolls;
+
+  /// No description provided for @browseConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversations'**
+  String get browseConversations;
+
+  /// No description provided for @browseScenes.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenes'**
+  String get browseScenes;
+
+  /// No description provided for @browseQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get browseQuestions;
+
+  /// No description provided for @browseHotTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot takes'**
+  String get browseHotTakes;
+
+  /// No description provided for @browseSectionFilmSage.
+  ///
+  /// In en, this message translates to:
+  /// **'FilmSage'**
+  String get browseSectionFilmSage;
+
+  /// No description provided for @browseNewHere.
+  ///
+  /// In en, this message translates to:
+  /// **'New here?'**
+  String get browseNewHere;
+
+  /// No description provided for @browseSocialMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Social media'**
+  String get browseSocialMedia;
+
+  /// No description provided for @browseFollowUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us'**
+  String get browseFollowUs;
+
+  /// No description provided for @browseGifts.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get browseGifts;
+
+  /// No description provided for @browseContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get browseContact;
+
+  /// No description provided for @browseTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use / Community policy'**
+  String get browseTerms;
+
+  /// No description provided for @browseYearsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a year'**
+  String get browseYearsTitle;
+
+  /// Decade heading on the Browse by year page, e.g. 1990s.
+  ///
+  /// In en, this message translates to:
+  /// **'{decade}s'**
+  String browseDecade(String decade);
+
+  /// No description provided for @browseServicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a streaming service'**
+  String get browseServicesTitle;
+
+  /// No description provided for @browseServicesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No streaming services available.'**
+  String get browseServicesEmpty;
+
+  /// No description provided for @browseFilmsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No films here yet.'**
+  String get browseFilmsEmpty;
+
+  /// No description provided for @browseTakesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing posted here yet.'**
+  String get browseTakesEmpty;
+
+  /// No description provided for @browseComingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get browseComingSoonTitle;
+
+  /// No description provided for @browseComingSoonBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re still working on this page. Check back soon.'**
+  String get browseComingSoonBody;
+
+  /// No description provided for @browseByGenre.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by genre'**
+  String get browseByGenre;
+
+  /// No description provided for @browseByCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by country'**
+  String get browseByCountry;
+
+  /// No description provided for @browseByLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by language'**
+  String get browseByLanguage;
+
+  /// No description provided for @browseGenresTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a genre'**
+  String get browseGenresTitle;
+
+  /// No description provided for @browseCountriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a country'**
+  String get browseCountriesTitle;
+
+  /// No description provided for @browseCountriesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular films streaming in each country.'**
+  String get browseCountriesHint;
+
+  /// Title of the film list for one country.
+  ///
+  /// In en, this message translates to:
+  /// **'Streaming in {country}'**
+  String browseStreamingIn(String country);
+
+  /// No description provided for @browseLanguagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a language'**
+  String get browseLanguagesTitle;
+
+  /// No description provided for @browsePickEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to pick from right now.'**
+  String get browsePickEmpty;
+
+  /// No description provided for @browseLanguageEn.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get browseLanguageEn;
+
+  /// No description provided for @browseLanguageFr.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get browseLanguageFr;
+
+  /// No description provided for @browseLanguageEs.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get browseLanguageEs;
+
+  /// No description provided for @browseLanguageIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get browseLanguageIt;
+
+  /// No description provided for @browseLanguageDe.
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get browseLanguageDe;
+
+  /// No description provided for @browseLanguagePt.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get browseLanguagePt;
+
+  /// No description provided for @browseLanguageRu.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get browseLanguageRu;
+
+  /// No description provided for @browseLanguageAr.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get browseLanguageAr;
+
+  /// No description provided for @browseLanguageTr.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get browseLanguageTr;
+
+  /// No description provided for @browseLanguageHi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hindi'**
+  String get browseLanguageHi;
+
+  /// No description provided for @browseLanguageKo.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get browseLanguageKo;
+
+  /// No description provided for @browseLanguageJa.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese'**
+  String get browseLanguageJa;
+
+  /// No description provided for @browseLanguageZh.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get browseLanguageZh;
+
+  /// No description provided for @browseLanguageSv.
+  ///
+  /// In en, this message translates to:
+  /// **'Swedish'**
+  String get browseLanguageSv;
+
+  /// No description provided for @overviewPlayTrailer.
+  ///
+  /// In en, this message translates to:
+  /// **'Play trailer'**
+  String get overviewPlayTrailer;
+
+  /// No description provided for @overviewTrailerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the trailer.'**
+  String get overviewTrailerUnavailable;
+
+  /// No description provided for @overviewLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get overviewLoading;
+
+  /// No description provided for @overviewNoCastCrew.
+  ///
+  /// In en, this message translates to:
+  /// **'No cast and crew information yet.'**
+  String get overviewNoCastCrew;
+
+  /// No description provided for @overviewOfferStream.
+  ///
+  /// In en, this message translates to:
+  /// **'Stream'**
+  String get overviewOfferStream;
+
+  /// No description provided for @overviewOfferFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get overviewOfferFree;
+
+  /// No description provided for @overviewOfferTvProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'With a TV provider'**
+  String get overviewOfferTvProvider;
+
+  /// No description provided for @overviewOfferRent.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get overviewOfferRent;
+
+  /// No description provided for @overviewOfferBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get overviewOfferBuy;
+
+  /// No description provided for @overviewCloseTrailer.
+  ///
+  /// In en, this message translates to:
+  /// **'Close trailer'**
+  String get overviewCloseTrailer;
+
+  /// No description provided for @filmSuggest.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest'**
+  String get filmSuggest;
+
+  /// No description provided for @filmListFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update your list. Try again.'**
+  String get filmListFailed;
+
+  /// No description provided for @filmFeelingsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to say how it made you feel'**
+  String get filmFeelingsEmpty;
+
+  /// No description provided for @filmFeelingsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up to 3 feelings.'**
+  String get filmFeelingsHint;
+
+  /// No description provided for @filmFeelingsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 3 picked'**
+  String filmFeelingsCount(String count);
+
+  /// No description provided for @filmFeelingsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get filmFeelingsSave;
+
+  /// No description provided for @filmFeelingsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get filmFeelingsClear;
+
+  /// No description provided for @filmAudienceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The audience'**
+  String get filmAudienceTitle;
+
+  /// No description provided for @filmAudienceEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No reactions yet. Be the first to say how it made you feel.'**
+  String get filmAudienceEmpty;
+
+  /// No description provided for @filmAudiencePositive.
+  ///
+  /// In en, this message translates to:
+  /// **'enjoyed it'**
+  String get filmAudiencePositive;
+
+  /// No description provided for @filmAudiencePeople.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person reacted} other{{count} people reacted}}'**
+  String filmAudiencePeople(int count);
+
+  /// No description provided for @filmYourTakeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your take'**
+  String get filmYourTakeTitle;
+
+  /// No description provided for @filmTakeCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 take} other{{count} takes}}'**
+  String filmTakeCount(int count);
+
+  /// No description provided for @filmTopTake.
+  ///
+  /// In en, this message translates to:
+  /// **'TOP TAKE'**
+  String get filmTopTake;
+
+  /// No description provided for @filmShowMoreTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Show 1 more take} other{Show {count} more takes}}'**
+  String filmShowMoreTakes(int count);
+
+  /// No description provided for @filmShowLessTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get filmShowLessTakes;
+
+  /// No description provided for @filmShareYourTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your take'**
+  String get filmShareYourTake;
+
+  /// No description provided for @filmAddTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Add take'**
+  String get filmAddTake;
+
+  /// No description provided for @personBiography.
+  ///
+  /// In en, this message translates to:
+  /// **'Biography'**
+  String get personBiography;
+
+  /// No description provided for @personFilmography.
+  ///
+  /// In en, this message translates to:
+  /// **'Movies'**
+  String get personFilmography;
+
+  /// No description provided for @personHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get personHeight;
+
+  /// No description provided for @personBorn.
+  ///
+  /// In en, this message translates to:
+  /// **'Born'**
+  String get personBorn;
+
+  /// No description provided for @personDied.
+  ///
+  /// In en, this message translates to:
+  /// **'Died'**
+  String get personDied;
+
+  /// No description provided for @personNoFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'No movies found for this person yet.'**
+  String get personNoFilms;
+
+  /// No description provided for @personLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this person\'s page.'**
+  String get personLoadFailed;
+
+  /// No description provided for @personAsCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'as {character}'**
+  String personAsCharacter(String character);
 }
 
 class _AppLocalizationsDelegate
