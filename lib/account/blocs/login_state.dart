@@ -1,64 +1,27 @@
-
-
-
-
-
-
-
-
-import 'package:equatable/equatable.dart';
-
-import '../data/auth_entity.dart';
-import '../data/login_model.dart';
-
-abstract class LoginState extends Equatable{}
-
-
-class LoginLoadingState extends LoginState{
-
-  @override
-  List<Object?> get props=>[];
+sealed class LoginState {
+  const LoginState();
 }
 
-
-
-class LogincalmState extends LoginState{
-  @override
-  List<Object?> get props=>[];
+final class LoginIdle extends LoginState {
+  const LoginIdle();
 }
 
-
-class LoginLoadedState extends LoginState{
-  Login services; 
-  LoginLoadedState({required this.services});
-  @override
-  List<Object?> get props=>[services];
+final class LoginInProgress extends LoginState {
+  const LoginInProgress();
 }
 
+final class LoginSucceeded extends LoginState {
+  const LoginSucceeded({required this.token, required this.isNewAccount});
 
-class LoginErrorState extends LoginState{
-  String msg; 
-  LoginErrorState({required this.msg});
-  @override
-  List<Object?> get props=>[];
+  final String token;
+  final bool isNewAccount;
 }
 
+enum LoginErrorKind { invalidCredentials, registerFailed, network }
 
+final class LoginFailed extends LoginState {
+  const LoginFailed(this.kind, {this.serverMessage});
 
-class LoginTrigerState extends LoginState{
-LoginEntity loginEntity;
-
-  LoginTrigerState({required this.loginEntity});
-  @override
-  List<Object?> get props=>[];
-}
-
-
-
-class RegisterTrigerState extends LoginState{
-RegisterEntity registerEntity;
-
-  RegisterTrigerState({required this.registerEntity});
-  @override
-  List<Object?> get props=>[];
+  final LoginErrorKind kind;
+  final String? serverMessage;
 }

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/home_bloc.dart';
 import '../../data/top_5_movies_entity.dart';
+import '../../../core/session.dart';
+import '../../../core/widgets/game_button.dart';
 
 class Add_Movies_CustomDialog extends StatelessWidget {
   final String message;
@@ -36,14 +38,16 @@ BuildContext context__;
                 style: TextStyle(color: Colors.white, fontSize: 15),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
+              GameButton(
+                label: buttonText,
+                style: GameButtonStyle.blue,
                 onPressed: () {
  if (come_from =="top_5_movies")
                   {
   BlocProvider
        .of<HomeBLoc>(context__)
        .Add_List_movies_movies(Add_List_MoviesTrigerState(
-        add_List_Movies_Entity:Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${movie_id}",come_from: "top_5_movies")
+        add_List_Movies_Entity:Add_List_Movies_Entity(token: Session.token,movie_id: "${movie_id}",come_from: "top_5_movies")
          ));
                   }
 
@@ -53,7 +57,7 @@ BuildContext context__;
   BlocProvider
        .of<HomeBLoc>(context__)
        .Add_List_movies_movies(Add_List_MoviesTrigerState(
-        add_List_Movies_Entity:Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${movie_id}",come_from: "watched_list")
+        add_List_Movies_Entity:Add_List_Movies_Entity(token: Session.token,movie_id: "${movie_id}",come_from: "watched_list")
          ));
                   }  
  
@@ -62,19 +66,12 @@ BuildContext context__;
   BlocProvider
        .of<HomeBLoc>(context__)
        .Add_List_movies_movies(Add_List_MoviesTrigerState(
-        add_List_Movies_Entity:Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${movie_id}",come_from: "watchlist")
+        add_List_Movies_Entity:Add_List_Movies_Entity(token: Session.token,movie_id: "${movie_id}",come_from: "watchlist")
          ));
                   }                   
 
                   Navigator.pop(context); // Close the dialog
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:  buttonColor, // Button color
-                ),
-                child: Text(
-                  buttonText,
-                  style: TextStyle(color: Colors.white,fontSize: 10), // Button text color
-                ),
               ),
             ],
           ),

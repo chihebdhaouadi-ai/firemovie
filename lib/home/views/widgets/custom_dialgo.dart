@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/widgets/game_button.dart';
 
 class CustomDialog extends StatelessWidget {
   final String message;
@@ -27,17 +28,12 @@ class CustomDialog extends StatelessWidget {
                 style: TextStyle(color: textColor, fontSize: 20),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
+              GameButton(
+                label: buttonText,
+                style: GameButtonStyle.dark,
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 216, 216, 216), // Button color
-                ),
-                child: Text(
-                  buttonText,
-                  style: TextStyle(color: Colors.black), // Button text color
-                ),
               ),
             ],
           ),

@@ -1,15 +1,17 @@
+import '../data/auth_entity.dart';
 
-
-
-import 'package:equatable/equatable.dart';
-
-abstract class LoginEvent extends Equatable{
-
+sealed class LoginEvent {
+  const LoginEvent();
 }
 
+final class LoginSubmitted extends LoginEvent {
+  const LoginSubmitted(this.entity);
 
-class LoadLoginEvent extends LoginEvent{
+  final LoginEntity entity;
+}
 
-  @override
-  List<Object?> get props =>[];
+final class RegisterSubmitted extends LoginEvent {
+  const RegisterSubmitted(this.entity);
+
+  final RegisterEntity entity;
 }

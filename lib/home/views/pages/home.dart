@@ -10,11 +10,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'dart:ui' as ui;
 import 'package:http/http.dart' as http;
-import 'package:lottie/lottie.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'dart:convert';
 
 import '../../../core/core.dart';
+import '../../../core/session.dart';
 import '../widgets/add_film_card.dart';
 import '../widgets/app_bar_action_items.dart';
 import '../widgets/film_card.dart';
@@ -23,6 +23,7 @@ import '../widgets/list_card.dart';
 import '../widgets/side_menu.dart';
 import 'add_find_film.dart';
 import 'film_page.dart';
+import '../../../core/widgets/game_button.dart';
 const itemSize = 150.0;
 
 class Generatecard {
@@ -79,20 +80,20 @@ if (!callint){
        BlocProvider
        .of<HomeBLoc>(context)
        .load_top_5_movies(Top_5_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
 //
 
        BlocProvider
        .of<WatchedBLoc>(context)
        .watched_list_movies(Watched_list_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
 
       BlocProvider
        .of<WatchtlistBLoc>(context)
        .watch_list_movies(Watched_list_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
          setState(() {
            callint=true;
@@ -100,7 +101,7 @@ if (!callint){
            BlocProvider
        .of<PopularlistBLoc>(context)
        .get_popular_list_list_movies(Watched_list_moviesTrigerState(
-        top_5_Movies_Entity:Top_5_Movies_Entity(token: '2aa9f42aa6410495d105594d4e872613c710839b' )
+        top_5_Movies_Entity:Top_5_Movies_Entity(token: Session.token )
          ));
          setState(() {
            callint=true;
@@ -151,7 +152,7 @@ if (!callint){
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 48, 255, 33), // Set the text color
                                     fontFamily:
-                                        'Montserrat', // Set the font family
+                                        'Inter', // Set the font family
                                     fontWeight:
                                         FontWeight.w400, // Set the font weight
                                     fontSize: 12, // Set the font size
@@ -206,7 +207,7 @@ if (!callint){
                                       color: Color.fromARGB(
                                           255, 216, 216, 216), // Set the text color
                                       fontFamily:
-                                          'Montserrat', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight:
                                           FontWeight.w400, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -241,7 +242,7 @@ if (!callint){
                                                   color: Color.fromARGB(
                                                       255, 216, 216, 216), // Set the text color
                                                   fontFamily:
-                                                      'Montserrat', // Set the font family
+                                                      'Inter', // Set the font family
                                                   fontWeight:
                                                       FontWeight.w400, // Set the font weight
                                                   fontSize: 8, // Set the font size
@@ -373,7 +374,7 @@ return Container(
                                     style: TextStyle(
                                       color: Color.fromARGB(200, 216, 216, 216), // Set the text color
                                       fontFamily:
-                                          'Montserrat', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight:
                                           FontWeight.w300, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -385,7 +386,7 @@ SizedBox(height: 2,),
                                     style: TextStyle(
                                       color: Color.fromARGB(250, 216, 216, 216), // Set the text color
                                       fontFamily:
-                                          'Montserrat', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight:
                                           FontWeight.w400, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -457,25 +458,11 @@ SizedBox(height: 2,),
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(right: 5),
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color.fromARGB(255, 6, 94,
-                                              153), // Set the background color of the button
-                                          foregroundColor: Colors
-                                              .white, // Set the text color of the button
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                30), // Set the border radius of the button
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                        },
-                                        child: const Text(
-                                          'Submit',
-                                          style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 217, 218, 219)),
-                                        ),
+                                      child: GameButton(
+                                        label: 'Submit',
+                                        style: GameButtonStyle.blue,
+                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                        onPressed: () {},
                                       ),
                                     ),
                                   ],
@@ -516,12 +503,12 @@ SizedBox(height: 2,),
                                                 margin:
                                                     EdgeInsets.only(right: 0),
                                                 child: Center(
-                                                                child: ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                  const Color.fromARGB(136, 33, 149, 243), // Change this color to your desired color
-                                  BlendMode.srcIn,
-                                ),child: Lottie.network("https://lottie.host/14d5e02e-201f-4649-be8d-5d995beb1959/Ba8dehPGRF.json",height: 42,width: 42)),
-                                                               )
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Color.fromARGB(255, 121, 121, 121),
+                                                    size: 25,
+                                                  ),
+                                                )
                                               ),
                                          
                                         ],
@@ -660,7 +647,7 @@ SizedBox(height: 2,),
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
                                   fontFamily:
-                                      'Montserrat', // Set the font family
+                                      'Inter', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -848,7 +835,7 @@ SizedBox(height: 2,),
                                     color: Color.fromARGB(255, 217, 217,
                                         217), // Set the text color
                                     fontFamily:
-                                        'Poppins', // Set the font family
+                                        'Inter', // Set the font family
                                     fontWeight: FontWeight
                                         .w400, // Set the font weight
                                     fontSize:
@@ -1077,21 +1064,8 @@ SizedBox(height: 2,),
                                           alignment: Alignment.center,
                                           width: (SizeConfig.screenWidth!! * 0.95) ,
                                           
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                 side: BorderSide(color: const Color.fromARGB(255, 93, 105, 122)),
-                                                backgroundColor: Color.fromARGB(
-                                                    255,
-                                                    8,
-                                                    76,
-                                                    124), // Set the background color of the button
-                                                foregroundColor: Colors
-                                                    .white, // Set the text color of the button
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(
-                                                      15), // Set the border radius of the button
-                                                ),
-                                              ),
+                                          child: GameButton(
+                                              style: GameButtonStyle.blue,
                                               onPressed: () {
                                           
                                                  showDialog(
@@ -1132,7 +1106,7 @@ SizedBox(height: 2,),
                                                             255,
                                                             255), // Set the text color
                                                         fontFamily:
-                                                            'Roboto', // Set the font family
+                                                            'Inter', // Set the font family
                                                         fontWeight: FontWeight
                                                             .bold, // Set the font weight
                                                         fontSize:
@@ -1159,7 +1133,7 @@ SizedBox(height: 2,),
                                                             style: TextStyle(
                                                               color: Color.fromRGBO(255, 255, 255, 1), // Set the text color
                                                               fontFamily:
-                                                                  'Poppins', // Set the font family
+                                                                  'Inter', // Set the font family
                                                               fontWeight: FontWeight
                                                                   .normal, // Set the font weight
                                                               fontSize:
@@ -1171,7 +1145,8 @@ SizedBox(height: 2,),
                                                     ),
                                                   ],
                                                 ),
-                                              )),
+                                              ),
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -1201,7 +1176,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Poppins', // Set the font family
+                                              'Inter', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1234,7 +1209,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Roboto', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1261,7 +1236,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Roboto', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1392,7 +1367,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Poppins', // Set the font family
+                                              'Inter', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1425,7 +1400,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Roboto', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1451,7 +1426,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Roboto', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1535,7 +1510,7 @@ SizedBox(height: 2,),
                                         child: Transform(
                                           alignment: Alignment.center,
                                           transform: Matrix4.identity()..scale(1.0, 1.0),
-                                          child:  Filmcard(come_from:'watch_list',film_id:"${character.movies_id}",filmname:"${character.title}",
+                                          child:  Filmcard(come_from:'watchlist',film_id:"${character.movies_id}",filmname:"${character.title}",
                                             key: null,
                                             imagePath: '${character.image_link}',
                                             loaded: true,
@@ -1598,7 +1573,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Poppins', // Set the font family
+                                              'Inter', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1631,7 +1606,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Roboto', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1657,7 +1632,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Roboto', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1792,7 +1767,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Poppins', // Set the font family
+                                              'Inter', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1805,7 +1780,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Roboto', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1820,7 +1795,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Roboto', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1897,7 +1872,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Poppins', // Set the font family
+                                              'Inter', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1910,7 +1885,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Roboto', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1925,7 +1900,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Roboto', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -2001,7 +1976,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Poppins', // Set the font family
+                                              'Inter', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -2014,7 +1989,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Roboto', // Set the font family
+                                          'Inter', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -2029,7 +2004,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Roboto', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -2100,7 +2075,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Roboto', // Set the font family
+                                              'Inter', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -2124,7 +2099,7 @@ SizedBox(height: 2,),
                                     color: Color.fromARGB(255, 255, 255,
                                         255), // Set the text color
                                     fontFamily:
-                                        'Poppins', // Set the font family
+                                        'Inter', // Set the font family
                                     fontWeight: FontWeight
                                         .w400, // Set the font weight
                                     fontSize: (SizeConfig.screenWidth! * 12) /
@@ -2197,7 +2172,7 @@ class popupdashboardbutton extends StatelessWidget {
             "$text",
             style: TextStyle(
               color: color, // Set the text color
-              fontFamily: 'Poppins', // Set the font family
+              fontFamily: 'Inter', // Set the font family
               fontWeight: FontWeight.w400, // Set the font weight
               fontSize: 10, // Set the font size
             ),

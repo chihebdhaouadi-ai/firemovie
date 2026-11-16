@@ -4,6 +4,7 @@ import 'package:film_wise_mobile/home/blocs/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/core.dart';
+import '../../../core/session.dart';
 import '../../blocs/home_state.dart';
 import '../../data/top_5_movies_entity.dart';
 import '../pages/film_page.dart';
@@ -138,7 +139,7 @@ if(widget.come_from == "watchlist")
   BlocProvider
        .of<HomeBLoc>(context)
        .Add_List_movies_movies(Add_List_MoviesTrigerState(
-        add_List_Movies_Entity:Add_List_Movies_Entity(token: "2aa9f42aa6410495d105594d4e872613c710839b",movie_id: "${widget.film_id}",come_from: "top_5_movies",)
+        add_List_Movies_Entity:Add_List_Movies_Entity(token: Session.token,movie_id: "${widget.film_id}",come_from: "top_5_movies",)
          ));
                   }
                   
@@ -228,7 +229,7 @@ if(widget.come_from == "watchlist")
                                 style: TextStyle(
                                   color: Color.fromARGB(
                                       255, 255, 255, 255), // Set the text color
-                                  fontFamily: 'Poppins', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight: FontWeight.w300, // Set the font weight
                                   fontSize: 15, // Set the font size
                                   height: 0,
@@ -243,7 +244,7 @@ if(widget.come_from == "watchlist")
                                   
                                   color: Color.fromARGB(
                                       255, 217, 217, 217), // Set the text color
-                                  fontFamily: 'Poppins', // Set the font family
+                                  fontFamily: 'Inter', // Set the font family
                                   fontWeight: FontWeight.w100, // Set the font weight
                                   fontSize: 10,
                                   height: 0, // Set the font size
@@ -259,7 +260,7 @@ if(widget.come_from == "watchlist")
                               style: TextStyle(
                                 color: Color.fromARGB(
                                     255, 217, 217, 217), // Set the text color
-                                fontFamily: 'Poppins', // Set the font family
+                                fontFamily: 'Inter', // Set the font family
                                 fontWeight: FontWeight.w100, // Set the font weight
                                 fontSize: 12,
                                 height: 1.2, // Set the font size
@@ -270,7 +271,7 @@ if(widget.come_from == "watchlist")
                               style: TextStyle(
                                 color: Color.fromARGB(
                                     255, 217, 217, 217), // Set the text color
-                                fontFamily: 'Poppins', // Set the font family
+                                fontFamily: 'Inter', // Set the font family
                                 fontWeight: FontWeight.w300, // Set the font weight
                                 fontSize: 12,
                                 height: 1.2, // Set the font size

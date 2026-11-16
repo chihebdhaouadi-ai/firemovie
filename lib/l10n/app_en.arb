@@ -1,0 +1,984 @@
+{
+  "@@locale": "en",
+  "homePointsLabel": "{points} Points",
+  "@homePointsLabel": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "homeTop5Title": "Your Top 5",
+  "homeTop5Hint": "Pick five films you love",
+  "homeTop5AddLabel": "Add a film to your Top 5",
+  "homeCollectionsTitle": "Collections",
+  "homeTabYou": "You",
+  "homeTabFriends": "Friends",
+  "homeTabExplore": "Explore",
+  "homeTabFilms": "Films",
+  "homePopularTakesTitle": "Popular takes",
+  "homeTrendingTopicsTitle": "Trending topics",
+  "homeTrendingEmpty": "No questions or discussions this week yet.",
+  "homeLatestArticlesTitle": "Latest articles",
+  "homeUpcomingThisMonthTitle": "Upcoming Films",
+  "upcomingNotOutYet": "{title} is not out yet. It releases on {date}.",
+  "@upcomingNotOutYet": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },    "homePopularThisWeekTitle": "Popular Films",
+  "homeFriendsFilmsTitle": "Friends' films this week",
+  "homeFriendsReviewsTitle": "Friends' latest reviews",
+  "homeMyTakesTitle": "My takes",
+  "homeComingSoon": "Coming soon",
+  "homeFriendsReviewsEmpty": "Your friends haven't posted any reviews yet.",
+  "homeMyTakesEmpty": "You haven't shared any takes yet.",
+  "homeUnderConstruction": "This section is under construction.",
+  "exploreSkipStamp": "SKIP",
+  "exploreOpenStamp": "OPEN",
+  "exploreCaughtUp": "You are all caught up",
+  "exploreReviewButton": "Review",
+  "exploreSubtitle": "Discover reviews, conversations and questions about films.",
+  "createSceneMovieHint": "Your scene appears in that movie's discussion.",
+  "createPollQuestionHint": "What do you want to ask?",
+  "exploreFilterAll": "All",
+  "exploreFilterConversations": "Conversations",
+  "exploreFilterPolls": "Polls",
+  "exploreFilterScenes": "Scenes",
+  "exploreFilterQuestions": "Questions",
+  "exploreFilterReviews": "Reviews",
+  "exploreSpoilerReveal": "Tap to reveal",
+  "topicTagPoll": "Poll",
+  "topicTagScene": "Scene",
+  "topicSpoilerLabel": "Contains spoilers",
+  "pollVoteHint": "Tap an option to vote",
+  "pollChangeVoteHint": "Tap another option to change your vote",
+  "pollVoteCount": "{count, plural, =1{1 vote} other{{count} votes}}",
+  "@pollVoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createTypePollSubtitle": "Let people vote between 2 and 4 options.",
+  "createTypeSceneSubtitle": "Pick one moment from a film and explain why it works.",
+  "createWritePollTitle": "Write your poll question",
+  "createPollOptionsTitle": "Add the options",
+  "createPollOptionsHint": "Give 2 to 4 choices. People pick one.",
+  "createPollOptionLabel": "Option {number}",
+  "@createPollOptionLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "createPollAddOption": "Add option",
+  "createPollRemoveOption": "Remove option",
+  "createSceneTitle": "Describe the scene",
+  "createSceneNameLabel": "Scene",
+  "createSceneNameHint": "The interrogation room",
+  "createSceneTimecodeLabel": "Timecode (optional)",
+  "createSceneTimecodeHint": "1h 12m",
+  "createSceneExplainLabel": "Why it works",
+  "createSceneExplainHint": "Say what makes this moment special",
+  "exploreRepliesButton": "View all {count} replies",
+  "@exploreRepliesButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exploreStripConversation": "Conversation",
+  "exploreRepliesShort": "{count, plural, =1{1 reply} other{{count} replies}}",
+  "@exploreRepliesShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exploreNoRepliesYet": "No replies yet",
+  "exploreBeFirstRespond": "Be the first to respond",
+  "explorePeopleTalking": "{count, plural, =1{1 person talking} other{{count} people talking}}",
+  "@explorePeopleTalking": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exploreLastReply": "last reply {time}",
+  "@exploreLastReply": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "exploreNoVotesYet": "No votes yet",
+  "exploreAgreePercent": "{percent}% agree",
+  "@exploreAgreePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "exploreDisagreePercent": "{percent}% disagree",
+  "@exploreDisagreePercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "exploreFor": "For",
+  "exploreAgainst": "Against",
+  "exploreBeFirstArgue": "Be the first to argue {side}",
+  "@exploreBeFirstArgue": {
+    "placeholders": {
+      "side": {
+        "type": "String"
+      }
+    }
+  },
+  "explorePickedBy": "picked by {name}",
+  "@explorePickedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exploreThanksVoting": "Thanks for voting",
+  "exploreJoinConversation": "Join the conversation",
+  "homeCollectionsResizeLabel": "Resize collections",
+  "homeFeedTitle": "Reviews From Your Collections",
+  "homeFeedEmpty": "No reviews on the films in your collections yet.",
+  "homeFeedShowAsRow": "Show as row",
+  "homeFeedShowAsColumn": "Show as column",
+  "homeQuickActionsLabel": "Quick actions",
+  "homeQuickActionSearch": "Search",
+  "homeQuickActionAddFilm": "Add film",
+  "homeWatchedTitle": "Watched",
+  "homeWatchlistTitle": "Watchlist",
+  "homePopularTitle": "Popular With Friends",
+  "homeFilmCount": "{count, plural, =1{1 film} other{{count} films}}",
+  "@homeFilmCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeAddTileLabel": "Add to {section}",
+  "@homeAddTileLabel": {
+    "placeholders": {
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "homeFilmTileSemantics": "{title}, {section}",
+  "@homeFilmTileSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "section": {
+        "type": "String"
+      }
+    }
+  },
+  "homeRemoveFilm": "Remove {title}",
+  "@homeRemoveFilm": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSectionEmptyTitle": "Nothing here yet",
+  "homeSectionEmptyAction": "Add a film",
+  "homeSectionErrorTitle": "Couldn't load this list",
+  "homeSectionErrorRetry": "Retry",
+  "homeRemovedSnackbar": "Removed {title}",
+  "@homeRemovedSnackbar": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "homeUndo": "Undo",
+  "homeTop5FullSnackbar": "Your Top 5 is full. Remove a film first.",
+  "homeGenericErrorSnackbar": "Something went wrong. Please try again.",
+  "findTitleTop5": "Add to Top 5",
+  "findTitleWatched": "Add to Watched",
+  "findTitleWatchlist": "Add to Watchlist",
+  "findTitleSearch": "Find a film",
+  "findBodySearch": "All films",
+  "findSearchHint": "Name of film…",
+  "findSearchClear": "Clear search",
+  "findSearchSubmit": "Search",
+  "findMinCharsTitle": "Keep typing",
+  "findMinCharsBody": "Type at least 2 characters to search.",
+  "findLoadingTitle": "Searching films…",
+  "findEmptyTitle": "No results for “{query}”",
+  "@findEmptyTitle": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "findEmptyTip1": "Check the spelling or try another title.",
+  "findEmptyTip2": "Try a shorter keyword or a director’s name.",
+  "findErrorTitle": "Couldn’t search right now",
+  "findErrorRetry": "Retry",
+  "findOfflineTitle": "You’re offline",
+  "findOfflineBody": "Search and adding are disabled while offline.",
+  "findNoMoreResults": "End of results",
+  "findLoadMore": "Load more",
+  "findRecentTitle": "Recent searches",
+  "findRecentClear": "Clear",
+  "findRecentSwipeDelete": "Remove recent search",
+  "findRecentEmpty": "No recent searches yet.",
+  "findDirectedBy": "Directed by",
+  "findGenreChip": "Genre",
+  "findAddToTop5": "Add to Top 5",
+  "findAddToWatched": "Add to Watched",
+  "findAddToWatchlist": "Add to Watchlist",
+  "findResultSemantics": "{title}, {year}, directed by {director}. {action}",
+  "@findResultSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      },
+      "director": {
+        "type": "String"
+      },
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "findAddedSemantics": "{title} is already in {target}",
+  "@findAddedSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findResultDetailsAction": "Open details for {title}",
+  "@findResultDetailsAction": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "findViewDetails": "Details",
+  "findSendToFriend": "Send to a friend",
+  "findAddedSnackbar": "Added to {target}",
+  "@findAddedSnackbar": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findUndo": "Undo",
+  "findRemovedSnackbar": "Removed from {target}",
+  "@findRemovedSnackbar": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findMovedToWatched": "Moved to Watched",
+  "findReplaceSlotTitle": "Replace {current}?",
+  "@findReplaceSlotTitle": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      }
+    }
+  },
+  "findReplaceSlotBody": "This spot is already taken by {current}. Replace it with {replacement}?",
+  "@findReplaceSlotBody": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "replacement": {
+        "type": "String"
+      }
+    }
+  },
+  "findReplace": "Replace",
+  "findCancel": "Cancel",
+  "findTop5FullTitle": "Top 5 is full",
+  "findTop5FullBody": "Remove a film before adding to your Top 5.",
+  "findAlreadyWatchedTitle": "Already watched",
+  "findAlreadyWatchedBody": "You can’t add an already-watched film to your Watchlist.",
+  "findAlreadyInListTitle": "Already added",
+  "findAlreadyInListBody": "{title} is already in {target}.",
+  "@findAlreadyInListBody": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "findGenericErrorTitle": "Something went wrong",
+  "findGenericErrorBody": "Please try again.",
+  "findDetailsErrorTitle": "Couldn’t load the film",
+  "findDetailsRetry": "Retry",
+  "findDetailsCast": "Cast",
+  "findDetailsOverview": "Overview",
+  "findDetailsRuntime": "{minutes} min",
+  "@findDetailsRuntime": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "findDetailsVote": "{value} stars",
+  "@findDetailsVote": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "findWatchNow": "Watch now",
+  "findAttribution": "Film data and posters via TMDB. Streaming availability via JustWatch.",
+  "overviewBack": "Back",
+  "overviewRating": "{value} / 10",
+  "@overviewRating": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewNoRating": "No rating yet",
+  "overviewWhereToWatch": "Where to watch?",
+  "overviewNoStreaming": "No streaming providers found",
+  "overviewRatingsCount": "Ratings: {count} filmwiser",
+  "@overviewRatingsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overviewStarsValue": "{value} out of 5 stars",
+  "@overviewStarsValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewTrailer": "Trailer",
+  "overviewNoGenres": "No genres listed",
+  "overviewTabGenres": "GENRES",
+  "overviewTabCast": "CAST",
+  "overviewTabCrew": "CREW",
+  "overviewTabProd": "PROD",
+  "overviewActivityTitle": "Activity From Friends",
+  "overviewWantsToWatch": "Wants to watch",
+  "overviewNoFriendActivity": "No activity from your friends yet.",
+  "overviewShowMore": "more",
+  "overviewShowLess": "less",
+  "overviewReviewsTitle": "Reviews",
+  "overviewAddReviewHint": "Add a review...",
+  "overviewYourReview": "Your Review",
+  "overviewFriendsReviews": "Friends Reviews",
+  "overviewPopularReviews": "Popular Reviews",
+  "overviewSeeAll": "See All",
+  "reviewTrustedLabel": "from trusted viewers",
+  "reviewEveryoneTogether": "Everyone together: {value}",
+  "@reviewEveryoneTogether": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewMostFelt": "Most felt:",
+  "reviewWhatIsTrusted": "What is “trusted”?",
+  "reviewTrustedNote": "Viewers earn trust when others find their takes well argued. Their votes count a little more, so the score feels fair and thoughtful.",
+  "reviewReactionTitle": "How did it make you feel?",
+  "reviewReactionHint": "Tap the one that fits best.",
+  "reviewReactionLoved": "Loved it",
+  "reviewReactionBrokeHeart": "Broke my heart",
+  "reviewReactionBlewMind": "Blew my mind",
+  "reviewReactionMadeCry": "Made me cry",
+  "reviewReactionShocked": "Shocked me",
+  "reviewReactionMadeLaugh": "Made me laugh",
+  "reviewReactionBored": "Bored me",
+  "reviewReactionDisappointed": "Disappointed me",
+  "reviewReactionMadeThink": "Made me think",
+  "reviewReactionMasterpiece": "Masterpiece",
+  "reviewReactionTapToReact": "Tap to react",
+  "reviewReactionChange": "Change",
+  "reviewReactionPickOne": "Pick one",
+  "reviewReactionClose": "Close",
+  "reviewWhyPrompt": "Want to add a line about why? It's optional.",
+  "reviewWhyHint": "What stayed with you?",
+  "reviewShare": "Share",
+  "reviewNoThanks": "No thanks",
+  "reviewSharedThanks": "Thanks for sharing your take!",
+  "reviewCountedThanks": "Thanks! Your reaction is counted.",
+  "reviewReactionFailed": "Couldn't save your reaction. Try again.",
+  "reviewSummaryFailed": "Couldn't load the reactions.",
+  "reviewDetailTitle": "Reviews",
+  "reviewTakesTitle": "What people said",
+  "reviewTakesHint": "Short takes from other viewers.",
+  "reviewMostHelpful": "Most helpful take",
+  "sageNavUnread": "Has unread",
+  "sageNavCloseMenu": "Close menu",
+  "reviewWriterBadge": "Writer",
+  "reviewCommentsButton": "{count, plural, =0{Comment} other{Comments {count}}}",
+  "@reviewCommentsButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewCommentHint": "Add a comment",
+  "reviewSend": "Send",
+  "reviewCommentsFailed": "Couldn't load comments.",
+  "reviewCommentFailed": "Couldn't post that comment. Try again.",
+  "reviewReply": "Reply",
+  "reviewReplyingTo": "Replying to {name}",
+  "@reviewReplyingTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewCancelReply": "Cancel reply",
+  "reviewShowReplies": "{count, plural, =1{Show 1 reply} other{Show {count} replies}}",
+  "@reviewShowReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewHideReplies": "Hide replies",
+  "reviewTimeJustNow": "Just now",
+  "reviewTimeMinutes": "{count}m ago",
+  "@reviewTimeMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewTimeHours": "{count}h ago",
+  "@reviewTimeHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewTimeDays": "{count}d ago",
+  "@reviewTimeDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewVoteChangedMyMind": "Changed my mind",
+  "reviewVoteWellArgued": "Well argued",
+  "reviewVoteDisagreeFair": "Disagree but fair",
+  "reviewVoteFailed": "Couldn't update that vote. Try again.",
+  "reviewTakeFailed": "Couldn't post that. Try again.",
+  "reviewTakesEmpty": "No takes here yet.",
+  "reviewTakesFailed": "Couldn't load takes.",
+  "reviewRetry": "Try again",
+  "overviewReviewBy": "Review by {name} on {date}",
+  "@overviewReviewBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "homeOpenProfile": "Open profile",
+  "profileBack": "Back",
+  "profileSearchTooltip": "Search",
+  "profileMoreTooltip": "More options",
+  "profileLogout": "Log out",
+  "profileFollowers": "Followers",
+  "profileFollowing": "Following",
+  "profileBioHint": "Edit your bio…",
+  "profileChat": "Chat",
+  "profileFollow": "Follow",
+  "profileSend": "Send",
+  "profileAchievementsTitle": "Achievements",
+  "profileAchievementRookie": "CINEPHILE ROOKIE",
+  "profileAchievementMaster": "CINEPHILE MASTER",
+  "profileAchievementLegend": "CINEPHILE LEGEND",
+  "profileAchievementFilms": "{count, plural, =1{1 film} other{{count} films}}",
+  "@profileAchievementFilms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "profileClaim": "Claim",
+  "profileStatisticsTitle": "Statistics",
+  "profileStatWatched": "Watched",
+  "profileStatWatchlist": "Watchlist",
+  "profileStatReviews": "Reviews",
+  "profileStatRewards": "Rewards",
+  "profileBlockTitle": "You want to block this user?",
+  "profileBlockReasonHint": "Why?…",
+  "profileBlockYes": "Yes",
+  "profileBlockNo": "No",
+  "profileErrorTitle": "We couldn't load your profile.",
+  "profileRetry": "Try again",
+  "profileLanguageButton": "Manage languages",
+  "profileLanguageDialogTitle": "App language",
+  "profileLanguageSystem": "System default",
+  "onboardingFinishLater": "Finish later",
+  "onboardingStepCounter": "Step {current} of {total}",
+  "@onboardingStepCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingContinue": "Continue",
+  "onboardingFinish": "Finish",
+  "onboardingSkip": "Skip for now",
+  "onboardingSaveFailed": "Couldn't save that. Check your connection and try again.",
+  "onboardingAvatarTitle": "Add a profile photo",
+  "onboardingAvatarBody": "Pick a picture so people can recognise you. JPG, PNG or WebP, up to 5 MB.",
+  "onboardingChoosePhoto": "Choose photo",
+  "onboardingPhotoSaved": "Profile photo saved",
+  "onboardingCoverTitle": "Add a cover photo",
+  "onboardingCoverBody": "A wide image behind your profile header.",
+  "onboardingChooseCover": "Choose cover",
+  "onboardingCoverSaved": "Cover saved",
+  "onboardingBioTitle": "Write a short bio",
+  "onboardingBioBody": "Tell people what kind of films you love.",
+  "onboardingBioHint": "A few words about your taste in film",
+  "onboardingTop5Title": "Choose your top 5 movies",
+  "onboardingTop5Body": "Your favourite films, shown first on your profile.",
+  "onboardingTop5Progress": "{count} of 5 chosen",
+  "@onboardingTop5Progress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingWatchedTitle": "Add movies you've watched",
+  "onboardingWatchedBody": "Log the films you have already seen.",
+  "onboardingWatchlistTitle": "Add movies to watch",
+  "onboardingWatchlistBody": "Save the films you plan to watch next.",
+  "onboardingFilmsAdded": "{count, plural, =1{1 film added} other{{count} films added}}",
+  "@onboardingFilmsAdded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingSearchFilms": "Search films",
+  "profileNotificationsTooltip": "Notifications",
+  "profileEditPhoto": "Edit photo",
+  "profileEditCover": "Edit cover",
+  "profileEditBio": "Edit bio",
+  "profileEditBioTitle": "Edit your bio",
+  "profileSave": "Save",
+  "profileCancel": "Cancel",
+  "profileSaveFailed": "Couldn't save that. Try again.",
+  "profileNoConnections": "No one here yet.",
+  "friendAdd": "Add friend",
+  "friendCancelRequest": "Cancel request",
+  "friendAccept": "Accept",
+  "friendDecline": "Decline",
+  "friendFriends": "Friends",
+  "friendRequestSent": "Friend request sent.",
+  "friendActionFailed": "Couldn't update the friend request. Try again.",
+  "friendRequestGone": "This request is no longer available.",
+  "friendAlreadyConnected": "You're already friends or have a pending request.",
+  "searchPeopleTitle": "Find people",
+  "searchPeopleHint": "Search by username",
+  "searchPeopleMinChars": "Type at least 2 characters.",
+  "searchPeopleEmpty": "No users found.",
+  "searchPeopleFailed": "Couldn't search right now. Try again.",
+  "suggestMovieAction": "Suggest a movie",
+  "suggestionTitle": "Suggest a movie",
+  "suggestionSearchHint": "Search a movie title",
+  "suggestionSearchMinChars": "Type at least 2 characters.",
+  "suggestionSearchEmpty": "No movies found.",
+  "suggestionSearchFailed": "Couldn't search right now. Try again.",
+  "suggestionMovieSection": "Movie",
+  "suggestionPickMovie": "Pick a movie to suggest.",
+  "suggestionChangeMovie": "Change movie",
+  "suggestionRecipientsSection": "Send to",
+  "suggestionSelectAll": "Select all",
+  "suggestionNoFriends": "Add friends first to send them suggestions.",
+  "suggestionFriendsFailed": "Couldn't load your friends.",
+  "suggestionCommentHint": "Add a comment (optional)",
+  "suggestionSend": "Send suggestion",
+  "suggestionSent": "Suggestion sent.",
+  "suggestionFailed": "Couldn't send the suggestion. Try again.",
+  "suggestionNotFriends": "You can only suggest movies to friends. Update your selection and try again.",
+  "notificationMovieSuggestion": "{name} suggested {title} to you.",
+  "@notificationMovieSuggestion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationsTitle": "Notifications",
+  "notificationsEmpty": "No notifications yet.",
+  "notificationsFailed": "Couldn't load notifications.",
+  "notificationFriendRequest": "{name} sent you a friend request.",
+  "@notificationFriendRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationFriendAccepted": "{name} accepted your friend request.",
+  "@notificationFriendAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "angelBirdQuestion": "Want to join a debate about one of your top 5 movies? The Sage community would love to hear your opinion.",
+  "angelBirdYes": "Yes, let's debate",
+  "angelBirdNotNow": "Not now",
+  "angelBirdPickFilm": "Pick a film to debate",
+  "angelBirdEmptyTop5": "Your top 5 is empty. Add five films to start a debate.",
+  "angelBirdLoadFailed": "Couldn't load your top 5.",
+  "angelBirdRetry": "Try again",
+  "angelBirdReviewQuestion": "Want to open a debate about this review? Pick someone from this conversation to talk with.",
+  "angelBirdPickPerson": "Who do you want to debate with?",
+  "angelBirdNoPeople": "Nobody to debate with yet. Wait for a comment on this review.",
+  "angelBirdPeopleFailed": "Could not load the people in this review.",
+  "debateWaitingTitle": "Waiting for {name}",
+  "@debateWaitingTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "debateWaitingBody": "Your invite is sent. The debate starts as soon as {name} accepts.",
+  "@debateWaitingBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "debateDeclined": "{name} can't debate right now. Try someone else from the conversation.",
+  "@debateDeclined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "debateInviteFailed": "Couldn't send your invite. Try again.",
+  "debateLoadFailed": "Couldn't load the questions. Try again.",
+  "debateSubmitFailed": "Couldn't send your answers. Try again.",
+  "debateRetry": "Try again",
+  "debateCancel": "Cancel",
+  "debateDone": "Done",
+  "debateVsTitle": "You vs {name}",
+  "@debateVsTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "debateQuestionCounter": "Question {current} of {total}",
+  "@debateQuestionCounter": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "debateResultWon": "You won the debate!",
+  "debateResultLost": "{name} won this round.",
+  "@debateResultLost": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "debateResultTied": "It's a tie.",
+  "debateScoreLine": "You {mine} · {name} {theirs}",
+  "@debateScoreLine": {
+    "placeholders": {
+      "mine": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      },
+      "theirs": {
+        "type": "int"
+      }
+    }
+  },
+  "debateSagePointsWon": "+{points} Sage points",
+  "@debateSagePointsWon": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "debateSagePointsLost": "{points} Sage points go to {name}.",
+  "@debateSagePointsLost": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authTagline": "UNLOCK YOUR INNER FILM BUFF",
+  "authSignIn": "Sign in",
+  "authEmail": "Email",
+  "authPassword": "Password",
+  "authForgotPassword": "Forgot password?",
+  "authNoAccountPrompt": "Don't have an account?",
+  "authSignUp": "Sign up",
+  "authPasswordsMismatch": "Passwords do not match",
+  "authCreateAccount": "Create account",
+  "authUsername": "Username",
+  "authRepeatPassword": "Repeat password",
+  "authHaveAccountPrompt": "Already have an account?",
+  "authEmailRequired": "Please enter your email",
+  "authEmailInvalid": "Please enter a valid email",
+  "authPasswordRequired": "Please enter your password",
+  "authPasswordTooShort": "Password must be at least 6 characters",
+  "authUsernameRequired": "Please enter a username",
+  "authUsernameTooShort": "Username must be at least 6 characters",
+  "authHidePassword": "Hide password",
+  "authShowPassword": "Show password",
+  "authAccountCreated": "Account created successfully. Sign in to continue.",
+  "authOr": "or",
+  "authContinueWithApple": "Continue with Apple",
+  "authContinueWithGoogle": "Continue with Google",
+  "authContinueWithReddit": "Continue with Reddit",
+  "authWelcomeBack": "Welcome back",
+  "authSignInSubtitle": "Sign in to pick up where you left off.",
+  "authCreateAccountSubtitle": "Join the community and start sharing your takes.",
+  "authMinLengthHint": "At least 6 characters",
+  "authErrorInvalidCredentials": "Incorrect email or password. Please try again.",
+  "authErrorRegisterFailed": "Could not create your account. Please try again.",
+  "authErrorNetwork": "Could not reach the server. Check your connection and try again.",
+  "appWindowTitle": "My App",
+  "findActionAdd": "Add",
+  "findActionAdded": "Added",
+  "reviewTranslate": "Translate",
+  "reviewShowOriginal": "Show original",
+  "reviewTranslateFailed": "Couldn't translate this right now.",
+  "reviewQuote": "“{body}”",
+  "@reviewQuote": {
+    "placeholders": {
+      "body": {
+        "type": "String"
+      }
+    }
+  },
+  "exploreCreateButton": "Create",
+  "topicCreateTitle": "Create topic",
+  "topicFindMovie": "Find a movie",
+  "topicSearchHint": "Search movies",
+  "topicNoResults": "No movies found",
+  "topicChangeMovie": "Change",
+  "topicTypeLabel": "Type",
+  "topicTagReview": "Review",
+  "topicTagQuestion": "Question",
+  "topicTagDiscussion": "Discussion",
+  "topicTagHotTake": "Hot Take",
+  "topicReviewHint": "Reviews are about one movie and need how it made you feel.",
+  "topicBodyHint": "Write your review, question or discussion",
+  "topicPostButton": "Post",
+  "topicPostFailed": "Could not post. Please try again.",
+  "topicSearchFailed": "Search failed. Please try again.",
+  "createTypeTitle": "Choose what you want to share.",
+  "createTypeReviewSubtitle": "Tell people how a movie made you feel.",
+  "createTypeQuestionSubtitle": "Ask about a movie or share a photo.",
+  "createTypeDiscussionSubtitle": "Start a conversation about a movie or a photo.",
+  "createTypeHotTakeSubtitle": "Share a bold take about a film.",
+  "createWriteReviewTitle": "Write your review",
+  "createWriteQuestionTitle": "Write your question",
+  "createWriteDiscussionTitle": "Start the discussion",
+  "createWriteHotTakeTitle": "Write your hot take",
+  "createReviewMovieTitle": "Which movie is it about?",
+  "createReviewMovieHint": "Your review appears on that movie's page.",
+  "createFeelTitle": "How did it make you feel?",
+  "createFeelHint": "Pick one reaction. It shows with your review.",
+  "createSubjectTitle": "What is it about?",
+  "createSubjectMovie": "A movie",
+  "createSubjectPhoto": "A photo",
+  "createAddPhoto": "Choose a photo",
+  "createChangePhoto": "Change photo",
+  "createPhotoFailed": "Could not open your photos. Please try again.",
+  "createNext": "Next",
+  "leaderboardTabLabel": "Leaderboard",
+  "leaderboardTitle": "Top reviewers",
+  "leaderboardSubtitle": "Ranked by reactions on their reviews",
+  "leaderboardHowItWorks": "How it works",
+  "leaderboardPeriodWeek": "This week",
+  "leaderboardPeriodMonth": "This month",
+  "leaderboardPeriodAll": "All time",
+  "leaderboardReactionsLabel": "reactions",
+  "leaderboardReactionsWord": "{count, plural, =1{reaction} other{reactions}}",
+  "@leaderboardReactionsWord": {"placeholders": {"count": {"type": "int"}}},
+  "leaderboardReviewsCount": "{count, plural, =1{1 review} other{{count} reviews}}",
+  "@leaderboardReviewsCount": {"placeholders": {"count": {"type": "int"}}},
+  "leaderboardYouSuffix": "(you)",
+  "leaderboardEmpty": "No reactions yet this period.",
+  "leaderboardLoadFailed": "We couldn't load the leaderboard.",
+  "leaderboardRetry": "Try again",
+  "howRankingTitle": "How ranking works",
+  "howStep1Title": "Write a review",
+  "howStep1Body": "Review any film. It shows up in Explore and Friends.",
+  "howStep2Title": "Collect reactions",
+  "howStep2Body": "Readers react to your take. Every reaction is worth one point.",
+  "howStep3Title": "Climb the board",
+  "howStep3Body": "The reviewers with the most reactions in the period take the podium.",
+  "howNoteReset": "This week resets every Monday at 00:00. This month and All time keep counting.",
+  "howNoteOncePerReview": "Each person can react once per review. Reacting to your own review doesn't count.",
+  "howNoteTie": "If two reviewers tie, the one who reached the total first ranks higher.",
+  "howNotePodium": "The top three wear a podium frame (gold, blue, bronze) on the board for the period shown.",
+  "howLevelsTitle": "Levels and XP",
+  "howXpReview": "Write a review",
+  "howXpComment": "Write a comment",
+  "howXpReaction": "Receive a reaction",
+  "howXpValue": "+{xp} XP",
+  "@howXpValue": {"placeholders": {"xp": {"type": "int"}}},
+  "howLevelFoot": "Each level needs 50 XP more than the one before.",
+  "profileBadgesTitle": "Badges",
+  "badgeWellArguedTitle": "Well argued",
+  "badgeWellArguedDesc": "Receive {count} “Well argued” reactions.",
+  "@badgeWellArguedDesc": {"placeholders": {"count": {"type": "int"}}},
+  "badgeChangedMindTitle": "Changed my mind",
+  "badgeChangedMindDesc": "Receive {count} “Changed my mind” reactions.",
+  "@badgeChangedMindDesc": {"placeholders": {"count": {"type": "int"}}},
+  "badgeDisagreeTitle": "Disagree but fair",
+  "badgeDisagreeDesc": "Receive {count} “Disagree but fair” reactions.",
+  "@badgeDisagreeDesc": {"placeholders": {"count": {"type": "int"}}},
+  "badgeTopCriticTitle": "Top critic",
+  "badgeTopCriticDesc": "Finish in the weekly top 3.",
+  "badgeFirstTakeTitle": "First take",
+  "badgeFirstTakeDesc": "Be the first person to review a film.",
+  "achFilmCriticTitle": "Film critic",
+  "achFilmCriticDesc": "Write {count} reviews.",
+  "@achFilmCriticDesc": {"placeholders": {"count": {"type": "int"}}},
+  "achDebaterTitle": "Debater",
+  "achDebaterDesc": "Get {count} “Well argued” reactions.",
+  "@achDebaterDesc": {"placeholders": {"count": {"type": "int"}}},
+  "achLocalCinemaTitle": "Local cinema",
+  "achLocalCinemaDesc": "Review {count} Tunisian films.",
+  "@achLocalCinemaDesc": {"placeholders": {"count": {"type": "int"}}},
+  "achComingSoon": "Coming soon",
+  "frameNewcomerTitle": "Newcomer",
+  "frameExplorerTitle": "Explorer",
+  "frameDebaterTitle": "Debater",
+  "frameTopCriticTitle": "Top critic",
+  "frameLegendTitle": "Legend",
+  "frameAlwaysUnlocked": "Everyone starts with this frame.",
+  "frameLevelRequirement": "Reach Level {level}.",
+  "@frameLevelRequirement": {"placeholders": {"level": {"type": "int"}}},
+  "frameDebaterRequirement": "Receive {count} “Well argued” reactions.",
+  "@frameDebaterRequirement": {"placeholders": {"count": {"type": "int"}}},
+  "frameEquipped": "Equipped",
+  "frameTapToEquip": "Tap to equip",
+  "frameUnlocked": "Unlocked",
+  "frameLocked": "Locked",
+  "frameUpdateFailed": "Couldn't equip that frame. Try again.",
+  "profileLevelLabel": "LEVEL {level}",
+  "@profileLevelLabel": {"placeholders": {"level": {"type": "int"}}},
+  "profileStatComments": "Comments",
+  "profileStatReactions": "Reactions",
+  "profileFramesTitle": "Frames",
+  "profileXpProgress": "{into} / {span} XP to level {next}",
+  "@profileXpProgress": {"placeholders": {"into": {"type": "int"}, "span": {"type": "int"}, "next": {"type": "int"}}},
+  "topicDetailTitle": "Topic",
+  "topicCommentsHeading": "{count, plural, =0{No comments yet} =1{1 comment} other{{count} comments}}",
+  "@topicCommentsHeading": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "topicAboutFilm": "About this movie",
+  "topicBeFirst": "Be the first to answer.",
+  "authClose": "Close",
+  "authReasonSearch": "Log in to search and add films",
+  "authReasonProfile": "Log in to open your profile",
+  "authReasonExplore": "Log in to explore reviews and takes",
+  "authReasonNotifications": "Log in to see your notifications",
+  "authReasonFilm": "Log in to open film details",
+  "authReasonHome": "Log in to see your films, friends and takes",
+  "authGuestPromptTitle": "Sign in to see your films and friends",
+  "authGuestPromptBody": "Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation."
+}

@@ -1,166 +1,100 @@
 import 'package:film_wise_mobile/account/blocs/login_bloc.dart';
-import 'package:film_wise_mobile/account/blocs/login_event.dart';
-import 'package:film_wise_mobile/account/blocs/login_state.dart';
 import 'package:film_wise_mobile/account/data/login_repo.dart';
-import 'package:film_wise_mobile/core/core.dart';
-import 'package:film_wise_mobile/firebase_options.dart';
-import 'package:film_wise_mobile/home/blocs/home_bloc.dart';
-import 'package:film_wise_mobile/home/blocs/home_state.dart';
-import 'package:film_wise_mobile/home/data/home_repo.dart';
-import 'package:film_wise_mobile/home/views/pages/add_find_film.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:film_wise_mobile/core/app_locale.dart';
+import 'package:film_wise_mobile/core/auth/auth_cubit.dart';
+import 'package:film_wise_mobile/core/auth/auth_gate.dart';
+import 'package:film_wise_mobile/core/auth/auth_state.dart';
+import 'package:film_wise_mobile/core/auth/auth_token_store.dart';
+import 'package:film_wise_mobile/core/l10n_context.dart';
+import 'package:film_wise_mobile/core/session.dart';
+import 'package:film_wise_mobile/core/theme/app_theme.dart';
+import 'package:film_wise_mobile/features/angel_bird/angel_bird_host.dart';
+import 'package:film_wise_mobile/features/find/views/find_film_screen.dart';
+import 'package:film_wise_mobile/features/home/bloc/home_bloc.dart';
+import 'package:film_wise_mobile/features/home/bloc/home_screen_event.dart';
+import 'package:film_wise_mobile/features/home/data/home_repository.dart';
+import 'package:film_wise_mobile/features/home/views/home_screen.dart';
+import 'package:film_wise_mobile/features/onboarding/views/onboarding_screen.dart';
+import 'package:film_wise_mobile/features/profile/data/profile_repository.dart';
+import 'package:film_wise_mobile/features/social/data/social_repository.dart';
+import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'account/views/pages/login.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'home/views/pages/film_page.dart';
-import 'home/views/pages/home.dart';
-import 'home/views/widgets/custom_dialgo.dart';
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure Flutter binding is initialized
 
-void main()  async{
-    WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter binding is initialized
-   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+  await AppLocale.load();
 
-  
-  runApp(const MyApp());
+  // Restore the session before the first frame so the app opens already
+  // knowing whether the person is a guest or signed in.
+  final auth = AuthCubit(store: SharedPrefsAuthTokenStore());
+  await auth.restore();
+
+  runApp(MyApp(auth: auth));
 }
 
 class MyApp extends StatelessWidget {
-  
-  const MyApp({super.key});
-  
+  const MyApp({super.key, required this.auth});
 
-  // This widget is the root of your application.
-  
+  final AuthCubit auth;
+
+  static final navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My App',
-      initialRoute: '/',
-      theme:ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: ColorScheme.dark(
-        background: Color.fromARGB(255, 30, 30, 30),
-        primary: const Color.fromARGB(255, 246, 238, 227))),
-      routes: {
-        '/': (context) => RepositoryProvider<LoginRepo>(
-          
-        create: (context) => LoginRepo(),
-        child: BlocProvider<LoginBLoc>(
-          
-          create:(context)=>LoginBLoc(context.read<LoginRepo>()) ,
-          child: BlocListener<LoginBLoc,LoginState>(
-            listener: (context,state){              
-               if ( state is LoginLoadedState ){
-               if((state.services.feature == "login")){
-               if (state.services.message != "wrong"){
-                Navigator.pushReplacementNamed(context, '/home');          
-               }else {
-                showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return CustomDialog(message:"Wrong email or password",textColor:Colors.red,buttonText: "OK",);},
-);
-
-                
-               }
-               }else if (state.services.feature == "register"){
- 
- if (state.services.status == 200){
-  showDialog(
-  context: context,
-  builder: (BuildContext context) {
-      return CustomDialog(message:"${state.services.message}",textColor:Color.fromARGB(255, 96, 255, 22),buttonText: "Login",); },
-);
-                Navigator.pushReplacementNamed(context, '/' ,arguments:{'come_from':'register'} );          
-
-               }
-       if (state.services.status == 400)
-          showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return CustomDialog(message:"${state.services.message}",textColor:Colors.red,buttonText: "OK",);
-  },
-  
-);
-
-
-      
-               }
-
-
-               
-             }
-            
-
-            }
-            ,child: Login()),)),
-         '/home': (context) => RepositoryProvider<HomeRepo>(
-          
-        create: (context) => HomeRepo(),
-        child: MultiBlocProvider(
-  providers: [
-    BlocProvider<HomeBLoc>(
-      create: (context) => HomeBLoc(context.read<HomeRepo>()),
-    ),
-    BlocProvider<WatchedBLoc>(
-      create: (context) => WatchedBLoc(context.read<HomeRepo>()),
-      child: BlocListener<WatchedBLoc,Top_5_moviesState>(listener: (context, state) {
-        print(state);
-     if ( state is Delete_List_Movies_Done_State )
-                   Navigator.pushReplacementNamed(context, '/home' ,arguments:{'param_load':'top_5_movies_delete','status':'${state.add_List_Movies_Model.status}','message':'${state.add_List_Movies_Model.message}'} );          
-      },),
-    ),
-    BlocProvider<WatchtlistBLoc>(
-      create: (context) => WatchtlistBLoc(context.read<HomeRepo>()),
-    ), 
-    BlocProvider<PopularlistBLoc>(
-      create: (context) => PopularlistBLoc(context.read<HomeRepo>()),
-    ), 
-  ],
-  child: BlocListener<HomeBLoc, Top_5_moviesState>(
-    listener: (context, state) {
-      // Your listener logic here
-    },
-    child: Dashboard(),
-  ),
-)),
-             '/find': (context) => RepositoryProvider<HomeRepo>(
-          
-        create: (context) => HomeRepo(),
-        child: BlocProvider<HomeBLoc>(
-          
-          create:(context)=>HomeBLoc(context.read<HomeRepo>()) ,
-          child: BlocListener<HomeBLoc,Top_5_moviesState>(
-            listener: (context,state){  
-            
-            
-
-
-
-            }
-            ,child: Find()),)),
-
-              '/film_detail': (context) => RepositoryProvider<HomeRepo>(
-          
-        create: (context) => HomeRepo(),
-        child: BlocProvider<HomeBLoc>(
-          
-          create:(context)=>HomeBLoc(context.read<HomeRepo>()) ,
-          child: BlocListener<HomeBLoc,Top_5_moviesState>(
-            listener: (context,state){  
-            
-            
-
-
-
-            }
-            ,child: Movie_Page(arg: "",)),))
-      });
+    return BlocProvider<AuthCubit>.value(
+      value: auth,
+      child: ValueListenableBuilder<Locale?>(
+        valueListenable: AppLocale.current,
+        builder: (context, locale, child) => MaterialApp(
+          locale: locale,
+          onGenerateTitle: (context) => context.l10n.appWindowTitle,
+          navigatorKey: navigatorKey,
+          // Opens on the login page. A successful sign-in replaces it with Home.
+          initialRoute: loginRouteName,
+          theme: AppTheme.dark(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (context, child) => AngelBirdHost(
+            navigatorKey: navigatorKey,
+            child: child!,
+          ),
+          routes: {
+            // Home is the front door for guests and members alike.
+            '/': _homeRoute,
+            '/home': _homeRoute,
+            loginRouteName: (context) => RepositoryProvider<LoginRepo>(
+                  create: (context) => LoginRepo(),
+                  child: BlocProvider<LoginBLoc>(
+                    create: (context) => LoginBLoc(context.read<LoginRepo>()),
+                    child: const Login(),
+                  ),
+                ),
+            onboardingRouteName: (context) => const OnboardingScreen(),
+            '/find': (context) => const FindFilmScreen(),
+          },
+        ),
+      ),
+    );
+  }
 }
-}
+
+Widget _homeRoute(BuildContext context) => BlocProvider<HomeBloc>(
+      create: (context) => HomeBloc(
+        repository: ApiHomeRepository(),
+        gateway: FakePointsGateway(),
+        isSignedIn: () => Session.isLoggedIn,
+      )..add(const HomeStarted()),
+      child: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, auth) => HomeScreen(
+          profile: ProfileRepository(),
+          social: SocialRepository(),
+          signedIn: auth is AuthAuthenticated,
+        ),
+      ),
+    );
