@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Backend issue
+    url: https://github.com/chihebdhaouadi-ai/firemovie-backend/issues/new/choose
+    about: API, database or server problems belong in the backend repository.
+  - name: Security report
+    url: https://github.com/chihebdhaouadi-ai/firemovie/security/advisories/new
+    about: Report vulnerabilities privately, not in a public issue.
