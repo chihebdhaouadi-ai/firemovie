@@ -47,3 +47,16 @@ app.*.map.json
 # Local Claude Code settings may contain credentials
 .claude/settings.json
 .claude/settings.local.json
+# Widget Preview related
+.widget_preview/
+
+# Environment files (the app uses --dart-define; see .env.example)
+.env
+.env.*
+!.env.example
+
+# Local tooling output
+.firebase/
+.vscode/
+graphify-out/
+.climpire-worktrees/
