@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/luxe_palette.dart';
 
 class OverviewPanel extends StatelessWidget {
   const OverviewPanel({super.key, required this.child, this.borderColor});
@@ -14,12 +15,14 @@ class OverviewPanel extends StatelessWidget {
     final border = borderColor;
 
     return DecoratedBox(
+      // Home palette: matte surface with a hairline border.
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(tokens.radiusLg),
-        border: border == null
-            ? null
-            : Border.all(color: border, width: tokens.borderWidth),
+        color: LuxeColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: border ?? LuxeColors.hair,
+          width: border == null ? 1 : tokens.borderWidth,
+        ),
       ),
       child: Padding(
         padding: EdgeInsets.all(tokens.spaceMd),
@@ -42,7 +45,7 @@ class OverviewChip extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.surfaceRaised,
+        color: LuxeColors.surface2,
         borderRadius: BorderRadius.circular(tokens.radiusSm),
       ),
       child: Padding(

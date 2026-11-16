@@ -75,7 +75,9 @@ class _ScoreCardState extends State<ScoreCard> {
               children: [
                 for (final item in summary.mostFelt)
                   OverviewChip(
-                    label: reactionChipLabel(l10n, item.reaction),
+                    leading: reactionIcon(item.reaction),
+                    label:
+                        '${reactionLabel(l10n, item.reaction)} ${item.count}',
                   ),
               ],
             ),

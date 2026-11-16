@@ -17,8 +17,8 @@ Do not make these numbers worse. When you fix tests, update this table in the sa
 
 | Check | Result |
 |---|---|
-| `flutter analyze` | 520 issues: **1 error**, 114 warnings, 405 infos |
-| `flutter test` | **202 passed, 60 failed**, 1 file fails to compile |
+| `flutter analyze` | 516 issues: **0 errors**, 114 warnings, 402 infos |
+| `flutter test` | **225 passed, 59 failed**, all files compile |
 
 ### Failing tests by file
 
@@ -35,7 +35,6 @@ Do not make these numbers worse. When you fix tests, update this table in the sa
 | `test/features/angel_bird/review_hold_test.dart` | 2 |
 | `test/features/overview/movie_overview_screen_test.dart` | 1 |
 | `test/features/home/home_screen_test.dart` | 1 |
-| `test/features/find/film_detail_screen_test.dart` | does not compile: `reviewRepository` parameter no longer exists (line 45) |
 
 ### Causes found
 

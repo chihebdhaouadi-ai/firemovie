@@ -4,7 +4,7 @@ import 'package:film_wise_mobile/core/session.dart';
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
 import 'package:film_wise_mobile/features/angel_bird/angel_bird_host.dart';
 import 'package:film_wise_mobile/features/home/data/home_repository.dart';
-import 'package:film_wise_mobile/features/overview/views/movie_overview_screen.dart';
+import 'package:film_wise_mobile/features/find/views/film_detail_screen.dart';
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -192,7 +192,7 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Heat'));
     await _settleFrames(tester);
 
-    expect(find.byType(MovieOverviewScreen), findsOneWidget);
+    expect(find.byType(FilmDetailScreen), findsOneWidget);
     expect(find.text(_en.angelBirdQuestion), findsNothing);
   });
 

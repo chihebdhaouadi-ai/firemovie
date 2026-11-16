@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/auth/auth_gate.dart';
 import '../../../core/l10n_context.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../browse/data/browse_repository.dart';
+import '../../browse/views/browse_menu.dart';
 import '../../../l10n/app_localizations.dart';
 import '../bloc/find_film_bloc.dart';
 import '../bloc/find_film_event.dart';
@@ -35,11 +37,13 @@ class FindFilmScreen extends StatefulWidget {
     this.repository,
     this.listsRepository,
     this.recentStore,
+    this.browseRepository,
   });
 
   final FindRepository? repository;
   final ListsRepository? listsRepository;
   final RecentSearchesStore? recentStore;
+  final BrowseRepository? browseRepository;
 
   static PageRoute<FindFilmResult> route(FindFilmRouteArgs args) {
     return MaterialPageRoute<FindFilmResult>(
@@ -66,15 +70,19 @@ class _FindFilmScreenState extends State<FindFilmScreen> {
         target: args.target ?? AddTarget.watchlist,
         circleIndex: args.target == AddTarget.top5 ? args.slot : 0,
       ),
-      child: _FindFilmView(args: args),
+      child: _FindFilmView(
+        args: args,
+        browseRepository: widget.browseRepository,
+      ),
     );
   }
 }
 
 class _FindFilmView extends StatefulWidget {
-  const _FindFilmView({required this.args});
+  const _FindFilmView({required this.args, this.browseRepository});
 
   final FindFilmRouteArgs args;
+  final BrowseRepository? browseRepository;
 
   @override
   State<_FindFilmView> createState() => _FindFilmViewState();
@@ -233,9 +241,17 @@ class _FindFilmViewState extends State<_FindFilmView> {
           context.tokens.spaceLg,
           context.tokens.spaceMd,
           context.tokens.spaceLg,
-          0,
+          context.tokens.spaceXl,
         ),
-        child: _recentWidget(context, recent),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _recentWidget(context, recent),
+            SizedBox(height: context.tokens.spaceLg),
+            // Browse options until the user starts typing.
+            BrowseMenu(repository: widget.browseRepository),
+          ],
+        ),
       ),
     );
   }

@@ -30,4 +30,16 @@ void main() {
     expect(find.byType(InkWell), findsNothing);
     expect(find.text('Hulu'), findsOneWidget);
   });
+
+  testWidgets('a rent option shows its price', (tester) async {
+    await tester.pumpWidget(_host(const StreamingProvider(
+      name: 'Amazon',
+      url: 'https://amazon.com/x',
+      offer: ProviderOffer.rent,
+      price: 3.99,
+    )));
+
+    expect(find.text('Amazon'), findsOneWidget);
+    expect(find.text(r'$3.99'), findsOneWidget);
+  });
 }

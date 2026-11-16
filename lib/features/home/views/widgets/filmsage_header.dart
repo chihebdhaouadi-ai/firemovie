@@ -287,7 +287,7 @@ class _FilmsageHeaderState extends State<FilmsageHeader>
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: AppFonts.body,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: _kMuted,
@@ -321,7 +321,7 @@ class _FilmsageHeaderState extends State<FilmsageHeader>
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.right,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: AppFonts.body,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: _kMuted,

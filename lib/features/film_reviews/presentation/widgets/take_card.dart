@@ -201,7 +201,7 @@ class _TakeCardState extends State<TakeCard> {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundColor: AppColors.surfaceRaised,
+                  backgroundColor: AppColors.accent,
                   child: Text(
                     initial,
                     style: theme.textTheme.labelLarge?.copyWith(
@@ -220,7 +220,14 @@ class _TakeCardState extends State<TakeCard> {
                   ),
                 ),
                 SizedBox(width: tokens.spaceSm),
-                OverviewChip(label: takeBadgeLabel(l10n, take)),
+                OverviewChip(
+                  leading: take.reaction == null
+                      ? null
+                      : reactionIcon(take.reaction!),
+                  label: take.reaction == null
+                      ? takeBadgeLabel(l10n, take)
+                      : reactionLabel(l10n, take.reaction!),
+                ),
               ],
             ),
             SizedBox(height: tokens.spaceSm),
@@ -228,41 +235,73 @@ class _TakeCardState extends State<TakeCard> {
               TakePhoto(url: take.imageUrl!),
               SizedBox(height: tokens.spaceSm),
             ],
-            TranslatableText(
-              text: take.body,
-              format: l10n.reviewQuote,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
+            Container(
+              width: double.infinity,
+              padding: EdgeInsetsDirectional.only(
+                start: tokens.spaceMd,
+                top: tokens.spaceXs,
+                bottom: tokens.spaceXs,
+              ),
+              decoration: const BoxDecoration(
+                border: BorderDirectional(
+                  start: BorderSide(color: AppColors.accentGlow, width: 2),
+                ),
+              ),
+              child: TranslatableText(
+                text: take.body,
+                format: l10n.reviewQuote,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: AppColors.textPrimary,
+                  height: 1.4,
+                ),
               ),
             ),
             SizedBox(height: tokens.spaceSm),
           ],
-          Wrap(
-            spacing: tokens.spaceSm,
-            runSpacing: tokens.spaceSm,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (final kind in VoteKind.values)
-                FilterChip(
-                  label: Text('${voteLabel(l10n, kind)} ${take.votesOf(kind)}'),
-                  selected: take.hasVoted(kind),
-                  showCheckmark: false,
-                  selectedColor: AppColors.accent,
-                  backgroundColor: AppColors.surfaceRaised,
-                  disabledColor: AppColors.surfaceRaised,
-                  side: BorderSide.none,
-                  labelStyle: theme.textTheme.labelMedium?.copyWith(
-                    color: take.hasVoted(kind)
-                        ? AppColors.textPrimary
-                        : AppColors.textSecondary,
-                  ),
-                  onSelected: take.isMine ? null : (_) => _vote(kind),
+              Expanded(
+                child: Wrap(
+                  spacing: tokens.spaceXs,
+                  runSpacing: tokens.spaceXs,
+                  children: [
+                    for (final kind in VoteKind.values)
+                      FilterChip(
+                        label: Text(
+                          '${voteLabel(l10n, kind)} ${take.votesOf(kind)}',
+                        ),
+                        selected: take.hasVoted(kind),
+                        showCheckmark: false,
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        selectedColor: AppColors.accent,
+                        backgroundColor: AppColors.surface,
+                        disabledColor: AppColors.surface,
+                        side: BorderSide(
+                          color: take.hasVoted(kind)
+                              ? AppColors.accentGlow
+                              : AppColors.textMuted.withValues(alpha: 0.35),
+                        ),
+                        labelStyle: theme.textTheme.labelSmall?.copyWith(
+                          color: take.hasVoted(kind)
+                              ? AppColors.textPrimary
+                              : AppColors.textSecondary,
+                        ),
+                        onSelected: take.isMine ? null : (_) => _vote(kind),
+                      ),
+                  ],
                 ),
+              ),
             ],
           ),
-          SizedBox(height: tokens.spaceXs),
-          TextButton(
-            onPressed: _toggleComments,
-            child: Text(l10n.reviewCommentsButton(take.commentCount)),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: _toggleComments,
+              icon: const Icon(Icons.chat_bubble_outline_rounded, size: 16),
+              label: Text(l10n.reviewCommentsButton(take.commentCount)),
+            ),
           ),
           if (_commentsOpen) _commentsPanel(l10n, tokens, theme),
         ],

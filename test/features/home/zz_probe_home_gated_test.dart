@@ -22,7 +22,7 @@ import 'package:film_wise_mobile/features/home/views/widgets/collections_box.dar
 import 'package:film_wise_mobile/features/home/views/widgets/film_tile.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/skeletons.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/top5_row.dart';
-import 'package:film_wise_mobile/features/overview/views/movie_overview_screen.dart';
+import 'package:film_wise_mobile/features/find/views/film_detail_screen.dart';
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -668,7 +668,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(find.byType(MovieOverviewScreen), findsOneWidget);
+      expect(find.byType(FilmDetailScreen), findsOneWidget);
       await tester.pump(const Duration(seconds: 13));
     });
 
@@ -683,7 +683,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(find.byType(MovieOverviewScreen), findsOneWidget);
+      expect(find.byType(FilmDetailScreen), findsOneWidget);
       await tester.pump(const Duration(seconds: 13));
     });
   });

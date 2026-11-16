@@ -28,6 +28,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../../../core/theme/app_theme.dart';
+
 /// Colours used by the wordmark. Move these into your theme tokens.
 abstract final class _LogoTokens {
   static const Color film = Color(0xFFEEF3FF);
@@ -84,8 +86,8 @@ class _FilmSageLogoState extends State<FilmSageLogo>
   /// Seconds since the idle clock started; drives every looping effect.
   final ValueNotifier<double> _clock = ValueNotifier<double>(0);
   late final Ticker _ticker = createTicker(
-    (elapsed) => _clock.value =
-        elapsed.inMicroseconds / Duration.microsecondsPerSecond,
+    (elapsed) =>
+        _clock.value = elapsed.inMicroseconds / Duration.microsecondsPerSecond,
   );
 
   bool _foreground = true;
@@ -241,7 +243,7 @@ class _Letter extends StatelessWidget {
   final Color base;
 
   static const TextStyle _style = TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: AppFonts.body,
     fontSize: 27,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.54,
@@ -366,15 +368,24 @@ class _StarPainter extends CustomPainter {
   final Color color;
 
   static const List<Offset> _points = [
-    Offset(50, 0), Offset(62, 38), Offset(100, 50), Offset(62, 62),
-    Offset(50, 100), Offset(38, 62), Offset(0, 50), Offset(38, 38),
+    Offset(50, 0),
+    Offset(62, 38),
+    Offset(100, 50),
+    Offset(62, 62),
+    Offset(50, 100),
+    Offset(38, 62),
+    Offset(0, 50),
+    Offset(38, 38),
   ];
 
   @override
   void paint(Canvas canvas, Size size) {
     final path = Path()
       ..addPolygon(
-        [for (final p in _points) Offset(p.dx * size.width / 100, p.dy * size.height / 100)],
+        [
+          for (final p in _points)
+            Offset(p.dx * size.width / 100, p.dy * size.height / 100)
+        ],
         true,
       );
     canvas.drawPath(path, Paint()..color = color);

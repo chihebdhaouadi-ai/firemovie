@@ -72,7 +72,8 @@ class HomeTabBar extends StatelessWidget {
                             HomeTab.films => l10n.homeTabFilms,
                           },
                           selected: tab == selected,
-                          showUnread: tab == HomeTab.friends && friendsHasUnread,
+                          showUnread:
+                              tab == HomeTab.friends && friendsHasUnread,
                           unreadLabel: l10n.sageNavUnread,
                           onTap: () => onSelected(tab),
                         ),
@@ -125,7 +126,7 @@ class _HomeTabButton extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 style: TextStyle(
                   color: selected ? Colors.white : LuxeColors.muted,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 14,
                   letterSpacing: .2,
                 ),

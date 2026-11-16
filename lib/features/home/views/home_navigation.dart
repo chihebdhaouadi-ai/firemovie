@@ -8,7 +8,7 @@ import '../../../core/l10n_context.dart';
 import '../../find/data/movie.dart';
 import '../../find/views/find_film_screen.dart';
 import '../../find/views/find_route_args.dart';
-import '../../overview/views/movie_overview_screen.dart';
+import '../../find/views/film_detail_screen.dart';
 import '../../profile/views/profile_screen.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_screen_event.dart';
@@ -31,9 +31,18 @@ void openProfile(BuildContext context) {
 
 /// Film details and search are open to guests. Adding a film still asks for
 /// login (see FindFilmScreen), and so do the account-only pages.
+/// The film page for a film from a home list (one page for every entry point).
+Widget filmPage(Film film) => FilmDetailScreen(
+      movie: Movie(
+        id: film.imdbId,
+        title: film.title ?? '',
+        posterUrl: film.posterUrl,
+      ),
+    );
+
 void openOverview(BuildContext context, Film film) {
   unawaited(Navigator.of(context).push<void>(
-    MaterialPageRoute<void>(builder: (_) => MovieOverviewScreen(film: film)),
+    MaterialPageRoute<void>(builder: (_) => filmPage(film)),
   ));
 }
 

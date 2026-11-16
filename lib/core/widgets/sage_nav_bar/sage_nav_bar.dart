@@ -46,16 +46,20 @@ class SageNavBar extends StatelessWidget {
   static const double _barH = 78;
   static const double _hump = 16; // how much the bar arches up in the middle
   static const double _ringR = 46; // half of the SAGE ring (92)
+  /// Height of the bar above the bottom system inset (home indicator).
   static const double height = _barH + _hump + _ringR + 4;
 
   @override
   Widget build(BuildContext context) {
+    // The bar background reaches the very bottom of the screen; only the tiles
+    // and the SAGE button are lifted above the home indicator.
+    final inset = MediaQuery.paddingOf(context).bottom;
     return Align(
       heightFactor: 1,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: SageNavTokens.maxBarWidth),
         child: SizedBox(
-          height: height,
+          height: height + inset,
           child: Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.bottomCenter,
@@ -65,14 +69,14 @@ class SageNavBar extends StatelessWidget {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                height: _barH + _hump,
+                height: _barH + _hump + inset,
                 child: const CustomPaint(painter: _BarPainter(_hump)),
               ),
               // the four tiles
               Positioned(
                 left: 12,
                 right: 12,
-                bottom: 8,
+                bottom: 8 + inset,
                 height: _barH - 14,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,7 +91,7 @@ class SageNavBar extends StatelessWidget {
               ),
               // SAGE button sitting on the arch
               Positioned(
-                bottom: _barH + _hump - _ringR,
+                bottom: _barH + _hump - _ringR + inset,
                 child: _CenterButton(
                   semanticsLabel: centerSemanticsLabel,
                   closeLabel: closeLabel,
@@ -508,7 +512,8 @@ class _CenterButtonState extends State<_CenterButton>
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withValues(alpha: .18)),
+                    border:
+                        Border.all(color: Colors.white.withValues(alpha: .18)),
                     gradient: LuxeColors.accentGradient,
                     boxShadow: [
                       BoxShadow(

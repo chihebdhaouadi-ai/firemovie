@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 /// Font family names registered in pubspec.yaml.
+///
+/// The whole app uses Pangram Sans, the FILMSAGE wordmark font, so titles,
+/// body text and labels read as one family. The roles stay separate so a
+/// role can change again without touching every screen.
 abstract final class AppFonts {
-  static const display = 'SpaceGrotesk'; // headings and titles
-  static const body = 'Inter'; // body copy and UI text
-  static const mono = 'SpaceMono'; // labels and small metadata
   static const brand = 'PangramSans'; // FILMSAGE wordmark
+  static const display = brand; // headings and titles
+  static const body = brand; // body copy and UI text
+  static const mono = brand; // labels and small metadata
 }
 
 abstract final class AppColors {
@@ -290,7 +294,7 @@ abstract final class AppTheme {
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: AppColors.surfaceRaised,
         contentTextStyle:
-            TextStyle(color: AppColors.textPrimary, fontFamily: 'Inter'),
+            TextStyle(color: AppColors.textPrimary, fontFamily: AppFonts.body),
         actionTextColor: AppColors.accentGlow,
         behavior: SnackBarBehavior.floating,
       ),

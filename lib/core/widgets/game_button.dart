@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 
-/// SAGE glossy 3D button (no texture). Usage:
+import 'luxe_palette.dart';
+
+/// SAGE pill button, styled like the selected Home tab. Usage:
 ///   GameButton(label: 'Add film', icon: Icons.add, style: GameButtonStyle.blue, onPressed: () {})
 ///   GameButton(label: 'Explore', style: GameButtonStyle.blue, pressed: true, onPressed: () {})
 class GameButtonStyle {
   final Color top, bottom, edge;
   const GameButtonStyle(this.top, this.bottom, this.edge);
-  static const dark = GameButtonStyle(Color(0xFF4C566B), Color(0xFF262D3D), Color(0xFF10141D));
-  static const blue = GameButtonStyle(Color(0xFF3F7FE8), Color(0xFF1D4CB5), Color(0xFF12306F));
+  static const dark =
+      GameButtonStyle(Color(0xFF4C566B), Color(0xFF262D3D), Color(0xFF10141D));
+  static const blue =
+      GameButtonStyle(Color(0xFF4A8CF0), Color(0xFF2A57B8), Color(0xFF12306F));
 }
 
 class GameButton extends StatefulWidget {
   final String? label;
   final IconData? icon;
-  final Widget? child;            // custom content (e.g. your own icon), overrides label/icon
+  final Widget?
+      child; // custom content (e.g. your own icon), overrides label/icon
   final GameButtonStyle style;
   final VoidCallback? onPressed;
-  final bool pressed;             // selected state (for tabs)
+  final bool pressed; // selected state (for tabs)
   final double radius;
   final EdgeInsets padding;
 
@@ -38,77 +43,82 @@ class GameButton extends StatefulWidget {
 
 class _GameButtonState extends State<GameButton> {
   bool _down = false;
-  static const double lip = 6;
 
   @override
   Widget build(BuildContext context) {
     final s = widget.pressed ? GameButtonStyle.blue : widget.style;
-    final down = _down || widget.pressed;
-    final offset = down ? lip - 2 : 0.0;
+    // One button look for the whole app, matching the selected "You" tab:
+    // a rounded pill with the blue accent gradient and a soft glow. The dark
+    // style is the quiet version: matte surface with a hairline border.
+    final quiet = identical(s, GameButtonStyle.dark);
+    final gradient = identical(s, GameButtonStyle.blue)
+        ? LuxeColors.accentGradient
+        : LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [s.top, s.bottom],
+          );
+    final textColor = s.bottom.computeLuminance() > .5
+        ? const Color(0xFF1A1300)
+        : Colors.white;
 
     final content = widget.child ??
         Row(mainAxisSize: MainAxisSize.min, children: [
-          if (widget.icon != null) ...[Icon(widget.icon, size: 20, color: Colors.white), const SizedBox(width: 9)],
+          if (widget.icon != null) ...[
+            Icon(widget.icon, size: 20, color: textColor),
+            const SizedBox(width: 8),
+          ],
           if (widget.label != null)
-            Text(widget.label!,
-                style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14, letterSpacing: .5,
-                  shadows: [Shadow(color: Color(0x73000000), offset: Offset(0, 1.5))],
-                )),
+            Flexible(
+              child: Text(
+                widget.label!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  letterSpacing: .2,
+                ),
+              ),
+            ),
         ]);
+
+    final radius =
+        BorderRadius.circular(widget.radius.clamp(10, 14).toDouble());
 
     return Opacity(
       opacity: widget.onPressed == null ? .45 : 1,
       child: GestureDetector(
-      onTapDown: (_) => setState(() => _down = true),
-      onTapUp: (_) => setState(() => _down = false),
-      onTapCancel: () => setState(() => _down = false),
-      onTap: widget.onPressed,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 120),
-        margin: EdgeInsets.only(top: offset, bottom: lip - offset),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.radius),
-          border: Border.all(color: s.edge, width: 2),
-          boxShadow: [
-            BoxShadow(color: s.edge, offset: Offset(0, down ? 2 : lip)),                 // 3D lip
-            BoxShadow(color: Colors.black.withOpacity(.45), offset: Offset(0, down ? 5 : lip + 4), blurRadius: 12),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(widget.radius - 2),
-          child: Stack(alignment: Alignment.center, children: [
-            Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [s.top, s.bottom]),
-                ),
-              ),
-            ),
-            // glossy highlight
-            Positioned.fill(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(5, 3, 5, 0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: FractionallySizedBox(
-                    heightFactor: .42,
-                    widthFactor: 1,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12), bottom: Radius.circular(22)),
-                        gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                            colors: [Colors.white.withOpacity(.34), Colors.white.withOpacity(.03)]),
+        onTapDown: (_) => setState(() => _down = true),
+        onTapUp: (_) => setState(() => _down = false),
+        onTapCancel: () => setState(() => _down = false),
+        onTap: widget.onPressed,
+        child: AnimatedScale(
+          scale: _down ? .97 : 1,
+          duration: const Duration(milliseconds: 110),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: radius,
+              color: quiet ? LuxeColors.surface2 : null,
+              gradient: quiet ? null : gradient,
+              border: quiet ? Border.all(color: LuxeColors.hair) : null,
+              boxShadow: quiet
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: s.top.withValues(alpha: .35),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
                       ),
-                    ),
-                  ),
-                ),
-              ),
+                    ],
             ),
-            Padding(padding: widget.padding, child: content),
-          ]),
+            child: Padding(
+              padding: widget.padding,
+              child: Center(widthFactor: 1, heightFactor: 1, child: content),
+            ),
+          ),
         ),
-      ),
       ),
     );
   }

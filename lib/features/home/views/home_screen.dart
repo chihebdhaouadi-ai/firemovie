@@ -199,70 +199,69 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: SageNavBar(
-          leading: [
-            SageNavEntry(
-              item: const SageNavItem(
-                icon: Icons.home_outlined,
-                svgAsset: 'assets/svg/home.svg',
-                label: '',
-              ),
-              semanticsLabel: l10n.homeTabYou,
-              selected: !_exploring,
-              onTap: () => _selectTab(HomeTab.you),
+      // No SafeArea here: SageNavBar paints its own background down through the
+      // bottom inset so nothing scrolls visibly underneath it.
+      bottomNavigationBar: SageNavBar(
+        leading: [
+          SageNavEntry(
+            item: const SageNavItem(
+              icon: Icons.home_outlined,
+              svgAsset: 'assets/svg/home.svg',
+              label: '',
             ),
-            SageNavEntry(
-              item: const SageNavItem(icon: Icons.explore_outlined, label: ''),
-              semanticsLabel: l10n.homeTabExplore,
-              selected: _exploring,
-              onTap: _openExplore,
+            semanticsLabel: l10n.homeTabYou,
+            selected: !_exploring,
+            onTap: () => _selectTab(HomeTab.you),
+          ),
+          SageNavEntry(
+            item: const SageNavItem(icon: Icons.explore_outlined, label: ''),
+            semanticsLabel: l10n.homeTabExplore,
+            selected: _exploring,
+            onTap: _openExplore,
+          ),
+        ],
+        trailing: [
+          SageNavEntry(
+            item: const SageNavItem(
+              icon: Icons.search,
+              svgAsset: 'assets/svg/search.svg',
+              label: '',
             ),
-          ],
-          trailing: [
-            SageNavEntry(
-              item: const SageNavItem(
-                icon: Icons.search,
-                svgAsset: 'assets/svg/search.svg',
-                label: '',
-              ),
-              semanticsLabel: l10n.homeQuickActionSearch,
-              onTap: () => openFind(context),
+            semanticsLabel: l10n.homeQuickActionSearch,
+            onTap: () => openFind(context),
+          ),
+          SageNavEntry(
+            item: SageNavItem(
+              icon: Icons.person_outline,
+              label: '',
+              avatar: avatarUrl == null || avatarUrl.isEmpty
+                  ? null
+                  : CachedNetworkImageProvider(avatarUrl),
+              avatarInitial: _username,
             ),
-            SageNavEntry(
-              item: SageNavItem(
-                icon: Icons.person_outline,
-                label: '',
-                avatar: avatarUrl == null || avatarUrl.isEmpty
-                    ? null
-                    : CachedNetworkImageProvider(avatarUrl),
-                avatarInitial: _username,
-              ),
-              semanticsLabel: l10n.homeOpenProfile,
-              onTap: () => openProfile(context),
-            ),
-          ],
-          centerSemanticsLabel: l10n.homeQuickActionsLabel,
-          closeLabel: l10n.sageNavCloseMenu,
-          centerActions: [
-            SageQuickAction(
-              label: l10n.homeQuickActionAddFilm,
-              svgAsset: 'assets/svg/add.svg',
-              onTap: () => openFind(context),
-            ),
-            SageQuickAction(
-              label: l10n.homeTabExplore,
-              icon: Icons.explore_outlined,
-              onTap: _openExplore,
-            ),
-            SageQuickAction(
-              label: l10n.homeTabFilms,
-              icon: Icons.movie_outlined,
-              onTap: () => _selectTab(HomeTab.films),
-            ),
-          ],
-        ),
+            semanticsLabel: l10n.homeOpenProfile,
+            onTap: () => openProfile(context),
+          ),
+        ],
+        centerSemanticsLabel: l10n.homeQuickActionsLabel,
+        closeLabel: l10n.sageNavCloseMenu,
+        centerActions: [
+          SageQuickAction(
+            label: l10n.homeQuickActionAddFilm,
+            svgAsset: 'assets/svg/add.svg',
+            onTap: () => openFind(context),
+          ),
+          SageQuickAction(
+            label: l10n.homeTabExplore,
+            icon: Icons.explore_outlined,
+            onTap: _openExplore,
+          ),
+          SageQuickAction(
+            label: l10n.homeTabFilms,
+            icon: Icons.movie_outlined,
+            onTap: () => _selectTab(HomeTab.films),
+          ),
+        ],
       ),
     );
   }

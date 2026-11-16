@@ -21,11 +21,15 @@ class MovieSuggestionScreen extends StatefulWidget {
     required this.socialRepository,
     required this.findRepository,
     this.preselectedUserIds = const {},
+    this.initialMovie,
   });
 
   final SocialRepository socialRepository;
   final FindRepository findRepository;
   final Set<int> preselectedUserIds;
+
+  /// The film to suggest, already picked (opened from a film page).
+  final Movie? initialMovie;
 
   @override
   State<MovieSuggestionScreen> createState() => _MovieSuggestionScreenState();
@@ -52,6 +56,7 @@ class _MovieSuggestionScreenState extends State<MovieSuggestionScreen> {
   void initState() {
     super.initState();
     _selected.addAll(widget.preselectedUserIds);
+    _movie = widget.initialMovie;
     _loadFriends();
   }
 

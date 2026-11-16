@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/reactions_repository.dart';
 import '../../data/review_repository.dart';
 import '../../domain/film_reaction.dart';
 import '../../domain/movie_review_summary.dart';
@@ -8,13 +9,17 @@ import '../../domain/vote_kind.dart';
 import 'movie_reviews_state.dart';
 
 class MovieReviewsCubit extends Cubit<MovieReviewsState> {
-  MovieReviewsCubit(
-      {required this.filmId, required ReviewRepository repository})
-      : _repository = repository,
+  MovieReviewsCubit({
+    required this.filmId,
+    required ReviewRepository repository,
+    ReactionsRepository? reactions,
+  })  : _repository = repository,
+        _reactions = reactions,
         super(const MovieReviewsState());
 
   final String filmId;
   final ReviewRepository _repository;
+  final ReactionsRepository? _reactions;
 
   Future<void> load() async {
     emit(state.copyWith(
@@ -35,6 +40,32 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
     final MovieReviewSummary summary;
     try {
       summary = await _repository.setReaction(filmId, reaction);
+    } catch (_) {
+      if (canRollBack && !isClosed) emit(state.copyWith(summary: previous));
+      return false;
+    }
+    if (isClosed) return true;
+    emit(state.copyWith(summary: AsyncReady(summary)));
+    await _loadTakes();
+    return true;
+  }
+
+  /// Saves up to three feelings at once (empty clears them). Shows the new
+  /// feelings straight away and rolls back if the save fails.
+  Future<bool> setFeelings(List<FilmReaction> feelings) async {
+    final picked =
+        feelings.take(MovieReviewSummary.maxFeelings).toList(growable: false);
+    final previous = state.summary;
+    final canRollBack = previous is AsyncReady<MovieReviewSummary>;
+    if (canRollBack) {
+      emit(state.copyWith(
+        summary: AsyncReady(previous.value.withFeelings(picked)),
+      ));
+    }
+    final MovieReviewSummary summary;
+    try {
+      summary = await (_reactions ?? ApiReactionsRepository())
+          .setFeelings(filmId, picked);
     } catch (_) {
       if (canRollBack && !isClosed) emit(state.copyWith(summary: previous));
       return false;
