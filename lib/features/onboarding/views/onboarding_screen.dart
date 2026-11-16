@@ -8,6 +8,7 @@ import '../../find/data/movie.dart';
 import '../../find/views/find_film_screen.dart';
 import '../../find/views/find_route_args.dart';
 import '../data/onboarding_repository.dart';
+import '../../../core/widgets/game_button.dart';
 
 enum OnboardingStep { avatar, cover, bio, top5, watched, watchlist }
 
@@ -303,13 +304,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           SizedBox(width: tokens.spaceSm),
           Expanded(
-            child: FilledButton(
+            child: GameButton(
               onPressed: _busy ? null : _continue,
-              style: FilledButton.styleFrom(
-                minimumSize: Size(0, tokens.minTouchTarget),
-              ),
-              child: Text(
-                  _isLast ? l10n.onboardingFinish : l10n.onboardingContinue),
+              style: GameButtonStyle.blue,
+              label: _isLast ? l10n.onboardingFinish : l10n.onboardingContinue,
             ),
           ),
         ],

@@ -14,6 +14,7 @@ import '../../blocs/home_state.dart';
 import '../../data/top_5_movies_entity.dart';
 import '../widgets/find_film_card.dart';
 import '../widgets/side_menu.dart';
+import '../../../core/widgets/game_button.dart';
 
 class Film {
   final String id;
@@ -357,7 +358,7 @@ Navigator.of(context).pop();                            },
                                               color: Color.fromARGB(255, 255, 255,
                                                   255), // Set the text color
                                               fontFamily:
-                                                  'Poppins', // Set the font family
+                                                  'Inter', // Set the font family
                                               fontWeight: FontWeight
                                                   .w500, // Set the font weight
                                               fontSize: 12, // Set the font size
@@ -396,54 +397,20 @@ if(show_under_list)
                                       ],
                                     ),
                               margin: EdgeInsets.fromLTRB(10, 10, 10, 18),
-                              child: ElevatedButton(
-                                
-                                  style: ElevatedButton.styleFrom(
-                                    
-                                // Set the text color of the button
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          28), // Set the border radius of the button
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                           setState(() {
-                                      r["is_active"] = !r["is_active"];
-             
-                      
-                      
-                          for (var k in top_bar_searchfilm){
-                            if (k["btn_string"] != r["btn_string"]){
-                              if (r["is_active"] ==true)
-                                k["is_active"] = !r["is_active"];
-                      
-                            }
-                          }
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 2, 0, 2),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(top: 3),
-                                          child: Text(
-                                            "${r["btn_string"]}",
-                                            style: TextStyle(
-                                              color: Color.fromARGB(255, 255, 255,
-                                                  255), // Set the text color
-                                              fontFamily:
-                                                  'Poppins', // Set the font family
-                                              fontWeight: FontWeight
-                                                  .w500, // Set the font weight
-                                              fontSize: 12, // Set the font size
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
+                              child: GameButton(
+                                label: "${r["btn_string"]}",
+                                pressed: r["is_active"] == true,
+                                onPressed: () {
+                                  setState(() {
+                                    r["is_active"] = !r["is_active"];
+                                    for (var k in top_bar_searchfilm) {
+                                      if (k["btn_string"] != r["btn_string"]) {
+                                        if (r["is_active"] == true) k["is_active"] = !r["is_active"];
+                                      }
+                                    }
+                                  });
+                                },
+                              ),
                             ),
                           ],
                       ),
@@ -516,35 +483,16 @@ if(show_under_list)
                                     ),
                                     Container(
                                       margin: EdgeInsets.only(right: 5),
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color.fromARGB(255, 6, 94,
-                                              153), // Set the background color of the button
-                                          foregroundColor: Colors
-                                              .white, // Set the text color of the button
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                30), // Set the border radius of the button
-                                          ),
-                                        ),
+                                      child: GameButton(
+                                        label: 'Submit',
+                                        style: GameButtonStyle.blue,
+                                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                                         onPressed: () {
-                                     /*   auto_complete(
-                                              _textEditingController.text);*/
-                                      
-                                      
-                                      
-       BlocProvider
-       .of<HomeBLoc>(context)
-       .find_movies_movies(Find_MoviesTrigerState(
-        find_Movies_Entity:Find_Movies_Entity(title: '${_textEditingController.text}' )
-         ));
+                                          BlocProvider
+                                              .of<HomeBLoc>(context)
+                                              .find_movies_movies(Find_MoviesTrigerState(
+                                                  find_Movies_Entity: Find_Movies_Entity(title: '${_textEditingController.text}')));
                                         },
-                                        child: const Text(
-                                          'Submit',
-                                          style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 217, 218, 219)),
-                                        ),
                                       ),
                                     ),
                                   ],

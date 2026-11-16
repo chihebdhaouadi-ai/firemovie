@@ -129,9 +129,7 @@ void main() {
             'genres': ['Drama'],
             'watch_providers': {
               'link': null,
-              'flatrate': [],
-              'rent': [],
-              'buy': []
+              'available': [],
             },
           }),
           200,

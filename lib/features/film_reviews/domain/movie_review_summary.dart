@@ -15,6 +15,13 @@ class MovieReviewSummary extends Equatable {
   final int? everyonePercent;
   final int? trustedPercent;
 
+  MovieReviewSummary withReaction(FilmReaction? reaction) => MovieReviewSummary(
+        myReaction: reaction,
+        mostFelt: mostFelt,
+        everyonePercent: everyonePercent,
+        trustedPercent: trustedPercent,
+      );
+
   @override
   List<Object?> get props =>
       [myReaction, mostFelt, everyonePercent, trustedPercent];

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../core/auth/auth_gate.dart';
 import '../../../core/l10n_context.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/app_localizations.dart';
@@ -20,11 +22,12 @@ import 'widgets/result_actions.dart';
 import 'widgets/result_tile.dart';
 import 'widgets/search_field.dart';
 import 'widgets/skeletons.dart';
+import '../../../core/widgets/game_button.dart';
 
 /// The Find a film screen.
 ///
 /// Opens with a [FindFilmRouteArgs] describing the destination context
-/// (`target` plus an optional slot/pick index). Pops with a [FindFilmResult]
+/// (`target` plus an optional top 5 slot). Pops with a [FindFilmResult]
 /// on a successful add when a fixed target is set.
 class FindFilmScreen extends StatefulWidget {
   const FindFilmScreen({
@@ -62,19 +65,8 @@ class _FindFilmScreenState extends State<FindFilmScreen> {
         recentStore: widget.recentStore ?? RecentSearchesStore(),
         target: args.target ?? AddTarget.watchlist,
         circleIndex: args.target == AddTarget.top5 ? args.slot : 0,
-        slot: args.target == AddTarget.generatePick ? args.pickIndex : 0,
-        onPickFilled: args.target == AddTarget.generatePick
-            ? (film) => _onPickFilled(context, film)
-            : null,
       ),
       child: _FindFilmView(args: args),
-    );
-  }
-
-  void _onPickFilled(BuildContext context, Movie film) {
-    if (!mounted) return;
-    Navigator.of(context).pop(
-      FindFilmResult(film: film, target: AddTarget.generatePick),
     );
   }
 }
@@ -132,11 +124,12 @@ class _FindFilmViewState extends State<_FindFilmView> {
                 scrolledUnderElevation: 0,
                 title: _titleFor(context, args),
                 leading: IconButton(
-                  tooltip: context.l10n.homeUndo,
+                  tooltip: context.l10n.overviewBack,
                   onPressed: () => Navigator.of(context).pop(
                     const FindFilmResult(),
                   ),
-                  icon: const Icon(Icons.arrow_back),
+                  icon: SvgPicture.asset('assets/svg/back.svg',
+                      width: 24, height: 24),
                 ),
               ),
               SliverToBoxAdapter(
@@ -231,7 +224,6 @@ class _FindFilmViewState extends State<_FindFilmView> {
         AddTarget.top5 => l10n.findTitleTop5,
         AddTarget.watched => l10n.findTitleWatched,
         AddTarget.watchlist => l10n.findTitleWatchlist,
-        AddTarget.generatePick => l10n.findTitleGenerate,
       };
 
   Widget _recentSliver(BuildContext context, List<String> recent) {
@@ -319,12 +311,11 @@ class _FindFilmViewState extends State<_FindFilmView> {
                 added: added,
                 processing: processingIds.contains(movie.id),
                 onAdd: target == null
-                    ? () => _chooseTargetThenAdd(context, movie, bloc,
-                        canPick: false)
+                    ? () => _chooseTargetThenAdd(context, movie, bloc)
                     : () => addNow(target),
                 onOpen: () => _openDetails(context, movie),
                 onLongPressMenu: () =>
-                    _chooseTargetThenAdd(context, movie, bloc, canPick: true),
+                    _chooseTargetThenAdd(context, movie, bloc),
                 heroTag: 'find-poster-${movie.id}',
               ),
             );
@@ -381,19 +372,26 @@ class _FindFilmViewState extends State<_FindFilmView> {
     );
   }
 
+  /// Adding a film needs an account. A guest is sent to login first, and the
+  /// target picker opens only after sign-in.
   Future<void> _chooseTargetThenAdd(
     BuildContext context,
     Movie movie,
-    FindFilmBloc bloc, {
-    required bool canPick,
-  }) async {
-    final chosen = await ResultActions.showChooseTarget(
+    FindFilmBloc bloc,
+  ) {
+    return requireAuth(
       context,
-      movie: movie,
-      canPick: canPick,
+      reason: context.l10n.authReasonSearch,
+      action: () async {
+        if (!context.mounted) return;
+        final chosen = await ResultActions.showChooseTarget(
+          context,
+          movie: movie,
+        );
+        if (!context.mounted || chosen == null) return;
+        bloc.add(AddRequested(movie, target: chosen));
+      },
     );
-    if (!context.mounted || chosen == null) return;
-    bloc.add(AddRequested(movie, target: chosen));
   }
 
   Future<void> _openDetails(BuildContext context, Movie movie) async {
@@ -427,9 +425,10 @@ class _FindFilmViewState extends State<_FindFilmView> {
             onPressed: () => Navigator.of(dialogContext).pop(false),
             child: Text(l10n.findCancel),
           ),
-          FilledButton(
+          GameButton(
+            label: l10n.findReplace,
+            style: GameButtonStyle.blue,
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(l10n.findReplace),
           ),
         ],
       ),

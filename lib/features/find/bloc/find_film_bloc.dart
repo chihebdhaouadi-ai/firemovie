@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/find_repository.dart';
@@ -12,7 +11,6 @@ import 'find_film_state.dart';
 
 const minQueryLength = 2;
 const debounceDuration = Duration(milliseconds: 350);
-const generatePickLimit = 3;
 
 class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
   FindFilmBloc({
@@ -21,8 +19,6 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
     required RecentSearchesStore recentStore,
     this.target = AddTarget.watchlist,
     this.circleIndex = 0,
-    this.slot = 0,
-    this.onPickFilled,
   })  : _find = find,
         _lists = lists,
         _recentStore = recentStore,
@@ -52,12 +48,6 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
 
   /// 1-based top5 slot when target is top5.
   final int circleIndex;
-
-  /// pick index 0..2 when target is generatePick (also aliased via circleIndex).
-  final int slot;
-
-  /// Called with the selected film when target is [AddTarget.generatePick].
-  final ValueChanged<Movie>? onPickFilled;
 
   int _seq = 0;
   int _noticeSeq = 0;
@@ -99,21 +89,14 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
   /// The 1-based Top 5 slot this screen was opened for, if any.
   int get targetCircleIndex => circleIndex;
 
-  /// The pick slot this screen was opened for, if any.
-  int get targetSlot => slot;
-
   /// Whether [film] is already present in the current [target] list.
   bool alreadyAdded(Movie film) {
-    final list = _listForTarget(target);
-    final sessionAdded = list == null
-        ? _addedThisSession.contains('generate:${film.id}')
-        : _isAdded(list, film.id);
+    final sessionAdded = _isAdded(_listForTarget(target), film.id);
     // Also honour membership flags returned by the search result.
     final flagAdded = switch (target) {
       AddTarget.top5 => film.isTop5,
       AddTarget.watched => film.isWatched,
       AddTarget.watchlist => film.isWatchlist,
-      AddTarget.generatePick => false,
     };
     return sessionAdded || flagAdded;
   }
@@ -273,10 +256,6 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
   Future<void> _onAddRequested(
       AddRequested event, Emitter<FindFilmState> emit) async {
     final film = event.film;
-    if (event.target == AddTarget.generatePick) {
-      _handleGeneratePick(event, emit, film);
-      return;
-    }
     final current = state;
     if (current is FindFilmResults && current.processingIds.contains(film.id)) {
       return;
@@ -292,8 +271,6 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
         await _addToWatched(event, emit, film);
       case AddTarget.watchlist:
         await _addToWatchlist(event, emit, film);
-      case AddTarget.generatePick:
-        break;
     }
     final s = state;
     if (s is FindFilmResults) {
@@ -416,28 +393,6 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
     }
   }
 
-  void _handleGeneratePick(
-      AddRequested event, Emitter<FindFilmState> emit, Movie film) {
-    final key = 'generate:${film.id}';
-    if (_addedThisSession.contains(key)) return;
-    if (_addedThisSession.where((e) => e.startsWith('generate:')).length >=
-        generatePickLimit) {
-      emit(_noticeFor(
-        ActionFailedNotice(_nextNoticeId, 'You can pick up to 3 films.'),
-      ));
-      return;
-    }
-    _addedThisSession.add(key);
-    _lastAdd = PendingAdd(
-      target: AddTarget.generatePick,
-      film: film,
-      movedFromWatchlist: false,
-    );
-    emit(_noticeFor(
-        AddedNotice(_nextNoticeId, film, AddTarget.generatePick, false)));
-    onPickFilled?.call(film);
-  }
-
   Future<void> _onConfirmReplace(
       ConfirmReplaceRequested event, Emitter<FindFilmState> emit) async {
     final film = event.film;
@@ -463,7 +418,6 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
 
   Future<void> _onRemoveRequested(
       RemoveRequested event, Emitter<FindFilmState> emit) async {
-    final list = _listForTarget(event.target);
     _addedThisSession.remove('${targetLabel(event.target)}:${event.film.id}');
     _lastRemove = PendingAdd(
       target: event.target,
@@ -471,12 +425,10 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
       movedFromWatchlist: false,
     );
     emit(_noticeFor(RemovedNotice(_nextNoticeId, event.film, event.target)));
-    if (list != null) {
-      try {
-        await _lists.remove(list, event.film.id);
-      } on FindFailure catch (f) {
-        emit(_noticeFor(ActionFailedNotice(_nextNoticeId, f.message)));
-      }
+    try {
+      await _lists.remove(_listForTarget(event.target), event.film.id);
+    } on FindFailure catch (f) {
+      emit(_noticeFor(ActionFailedNotice(_nextNoticeId, f.message)));
     }
   }
 
@@ -485,34 +437,23 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
     if (add != null) {
       final key = '${targetLabel(add.target)}:${add.film.id}';
       _addedThisSession.remove(key);
-      if (add.target != AddTarget.generatePick) {
-        final list = _listForTarget(add.target);
-        if (list != null) {
-          try {
-            await _lists.remove(list, add.film.id);
-          } catch (_) {}
-        }
-      }
+      try {
+        await _lists.remove(_listForTarget(add.target), add.film.id);
+      } catch (_) {}
       if (add.movedFromWatchlist) {
         try {
           await _lists.add(FilmListId.watchlist, add.film.id);
           _addedThisSession.add('watchlist:${add.film.id}');
         } catch (_) {}
       }
-      if (add.target == AddTarget.generatePick) {
-        onPickFilled?.call(add.film); // signal un-pick; screen handles removal
-      }
       _lastAdd = null;
     } else if (_lastRemove != null) {
       final remove = _lastRemove!;
-      final list = _listForTarget(remove.target);
-      if (list != null) {
-        try {
-          await _lists.add(list, remove.film.id);
-          _addedThisSession
-              .add('${targetLabel(remove.target)}:${remove.film.id}');
-        } catch (_) {}
-      }
+      try {
+        await _lists.add(_listForTarget(remove.target), remove.film.id);
+        _addedThisSession
+            .add('${targetLabel(remove.target)}:${remove.film.id}');
+      } catch (_) {}
       _lastRemove = null;
     }
   }
@@ -623,11 +564,10 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
     );
   }
 
-  FilmListId? _listForTarget(AddTarget target) => switch (target) {
+  FilmListId _listForTarget(AddTarget target) => switch (target) {
         AddTarget.top5 => FilmListId.top5,
         AddTarget.watched => FilmListId.watched,
         AddTarget.watchlist => FilmListId.watchlist,
-        AddTarget.generatePick => null,
       };
 
   void _touchRecent(String query) {

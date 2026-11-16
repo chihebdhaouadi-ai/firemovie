@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/app_locale.dart';
+import '../../../core/auth/auth_cubit.dart';
+import '../../../core/avatar_frames.dart';
 import '../../../core/l10n_context.dart';
-import '../../../core/session.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/game_button.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../find/data/find_repository.dart';
 import '../../find/data/movie.dart';
+import '../../leaderboard/views/leaderboard_how_it_works_screen.dart';
+import '../../leaderboard/views/leaderboard_screen.dart';
 import '../../overview/views/widgets/overview_panel.dart';
 import '../../social/data/social_models.dart';
 import '../../social/data/social_repository.dart';
@@ -14,7 +22,9 @@ import '../../social/views/notifications_screen.dart';
 import '../../social/views/user_search_screen.dart';
 import '../data/profile_models.dart';
 import '../data/profile_repository.dart';
+import 'widgets/profile_game_kit.dart';
 import 'widgets/profile_header.dart';
+import 'widgets/profile_hero.dart';
 import 'widgets/profile_widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -42,10 +52,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   UserProfile? _profile;
   List<SocialUser> _following = const [];
   List<SocialUser> _followers = const [];
-  int _unreadCount = 0;
   bool _loading = true;
   bool _failed = false;
   bool _friendBusy = false;
+  int _unreadCount = 0;
 
   bool get _isOwn => widget.userId == null;
 
@@ -57,9 +67,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _load();
   }
 
-  Future<UserProfile> _fetchProfile() => _isOwn
-      ? _repository.fetchMe()
-      : _repository.fetchUser(widget.userId!);
+  Future<UserProfile> _fetchProfile() =>
+      _isOwn ? _repository.fetchMe() : _repository.fetchUser(widget.userId!);
 
   Future<void> _load() async {
     try {
@@ -69,7 +78,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _profile = profile;
         _loading = false;
       });
-      if (_isOwn) _loadSocial();
+      if (_isOwn) {
+        _loadSocial();
+        _loadUnread();
+      }
     } catch (_) {
       if (!mounted) return;
       setState(() {
@@ -108,17 +120,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (_) {
       // Connection chips are optional; the profile still renders without them.
     }
-    try {
-      final page = await _social.notifications();
-      if (!mounted) return;
-      setState(() => _unreadCount = page.unreadCount);
-    } catch (_) {
-      // The bell badge is optional; a failed fetch leaves it hidden.
-    }
   }
 
   void _showSnack(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _openUser(int userId) {
@@ -144,6 +150,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Future<void> _loadUnread() async {
+    try {
+      final page = await _social.notifications();
+      if (!mounted) return;
+      setState(() => _unreadCount = page.unreadCount);
+    } catch (_) {
+      // The unread badge is optional; the icon still works without it.
+    }
+  }
+
+  Future<void> _openNotifications() async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => NotificationsScreen(
+          repository: _social,
+          onOpenUser: (user) => _openUser(user.id),
+        ),
+      ),
+    );
+    if (mounted) _loadUnread();
+  }
+
+  void _openLeaderboard() {
+    Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (context) => Scaffold(
+          backgroundColor: AppColors.background,
+          appBar: AppBar(
+            backgroundColor: AppColors.background,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              tooltip: context.l10n.profileBack,
+              onPressed: () => Navigator.of(context).pop(),
+              icon: SvgPicture.asset(
+                'assets/svg/back.svg',
+                width: 24,
+                height: 24,
+              ),
+            ),
+          ),
+          body: const SafeArea(top: false, child: LeaderboardScreen()),
+        ),
+      ),
+    );
+  }
+
   Future<void> _openSuggest({int? preselectedUserId}) async {
     final l10n = context.l10n;
     final sent = await Navigator.of(context).push<bool>(
@@ -160,37 +213,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (sent == true && mounted) _showSnack(l10n.suggestionSent);
   }
 
-  Future<void> _openNotifications() async {
-    await Navigator.of(context).push<void>(
-      MaterialPageRoute<void>(
-        builder: (_) => NotificationsScreen(
-          repository: _social,
-          onOpenUser: (user) => _openUser(user.id),
+  void _openAchievements(List<ProgressItem> items) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.background,
+      builder: (context) => SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: ProfileAchievementsSection(items: items),
         ),
       ),
     );
-    if (mounted) _loadSocial();
+  }
+
+  void _openLanguagePicker() {
+    showDialog<void>(
+      context: context,
+      builder: (_) => const _LanguagePicker(),
+    );
   }
 
   void _logout() {
-    Session.clear();
+    // Signs out (clears the token everywhere) and returns to Home as a guest.
+    context.read<AuthCubit>().signOut();
     Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
   }
 
-  Future<void> _editImage({required bool avatar}) async {
+  Future<void> _editAvatar() async {
     final l10n = context.l10n;
     final file = await (widget.pickImage ?? _defaultPickImage)();
     if (file == null || !mounted) return;
     try {
-      if (avatar) {
-        await _repository.uploadAvatar(file);
-      } else {
-        await _repository.uploadCover(file);
-      }
+      await _repository.uploadAvatar(file);
       await _refreshProfile();
     } catch (_) {
       if (mounted) _showSnack(l10n.profileSaveFailed);
     }
+  }
+
+  /// Equips an unlocked frame straight away; reverts if the server refuses.
+  Future<void> _equipFrame(String frameKey) async {
+    final profile = _profile;
+    if (profile == null || profile.equippedFrame == frameKey) return;
+    final previous = profile.equippedFrame;
+    setState(() => _profile = profile.withEquippedFrame(frameKey));
+    try {
+      await _repository.setEquippedFrame(frameKey);
+    } catch (_) {
+      if (!mounted) return;
+      final current = _profile;
+      if (current != null) {
+        setState(() => _profile = current.withEquippedFrame(previous));
+      }
+      _showSnack(context.l10n.frameUpdateFailed);
+    }
+  }
+
+  void _openHowItWorks() {
+    Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => const LeaderboardHowItWorksScreen(),
+      ),
+    );
   }
 
   static Future<XFile?> _defaultPickImage() {
@@ -324,31 +409,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
         leading: IconButton(
           tooltip: l10n.profileBack,
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back),
+          icon: SvgPicture.asset('assets/svg/back.svg', width: 24, height: 24),
         ),
         actions: _isOwn
             ? [
-                IconButton(
+                GameIconButton(
                   tooltip: l10n.profileSearchTooltip,
                   onPressed: _openSearch,
-                  icon: const Icon(Icons.search),
+                  icon: Icons.search,
                 ),
-                IconButton(
-                  tooltip: l10n.notificationsTitle,
-                  onPressed: _openNotifications,
-                  icon: Badge(
-                    isLabelVisible: _unreadCount > 0,
-                    label: Text('$_unreadCount'),
-                    child: const Icon(Icons.notifications_outlined),
+                GameIconButton(
+                  tooltip: l10n.leaderboardTabLabel,
+                  onPressed: _openLeaderboard,
+                  child: SvgPicture.asset(
+                    'assets/svg/trophy.svg',
+                    width: 26,
+                    height: 26,
                   ),
                 ),
-                IconButton(
+                GameIconButton(
+                  tooltip: l10n.notificationsTitle,
+                  onPressed: _openNotifications,
+                  child: Badge(
+                    isLabelVisible: _unreadCount > 0,
+                    label: Text('$_unreadCount'),
+                    child: const Icon(
+                      Icons.notifications_outlined,
+                      size: 22,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                GameIconButton(
+                  tooltip: l10n.profileAchievementsTitle,
+                  onPressed: () => _openAchievements(
+                    _profile?.progress.achievements ?? const [],
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/svg/trophy.svg',
+                    width: 26,
+                    height: 26,
+                  ),
+                ),
+                GameIconButton(
                   tooltip: l10n.profileLogout,
                   onPressed: _logout,
-                  icon: const Icon(Icons.logout),
+                  icon: Icons.logout,
                 ),
               ]
-            : null,
+            : [
+                GameIconButton(
+                  tooltip: l10n.profileMoreTooltip,
+                  onPressed: () => showProfileBlockDialog(context),
+                  icon: Icons.more_vert,
+                ),
+              ],
       ),
       body: SafeArea(
         top: false,
@@ -357,9 +472,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             constraints: BoxConstraints(
               maxWidth: context.tokens.maxContentWidth,
             ),
-            child: _failed
-                ? _ErrorState(onRetry: _retry)
-                : _buildContent(context),
+            child:
+                _failed ? _ErrorState(onRetry: _retry) : _buildContent(context),
           ),
         ),
       ),
@@ -368,53 +482,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildContent(BuildContext context) {
     final tokens = context.tokens;
+    final l10n = context.l10n;
     final profile = _profile;
     final isOwn = _isOwn;
+    final progress = profile?.progress ?? ProfileProgress.empty;
+    final username = profile?.username ?? '';
+    final initial = username.isEmpty ? '' : username.substring(0, 1);
 
     return ListView(
       padding: EdgeInsetsDirectional.fromSTEB(
         tokens.spaceLg,
-        0,
+        tokens.spaceSm,
         tokens.spaceLg,
         tokens.spaceXl,
       ),
       children: [
-        ProfileBanner(
-          username: profile?.username ?? '',
+        ProfileHero(
+          username: username,
           avatarUrl: profile?.avatarUrl,
-          coverUrl: profile?.coverUrl,
-          onMore: isOwn ? null : () => showProfileBlockDialog(context),
-          onEditAvatar: isOwn ? () => _editImage(avatar: true) : null,
-          onEditCover: isOwn ? () => _editImage(avatar: false) : null,
-        ),
-        SizedBox(height: tokens.minTouchTarget + tokens.spaceSm),
-        ProfileCountPills(
-          followers: profile?.followers ?? 0,
-          following: profile?.following ?? 0,
-        ),
-        SizedBox(height: tokens.spaceMd),
-        ProfileIdentity(
-          username: profile?.username ?? '',
+          frame: profile?.equippedFrame ?? defaultFrameKey,
+          progress: progress,
           bio: profile?.bio ?? '',
+          onEditAvatar: isOwn ? _editAvatar : null,
           onEditBio: isOwn ? _editBio : null,
         ),
-        SizedBox(height: tokens.spaceLg),
-        if (isOwn) ...[
-          FilledButton.icon(
-            onPressed: () => _openSuggest(),
-            icon: const Icon(Icons.movie_filter_outlined),
-            style: FilledButton.styleFrom(
-              minimumSize: Size(double.infinity, tokens.minTouchTarget),
-            ),
-            label: Text(context.l10n.suggestMovieAction),
-          ),
+        if (!isOwn && profile != null) ...[
           SizedBox(height: tokens.spaceLg),
-          ConnectionsSection(
-            following: _following,
-            followers: _followers,
-            onOpen: (user) => _openUser(user.id),
-          ),
-        ] else if (profile != null)
           FriendActionRow(
             state: profile.friendship,
             busy: _friendBusy,
@@ -424,9 +517,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onDecline: _onDecline,
             onSuggest: () => _openSuggest(preselectedUserId: profile.id),
           ),
+        ],
         SizedBox(height: tokens.spaceLg),
-        OverviewPanel(
-          child: SizedBox(height: tokens.minTouchTarget * 2),
+        ProfileStatsRow(progress: progress),
+        ProfileBadgesSection(badges: progress.badges),
+        if (isOwn)
+          ProfileFramesSection(
+            frames: progress.frames,
+            equipped: profile?.equippedFrame ?? defaultFrameKey,
+            initial: initial,
+            onSelect: _equipFrame,
+          ),
+        ProfileAchievementsSection(items: progress.achievements),
+        if (isOwn) ...[
+          SizedBox(height: tokens.spaceLg),
+          SizedBox(
+            width: double.infinity,
+            child: GameButton(
+              onPressed: () => _openSuggest(),
+              icon: Icons.movie_filter_outlined,
+              label: l10n.suggestMovieAction,
+              style: GameButtonStyle.blue,
+            ),
+          ),
+          SizedBox(height: tokens.spaceLg),
+          GameCard(
+            child: ConnectionsSection(
+              following: _following,
+              followers: _followers,
+              onOpen: (user) => _openUser(user.id),
+            ),
+          ),
+          SizedBox(height: tokens.spaceLg),
+          SizedBox(
+            width: double.infinity,
+            child: GameButton(
+              onPressed: _openLanguagePicker,
+              icon: Icons.translate,
+              label: l10n.profileLanguageButton,
+            ),
+          ),
+        ],
+        SizedBox(height: tokens.spaceLg),
+        Center(
+          child: TextButton(
+            onPressed: _openHowItWorks,
+            child: Text(l10n.leaderboardHowItWorks),
+          ),
         ),
         if (_loading) ...[
           SizedBox(height: tokens.spaceMd),
@@ -435,10 +572,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             backgroundColor: AppColors.surfaceRaised,
           ),
         ],
-        SizedBox(height: tokens.spaceXl),
-        AchievementsSection(watched: profile?.watched),
-        SizedBox(height: tokens.spaceXl),
-        StatisticsSection(profile: profile),
       ],
     );
   }
@@ -481,11 +614,63 @@ class _BioEditorState extends State<_BioEditor> {
           onPressed: () => Navigator.of(context).pop(),
           child: Text(l10n.profileCancel),
         ),
-        FilledButton(
+        GameButton(
+          label: l10n.profileSave,
+          style: GameButtonStyle.blue,
           onPressed: () => Navigator.of(context).pop(_controller.text.trim()),
-          child: Text(l10n.profileSave),
         ),
       ],
+    );
+  }
+}
+
+const _languageNames = {
+  'en': 'English',
+  'fr': 'Français',
+  'ar': 'العربية',
+  'ru': 'Русский',
+};
+
+class _LanguagePicker extends StatelessWidget {
+  const _LanguagePicker();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final options = <(Locale?, String)>[
+      (null, l10n.profileLanguageSystem),
+      for (final locale in AppLocalizations.supportedLocales)
+        (locale, _languageNames[locale.languageCode] ?? locale.languageCode),
+    ];
+
+    return ValueListenableBuilder<Locale?>(
+      valueListenable: AppLocale.current,
+      builder: (context, current, child) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(l10n.profileLanguageDialogTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final (locale, name) in options)
+              ListTile(
+                title: Text(name),
+                trailing: locale?.languageCode == current?.languageCode
+                    ? const Icon(Icons.check, color: AppColors.accentGlow)
+                    : null,
+                onTap: () {
+                  AppLocale.select(locale);
+                  Navigator.of(context).pop();
+                },
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.profileCancel),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -515,9 +700,10 @@ class _ErrorState extends StatelessWidget {
               ),
             ),
             SizedBox(height: tokens.spaceSm),
-            FilledButton(
+            GameButton(
+              label: l10n.profileRetry,
+              style: GameButtonStyle.blue,
               onPressed: onRetry,
-              child: Text(l10n.profileRetry),
             ),
           ],
         ),

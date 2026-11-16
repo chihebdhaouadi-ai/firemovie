@@ -60,7 +60,7 @@ Not advertised: the friend-activity feed on the film overview (placeholder names
 ## Not on the page (design only or placeholder)
 
 - Points and the "Generate" recommendation button: `FakeRecommendationGateway` only. No backend.
-- Where to watch (streaming providers): the backend response never includes providers, so the app always shows "No streaming providers found".
+- Where to watch (streaming providers): the backend fills `watch_providers.available` from the RapidAPI `streaming-availability` `/shows/{imdb_id}` endpoint (uses `RAPIDAPI_KEY`, country `STREAMING_COUNTRY`, default us). Each platform is one entry with its logo and a link to the film on that platform. Platforms without an https link are skipped, so every shown platform is tappable; a platform without a logo shows its name. Each platform appears once. Tapping a platform opens its page in the browser. If the key is missing or the API is down, the app shows "No streaming providers found".
 - Popular friends list: only in the old home screen.
 - Film reviews: backend endpoints exist but the new app never submits a review. Reviews in the overview are placeholders.
 - Cast, crew and production details on the overview: placeholders.

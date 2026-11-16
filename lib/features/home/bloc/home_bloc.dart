@@ -8,31 +8,49 @@ import 'home_screen_state.dart';
 EventTransformer<E> _sequential<E extends HomeScreenEvent>() =>
     (events, mapper) => events.asyncExpand(mapper);
 
+const _feedLists = [HomeList.top5, HomeList.watched, HomeList.watchlist];
+
 class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
+  /// [isSignedIn] decides whether account-only lists and the feed load. Guests
+  /// get no requests for them, so the backend never sees 401s from Home. When
+  /// it is omitted the bloc behaves as signed in; the app passes
+  /// `Session.isLoggedIn`.
   HomeBloc({
     required HomeRepository repository,
-    required RecommendationGateway gateway,
+    required PointsGateway gateway,
+    bool Function()? isSignedIn,
   })  : _repository = repository,
         _gateway = gateway,
+        _isSignedIn = isSignedIn ?? (() => true),
         super(const HomeLoading()) {
     on<HomeStarted>(_onStarted, transformer: _sequential());
     on<HomeRefreshRequested>(_onRefreshRequested, transformer: _sequential());
     on<HomeSectionRetryRequested>(_onRetry, transformer: _sequential());
+    on<HomeFeedRetryRequested>(_onFeedRetry, transformer: _sequential());
     on<HomeFilmAdded>(_onFilmAdded, transformer: _sequential());
     on<HomeFilmRemoved>(_onFilmRemoved, transformer: _sequential());
     on<HomeFilmRestored>(_onFilmRestored, transformer: _sequential());
-    on<HomePickToggled>(_onPickToggled, transformer: _sequential());
-    on<HomeGenerateRequested>(_onGenerate, transformer: _sequential());
   }
 
   final HomeRepository _repository;
-  final RecommendationGateway _gateway;
+  final PointsGateway _gateway;
+  final bool Function() _isSignedIn;
   int _noticeSeq = 0;
 
   int _nextNoticeId() => ++_noticeSeq;
 
   Future<void> _onStarted(
       HomeStarted event, Emitter<HomeScreenState> emit) async {
+    if (!_isSignedIn()) {
+      // Guests see public content only; the tabs show a sign-in prompt instead.
+      emit(
+        HomeLoaded(
+          sections: {for (final list in HomeList.values) list: const SectionEmpty()},
+          feed: const FeedEmpty(),
+        ),
+      );
+      return;
+    }
     emit(
       HomeLoaded(
         sections: {
@@ -42,15 +60,21 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     );
     await _loadPoints(emit);
     await _loadAll(emit, showLoading: true);
+    await _loadFeed(emit, showLoading: true);
   }
 
   Future<void> _onRefreshRequested(
     HomeRefreshRequested event,
     Emitter<HomeScreenState> emit,
   ) async {
+    if (!_isSignedIn()) {
+      event.done?.complete();
+      return;
+    }
     try {
       await _loadPoints(emit);
       await _loadAll(emit, showLoading: false);
+      await _loadFeed(emit, showLoading: false);
     } finally {
       event.done?.complete();
     }
@@ -61,6 +85,12 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     Emitter<HomeScreenState> emit,
   ) =>
       _loadSection(event.list, emit, showLoading: true);
+
+  Future<void> _onFeedRetry(
+    HomeFeedRetryRequested event,
+    Emitter<HomeScreenState> emit,
+  ) =>
+      _loadFeed(emit, showLoading: true);
 
   Future<void> _onFilmAdded(
       HomeFilmAdded event, Emitter<HomeScreenState> emit) async {
@@ -74,6 +104,7 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     try {
       await _repository.add(event.list, event.film);
       await _loadSection(event.list, emit, showLoading: false);
+      await _loadFeed(emit, showLoading: false);
     } on Exception {
       _patch(
           emit, (s) => s.copyWith(notice: ActionFailedNotice(_nextNoticeId())));
@@ -90,10 +121,13 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     if (index < 0) return;
 
     final films = [...section.films]..removeAt(index);
+    final sections = {...loaded.sections, event.list: _sectionFor(films)};
     emit(
       loaded.copyWith(
-        sections: {...loaded.sections, event.list: _sectionFor(films)},
-        picks: loaded.picks.where((pick) => pick != event.film).toList(),
+        sections: sections,
+        feed: _collectionFilms(sections).contains(event.film)
+            ? loaded.feed
+            : _feedWithout(loaded.feed, event.film),
         notice: FilmRemovedNotice(
           id: _nextNoticeId(),
           list: event.list,
@@ -108,6 +142,7 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     } on Exception {
       if (emit.isDone) return;
       await _loadSection(event.list, emit, showLoading: false);
+      await _loadFeed(emit, showLoading: false);
       _patch(
           emit, (s) => s.copyWith(notice: ActionFailedNotice(_nextNoticeId())));
     }
@@ -137,60 +172,12 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
     try {
       await _repository.add(event.list, event.film);
+      await _loadFeed(emit, showLoading: false);
     } on Exception {
       if (emit.isDone) return;
       await _loadSection(event.list, emit, showLoading: false);
       _patch(
           emit, (s) => s.copyWith(notice: ActionFailedNotice(_nextNoticeId())));
-    }
-  }
-
-  void _onPickToggled(HomePickToggled event, Emitter<HomeScreenState> emit) {
-    final loaded = _loaded;
-    if (loaded == null || loaded.generating) return;
-
-    if (loaded.picks.contains(event.film)) {
-      emit(
-        loaded.copyWith(
-          picks: loaded.picks.where((pick) => pick != event.film).toList(),
-        ),
-      );
-      return;
-    }
-    if (loaded.picks.length >= HomeLimits.recommendPicks) {
-      emit(loaded.copyWith(notice: PicksFullNotice(_nextNoticeId())));
-      return;
-    }
-    emit(loaded.copyWith(picks: [...loaded.picks, event.film]));
-  }
-
-  Future<void> _onGenerate(
-    HomeGenerateRequested event,
-    Emitter<HomeScreenState> emit,
-  ) async {
-    final loaded = _loaded;
-    if (loaded == null || !loaded.canGenerate) return;
-
-    emit(loaded.copyWith(generating: true));
-    try {
-      final points = await _gateway.generate(loaded.picks);
-      _patch(
-        emit,
-        (s) => s.copyWith(
-          generating: false,
-          points: points,
-          picks: const [],
-          notice: RecommendReadyNotice(_nextNoticeId()),
-        ),
-      );
-    } on Exception {
-      _patch(
-        emit,
-        (s) => s.copyWith(
-          generating: false,
-          notice: ActionFailedNotice(_nextNoticeId()),
-        ),
-      );
     }
   }
 
@@ -242,10 +229,55 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
     }
   }
 
+  Future<void> _loadFeed(
+    Emitter<HomeScreenState> emit, {
+    required bool showLoading,
+  }) async {
+    final loaded = _loaded;
+    if (loaded == null) return;
+    final films = _collectionFilms(loaded.sections)
+        .toSet()
+        .take(HomeLimits.feedFilmLimit)
+        .toList(growable: false);
+    if (films.isEmpty) {
+      _setFeed(emit, const FeedEmpty());
+      return;
+    }
+    if (showLoading) _setFeed(emit, const FeedLoading());
+    try {
+      final items = await _repository.fetchFeed(films);
+      _setFeed(emit, _feedFor(items));
+    } on Exception catch (error) {
+      _setFeed(emit, FeedError(error.toString()));
+    }
+  }
+
   void _setSection(
       Emitter<HomeScreenState> emit, HomeList list, SectionState section) {
     _patch(emit, (s) => s.copyWith(sections: {...s.sections, list: section}));
   }
+
+  void _setFeed(Emitter<HomeScreenState> emit, FeedState feed) {
+    _patch(emit, (s) => s.copyWith(feed: feed));
+  }
+
+  Iterable<Film> _collectionFilms(Map<HomeList, SectionState> sections) sync* {
+    for (final list in _feedLists) {
+      if (sections[list] case SectionContent(films: final films)) {
+        yield* films;
+      }
+    }
+  }
+
+  FeedState _feedWithout(FeedState feed, Film film) => switch (feed) {
+        FeedContent(items: final items) => _feedFor(
+            items.where((item) => item.film != film).toList(growable: false),
+          ),
+        _ => feed,
+      };
+
+  FeedState _feedFor(List<FeedItem> items) =>
+      items.isEmpty ? const FeedEmpty() : FeedContent(items);
 
   int _countOf(HomeLoaded loaded, HomeList list) =>
       switch (loaded.sections[list]) {

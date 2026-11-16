@@ -47,6 +47,7 @@ Map<String, Object?> takeJson({
   String body = 'Great film',
   int wellArgued = 3,
   List<String> myVotes = const [],
+  int commentCount = 2,
 }) {
   return {
     'id': id,
@@ -63,7 +64,7 @@ Map<String, Object?> takeJson({
       'disagree_but_fair': 0,
     },
     'my_votes': myVotes,
-    'comment_count': 2,
+    'comment_count': commentCount,
     'is_most_helpful': isMostHelpful,
   };
 }
@@ -71,13 +72,16 @@ Map<String, Object?> takeJson({
 Map<String, Object?> commentJson({
   int id = 9,
   String authorName = 'maya',
+  int authorId = 5,
   String body = 'Agreed',
   bool isWriter = false,
+  int? parentId,
 }) {
   return {
     'id': id,
-    'author_id': 5,
+    'author_id': authorId,
     'author_name': authorName,
+    'parent_id': parentId,
     'body': body,
     'created_at': '2026-01-01T13:00:00Z',
     'is_writer': isWriter,
@@ -87,12 +91,17 @@ Map<String, Object?> commentJson({
 /// Routes /api/takes/ requests against in-memory state shaped like the backend contract.
 /// Add a key to [failing] to make that route answer with a 500.
 class ReviewApi {
-  ReviewApi({Map<String, Object?>? summary, List<Map<String, Object?>>? takes})
-      : summary = summary ?? summaryJson(),
-        takes = takes ?? [];
+  ReviewApi({
+    Map<String, Object?>? summary,
+    List<Map<String, Object?>>? takes,
+    List<Map<String, Object?>>? friends,
+  })  : summary = summary ?? summaryJson(),
+        takes = takes ?? [],
+        friends = friends ?? [];
 
   Map<String, Object?> summary;
   List<Map<String, Object?>> takes;
+  List<Map<String, Object?>> friends;
   final List<Map<String, Object?>> comments = [];
   final Set<String> failing = {};
   final List<http.Request> requests = [];
@@ -114,7 +123,8 @@ class ReviewApi {
       summary = summaryJson(myReaction: body['reaction'] as String?);
       return jsonResponse(summary);
     }
-    final vote = RegExp(r'/api/takes/takes/(\d+)/votes/(\w+)/$').firstMatch(path);
+    final vote =
+        RegExp(r'/api/takes/takes/(\d+)/votes/(\w+)/$').firstMatch(path);
     if (vote != null) {
       return _vote(
         int.parse(vote.group(1)!),
@@ -124,12 +134,20 @@ class ReviewApi {
     }
     final comment = RegExp(r'/api/takes/takes/\d+/comments/$').hasMatch(path);
     if (comment) {
-      if (request.method == 'POST') return _postComment(body['body'] as String);
+      if (request.method == 'POST') {
+        return _postComment(
+          body['body'] as String,
+          parentId: body['parent_id'] as int?,
+        );
+      }
       return failing.contains('comments') ? _down() : jsonResponse(comments);
     }
     if (path.endsWith('/takes/')) {
       if (request.method == 'POST') return _postTake(body['body'] as String);
       return failing.contains('takes') ? _down() : jsonResponse(takes);
+    }
+    if (path.endsWith('/friends/')) {
+      return failing.contains('friends') ? _down() : jsonResponse(friends);
     }
     return http.Response('not found', 404);
   }
@@ -141,7 +159,8 @@ class ReviewApi {
     final index = takes.indexWhere((take) => take['id'] == takeId);
     if (index < 0) return http.Response('not found', 404);
     final take = Map<String, Object?>.of(takes[index]);
-    final votes = Map<String, Object?>.of(take['votes']! as Map<String, Object?>);
+    final votes =
+        Map<String, Object?>.of(take['votes']! as Map<String, Object?>);
     final mine = (take['my_votes']! as List).cast<String>().toList();
     final had = mine.contains(kind);
     if (active && !had) {
@@ -161,7 +180,10 @@ class ReviewApi {
   http.Response _postTake(String body) {
     if (failing.contains('postTake')) {
       return jsonResponse(
-        {'detail': 'You already shared a take for this film.', 'code': 'already_posted'},
+        {
+          'detail': 'You already shared a take for this film.',
+          'code': 'already_posted'
+        },
         409,
       );
     }
@@ -175,9 +197,14 @@ class ReviewApi {
     return jsonResponse(take, 201);
   }
 
-  http.Response _postComment(String body) {
+  http.Response _postComment(String body, {int? parentId}) {
     if (failing.contains('postComment')) return _down();
-    final comment = commentJson(id: 20 + comments.length, authorName: 'Me', body: body);
+    final comment = commentJson(
+      id: 20 + comments.length,
+      authorName: 'Me',
+      body: body,
+      parentId: parentId,
+    );
     comments.add(comment);
     return jsonResponse(comment, 201);
   }

@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/api_config.dart';
 import '../../../core/session.dart';
+import '../../film_reviews/data/api_review_repository.dart';
+import '../../film_reviews/data/review_repository.dart';
+import '../../film_reviews/domain/take.dart';
 import 'home_models.dart';
 
 abstract class HomeRepository {
@@ -12,21 +15,26 @@ abstract class HomeRepository {
   Future<void> add(HomeList list, Film film);
 
   Future<void> remove(HomeList list, Film film);
+
+  Future<List<FeedItem>> fetchFeed(List<Film> films);
 }
 
-abstract class RecommendationGateway {
+abstract class PointsGateway {
   Future<int> fetchPoints();
-
-  Future<int> generate(List<Film> picks);
 }
 
 class ApiHomeRepository implements HomeRepository {
-  ApiHomeRepository({http.Client? client, String? baseUrl})
-      : _client = client ?? http.Client(),
-        _baseUrl = baseUrl ?? '${ApiConfig.baseUrl}/api/film/';
+  ApiHomeRepository({
+    http.Client? client,
+    String? baseUrl,
+    ReviewRepository? reviews,
+  })  : _client = client ?? http.Client(),
+        _baseUrl = baseUrl ?? '${ApiConfig.baseUrl}/api/film/',
+        _reviews = reviews ?? ApiReviewRepository();
 
   final http.Client _client;
   final String _baseUrl;
+  final ReviewRepository _reviews;
 
   @override
   Future<List<Film>> fetch(HomeList list) async {
@@ -71,6 +79,36 @@ class ApiHomeRepository implements HomeRepository {
     _decode(await _post(path, film));
   }
 
+  @override
+  Future<List<FeedItem>> fetchFeed(List<Film> films) async {
+    if (films.isEmpty) return const [];
+    var failures = 0;
+    final results = await Future.wait([
+      for (final film in films)
+        _reviews.fetchTakes(film.imdbId).catchError((Object _) {
+          failures++;
+          return const <Take>[];
+        }),
+    ]);
+    if (failures == films.length) {
+      throw const HomeDataException('Feed unavailable');
+    }
+    final items = [
+      for (var i = 0; i < films.length; i++)
+        for (final take in results[i])
+          if (!take.isMine) FeedItem(film: films[i], take: take),
+    ];
+    items.sort(_compareFeedItems);
+    return items.take(HomeLimits.feedTakeLimit).toList(growable: false);
+  }
+
+  static int _compareFeedItems(FeedItem a, FeedItem b) {
+    final helpful =
+        (b.take.isMostHelpful ? 1 : 0) - (a.take.isMostHelpful ? 1 : 0);
+    if (helpful != 0) return helpful;
+    return b.take.totalVotes.compareTo(a.take.totalVotes);
+  }
+
   Future<http.Response> _post(String path, Film film) {
     return _client.post(
       Uri.parse('$_baseUrl$path'),
@@ -79,8 +117,9 @@ class ApiHomeRepository implements HomeRepository {
     );
   }
 
+  /// No Authorization header for guests. A bare 'Token ' value is malformed.
   Map<String, String> get _headers => {
-        'Authorization': 'Token ${Session.token}',
+        if (ApiConfig.authorization case final auth?) 'Authorization': auth,
       };
 
   String _fetchPath(HomeList list) => switch (list) {
@@ -91,6 +130,7 @@ class ApiHomeRepository implements HomeRepository {
       };
 
   Map<String, dynamic> _decode(http.Response response) {
+    if (response.statusCode == 401) Session.reportUnauthorized();
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw HomeDataException('HTTP ${response.statusCode}');
     }
@@ -105,7 +145,7 @@ class ApiHomeRepository implements HomeRepository {
 // FAKE: in-memory list store for widget tests and offline previews. Not wired
 // to any server.
 class FakeHomeRepository implements HomeRepository {
-  FakeHomeRepository({Map<HomeList, List<Film>>? seed})
+  FakeHomeRepository({Map<HomeList, List<Film>>? seed, this.feed = const []})
       : _lists = {
           HomeList.top5: <Film>[],
           HomeList.watched: <Film>[],
@@ -115,6 +155,7 @@ class FakeHomeRepository implements HomeRepository {
         };
 
   final Map<HomeList, List<Film>> _lists;
+  final List<FeedItem> feed;
 
   @override
   Future<List<Film>> fetch(HomeList list) async =>
@@ -133,19 +174,14 @@ class FakeHomeRepository implements HomeRepository {
   Future<void> remove(HomeList list, Film film) async {
     _lists[list]?.remove(film);
   }
+
+  @override
+  Future<List<FeedItem>> fetchFeed(List<Film> films) async =>
+      feed.where((item) => films.contains(item.film)).toList(growable: false);
 }
 
-// FAKE: the backend has no points or recommendation endpoint yet. Points start
-// at zero and each GENERATE adds HomeLimits.pointsPerGenerate locally.
-class FakeRecommendationGateway implements RecommendationGateway {
-  int _points = 0;
-
+// FAKE: the backend has no points endpoint yet. Points stay at zero.
+class FakePointsGateway implements PointsGateway {
   @override
-  Future<int> fetchPoints() async => _points;
-
-  @override
-  Future<int> generate(List<Film> picks) async {
-    _points += HomeLimits.pointsPerGenerate;
-    return _points;
-  }
+  Future<int> fetchPoints() async => 0;
 }

@@ -17,8 +17,11 @@ final class LoginSucceeded extends LoginState {
   final bool isNewAccount;
 }
 
-final class LoginFailed extends LoginState {
-  const LoginFailed(this.message);
+enum LoginErrorKind { invalidCredentials, registerFailed, network }
 
-  final String message;
+final class LoginFailed extends LoginState {
+  const LoginFailed(this.kind, {this.serverMessage});
+
+  final LoginErrorKind kind;
+  final String? serverMessage;
 }

@@ -36,7 +36,7 @@ class ResultTile extends StatelessWidget {
     final tokens = context.tokens;
     final l10n = context.l10n;
     final directedBy = movie.director;
-    final action = added ? 'Added' : 'Add';
+    final action = added ? l10n.findActionAdded : l10n.findActionAdd;
 
     final semanticsLabel = l10n.findResultSemantics(
       movie.title,
@@ -98,7 +98,7 @@ class ResultTile extends StatelessWidget {
                         ),
                         if (directedBy != null) ...[
                           Text(
-                            '· ${l10n.findDirectedBy.toLowerCase()}',
+                            '· ${l10n.findDirectedBy}',
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: AppColors.textMuted,

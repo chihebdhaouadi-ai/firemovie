@@ -1,10 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:film_wise_mobile/core/l10n_context.dart';
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
-enum SocialProvider { google, apple }
+enum SocialProvider { google, apple, reddit }
+
+const _buttonSize = 56.0;
+const _redditOrange = Color(0xFFFF4500);
 
 class SocialAuthButton extends StatelessWidget {
   const SocialAuthButton({
@@ -18,40 +22,55 @@ class SocialAuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isApple = provider == SocialProvider.apple;
-    final label = isApple ? 'Continue with Apple' : 'Continue with Google';
+    final l10n = context.l10n;
+    final label = switch (provider) {
+      SocialProvider.google => l10n.authContinueWithGoogle,
+      SocialProvider.apple => l10n.authContinueWithApple,
+      SocialProvider.reddit => l10n.authContinueWithReddit,
+    };
 
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        backgroundColor: isApple ? Colors.white : const Color(0xFF131314),
-        foregroundColor: isApple ? Colors.black : const Color(0xFFE3E3E3),
-        minimumSize: const Size.fromHeight(52),
-        side: BorderSide(
-          color: isApple ? Colors.transparent : const Color(0xFF8E918F),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(context.tokens.radiusMd),
-        ),
-        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (isApple)
-            const Icon(BootstrapIcons.apple, size: 20)
-          else
-            const SizedBox.square(
-              dimension: 20,
-              child: CustomPaint(painter: _GoogleGlyphPainter()),
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        button: true,
+        label: label,
+        child: Material(
+          color: AppColors.surface,
+          shape: CircleBorder(
+            side: BorderSide(
+              color: AppColors.outline,
+              width: context.tokens.borderWidth,
             ),
-          const SizedBox(width: 12),
-          Text(label),
-        ],
+          ),
+          child: InkWell(
+            onTap: onPressed,
+            customBorder: const CircleBorder(),
+            child: SizedBox.square(
+              dimension: _buttonSize,
+              child: Center(child: _icon()),
+            ),
+          ),
+        ),
       ),
     );
   }
+
+  Widget _icon() => switch (provider) {
+        SocialProvider.google => const SizedBox.square(
+            dimension: 22,
+            child: CustomPaint(painter: _GoogleGlyphPainter()),
+          ),
+        SocialProvider.apple => const Icon(
+            BootstrapIcons.apple,
+            size: 24,
+            color: AppColors.textPrimary,
+          ),
+        SocialProvider.reddit => const Icon(
+            BootstrapIcons.reddit,
+            size: 24,
+            color: _redditOrange,
+          ),
+      };
 }
 
 class _GoogleGlyphPainter extends CustomPainter {

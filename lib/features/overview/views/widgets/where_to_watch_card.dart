@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../find/data/movie.dart';
+import '../../../find/views/widgets/streaming_provider_logo.dart';
 import 'overview_panel.dart';
 
 class WhereToWatchCard extends StatelessWidget {
@@ -16,10 +16,7 @@ class WhereToWatchCard extends StatelessWidget {
     final tokens = context.tokens;
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final flatrate = providers?.flatrate ?? const <StreamingProvider>[];
-    final rent = providers?.rent ?? const <StreamingProvider>[];
-    final buy = providers?.buy ?? const <StreamingProvider>[];
-    final hasAny = flatrate.isNotEmpty || rent.isNotEmpty || buy.isNotEmpty;
+    final available = providers?.available ?? const <StreamingProvider>[];
 
     return OverviewPanel(
       child: Column(
@@ -49,10 +46,16 @@ class WhereToWatchCard extends StatelessWidget {
               ),
             ],
           ),
-          if (hasAny) ...[
-            _ProviderGroup(label: l10n.overviewStreamLabel, items: flatrate),
-            _ProviderGroup(label: l10n.overviewRentLabel, items: rent),
-            _ProviderGroup(label: l10n.overviewBuyLabel, items: buy),
+          if (available.isNotEmpty) ...[
+            SizedBox(height: tokens.spaceSm),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: tokens.spaceSm,
+              children: [
+                for (final provider in available)
+                  StreamingProviderLogo(provider: provider),
+              ],
+            ),
           ] else ...[
             SizedBox(height: tokens.spaceSm),
             Text(
@@ -68,70 +71,3 @@ class WhereToWatchCard extends StatelessWidget {
   }
 }
 
-class _ProviderGroup extends StatelessWidget {
-  const _ProviderGroup({required this.label, required this.items});
-
-  final String label;
-  final List<StreamingProvider> items;
-
-  @override
-  Widget build(BuildContext context) {
-    if (items.isEmpty) return const SizedBox.shrink();
-
-    final tokens = context.tokens;
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: EdgeInsets.only(top: tokens.spaceSm),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: AppColors.textMuted,
-            ),
-          ),
-          SizedBox(height: tokens.spaceXs),
-          Wrap(
-            spacing: tokens.spaceSm,
-            runSpacing: tokens.spaceSm,
-            children: [
-              for (final provider in items)
-                OverviewChip(
-                  label: provider.name,
-                  leading: _ProviderLogo(url: provider.logoUrl),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProviderLogo extends StatelessWidget {
-  const _ProviderLogo({required this.url});
-
-  final String? url;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.tokens;
-    final logoUrl = url;
-    if (logoUrl == null) return const SizedBox.shrink();
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(tokens.radiusSm),
-      child: SizedBox(
-        width: tokens.logoHeight,
-        height: tokens.logoHeight,
-        child: CachedNetworkImage(
-          imageUrl: logoUrl,
-          fit: BoxFit.cover,
-          errorWidget: (_, __, ___) => const SizedBox.shrink(),
-        ),
-      ),
-    );
-  }
-}

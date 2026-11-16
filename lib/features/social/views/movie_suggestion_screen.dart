@@ -9,6 +9,7 @@ import '../../find/data/find_repository.dart';
 import '../../find/data/movie.dart';
 import '../data/social_models.dart';
 import '../data/social_repository.dart';
+import '../../../core/widgets/game_button.dart';
 
 const _debounce = Duration(milliseconds: 350);
 const _minQueryLength = 2;
@@ -226,12 +227,13 @@ class _MovieSuggestionScreenState extends State<MovieSuggestionScreen> {
                   ),
                 ),
                 SizedBox(height: tokens.spaceLg),
-                FilledButton(
-                  onPressed: _canSend ? _send : null,
-                  style: FilledButton.styleFrom(
-                    minimumSize: Size(double.infinity, tokens.minTouchTarget),
+                SizedBox(
+                  width: double.infinity,
+                  child: GameButton(
+                    onPressed: _canSend ? _send : null,
+                    label: l10n.suggestionSend,
+                    style: GameButtonStyle.blue,
                   ),
-                  child: Text(l10n.suggestionSend),
                 ),
               ],
             ),

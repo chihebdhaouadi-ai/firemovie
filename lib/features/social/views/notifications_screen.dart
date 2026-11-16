@@ -6,6 +6,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../find/data/movie.dart';
 import '../data/social_models.dart';
 import '../data/social_repository.dart';
+import '../../../core/widgets/game_button.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({
@@ -147,9 +148,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
             ),
             SizedBox(height: tokens.spaceSm),
-            FilledButton(
+            GameButton(
+              label: l10n.profileRetry,
+              style: GameButtonStyle.blue,
               onPressed: _load,
-              child: Text(l10n.profileRetry),
             ),
           ],
         ),
@@ -280,12 +282,10 @@ class _NotificationTile extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: FilledButton(
+                    child: GameButton(
+                      label: l10n.friendAccept,
+                      style: GameButtonStyle.blue,
                       onPressed: onAccept,
-                      style: FilledButton.styleFrom(
-                        minimumSize: Size(0, tokens.minTouchTarget),
-                      ),
-                      child: Text(l10n.friendAccept),
                     ),
                   ),
                   SizedBox(width: tokens.spaceSm),

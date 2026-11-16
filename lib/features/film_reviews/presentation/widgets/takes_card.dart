@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -6,12 +7,22 @@ import '../../../overview/views/widgets/overview_panel.dart';
 import '../../domain/take.dart';
 import '../state/movie_reviews_state.dart';
 import 'take_card.dart';
+import '../../../../core/widgets/game_button.dart';
+
+const _flameCommentThreshold = 5;
+const _flameSize = 40.0;
 
 class TakesCard extends StatelessWidget {
-  const TakesCard({super.key, required this.takes, required this.onRetry});
+  const TakesCard({
+    super.key,
+    required this.takes,
+    required this.onRetry,
+    this.highlightTakeId,
+  });
 
   final AsyncView<List<Take>> takes;
   final Future<void> Function() onRetry;
+  final int? highlightTakeId;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +42,10 @@ class TakesCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: tokens.spaceSm),
-            FilledButton(onPressed: onRetry, child: Text(l10n.reviewRetry)),
+            GameButton(
+                label: l10n.reviewRetry,
+                style: GameButtonStyle.blue,
+                onPressed: onRetry),
           ],
         ),
       AsyncReady(:final value) when value.isEmpty => Text(
@@ -40,7 +54,10 @@ class TakesCard extends StatelessWidget {
             color: AppColors.textMuted,
           ),
         ),
-      AsyncReady(:final value) => _TakesList(takes: value),
+      AsyncReady(:final value) => _TakesList(
+          takes: value,
+          highlightTakeId: highlightTakeId,
+        ),
     };
 
     return OverviewPanel(
@@ -69,9 +86,10 @@ class TakesCard extends StatelessWidget {
 }
 
 class _TakesList extends StatelessWidget {
-  const _TakesList({required this.takes});
+  const _TakesList({required this.takes, this.highlightTakeId});
 
   final List<Take> takes;
+  final int? highlightTakeId;
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +104,61 @@ class _TakesList extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: tokens.spaceMd),
               child: const Divider(height: 1, color: AppColors.panelBorder),
             ),
-          TakeCard(
+          _TakeEntry(
             key: ValueKey(takes[index].id),
             take: takes[index],
-            isMostHelpful:
-                index == 0 && takes[index].isMostHelpful && !takes[index].isMine,
+            isMostHelpful: index == 0 &&
+                takes[index].isMostHelpful &&
+                !takes[index].isMine,
+            isHighlighted: takes[index].id == highlightTakeId,
           ),
         ],
       ],
+    );
+  }
+}
+
+class _TakeEntry extends StatelessWidget {
+  const _TakeEntry({
+    super.key,
+    required this.take,
+    required this.isMostHelpful,
+    required this.isHighlighted,
+  });
+
+  final Take take;
+  final bool isMostHelpful;
+  final bool isHighlighted;
+
+  @override
+  Widget build(BuildContext context) {
+    final card = TakeCard(
+      take: take,
+      isMostHelpful: isMostHelpful,
+      isHighlighted: isHighlighted,
+    );
+    if (take.commentCount <= _flameCommentThreshold) return card;
+
+    return SizedBox(
+      width: double.infinity,
+      child: Stack(
+        children: [
+          card,
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IgnorePointer(
+              child: ExcludeSemantics(
+                child: Lottie.asset(
+                  'assets/flamefire.json',
+                  width: _flameSize,
+                  height: _flameSize,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

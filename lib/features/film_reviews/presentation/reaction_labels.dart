@@ -1,5 +1,7 @@
 import '../../../l10n/app_localizations.dart';
 import '../domain/film_reaction.dart';
+import '../domain/take.dart';
+import '../domain/take_tag.dart';
 import '../domain/vote_kind.dart';
 
 String reactionLabel(AppLocalizations l10n, FilmReaction reaction) {
@@ -34,6 +36,25 @@ String reactionEmoji(FilmReaction reaction) {
 
 String reactionChipLabel(AppLocalizations l10n, FilmReaction reaction) {
   return '${reactionEmoji(reaction)} ${reactionLabel(l10n, reaction)}';
+}
+
+String topicTagLabel(AppLocalizations l10n, TakeTag tag) {
+  return switch (tag) {
+    TakeTag.review => l10n.topicTagReview,
+    TakeTag.question => l10n.topicTagQuestion,
+    TakeTag.discussion => l10n.topicTagDiscussion,
+    TakeTag.hotTake => l10n.topicTagHotTake,
+    TakeTag.poll => l10n.topicTagPoll,
+    TakeTag.scene => l10n.topicTagScene,
+  };
+}
+
+/// Reaction chip for reviews; the tag name for questions and discussions.
+String takeBadgeLabel(AppLocalizations l10n, Take take) {
+  final reaction = take.reaction;
+  return reaction == null
+      ? topicTagLabel(l10n, take.tag)
+      : reactionChipLabel(l10n, reaction);
 }
 
 String voteLabel(AppLocalizations l10n, VoteKind kind) {

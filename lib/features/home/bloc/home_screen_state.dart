@@ -16,39 +16,32 @@ final class HomeLoading extends HomeScreenState {
 final class HomeLoaded extends HomeScreenState {
   const HomeLoaded({
     required this.sections,
-    this.picks = const [],
+    this.feed = const FeedLoading(),
     this.points = 0,
-    this.generating = false,
     this.notice,
   });
 
   final Map<HomeList, SectionState> sections;
-  final List<Film> picks;
+  final FeedState feed;
   final int points;
-  final bool generating;
   final HomeNotice? notice;
-
-  bool get canGenerate =>
-      !generating && picks.length == HomeLimits.recommendPicks;
 
   HomeLoaded copyWith({
     Map<HomeList, SectionState>? sections,
-    List<Film>? picks,
+    FeedState? feed,
     int? points,
-    bool? generating,
     HomeNotice? notice,
   }) {
     return HomeLoaded(
       sections: sections ?? this.sections,
-      picks: picks ?? this.picks,
+      feed: feed ?? this.feed,
       points: points ?? this.points,
-      generating: generating ?? this.generating,
       notice: notice ?? this.notice,
     );
   }
 
   @override
-  List<Object?> get props => [sections, picks, points, generating, notice];
+  List<Object?> get props => [sections, feed, points, notice];
 }
 
 sealed class SectionState extends Equatable {
@@ -87,6 +80,42 @@ final class SectionContent extends SectionState {
   List<Object?> get props => [films];
 }
 
+sealed class FeedState extends Equatable {
+  const FeedState();
+}
+
+final class FeedLoading extends FeedState {
+  const FeedLoading();
+
+  @override
+  List<Object?> get props => const [];
+}
+
+final class FeedEmpty extends FeedState {
+  const FeedEmpty();
+
+  @override
+  List<Object?> get props => const [];
+}
+
+final class FeedError extends FeedState {
+  const FeedError(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => [message];
+}
+
+final class FeedContent extends FeedState {
+  const FeedContent(this.items);
+
+  final List<FeedItem> items;
+
+  @override
+  List<Object?> get props => [items];
+}
+
 sealed class HomeNotice extends Equatable {
   const HomeNotice(this.id);
 
@@ -111,20 +140,6 @@ final class FilmRemovedNotice extends HomeNotice {
 
 final class Top5FullNotice extends HomeNotice {
   const Top5FullNotice(super.id);
-
-  @override
-  List<Object?> get props => [id];
-}
-
-final class PicksFullNotice extends HomeNotice {
-  const PicksFullNotice(super.id);
-
-  @override
-  List<Object?> get props => [id];
-}
-
-final class RecommendReadyNotice extends HomeNotice {
-  const RecommendReadyNotice(super.id);
 
   @override
   List<Object?> get props => [id];

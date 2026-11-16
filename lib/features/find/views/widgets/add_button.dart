@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
 
 /// A circular trailing action that shows a "+" to add, or an animated "Added"
@@ -11,13 +12,13 @@ class AddButton extends StatefulWidget {
     required this.onPressed,
     this.added = false,
     this.processing = false,
-    this.semanticsLabel = 'Add',
+    this.semanticsLabel,
   });
 
   final VoidCallback? onPressed;
   final bool added;
   final bool processing;
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   @override
   State<AddButton> createState() => _AddButtonState();
@@ -37,7 +38,7 @@ class _AddButtonState extends State<AddButton> {
     return Semantics(
       button: enabled && !added,
       enabled: enabled && !added,
-      label: widget.semanticsLabel,
+      label: widget.semanticsLabel ?? context.l10n.findActionAdd,
       child: AnimatedContainer(
         duration: context.motion(tokens.durationBase),
         curve: Curves.easeOut,

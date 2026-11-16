@@ -62,11 +62,9 @@ void main() {
         'backdrop_url': 'https://image.tmdb.org/t/p/w342/b.jpg',
         'watch_providers': {
           'link': 'https://www.justwatch.com/us/movie/x',
-          'flatrate': [
-            {'name': 'Netflix', 'logo_url': 'https://x/n.png'},
+          'available': [
+            {'name': 'Netflix', 'logo_url': 'https://x/n.png', 'url': 'https://n/x'},
           ],
-          'rent': [],
-          'buy': [],
         },
         'in_lists': ['top_5'],
       };
@@ -76,8 +74,26 @@ void main() {
       expect(movie.genres, ['Drama']);
       expect(movie.voteAverage, 8.7);
       expect(movie.watchProviders, isNotNull);
-      expect(movie.watchProviders!.flatrate.single.name, 'Netflix');
+      expect(movie.watchProviders!.available.single.name, 'Netflix');
+      expect(movie.watchProviders!.available.single.url, 'https://n/x');
       expect(movie.isTop5, isTrue);
+    });
+
+    test('keeps only https logo and link urls for providers', () {
+      final movie = MovieParser.detail({
+        'film_id': '278',
+        'watch_providers': {
+          'available': [
+            {'name': 'Max', 'logo_url': 'http://x/m.png', 'url': 'http://m/x'},
+            {'name': 'Hulu', 'logo_url': 'https://x/h.png', 'url': 'https://h/x'},
+          ],
+        },
+      });
+      final providers = movie.watchProviders!.available;
+      expect(providers[0].logoUrl, isNull);
+      expect(providers[0].url, isNull);
+      expect(providers[1].logoUrl, 'https://x/h.png');
+      expect(providers[1].url, 'https://h/x');
     });
 
     test('defaults to the numeric id in the search payload', () {

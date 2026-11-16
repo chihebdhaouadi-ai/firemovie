@@ -20,8 +20,6 @@ class FilmSection extends StatelessWidget {
     this.onAdd,
     this.onRemove,
     this.onOpenFilm,
-    this.onLongPressFilm,
-    this.selectedFilms = const {},
   });
 
   final String title;
@@ -31,8 +29,6 @@ class FilmSection extends StatelessWidget {
   final VoidCallback? onAdd;
   final ValueChanged<Film>? onRemove;
   final ValueChanged<Film>? onOpenFilm;
-  final ValueChanged<Film>? onLongPressFilm;
-  final Set<Film> selectedFilms;
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +56,6 @@ class FilmSection extends StatelessWidget {
           onAdd: add,
           onRemove: onRemove,
           onOpenFilm: onOpenFilm,
-          onLongPressFilm: onLongPressFilm,
-          selectedFilms: selectedFilms,
         ),
     };
 
@@ -88,8 +82,6 @@ class _FilmRow extends StatelessWidget {
     required this.onAdd,
     required this.onRemove,
     required this.onOpenFilm,
-    required this.onLongPressFilm,
-    required this.selectedFilms,
   });
 
   final String title;
@@ -98,8 +90,6 @@ class _FilmRow extends StatelessWidget {
   final VoidCallback? onAdd;
   final ValueChanged<Film>? onRemove;
   final ValueChanged<Film>? onOpenFilm;
-  final ValueChanged<Film>? onLongPressFilm;
-  final Set<Film> selectedFilms;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +98,6 @@ class _FilmRow extends StatelessWidget {
     final add = onAdd;
     final remove = onRemove;
     final open = onOpenFilm;
-    final longPress = onLongPressFilm;
     final itemCount = add == null ? films.length : films.length + 1;
 
     return SizedBox(
@@ -132,9 +121,7 @@ class _FilmRow extends StatelessWidget {
             semanticsLabel:
                 l10n.homeFilmTileSemantics(film.displayTitle, title),
             removeLabel: l10n.homeRemoveFilm(film.displayTitle),
-            selected: selectedFilms.contains(film),
             onTap: open == null ? null : () => open(film),
-            onLongPress: longPress == null ? null : () => longPress(film),
             onRemove: remove == null ? null : () => remove(film),
           );
         },

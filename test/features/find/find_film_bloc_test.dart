@@ -81,7 +81,6 @@ class _Harness {
       lists: lists,
       recentStore: recent,
       target: target,
-      slot: slot,
       circleIndex: slot,
     );
   }
@@ -143,8 +142,7 @@ void main() {
       addTearDown(bloc.close);
 
       bloc.add(const QueryChanged('matrix'));
-      await Future.delayed(
-          debounceDuration + const Duration(milliseconds: 50));
+      await Future.delayed(debounceDuration + const Duration(milliseconds: 50));
       bloc.add(const QueryChanged('inception'));
       await Future.delayed(
           debounceDuration + const Duration(milliseconds: 400));
@@ -298,32 +296,6 @@ void main() {
       bloc.add(const UndoRequested());
       await _pumpUntil(bloc, (s) => s is FindFilmResults);
       expect(h.lists.hasWatched(_pulp.id), isTrue);
-    });
-  });
-
-  group('generatePick', () {
-    test('fills pick slots and respects the 3-film limit', () async {
-      final picked = <Movie>[];
-      final h = _Harness(target: AddTarget.generatePick);
-      final bloc = FindFilmBloc(
-        find: h.find,
-        lists: h.lists,
-        recentStore: h.recent,
-        target: AddTarget.generatePick,
-        onPickFilled: picked.add,
-      );
-      addTearDown(bloc.close);
-
-      for (final movie in [_pulp, _shaw, _mat, _in, _arr]) {
-        bloc.add(AddRequested(movie, target: AddTarget.generatePick));
-        await _pumpUntil(
-          bloc,
-          (s) => s is FindFilmResults && s.notice is AddedNotice,
-          maxTries: 20,
-        );
-      }
-
-      expect(picked.length, 3);
     });
   });
 }

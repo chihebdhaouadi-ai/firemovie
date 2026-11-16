@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:film_wise_mobile/features/film_reviews/data/api_review_repository.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/film_reaction.dart';
+import 'package:film_wise_mobile/features/film_reviews/domain/review_stance.dart';
+import 'package:film_wise_mobile/features/film_reviews/domain/take_tag.dart';
+import 'package:film_wise_mobile/features/film_reviews/domain/topic_vote.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/vote_kind.dart';
 import 'package:film_wise_mobile/features/find/data/api_client.dart';
 import 'package:film_wise_mobile/features/find/data/movie.dart';
@@ -51,6 +54,65 @@ ApiReviewRepository _repository(
 }
 
 void main() {
+  test('postTopic serializes hot takes with the hot_take tag', () async {
+    String? body;
+    final client = MockClient((request) async {
+      body = request.body;
+      return http.Response(
+        jsonEncode({..._takeBody, 'reaction': null, 'tag': 'hot_take'}),
+        201,
+        headers: _json,
+      );
+    });
+    final repository = ApiReviewRepository(
+      client: ApiClient(httpClient: client),
+    );
+
+    final take = await repository.postTopic(
+      filmId: 'tt1',
+      body: 'A bold opinion.',
+      tag: TakeTag.hotTake,
+    );
+
+    expect(body, contains('name="film_id"\r\n\r\ntt1'));
+    expect(body, contains('name="body"\r\n\r\nA bold opinion.'));
+    expect(body, contains('name="tag"\r\n\r\nhot_take'));
+    expect(take.tag, TakeTag.hotTake);
+  });
+
+  test('explore feed parses hot takes and their topic vote counts', () async {
+    final seen = <http.Request>[];
+    final repository = _repository(
+      (_) async => http.Response(
+        jsonEncode([
+          {
+            ..._takeBody,
+            'reaction': null,
+            'tag': 'hot_take',
+            'votes': {'like': 14, 'dislike': 3},
+            'my_votes': ['like'],
+            'film': {
+              'film_id': 'tt1',
+              'title': 'A Film',
+              'poster_url': 'https://example.test/poster.jpg',
+            },
+          },
+        ]),
+        200,
+        headers: _json,
+      ),
+      seen,
+    );
+
+    final items = await repository.fetchExploreFeed();
+
+    expect(seen.single.url.path, '/api/takes/explore/');
+    expect(items.single.take.tag, TakeTag.hotTake);
+    expect(items.single.take.topicVotesOf(TopicVote.like), 14);
+    expect(items.single.take.topicVotesOf(TopicVote.dislike), 3);
+    expect(items.single.take.myTopicVotes, {TopicVote.like});
+  });
+
   test('fetchSummary reads the summary endpoint', () async {
     final seen = <http.Request>[];
     final repository = _repository(
@@ -90,8 +152,7 @@ void main() {
   test('fetchTakes parses the take list', () async {
     final seen = <http.Request>[];
     final repository = _repository(
-      (_) async =>
-          http.Response(jsonEncode([_takeBody]), 200, headers: _json),
+      (_) async => http.Response(jsonEncode([_takeBody]), 200, headers: _json),
       seen,
     );
 
@@ -122,7 +183,8 @@ void main() {
 
     expect(seen.single.method, 'POST');
     expect(seen.single.url.path, '/api/takes/films/tt1/takes/');
-    expect(jsonDecode(seen.single.body), {'body': 'A slow burn.'});
+    expect(jsonDecode(seen.single.body),
+        {'body': 'A slow burn.', 'tag': 'review'});
     expect(take.body, 'A slow burn.');
   });
 
@@ -183,6 +245,7 @@ void main() {
               'body': 'Agreed.',
               'created_at': '2026-10-21T11:00:00Z',
               'is_writer': true,
+              'stance': 'changed_my_mind',
             },
           ]),
           200,
@@ -197,6 +260,7 @@ void main() {
           'body': 'Thanks.',
           'created_at': '2026-10-21T12:00:00Z',
           'is_writer': false,
+          'stance': 'disagree_but_fair',
         }),
         201,
         headers: _json,
@@ -204,13 +268,77 @@ void main() {
     }, seen);
 
     final comments = await repository.fetchComments(4);
-    final comment = await repository.postComment(4, body: 'Thanks.');
+    final comment = await repository.postComment(
+      4,
+      body: 'Thanks.',
+      stance: ReviewStance.disagreeButFair,
+    );
 
     expect(seen[0].url.path, '/api/takes/takes/4/comments/');
     expect(comments.single.isWriter, isTrue);
+    expect(comments.single.stance, ReviewStance.changedMyMind);
     expect(seen[1].method, 'POST');
-    expect(jsonDecode(seen[1].body), {'body': 'Thanks.'});
+    expect(jsonDecode(seen[1].body), {
+      'body': 'Thanks.',
+      'stance': 'disagree_but_fair',
+    });
     expect(comment.id, 10);
+    expect(comment.stance, ReviewStance.disagreeButFair);
+  });
+
+  test('a reply carries its parent id through the comment round trip',
+      () async {
+    final seen = <http.Request>[];
+    final repository = _repository((request) async {
+      if (request.method == 'GET') {
+        return http.Response(
+          jsonEncode([
+            {
+              'id': 9,
+              'author_id': 3,
+              'author_name': 'Grace',
+              'body': 'Agreed.',
+              'created_at': '2026-10-21T11:00:00Z',
+              'is_writer': false,
+              'parent_id': null,
+            },
+            {
+              'id': 11,
+              'author_id': 4,
+              'author_name': 'Hugo',
+              'body': 'Me too.',
+              'created_at': '2026-10-21T11:30:00Z',
+              'is_writer': false,
+              'parent_id': 9,
+            },
+          ]),
+          200,
+          headers: _json,
+        );
+      }
+      return http.Response(
+        jsonEncode({
+          'id': 12,
+          'author_id': 1,
+          'author_name': 'Me',
+          'body': 'Thanks.',
+          'created_at': '2026-10-21T12:00:00Z',
+          'is_writer': false,
+          'parent_id': 9,
+        }),
+        201,
+        headers: _json,
+      );
+    }, seen);
+
+    final comments = await repository.fetchComments(4);
+    final reply = await repository.postComment(4, body: 'Thanks.', parentId: 9);
+
+    expect(comments[0].parentId, isNull);
+    expect(comments[1].parentId, 9);
+    expect(comments[1].createdAt, DateTime.utc(2026, 10, 21, 11, 30));
+    expect(jsonDecode(seen[1].body), {'body': 'Thanks.', 'parent_id': 9});
+    expect(reply.parentId, 9);
   });
 
   test('an unknown reaction from the server is a bad response', () async {
@@ -236,5 +364,38 @@ void main() {
         ),
       ),
     );
+  });
+
+  test('setCommentVote puts the vote and parses the new counts', () async {
+    final seen = <http.Request>[];
+    final repository = _repository((request) async {
+      return http.Response(
+        jsonEncode({
+          'id': 9,
+          'author_id': 3,
+          'author_name': 'Grace',
+          'body': 'Agreed.',
+          'created_at': '2026-10-21T11:00:00Z',
+          'is_writer': false,
+          'is_mine': false,
+          'likes': 4,
+          'dislikes': 1,
+          'my_vote': 'like',
+        }),
+        200,
+        headers: _json,
+      );
+    }, seen);
+
+    final comment =
+        await repository.setCommentVote(9, TopicVote.like, active: true);
+
+    expect(seen.single.method, 'PUT');
+    expect(seen.single.url.path, '/api/takes/comments/9/votes/like/');
+    expect(jsonDecode(seen.single.body), {'active': true});
+    expect(comment.likes, 4);
+    expect(comment.dislikes, 1);
+    expect(comment.myVote, TopicVote.like);
+    expect(comment.isMine, isFalse);
   });
 }

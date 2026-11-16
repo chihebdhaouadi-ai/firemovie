@@ -1,26 +1,34 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/auth/auth_gate.dart';
 import '../../../core/l10n_context.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../find/data/movie.dart';
-import '../../find/views/find_film_screen.dart';
-import '../../find/views/find_route_args.dart';
-import '../../overview/views/movie_overview_screen.dart';
-import '../../profile/views/profile_screen.dart';
+import '../../../core/widgets/game_parts.dart';
+import '../../../core/widgets/sage_nav_bar/sage_nav_bar.dart';
+import '../../../core/widgets/sage_nav_bar/sage_nav_models.dart';
+import '../../film_reviews/data/review_repository.dart';
+import '../../profile/data/profile_repository.dart';
+import '../../social/data/social_repository.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_screen_event.dart';
 import '../bloc/home_screen_state.dart';
 import '../data/home_models.dart';
-import 'widgets/film_section.dart';
-import 'widgets/generate_button.dart';
-import 'widgets/home_app_bar.dart';
-import 'widgets/quick_actions_bar.dart';
-import 'widgets/recommend_section.dart';
-import 'widgets/section_header.dart';
-import 'widgets/top5_row.dart';
+import 'home_navigation.dart';
+import 'explore_page.dart';
+import 'home_tab.dart';
+import 'tabs/films_tab.dart';
+import 'tabs/friends_tab.dart';
+import 'tabs/you_tab.dart';
+import '../../articles/data/article_repository.dart';
+import '../../news/views/news_ticker_section.dart';
+import 'widgets/filmsage_header.dart';
+import 'widgets/home_tab_bar.dart';
+import '../../profile/views/profile_screen.dart';
+import '../../social/views/notifications_screen.dart';
 
 const _loadingState = HomeLoaded(
   sections: {
@@ -31,14 +39,130 @@ const _loadingState = HomeLoaded(
   },
 );
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
+    super.key,
+    this.reviews,
+    this.profile,
+    this.social,
+    this.articles,
+    this.signedIn = true,
+  });
+
+  final ReviewRepository? reviews;
+  final ProfileRepository? profile;
+  final SocialRepository? social;
+  final ArticleRepository? articles;
+
+  /// False for guests: account-only sections show a sign-in prompt and no
+  /// profile or notification requests are made.
+  final bool signedIn;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  HomeTab _tab = HomeTab.you;
+  bool _exploring = false;
+  String? _username;
+  String? _avatarUrl;
+  int _unreadCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.signedIn) unawaited(_loadNavData());
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.signedIn == widget.signedIn) return;
+    // Signed in or out while Home is open: reload for the new state.
+    _username = null;
+    _avatarUrl = null;
+    _unreadCount = 0;
+    _exploring = false;
+    if (widget.signedIn) unawaited(_loadNavData());
+    context.read<HomeBloc>().add(const HomeStarted());
+  }
+
+  Future<void> _loadNavData() async {
+    final profile = widget.profile;
+    if (profile != null) {
+      try {
+        final me = await profile.fetchMe();
+        if (!mounted) return;
+        setState(() {
+          _username = me.username;
+          _avatarUrl = me.avatarUrl;
+        });
+      } on Exception {
+        // The avatar keeps its icon fallback.
+      }
+    }
+    final social = widget.social;
+    if (social != null) {
+      try {
+        final page = await social.notifications();
+        if (!mounted) return;
+        setState(() => _unreadCount = page.unreadCount);
+      } on Exception {
+        // The friends tab keeps no unread dot.
+      }
+    }
+  }
+
+  void _selectTab(HomeTab tab) => setState(() {
+        _tab = tab;
+        _exploring = false;
+      });
+
+  void _openExplore() {
+    // Browsing reviews and takes is open to guests.
+    setState(() => _exploring = true);
+  }
+
+  void _closeExplore() => setState(() => _exploring = false);
+
+  void _openNotifications() {
+    final social = widget.social;
+    if (social == null) return;
+    unawaited(requireAuth(
+      context,
+      reason: context.l10n.authReasonNotifications,
+      action: () async {
+        if (!mounted) return;
+        await Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(
+            builder: (_) => NotificationsScreen(
+              repository: social,
+              onOpenUser: (user) => Navigator.of(context).push<void>(
+                MaterialPageRoute<void>(
+                  builder: (_) => ProfileScreen(
+                    userId: user.id,
+                    socialRepository: social,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        if (mounted) unawaited(_loadNavData());
+      },
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final avatarUrl = _avatarUrl;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: GameColors.background,
+      extendBody: true,
       body: SafeArea(
+        bottom: false,
         child: BlocListener<HomeBloc, HomeScreenState>(
           listenWhen: (previous, current) =>
               _noticeId(previous) != _noticeId(current),
@@ -48,11 +172,96 @@ class HomeScreen extends StatelessWidget {
             }
           },
           child: BlocBuilder<HomeBloc, HomeScreenState>(
-            builder: (context, state) => switch (state) {
-              HomeLoading() => const _HomeBody(state: _loadingState),
-              HomeLoaded loaded => _HomeBody(state: loaded),
+            builder: (context, state) {
+              final loaded = switch (state) {
+                HomeLoading() => _loadingState,
+                HomeLoaded loaded => loaded,
+              };
+              if (_exploring) {
+                return ExplorePage(
+                  reviews: widget.reviews,
+                  onBack: _closeExplore,
+                );
+              }
+              return _HomeBody(
+                state: loaded,
+                reviews: widget.reviews,
+                articles: widget.articles,
+                signedIn: widget.signedIn,
+                tab: _tab,
+                onTabSelected: _selectTab,
+                friendsHasUnread: _unreadCount > 0,
+                notificationCount: _unreadCount,
+                onOpenNotifications: _openNotifications,
+                onAddFilm: () => openFind(context),
+              );
             },
           ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: SageNavBar(
+          leading: [
+            SageNavEntry(
+              item: const SageNavItem(
+                icon: Icons.home_outlined,
+                svgAsset: 'assets/svg/home.svg',
+                label: '',
+              ),
+              semanticsLabel: l10n.homeTabYou,
+              selected: !_exploring,
+              onTap: () => _selectTab(HomeTab.you),
+            ),
+            SageNavEntry(
+              item: const SageNavItem(icon: Icons.explore_outlined, label: ''),
+              semanticsLabel: l10n.homeTabExplore,
+              selected: _exploring,
+              onTap: _openExplore,
+            ),
+          ],
+          trailing: [
+            SageNavEntry(
+              item: const SageNavItem(
+                icon: Icons.search,
+                svgAsset: 'assets/svg/search.svg',
+                label: '',
+              ),
+              semanticsLabel: l10n.homeQuickActionSearch,
+              onTap: () => openFind(context),
+            ),
+            SageNavEntry(
+              item: SageNavItem(
+                icon: Icons.person_outline,
+                label: '',
+                avatar: avatarUrl == null || avatarUrl.isEmpty
+                    ? null
+                    : CachedNetworkImageProvider(avatarUrl),
+                avatarInitial: _username,
+              ),
+              semanticsLabel: l10n.homeOpenProfile,
+              onTap: () => openProfile(context),
+            ),
+          ],
+          centerSemanticsLabel: l10n.homeQuickActionsLabel,
+          closeLabel: l10n.sageNavCloseMenu,
+          centerActions: [
+            SageQuickAction(
+              label: l10n.homeQuickActionAddFilm,
+              svgAsset: 'assets/svg/add.svg',
+              onTap: () => openFind(context),
+            ),
+            SageQuickAction(
+              label: l10n.homeTabExplore,
+              icon: Icons.explore_outlined,
+              onTap: _openExplore,
+            ),
+            SageQuickAction(
+              label: l10n.homeTabFilms,
+              icon: Icons.movie_outlined,
+              onTap: () => _selectTab(HomeTab.films),
+            ),
+          ],
         ),
       ),
     );
@@ -60,118 +269,119 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeBody extends StatelessWidget {
-  const _HomeBody({required this.state});
+  const _HomeBody({
+    required this.state,
+    required this.tab,
+    required this.onTabSelected,
+    required this.friendsHasUnread,
+    required this.notificationCount,
+    required this.onOpenNotifications,
+    required this.onAddFilm,
+    this.signedIn = true,
+    this.reviews,
+    this.articles,
+  });
 
   final HomeLoaded state;
+  final HomeTab tab;
+  final ValueChanged<HomeTab> onTabSelected;
+  final bool friendsHasUnread;
+  final int notificationCount;
+  final VoidCallback onOpenNotifications;
+  final VoidCallback onAddFilm;
+  final bool signedIn;
+  final ReviewRepository? reviews;
+  final ArticleRepository? articles;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final l10n = context.l10n;
-    final bloc = context.read<HomeBloc>();
-    final sections = state.sections;
-    final picks = state.picks;
+    final header = FilmsageHeaderDelegate(
+      padding: EdgeInsets.fromLTRB(
+        tokens.spaceLg,
+        tokens.spaceLg,
+        tokens.spaceLg,
+        0,
+      ),
+      tabBar: HomeTabBar(
+        selected: tab,
+        onSelected: onTabSelected,
+        friendsHasUnread: friendsHasUnread,
+      ),
+      tabBarVerticalPadding: tokens.spaceSm,
+      notificationCount: notificationCount,
+      onAddFilm: onAddFilm,
+      onOpenNotifications: onOpenNotifications,
+      addLabel: context.l10n.homeQuickActionAddFilm,
+      notificationsLabel: context.l10n.notificationsTitle,
+    );
+    // Content blurs and narrows as it slides under the pinned header.
+    final exitInset = header.minExtent;
 
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: tokens.maxContentWidth),
         child: RefreshIndicator(
           onRefresh: () => _refresh(context),
-          child: ListView(
+          child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsetsDirectional.symmetric(
-              horizontal: tokens.spaceLg,
-              vertical: tokens.spaceLg,
-            ),
-            children: [
-              HomeAppBar(
-                points: state.points,
-                onOpenProfile: () => _openProfile(context),
+            slivers: [
+              // Pinned FilmSage header: fixed height, with the You / Friends /
+              // Films tab bar inside it. It does not shrink on scroll.
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: header,
               ),
-              SizedBox(height: tokens.spaceXl),
-              QuickActionsBar(
-                onSearch: () => _openFind(context),
-                onAddFilm: () => _openFind(context),
-              ),
-              SizedBox(height: tokens.spaceXl),
-              SectionHeader(
-                title: l10n.homeTop5Title,
-                trailing: l10n.homeTop5Hint,
-              ),
-              SizedBox(height: tokens.spaceSm),
-              Top5Row(
-                title: l10n.homeTop5Title,
-                state: sections[HomeList.top5] ?? const SectionLoading(),
-                onRetry: () =>
-                    bloc.add(const HomeSectionRetryRequested(HomeList.top5)),
-                onAddSlot: (slot) => _openFind(
-                  context,
-                  args: FindFilmRouteArgs(target: AddTarget.top5, slot: slot),
-                ),
-                onOpenFilm: (film) => _openOverview(context, film),
-                onRemove: (film) =>
-                    bloc.add(HomeFilmRemoved(HomeList.top5, film)),
-              ),
-              SizedBox(height: tokens.spaceXl),
-              SectionHeader(title: l10n.homeRecommendTitle),
-              SizedBox(height: tokens.spaceSm),
-              RecommendSection(
-                picks: picks,
-                onRemovePick: (film) => bloc.add(HomePickToggled(film)),
-                onAddPick: (index) => _openFind(
-                  context,
-                  args: FindFilmRouteArgs(
-                    target: AddTarget.generatePick,
-                    pickIndex: index,
+              // Keep the news ticker pinned directly below the tab bar.
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _PinnedNewsTickerDelegate(
+                  height: 56 + tokens.spaceMd,
+                  child: ColoredBox(
+                    color: const Color.fromARGB(0, 18, 18, 20),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        tokens.spaceLg,
+                        tokens.spaceMd,
+                        tokens.spaceLg,
+                        0,
+                      ),
+                      child: NewsTickerSection(repository: articles),
+                    ),
                   ),
                 ),
               ),
-              SizedBox(height: tokens.spaceLg),
-              GenerateButton(
-                enabled: state.canGenerate,
-                generating: state.generating,
-                remaining: HomeLimits.recommendPicks - picks.length,
-                onPressed: () => bloc.add(const HomeGenerateRequested()),
-              ),
-              SizedBox(height: tokens.spaceXl),
-              FilmSection(
-                title: l10n.homeWatchedTitle,
-                state: sections[HomeList.watched] ?? const SectionLoading(),
-                tileWidth: tokens.filmTileWidth,
-                onRetry: () =>
-                    bloc.add(const HomeSectionRetryRequested(HomeList.watched)),
-                onAdd: () => _openFind(
-                  context,
-                  args: const FindFilmRouteArgs(target: AddTarget.watched),
+              SliverPadding(
+                padding: EdgeInsetsDirectional.fromSTEB(
+                  tokens.spaceLg,
+                  tokens.spaceXl,
+                  tokens.spaceLg,
+                  tokens.spaceLg +
+                      SageNavBar.height +
+                      MediaQuery.paddingOf(context).bottom,
                 ),
-                onRemove: (film) =>
-                    bloc.add(HomeFilmRemoved(HomeList.watched, film)),
-                onOpenFilm: (film) => _openOverview(context, film),
-                onLongPressFilm: (film) => bloc.add(HomePickToggled(film)),
-                selectedFilms: picks.toSet(),
-              ),
-              SizedBox(height: tokens.spaceXl),
-              FilmSection(
-                title: l10n.homeWatchlistTitle,
-                state: sections[HomeList.watchlist] ?? const SectionLoading(),
-                tileWidth: tokens.filmTileWidth,
-                onRetry: () => bloc
-                    .add(const HomeSectionRetryRequested(HomeList.watchlist)),
-                onAdd: () => _openFind(
-                  context,
-                  args: const FindFilmRouteArgs(target: AddTarget.watchlist),
+                sliver: SliverToBoxAdapter(
+                  child: switch (tab) {
+                    HomeTab.you => YouTab(
+                        state: state,
+                        exitInset: exitInset,
+                        reviews: reviews,
+                        signedIn: signedIn,
+                      ),
+                    HomeTab.friends => FriendsTab(
+                        state: state,
+                        exitInset: exitInset,
+                        reviews: reviews,
+                        signedIn: signedIn,
+                      ),
+                    HomeTab.films => FilmsTab(
+                        state: state,
+                        exitInset: exitInset,
+                        reviews: reviews,
+                        signedIn: signedIn,
+                      ),
+                  },
                 ),
-                onRemove: (film) =>
-                    bloc.add(HomeFilmRemoved(HomeList.watchlist, film)),
-                onOpenFilm: (film) => _openOverview(context, film),
-              ),
-              SizedBox(height: tokens.spaceXl),
-              FilmSection(
-                title: l10n.homePopularTitle,
-                state: sections[HomeList.popular] ?? const SectionLoading(),
-                tileWidth: tokens.filmTileWidth,
-                onRetry: () =>
-                    bloc.add(const HomeSectionRetryRequested(HomeList.popular)),
               ),
             ],
           ),
@@ -179,6 +389,38 @@ class _HomeBody extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PinnedNewsTickerDelegate extends SliverPersistentHeaderDelegate {
+  const _PinnedNewsTickerDelegate({
+    required this.height,
+    required this.child,
+  });
+
+  final double height;
+  final Widget child;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) =>
+      // The child must fill the declared extent. NewsTickerSection collapses to
+      // zero height while loading or when there is no article, and a pinned
+      // header whose child is shorter than its extent throws in layout, which
+      // freezes every later frame.
+      SizedBox(height: height, child: child);
+
+  @override
+  bool shouldRebuild(covariant _PinnedNewsTickerDelegate oldDelegate) =>
+      oldDelegate.height != height || oldDelegate.child != child;
 }
 
 int? _noticeId(HomeScreenState state) => switch (state) {
@@ -193,62 +435,6 @@ Future<void> _refresh(BuildContext context) {
   return done.future;
 }
 
-void _openProfile(BuildContext context) {
-  Navigator.of(context).push<void>(
-    MaterialPageRoute<void>(builder: (_) => const ProfileScreen()),
-  );
-}
-
-void _openOverview(BuildContext context, Film film) {
-  Navigator.of(context).push<void>(
-    MaterialPageRoute<void>(builder: (_) => MovieOverviewScreen(film: film)),
-  );
-}
-
-Future<void> _openFind(
-  BuildContext context, {
-  FindFilmRouteArgs args = const FindFilmRouteArgs(),
-}) async {
-  final bloc = context.read<HomeBloc>();
-  final result = await Navigator.of(context).push<FindFilmResult>(
-    FindFilmScreen.route(args),
-  );
-  if (!context.mounted) return;
-
-  final film = result?.film;
-  final target = result?.target;
-
-  if (film == null || target == null) {
-    // Reflect any activity that may have happened in the find screen.
-    bloc.add(const HomeRefreshRequested());
-    return;
-  }
-
-  switch (target) {
-    case AddTarget.top5:
-      final homeFilm =
-          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
-      bloc.add(HomeFilmAdded(HomeList.top5, homeFilm));
-      bloc.add(HomeSectionRetryRequested(HomeList.top5));
-    case AddTarget.watched:
-      final homeFilm =
-          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
-      bloc.add(HomeFilmAdded(HomeList.watched, homeFilm));
-      bloc.add(HomeSectionRetryRequested(HomeList.watched));
-    case AddTarget.watchlist:
-      final homeFilm =
-          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
-      bloc.add(HomeFilmAdded(HomeList.watchlist, homeFilm));
-      bloc.add(HomeSectionRetryRequested(HomeList.watchlist));
-    case AddTarget.generatePick:
-      final homeFilm =
-          Film(imdbId: film.id, title: film.title, posterUrl: film.posterUrl);
-      if (bloc.state is HomeLoaded) {
-        bloc.add(HomePickToggled(homeFilm));
-      }
-  }
-}
-
 void _showNotice(BuildContext context, HomeNotice notice) {
   final l10n = context.l10n;
   final bloc = context.read<HomeBloc>();
@@ -257,8 +443,6 @@ void _showNotice(BuildContext context, HomeNotice notice) {
     FilmRemovedNotice(:final film) =>
       l10n.homeRemovedSnackbar(film.displayTitle),
     Top5FullNotice() => l10n.homeTop5FullSnackbar,
-    PicksFullNotice() => l10n.homeRecommendFullSnackbar,
-    RecommendReadyNotice() => l10n.homeGenerateSuccess,
     ActionFailedNotice() => l10n.homeGenericErrorSnackbar,
   };
 

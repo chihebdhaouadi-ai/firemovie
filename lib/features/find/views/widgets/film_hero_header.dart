@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -21,11 +22,13 @@ class FilmHeroHeader extends StatefulWidget {
     required this.movie,
     this.heroTag,
     this.stills = const [],
+    this.overviewMode = false,
   });
 
   final Movie movie;
   final Object? heroTag;
   final List<String> stills;
+  final bool overviewMode;
 
   @override
   State<FilmHeroHeader> createState() => _FilmHeroHeaderState();
@@ -98,7 +101,11 @@ class _FilmHeroHeaderState extends State<FilmHeroHeader> {
                         backgroundColor: Colors.black45,
                         foregroundColor: Colors.white,
                       ),
-                      icon: const Icon(Icons.arrow_back),
+                      icon: SvgPicture.asset(
+                        'assets/svg/back.svg',
+                        width: 24,
+                        height: 24,
+                      ),
                     ),
                   ),
                 ),
@@ -180,12 +187,20 @@ class _FilmHeroHeaderState extends State<FilmHeroHeader> {
                       ),
                     ),
                     SizedBox(height: tokens.spaceXs),
-                    Text(
-                      overview,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
+                    if (widget.overviewMode)
+                      _ExpandableOverview(
+                        text: overview,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      )
+                    else
+                      Text(
+                        overview,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
                       ),
-                    ),
                   ],
                 ],
               ),
@@ -254,7 +269,8 @@ class _FilmHeroHeaderState extends State<FilmHeroHeader> {
           : CachedNetworkImage(
               imageUrl: url,
               fit: BoxFit.cover,
-              placeholder: (_, __) => const ColoredBox(color: AppColors.surface),
+              placeholder: (_, __) =>
+                  const ColoredBox(color: AppColors.surface),
               errorWidget: (_, __, ___) => Center(
                 child: Icon(Icons.movie_outlined, color: AppColors.textMuted),
               ),
@@ -289,10 +305,76 @@ class _FilmHeroHeaderState extends State<FilmHeroHeader> {
       if (movie.year != null) '${movie.year}',
       if (movie.director != null) '${l10n.findDirectedBy} ${movie.director}',
       if (movie.runtime != null) l10n.findDetailsRuntime(movie.runtime!),
-      if (movie.voteAverage != null)
+      if (!widget.overviewMode && movie.voteAverage != null)
         l10n.findDetailsVote(movie.voteAverage!.toStringAsFixed(1)),
     ];
     return parts.join(' · ');
+  }
+}
+
+class _ExpandableOverview extends StatefulWidget {
+  const _ExpandableOverview({required this.text, required this.style});
+
+  final String text;
+  final TextStyle? style;
+
+  @override
+  State<_ExpandableOverview> createState() => _ExpandableOverviewState();
+}
+
+class _ExpandableOverviewState extends State<_ExpandableOverview> {
+  static const _collapsedLines = 2;
+
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tokens;
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final painter = TextPainter(
+          text: TextSpan(
+            text: widget.text,
+            style: DefaultTextStyle.of(context).style.merge(widget.style),
+          ),
+          maxLines: _collapsedLines,
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout(maxWidth: constraints.maxWidth);
+        final overflows = painter.didExceedMaxLines;
+        painter.dispose();
+        final collapsed = overflows && !_expanded;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.text,
+              style: widget.style,
+              maxLines: collapsed ? _collapsedLines : null,
+              overflow: collapsed ? TextOverflow.ellipsis : TextOverflow.clip,
+            ),
+            if (overflows) ...[
+              SizedBox(height: tokens.spaceXs),
+              InkWell(
+                onTap: () => setState(() => _expanded = !_expanded),
+                child: Text(
+                  _expanded ? l10n.overviewShowLess : l10n.overviewShowMore,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: AppColors.accentGlow,
+                    decoration: TextDecoration.underline,
+                    decorationColor: AppColors.accentGlow,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    );
   }
 }
 

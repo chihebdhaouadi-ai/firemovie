@@ -51,7 +51,7 @@ final class AddRequested extends FindFilmEvent {
   final Movie film;
   final AddTarget target;
 
-  /// 1-based slot for top5, pick index 0..2 for generatePick.
+  /// 1-based slot for top5.
   final int circleIndex;
   final int slot;
   final bool replace;

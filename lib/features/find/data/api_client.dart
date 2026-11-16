@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/api_config.dart';
+import '../../../core/session.dart';
 import 'movie.dart';
 
 /// Thin HTTP client for the Django backend.
@@ -104,6 +106,42 @@ class ApiClient {
     return _decodeObject(response);
   }
 
+  /// Posts form fields plus an optional image, as multipart form data.
+  /// [fieldLists] sends each value under a repeated key, such as `options`.
+  Future<Map<String, dynamic>> postMultipart(
+    String path, {
+    Map<String, String> fields = const {},
+    Map<String, List<String>> fieldLists = const {},
+    XFile? file,
+    String fileField = 'image',
+    MediaType? fileType,
+  }) async {
+    final bytes = file == null ? null : await file.readAsBytes();
+    final response = await _send(() async {
+      final request = http.MultipartRequest('POST', _uri(path))
+        ..fields.addAll(fields);
+      for (final entry in fieldLists.entries) {
+        for (final value in entry.value) {
+          request.files.add(http.MultipartFile.fromString(entry.key, value));
+        }
+      }
+      if (file != null && bytes != null) {
+        request.files.add(http.MultipartFile.fromBytes(
+          fileField,
+          bytes,
+          filename: file.name,
+          contentType: fileType,
+        ));
+      }
+      if (ApiConfig.authorization case final auth?) {
+        request.headers['Authorization'] = auth;
+      }
+      final streamed = await _inner.send(request);
+      return http.Response.fromStream(streamed);
+    });
+    return _decodeObject(response);
+  }
+
   Future<void> delete(String path) async {
     final response =
         await _send(() => _inner.delete(_uri(path), headers: _headers));
@@ -129,7 +167,11 @@ class ApiClient {
   void _throwForError(http.Response response) {
     final code = response.statusCode;
     if (code >= 200 && code < 300) return;
-    if (code == 401 || code == 403) {
+    // 401 means the token is missing or expired: drop the session to guest.
+    // 403 is a permission refusal for a signed-in person, so it stays an
+    // ordinary server error and does not sign anyone out.
+    if (code == 401) {
+      Session.reportUnauthorized();
       throw AuthFailure(_detailOf(response) ?? 'You need to sign in again.');
     }
     if (code >= 500) {

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../data/home_models.dart';
 
@@ -10,54 +13,143 @@ class FilmPoster extends StatelessWidget {
     super.key,
     required this.film,
     required this.width,
+    this.height,
+    this.radius,
     this.heroTag,
-    this.selected = false,
   });
 
   final Film film;
   final double width;
+  final double? height;
+  final double? radius;
   final Object? heroTag;
-  final bool selected;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final height = tokens.posterHeight(width);
+    final height = this.height ?? tokens.posterHeight(width);
     final url = film.posterUrl;
     final heroTagValue = heroTag;
 
     final poster = ClipRRect(
-      borderRadius: BorderRadius.circular(tokens.radiusMd),
+      borderRadius: BorderRadius.circular(radius ?? tokens.radiusMd),
       child: SizedBox(
         width: width,
         height: height,
         child: url == null
             ? const PosterPlaceholder()
-            : CachedNetworkImage(
-                imageUrl: url,
-                fit: BoxFit.cover,
-                placeholder: (ctx, url) => const PosterPlaceholder(),
-                errorWidget: (ctx, url, error) => const PosterPlaceholder(),
-              ),
+            : _PosterImage(url: url, width: width, height: height),
       ),
     );
 
-    final framed = AnimatedContainer(
-      duration: context.motion(tokens.durationBase),
-      curve: Curves.easeOut,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(tokens.radiusMd),
-        boxShadow: selected ? tokens.glowShadow : const [],
-        border: Border.all(
-          color: selected ? AppColors.accentGlow : AppColors.transparent,
-          width: tokens.borderWidth,
+    if (heroTagValue == null) return poster;
+    return Hero(tag: heroTagValue, child: poster);
+  }
+}
+
+class _PosterImage extends StatefulWidget {
+  const _PosterImage({
+    required this.url,
+    required this.width,
+    required this.height,
+  });
+
+  final String url;
+  final double width;
+  final double height;
+
+  @override
+  State<_PosterImage> createState() => _PosterImageState();
+}
+
+class _PosterImageState extends State<_PosterImage> {
+  static const _autoRetryLimit = 2;
+  static const _retryDelay = Duration(seconds: 2);
+
+  int _attempt = 0;
+  int _failures = 0;
+  Timer? _retryTimer;
+
+  @override
+  void didUpdateWidget(covariant _PosterImage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _retryTimer?.cancel();
+      _attempt = 0;
+      _failures = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _retryTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onError(Object error) {
+    _failures++;
+    if (_failures <= _autoRetryLimit) {
+      _retryTimer?.cancel();
+      _retryTimer = Timer(_retryDelay * _failures, _reload);
+    }
+    if (mounted) setState(() {});
+  }
+
+  void _reload() {
+    if (!mounted) return;
+    setState(() => _attempt++);
+  }
+
+  void _retryManually() {
+    _failures = 0;
+    _reload();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+    final cacheKey = _attempt == 0 ? widget.url : '${widget.url}#$_attempt';
+
+    return CachedNetworkImage(
+      key: ValueKey(_attempt),
+      imageUrl: widget.url,
+      cacheKey: cacheKey,
+      fit: BoxFit.cover,
+      filterQuality: FilterQuality.high,
+      memCacheWidth: (widget.width * devicePixelRatio).round(),
+      memCacheHeight: (widget.height * devicePixelRatio).round(),
+      errorListener: _onError,
+      placeholder: (context, url) => const PosterPlaceholder(),
+      errorWidget: (context, url, error) => _failures <= _autoRetryLimit
+          ? const PosterPlaceholder()
+          : _PosterRetry(onRetry: _retryManually),
+    );
+  }
+}
+
+class _PosterRetry extends StatelessWidget {
+  const _PosterRetry({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.surfaceRaised,
+      child: InkWell(
+        onTap: onRetry,
+        child: Center(
+          child: Tooltip(
+            message: context.l10n.homeSectionErrorRetry,
+            child: Icon(
+              Icons.refresh,
+              color: AppColors.textMuted,
+              size: context.tokens.iconLarge,
+            ),
+          ),
         ),
       ),
-      child: poster,
     );
-
-    if (heroTagValue == null) return framed;
-    return Hero(tag: heroTagValue, child: framed);
   }
 }
 
@@ -66,13 +158,17 @@ class PosterPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconLarge = context.tokens.iconLarge;
     return ColoredBox(
       color: AppColors.surfaceRaised,
-      child: Center(
-        child: Icon(
-          Icons.movie_outlined,
-          color: AppColors.textMuted,
-          size: context.tokens.iconLarge,
+      child: LayoutBuilder(
+        builder: (context, constraints) => Center(
+          child: Icon(
+            Icons.movie_outlined,
+            color: AppColors.textMuted,
+            size:
+                (constraints.biggest.shortestSide * 0.5).clamp(0.0, iconLarge),
+          ),
         ),
       ),
     );
@@ -87,9 +183,7 @@ class FilmTile extends StatelessWidget {
     required this.semanticsLabel,
     required this.removeLabel,
     this.heroTag,
-    this.selected = false,
     this.onTap,
-    this.onLongPress,
     this.onRemove,
   });
 
@@ -98,28 +192,18 @@ class FilmTile extends StatelessWidget {
   final String semanticsLabel;
   final String removeLabel;
   final Object? heroTag;
-  final bool selected;
   final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
   final VoidCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
     final tap = onTap;
-    final longPress = onLongPress;
     final remove = onRemove;
 
     return Semantics(
       button: tap != null,
-      selected: selected,
       label: semanticsLabel,
-      onLongPress: longPress == null
-          ? null
-          : () {
-              HapticFeedback.mediumImpact();
-              longPress();
-            },
       child: SizedBox(
         width: width,
         child: Stack(
@@ -132,18 +216,11 @@ class FilmTile extends StatelessWidget {
                       HapticFeedback.selectionClick();
                       tap();
                     },
-              onLongPress: longPress == null
-                  ? null
-                  : () {
-                      HapticFeedback.mediumImpact();
-                      longPress();
-                    },
               child: ExcludeSemantics(
                 child: FilmPoster(
                   film: film,
                   width: width,
                   heroTag: heroTag,
-                  selected: selected,
                 ),
               ),
             ),

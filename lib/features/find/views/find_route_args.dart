@@ -5,7 +5,6 @@ class FindFilmRouteArgs {
   const FindFilmRouteArgs({
     this.target,
     this.slot = 0,
-    this.pickIndex = 0,
   });
 
   /// Destination context. `null` means the screen was opened from the global
@@ -14,9 +13,6 @@ class FindFilmRouteArgs {
 
   /// 1-based Top 5 slot when [target] is [AddTarget.top5].
   final int slot;
-
-  /// 0-based pick slot when [target] is [AddTarget.generatePick].
-  final int pickIndex;
 }
 
 /// Typed result returned when the screen pops after a successful add.

@@ -4,7 +4,8 @@ import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../overview/views/widgets/overview_panel.dart';
 import '../../domain/film_reaction.dart';
-import '../reaction_labels.dart';
+import 'reaction_button.dart';
+import '../../../../core/widgets/game_button.dart';
 
 class ReactionCard extends StatefulWidget {
   const ReactionCard({
@@ -113,28 +114,9 @@ class _ReactionCardState extends State<ReactionCard> {
             ),
           ),
           SizedBox(height: tokens.spaceMd),
-          Wrap(
-            spacing: tokens.spaceSm,
-            runSpacing: tokens.spaceSm,
-            children: [
-              for (final reaction in FilmReaction.values)
-                ChoiceChip(
-                  label: Text(reactionChipLabel(l10n, reaction)),
-                  selected: widget.reaction == reaction,
-                  showCheckmark: false,
-                  selectedColor: AppColors.accent,
-                  backgroundColor: AppColors.surfaceRaised,
-                  side: BorderSide.none,
-                  labelStyle: theme.textTheme.labelLarge?.copyWith(
-                    color: widget.reaction == reaction
-                        ? AppColors.textPrimary
-                        : AppColors.textSecondary,
-                  ),
-                  onSelected: (selected) {
-                    if (selected) _pick(reaction);
-                  },
-                ),
-            ],
+          ReactionButton(
+            selected: widget.reaction,
+            onChanged: _pick,
           ),
           if (showWhy) ...[
             SizedBox(height: tokens.spaceMd),
@@ -169,9 +151,10 @@ class _ReactionCardState extends State<ReactionCard> {
             SizedBox(height: tokens.spaceSm),
             Row(
               children: [
-                FilledButton(
+                GameButton(
+                  label: l10n.reviewShare,
+                  style: GameButtonStyle.blue,
                   onPressed: _sharing ? null : _share,
-                  child: Text(l10n.reviewShare),
                 ),
                 SizedBox(width: tokens.spaceSm),
                 TextButton(

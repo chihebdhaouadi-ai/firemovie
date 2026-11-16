@@ -26,7 +26,6 @@ class ResultActions {
         AddTarget.top5 => context.l10n.findAddToTop5,
         AddTarget.watched => context.l10n.findAddToWatched,
         AddTarget.watchlist => context.l10n.findAddToWatchlist,
-        AddTarget.generatePick => context.l10n.findAddToPick,
       };
 
   /// The icon used per target row.
@@ -34,7 +33,6 @@ class ResultActions {
         AddTarget.top5 => Icons.star_rounded,
         AddTarget.watched => Icons.check_circle_outline,
         AddTarget.watchlist => Icons.playlist_add,
-        AddTarget.generatePick => Icons.add_circle_outline,
       };
 
   /// Shows a modal bottom sheet to choose a destination for [movie].
@@ -43,9 +41,7 @@ class ResultActions {
   static Future<AddTarget?> showChooseTarget(
     BuildContext context, {
     required Movie movie,
-    bool canPick = false,
   }) {
-    final l10n = context.l10n;
     final tokens = context.tokens;
     return showModalBottomSheet<AddTarget>(
       context: context,
@@ -86,19 +82,6 @@ class ResultActions {
                     title: Text(labelFor(sheetContext, option.target)),
                     onTap: () => Navigator.of(sheetContext).pop(option.target),
                   ),
-                if (canPick) ...[
-                  ListTile(
-                    minTileHeight: tokens.minTouchTarget,
-                    contentPadding: EdgeInsetsDirectional.zero,
-                    leading: Icon(
-                      iconFor(AddTarget.generatePick),
-                      color: AppColors.accentGlow,
-                    ),
-                    title: Text(l10n.findAddToPick),
-                    onTap: () =>
-                        Navigator.of(sheetContext).pop(AddTarget.generatePick),
-                  ),
-                ],
               ],
             ),
           ),

@@ -92,9 +92,7 @@ abstract final class MovieParser {
   static WatchProviders _parseWatchProviders(Map<String, dynamic> json) {
     return WatchProviders(
       link: _string(json['link']),
-      flatrate: _parseProviders(json['flatrate']),
-      rent: _parseProviders(json['rent']),
-      buy: _parseProviders(json['buy']),
+      available: _parseProviders(json['available']),
     );
   }
 
@@ -107,13 +105,19 @@ abstract final class MovieParser {
           if (name.isNotEmpty) {
             out.add(StreamingProvider(
               name: name,
-              logoUrl: _string(row['logo_url']),
+              logoUrl: _httpsUrl(row['logo_url']),
+              url: _httpsUrl(row['url']),
             ));
           }
         }
       }
     }
     return out;
+  }
+
+  static String? _httpsUrl(Object? value) {
+    final url = _string(value);
+    return url != null && url.startsWith('https://') ? url : null;
   }
 
   static String? _string(Object? value) => value is String

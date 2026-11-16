@@ -4,17 +4,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../angel_bird/angel_bird_host.dart';
+import '../../../angel_bird/hold_gesture.dart';
+import '../../../debate/presentation/debate_waiting_page.dart';
 import '../../../overview/views/widgets/overview_panel.dart';
 import '../../domain/take.dart';
 import '../../domain/vote_kind.dart';
+import 'comment_thread.dart';
+import 'take_photo.dart';
+import 'translatable_text.dart';
 import '../reaction_labels.dart';
 import '../state/movie_reviews_cubit.dart';
 
 class TakeCard extends StatefulWidget {
-  const TakeCard({super.key, required this.take, required this.isMostHelpful});
+  const TakeCard({
+    super.key,
+    required this.take,
+    required this.isMostHelpful,
+    this.isHighlighted = false,
+    this.expandComments = false,
+    this.showBody = true,
+  });
 
   final Take take;
   final bool isMostHelpful;
+  final bool isHighlighted;
+  final bool expandComments;
+  final bool showBody;
 
   @override
   State<TakeCard> createState() => _TakeCardState();
@@ -23,11 +39,32 @@ class TakeCard extends StatefulWidget {
 class _TakeCardState extends State<TakeCard> {
   final _input = TextEditingController();
   final _inputFocus = FocusNode();
-  bool _commentsOpen = false;
-  bool _commentsLoading = false;
+  late bool _commentsOpen = widget.expandComments;
+  late bool _commentsLoading = widget.expandComments;
   bool _sending = false;
   bool _commentFailed = false;
   List<TakeComment>? _comments;
+  TakeComment? _replyTo;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.expandComments) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _loadComments();
+      });
+    }
+    if (widget.isHighlighted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        Scrollable.ensureVisible(
+          context,
+          alignment: 0.1,
+          duration: const Duration(milliseconds: 300),
+        );
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -64,7 +101,7 @@ class _TakeCardState extends State<TakeCard> {
     });
     final comment = await context
         .read<MovieReviewsCubit>()
-        .postComment(widget.take.id, body);
+        .postComment(widget.take.id, body, parentId: _replyTo?.id);
     if (!mounted) return;
     setState(() {
       _sending = false;
@@ -73,9 +110,17 @@ class _TakeCardState extends State<TakeCard> {
         return;
       }
       _comments = [...?_comments, comment];
+      _replyTo = null;
       _input.clear();
     });
   }
+
+  void _startReply(TakeComment comment) {
+    setState(() => _replyTo = comment);
+    _inputFocus.requestFocus();
+  }
+
+  void _cancelReply() => setState(() => _replyTo = null);
 
   Future<void> _vote(VoteKind kind) async {
     final ok =
@@ -86,91 +131,157 @@ class _TakeCardState extends State<TakeCard> {
     );
   }
 
+  void _summonBird() {
+    final l10n = context.l10n;
+    final cubit = context.read<MovieReviewsCubit>();
+    final take = widget.take;
+    AngelBirdHost.summon(
+      context,
+      BirdRequest(
+        question: l10n.angelBirdReviewQuestion,
+        pickPrompt: l10n.angelBirdPickPerson,
+        emptyMessage: l10n.angelBirdNoPeople,
+        failedMessage: l10n.angelBirdPeopleFailed,
+        load: () => _participants(cubit, take),
+      ),
+    );
+  }
+
+  Future<List<BirdOption>> _participants(
+    MovieReviewsCubit cubit,
+    Take take,
+  ) async {
+    final comments = await cubit.loadComments(take.id);
+    if (comments == null) throw StateError('Comments unavailable');
+    final seen = <int>{};
+    final options = <BirdOption>[];
+    void add(int userId, String name) {
+      if (!seen.add(userId)) return;
+      options.add(
+        BirdOption(
+          label: name,
+          page: (_) =>
+              DebateWaitingPage(opponentId: userId, opponentName: name),
+        ),
+      );
+    }
+
+    if (!take.isMine) add(take.authorId, take.authorName);
+    for (final comment in comments) {
+      add(comment.authorId, comment.authorName);
+    }
+    return options;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final tokens = context.tokens;
     final theme = Theme.of(context);
     final take = widget.take;
-    final initial = take.authorName.isEmpty
-        ? '?'
-        : take.authorName[0].toUpperCase();
+    final initial =
+        take.authorName.isEmpty ? '?' : take.authorName[0].toUpperCase();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (widget.isMostHelpful) ...[
-          Text(
-            l10n.reviewMostHelpful,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: AppColors.accentGlow,
+    final content = BirdHoldRegion(
+      onHold: _summonBird,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.showBody) ...[
+            if (widget.isMostHelpful) ...[
+              Text(
+                l10n.reviewMostHelpful,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: AppColors.accentGlow,
+                ),
+              ),
+              SizedBox(height: tokens.spaceXs),
+            ],
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: AppColors.surfaceRaised,
+                  child: Text(
+                    initial,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ),
+                SizedBox(width: tokens.spaceSm),
+                Flexible(
+                  child: Text(
+                    take.authorName,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ),
+                SizedBox(width: tokens.spaceSm),
+                OverviewChip(label: takeBadgeLabel(l10n, take)),
+              ],
             ),
+            SizedBox(height: tokens.spaceSm),
+            if (take.imageUrl != null) ...[
+              TakePhoto(url: take.imageUrl!),
+              SizedBox(height: tokens.spaceSm),
+            ],
+            TranslatableText(
+              text: take.body,
+              format: l10n.reviewQuote,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+            SizedBox(height: tokens.spaceSm),
+          ],
+          Wrap(
+            spacing: tokens.spaceSm,
+            runSpacing: tokens.spaceSm,
+            children: [
+              for (final kind in VoteKind.values)
+                FilterChip(
+                  label: Text('${voteLabel(l10n, kind)} ${take.votesOf(kind)}'),
+                  selected: take.hasVoted(kind),
+                  showCheckmark: false,
+                  selectedColor: AppColors.accent,
+                  backgroundColor: AppColors.surfaceRaised,
+                  disabledColor: AppColors.surfaceRaised,
+                  side: BorderSide.none,
+                  labelStyle: theme.textTheme.labelMedium?.copyWith(
+                    color: take.hasVoted(kind)
+                        ? AppColors.textPrimary
+                        : AppColors.textSecondary,
+                  ),
+                  onSelected: take.isMine ? null : (_) => _vote(kind),
+                ),
+            ],
           ),
           SizedBox(height: tokens.spaceXs),
-        ],
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: AppColors.surfaceRaised,
-              child: Text(
-                initial,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-            SizedBox(width: tokens.spaceSm),
-            Flexible(
-              child: Text(
-                take.authorName,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-            SizedBox(width: tokens.spaceSm),
-            OverviewChip(label: reactionChipLabel(l10n, take.reaction)),
-          ],
-        ),
-        SizedBox(height: tokens.spaceSm),
-        Text(
-          '“${take.body}”',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: AppColors.textSecondary,
+          TextButton(
+            onPressed: _toggleComments,
+            child: Text(l10n.reviewCommentsButton(take.commentCount)),
           ),
+          if (_commentsOpen) _commentsPanel(l10n, tokens, theme),
+        ],
+      ),
+    );
+
+    if (!widget.isHighlighted) return content;
+
+    return Container(
+      key: const ValueKey('highlighted-take'),
+      padding: EdgeInsets.all(tokens.spaceSm),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(tokens.radiusMd),
+        border: Border.all(
+          color: AppColors.accentGlow,
+          width: tokens.borderWidth,
         ),
-        SizedBox(height: tokens.spaceSm),
-        Wrap(
-          spacing: tokens.spaceSm,
-          runSpacing: tokens.spaceSm,
-          children: [
-            for (final kind in VoteKind.values)
-              FilterChip(
-                label: Text('${voteLabel(l10n, kind)} ${take.votesOf(kind)}'),
-                selected: take.hasVoted(kind),
-                showCheckmark: false,
-                selectedColor: AppColors.accent,
-                backgroundColor: AppColors.surfaceRaised,
-                disabledColor: AppColors.surfaceRaised,
-                side: BorderSide.none,
-                labelStyle: theme.textTheme.labelMedium?.copyWith(
-                  color: take.hasVoted(kind)
-                      ? AppColors.textPrimary
-                      : AppColors.textSecondary,
-                ),
-                onSelected: take.isMine ? null : (_) => _vote(kind),
-              ),
-          ],
-        ),
-        SizedBox(height: tokens.spaceXs),
-        TextButton(
-          onPressed: _toggleComments,
-          child: Text(l10n.reviewCommentsButton(take.commentCount)),
-        ),
-        if (_commentsOpen) _commentsPanel(l10n, tokens, theme),
-      ],
+      ),
+      child: content,
     );
   }
 
@@ -203,40 +314,15 @@ class _TakeCardState extends State<TakeCard> {
               ),
             )
           else
-            for (final comment in comments) _CommentRow(comment: comment),
+            CommentThread(comments: comments, onReply: _startReply),
           SizedBox(height: tokens.spaceSm),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _input,
-                  focusNode: _inputFocus,
-                  maxLength: 300,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (_) => _send(),
-                  buildCounter: (_,
-                          {required currentLength,
-                          required isFocused,
-                          required maxLength}) =>
-                      null,
-                  decoration: InputDecoration(
-                    hintText: l10n.reviewCommentHint,
-                    isDense: true,
-                    filled: true,
-                    fillColor: AppColors.surfaceRaised,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(tokens.radiusSm),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: tokens.spaceSm),
-              TextButton(
-                onPressed: _sending ? null : _send,
-                child: Text(l10n.reviewSend),
-              ),
-            ],
+          CommentComposer(
+            controller: _input,
+            focusNode: _inputFocus,
+            sending: _sending,
+            onSend: _send,
+            replyingTo: _replyTo?.authorName,
+            onCancelReply: _cancelReply,
           ),
           if (_commentFailed)
             Text(
@@ -245,66 +331,6 @@ class _TakeCardState extends State<TakeCard> {
                 color: AppColors.error,
               ),
             ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CommentRow extends StatelessWidget {
-  const _CommentRow({required this.comment});
-
-  final TakeComment comment;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final tokens = context.tokens;
-    final theme = Theme.of(context);
-    final initial = comment.authorName.isEmpty
-        ? '?'
-        : comment.authorName[0].toUpperCase();
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: tokens.spaceSm),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 12,
-                backgroundColor: AppColors.surfaceRaised,
-                child: Text(
-                  initial,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-              SizedBox(width: tokens.spaceSm),
-              Flexible(
-                child: Text(
-                  comment.authorName,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-              if (comment.isWriter) ...[
-                SizedBox(width: tokens.spaceSm),
-                OverviewChip(label: l10n.reviewWriterBadge),
-              ],
-            ],
-          ),
-          SizedBox(height: tokens.spaceXs),
-          Text(
-            comment.body,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
         ],
       ),
     );

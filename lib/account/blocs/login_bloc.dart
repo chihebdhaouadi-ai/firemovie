@@ -4,10 +4,6 @@ import '../data/login_repo.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
-const _invalidCredentials = 'Incorrect email or password. Please try again.';
-const _registerFailed = 'Could not create your account. Please try again.';
-const _networkError = 'Could not reach the server. Check your connection and try again.';
-
 class LoginBLoc extends Bloc<LoginEvent, LoginState> {
   LoginBLoc(this._repo) : super(const LoginIdle()) {
     on<LoginSubmitted>(_onLogin);
@@ -21,12 +17,12 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
     try {
       final result = await _repo.login(event.entity);
       if (result.token.isEmpty) {
-        emit(const LoginFailed(_invalidCredentials));
+        emit(const LoginFailed(LoginErrorKind.invalidCredentials));
       } else {
         emit(LoginSucceeded(token: result.token, isNewAccount: false));
       }
     } catch (_) {
-      emit(const LoginFailed(_networkError));
+      emit(const LoginFailed(LoginErrorKind.network));
     }
   }
 
@@ -37,10 +33,13 @@ class LoginBLoc extends Bloc<LoginEvent, LoginState> {
       if (result.status == 200 && result.token.isNotEmpty) {
         emit(LoginSucceeded(token: result.token, isNewAccount: true));
       } else {
-        emit(LoginFailed(result.message.isEmpty ? _registerFailed : result.message));
+        emit(LoginFailed(
+          LoginErrorKind.registerFailed,
+          serverMessage: result.message.isEmpty ? null : result.message,
+        ));
       }
     } catch (_) {
-      emit(const LoginFailed(_networkError));
+      emit(const LoginFailed(LoginErrorKind.network));
     }
   }
 }

@@ -14,12 +14,19 @@ import 'state/movie_reviews_state.dart';
 import 'widgets/reaction_card.dart';
 import 'widgets/score_card.dart';
 import 'widgets/takes_card.dart';
+import '../../../core/widgets/game_button.dart';
 
 class ReviewSection extends StatelessWidget {
-  const ReviewSection({super.key, required this.movieId, this.repository});
+  const ReviewSection({
+    super.key,
+    required this.movieId,
+    this.repository,
+    this.highlightTakeId,
+  });
 
   final String movieId;
   final ReviewRepository? repository;
+  final int? highlightTakeId;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +35,15 @@ class ReviewSection extends StatelessWidget {
         filmId: movieId,
         repository: repository ?? ApiReviewRepository(),
       )..load(),
-      child: const _ReviewSectionBody(),
+      child: _ReviewSectionBody(highlightTakeId: highlightTakeId),
     );
   }
 }
 
 class _ReviewSectionBody extends StatelessWidget {
-  const _ReviewSectionBody();
+  const _ReviewSectionBody({this.highlightTakeId});
+
+  final int? highlightTakeId;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +59,10 @@ class _ReviewSectionBody extends StatelessWidget {
         return SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: side),
           sliver: BlocBuilder<MovieReviewsCubit, MovieReviewsState>(
-            builder: (context, state) => _ReviewSlivers(state: state),
+            builder: (context, state) => _ReviewSlivers(
+              state: state,
+              highlightTakeId: highlightTakeId,
+            ),
           ),
         );
       },
@@ -59,9 +71,10 @@ class _ReviewSectionBody extends StatelessWidget {
 }
 
 class _ReviewSlivers extends StatelessWidget {
-  const _ReviewSlivers({required this.state});
+  const _ReviewSlivers({required this.state, this.highlightTakeId});
 
   final MovieReviewsState state;
+  final int? highlightTakeId;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +82,8 @@ class _ReviewSlivers extends StatelessWidget {
     final tokens = context.tokens;
     final cubit = context.read<MovieReviewsCubit>();
     final takes = state.takes;
-    final hasTake =
-        takes is AsyncReady<List<Take>> && takes.value.any((take) => take.isMine);
+    final hasTake = takes is AsyncReady<List<Take>> &&
+        takes.value.any((take) => take.isMine);
 
     final slivers = <Widget>[
       SliverToBoxAdapter(child: SizedBox(height: tokens.spaceLg)),
@@ -98,7 +111,11 @@ class _ReviewSlivers extends StatelessWidget {
         gap();
     }
 
-    box(TakesCard(takes: takes, onRetry: cubit.load));
+    box(TakesCard(
+      takes: takes,
+      onRetry: cubit.load,
+      highlightTakeId: highlightTakeId,
+    ));
     slivers.add(SliverToBoxAdapter(child: SizedBox(height: tokens.spaceLg)));
 
     return SliverMainAxisGroup(slivers: slivers);
@@ -139,9 +156,10 @@ class _ErrorPanel extends StatelessWidget {
                 ),
           ),
           SizedBox(height: tokens.spaceSm),
-          FilledButton(
+          GameButton(
+            label: l10n.reviewRetry,
+            style: GameButtonStyle.blue,
             onPressed: onRetry,
-            child: Text(l10n.reviewRetry),
           ),
         ],
       ),

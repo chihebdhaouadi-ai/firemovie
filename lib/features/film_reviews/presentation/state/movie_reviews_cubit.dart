@@ -8,7 +8,8 @@ import '../../domain/vote_kind.dart';
 import 'movie_reviews_state.dart';
 
 class MovieReviewsCubit extends Cubit<MovieReviewsState> {
-  MovieReviewsCubit({required this.filmId, required ReviewRepository repository})
+  MovieReviewsCubit(
+      {required this.filmId, required ReviewRepository repository})
       : _repository = repository,
         super(const MovieReviewsState());
 
@@ -24,10 +25,18 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
   }
 
   Future<bool> setReaction(FilmReaction? reaction) async {
+    final previous = state.summary;
+    final canRollBack = previous is AsyncReady<MovieReviewSummary>;
+    if (canRollBack) {
+      emit(state.copyWith(
+        summary: AsyncReady(previous.value.withReaction(reaction)),
+      ));
+    }
     final MovieReviewSummary summary;
     try {
       summary = await _repository.setReaction(filmId, reaction);
     } catch (_) {
+      if (canRollBack && !isClosed) emit(state.copyWith(summary: previous));
       return false;
     }
     if (isClosed) return true;
@@ -82,10 +91,18 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
     }
   }
 
-  Future<TakeComment?> postComment(int takeId, String body) async {
+  Future<TakeComment?> postComment(
+    int takeId,
+    String body, {
+    int? parentId,
+  }) async {
     final TakeComment comment;
     try {
-      comment = await _repository.postComment(takeId, body: body);
+      comment = await _repository.postComment(
+        takeId,
+        body: body,
+        parentId: parentId,
+      );
     } catch (_) {
       return null;
     }
@@ -107,7 +124,8 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
     if (current is! AsyncReady<List<Take>>) return;
     emit(state.copyWith(
       takes: AsyncReady([
-        for (final take in current.value) take.id == updated.id ? updated : take,
+        for (final take in current.value)
+          take.id == updated.id ? updated : take,
       ]),
     ));
   }

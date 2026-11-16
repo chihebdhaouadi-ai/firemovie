@@ -5,13 +5,11 @@ enum AddTarget {
   top5,
   watched,
   watchlist,
-  generatePick,
 }
 
 /// Identifies a single destination within a target.
 ///
 /// - `top5`: [index] is the slot 1..5 (0 for "any free slot").
-/// - `generatePick`: [index] is the pick slot 0..2.
 /// - `watched` / `watchlist`: [index] is unused.
 typedef TargetSlot = ({AddTarget target, int index});
 
@@ -20,7 +18,6 @@ String targetLabel(AddTarget target) => switch (target) {
       AddTarget.top5 => 'top5',
       AddTarget.watched => 'watched',
       AddTarget.watchlist => 'watchlist',
-      AddTarget.generatePick => 'generate',
     };
 
 /// The three persisted lists. Mirrors the backend list_type values.
@@ -85,28 +82,25 @@ class Movie extends Equatable {
 class WatchProviders extends Equatable {
   const WatchProviders({
     this.link,
-    this.flatrate = const [],
-    this.rent = const [],
-    this.buy = const [],
+    this.available = const [],
   });
 
   final String? link;
-  final List<StreamingProvider> flatrate;
-  final List<StreamingProvider> rent;
-  final List<StreamingProvider> buy;
+  final List<StreamingProvider> available;
 
   @override
-  List<Object?> get props => [link, flatrate, rent, buy];
+  List<Object?> get props => [link, available];
 }
 
 class StreamingProvider extends Equatable {
-  const StreamingProvider({required this.name, this.logoUrl});
+  const StreamingProvider({required this.name, this.logoUrl, this.url});
 
   final String name;
   final String? logoUrl;
+  final String? url;
 
   @override
-  List<Object?> get props => [name, logoUrl];
+  List<Object?> get props => [name, logoUrl, url];
 }
 
 /// A page of search results.

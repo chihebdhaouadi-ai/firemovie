@@ -64,7 +64,7 @@ required this.text,
                                                               116,
                                                               116), // Set the text color
                                                           fontFamily:
-                                                              'Poppins', // Set the font family
+                                                              'Inter', // Set the font family
                                                           fontWeight: FontWeight
                                                               .normal, // Set the font weight
                                                           fontSize:
@@ -89,7 +89,7 @@ required this.text,
                                                   116,
                                                   116), // Set the text color
                                               fontFamily:
-                                                  'Poppins', // Set the font family
+                                                  'Inter', // Set the font family
                                               fontWeight: FontWeight
                                                   .w600, // Set the font weight
                                               fontSize:

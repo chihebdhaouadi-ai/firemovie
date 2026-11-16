@@ -30,11 +30,10 @@ class ProfileRepository {
     );
   }
 
-  Future<void> uploadCover(XFile file) async {
-    await _client.patchMultipart(
+  Future<void> setEquippedFrame(String frameKey) async {
+    await _client.patchJson(
       '/api/account/profile',
-      fileField: 'cover',
-      file: file,
+      body: {'equipped_frame': frameKey},
     );
   }
 }

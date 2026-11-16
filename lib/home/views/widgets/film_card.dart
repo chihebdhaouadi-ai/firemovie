@@ -10,6 +10,7 @@ import '../../../core/core.dart';
 import '../../../core/session.dart';
 import '../../blocs/home_state.dart';
 import '../../data/top_5_movies_entity.dart';
+import '../../../core/widgets/game_button.dart';
 
 
 class Filmcard extends StatefulWidget {
@@ -124,7 +125,9 @@ class _FilmcardState extends State<Filmcard> with TickerProviderStateMixin  {
                 style: TextStyle(color: const Color.fromARGB(255, 217, 217, 217), fontSize: 13),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
+              GameButton(
+                label: 'Delete IT',
+                style: GameButtonStyle.dark,
                 onPressed: () {
 
 
@@ -156,13 +159,6 @@ BlocProvider
 
 
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(199, 184, 21, 0),
-                ),
-                child: Text(
-                  "Delete IT",
-                  style: TextStyle(color: const Color.fromARGB(255, 217, 217, 217)), // Button text color
-                ),
               ),
             ],
           ),

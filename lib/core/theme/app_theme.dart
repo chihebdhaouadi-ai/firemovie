@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+/// Font family names registered in pubspec.yaml.
+abstract final class AppFonts {
+  static const display = 'SpaceGrotesk'; // headings and titles
+  static const body = 'Inter'; // body copy and UI text
+  static const mono = 'SpaceMono'; // labels and small metadata
+  static const brand = 'PangramSans'; // FILMSAGE wordmark
+}
+
 abstract final class AppColors {
   static const background = Color(0xFF151515);
   static const surface = Color(0xFF1F1F1F);
@@ -16,6 +24,11 @@ abstract final class AppColors {
   static const error = Color(0xFFFF6B6B);
   static const onPrimaryButton = Color(0xFFFFFFFF);
   static const transparent = Color(0x00000000);
+  static const tabSelected = Color(0xFF0077DE);
+  static const tabUnselected = Color(0xFF28313A);
+  static const cardPill = Color(0xFF1E1F24);
+  static const reactionCount = Color(0xFF2F6FD6);
+  static const movieReference = Color(0xFF8A8F9C);
 }
 
 class AppTokens extends ThemeExtension<AppTokens> {
@@ -93,7 +106,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
     generateButtonHeight: 48,
     maxContentWidth: 640,
     logoHeight: 28,
-    posterAspectRatio: 0.7,
+    posterAspectRatio: 2 / 3,
     iconSmall: 16,
     iconLarge: 40,
   );
@@ -202,23 +215,58 @@ abstract final class AppTheme {
       onError: AppColors.background,
     );
 
+    // Typography roles:
+    //  - Space Grotesk: headings and titles
+    //  - Inter: body copy and UI text
+    //  - Space Mono: labels and small metadata
     const base = TextTheme(
-      headlineSmall:
-          TextStyle(fontSize: 22, fontWeight: FontWeight.w600, height: 1.3),
-      titleMedium:
-          TextStyle(fontSize: 16, fontWeight: FontWeight.w600, height: 1.4),
-      titleSmall:
-          TextStyle(fontSize: 14, fontWeight: FontWeight.w600, height: 1.4),
-      bodyLarge:
-          TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 1.5),
-      bodyMedium:
-          TextStyle(fontSize: 14, fontWeight: FontWeight.w400, height: 1.5),
-      bodySmall:
-          TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1.4),
+      headlineSmall: TextStyle(
+          fontFamily: AppFonts.display,
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          height: 1.3),
+      titleLarge: TextStyle(
+          fontFamily: AppFonts.display,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          height: 1.3),
+      titleMedium: TextStyle(
+          fontFamily: AppFonts.display,
+          fontSize: 17,
+          fontWeight: FontWeight.w600,
+          height: 1.35),
+      titleSmall: TextStyle(
+          fontFamily: AppFonts.display,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          height: 1.35),
+      bodyLarge: TextStyle(
+          fontFamily: AppFonts.body,
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          height: 1.5),
+      bodyMedium: TextStyle(
+          fontFamily: AppFonts.body,
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          height: 1.5),
+      bodySmall: TextStyle(
+          fontFamily: AppFonts.body,
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+          height: 1.45),
       labelLarge: TextStyle(
-          fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0.5),
-      labelSmall:
-          TextStyle(fontSize: 11, fontWeight: FontWeight.w500, height: 1.3),
+          fontFamily: AppFonts.mono,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.35,
+          height: 1.35),
+      labelSmall: TextStyle(
+          fontFamily: AppFonts.mono,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          height: 1.4,
+          letterSpacing: 0.15),
     );
 
     return ThemeData(
@@ -226,7 +274,7 @@ abstract final class AppTheme {
       brightness: Brightness.dark,
       colorScheme: scheme,
       scaffoldBackgroundColor: AppColors.background,
-      fontFamily: 'Poppins',
+      fontFamily: AppFonts.body,
       textTheme: base.apply(
         bodyColor: AppColors.textPrimary,
         displayColor: AppColors.textPrimary,
@@ -242,7 +290,7 @@ abstract final class AppTheme {
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: AppColors.surfaceRaised,
         contentTextStyle:
-            TextStyle(color: AppColors.textPrimary, fontFamily: 'Poppins'),
+            TextStyle(color: AppColors.textPrimary, fontFamily: 'Inter'),
         actionTextColor: AppColors.accentGlow,
         behavior: SnackBarBehavior.floating,
       ),

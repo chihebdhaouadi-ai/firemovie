@@ -68,6 +68,19 @@ void main() {
     expect(summary.value.myReaction, isNull);
   });
 
+  test('setReaction rolls back an optimistic change to the previous reaction',
+      () async {
+    api.summary = summaryJson(myReaction: 'loved');
+    await cubit.load();
+    api.failing.add('reaction');
+
+    final ok = await cubit.setReaction(FilmReaction.masterpiece);
+
+    expect(ok, isFalse);
+    final summary = cubit.state.summary as AsyncReady<MovieReviewSummary>;
+    expect(summary.value.myReaction, FilmReaction.loved);
+  });
+
   test('shareTake prepends the new take to the loaded list', () async {
     await cubit.load();
 

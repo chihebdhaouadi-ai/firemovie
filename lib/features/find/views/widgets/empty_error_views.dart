@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/game_button.dart';
 
 /// A centered message with an optional icon and optional action.
 class FindMessageView extends StatelessWidget {
@@ -55,10 +56,11 @@ class FindMessageView extends StatelessWidget {
                 SizedBox(height: tokens.spaceLg),
                 SizedBox(
                   height: tokens.minTouchTarget,
-                  child: FilledButton.icon(
+                  child: GameButton(
                     onPressed: action,
-                    icon: const Icon(Icons.refresh, size: 18),
-                    label: Text(actionLabel ?? ''),
+                    icon: Icons.refresh,
+                    label: actionLabel ?? '',
+                    style: GameButtonStyle.blue,
                   ),
                 ),
               ],

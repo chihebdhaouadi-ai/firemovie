@@ -61,15 +61,6 @@ final class HomeFilmRestored extends HomeScreenEvent {
   List<Object?> get props => [list, film, index];
 }
 
-final class HomePickToggled extends HomeScreenEvent {
-  const HomePickToggled(this.film);
-
-  final Film film;
-
-  @override
-  List<Object?> get props => [film];
-}
-
-final class HomeGenerateRequested extends HomeScreenEvent {
-  const HomeGenerateRequested();
+final class HomeFeedRetryRequested extends HomeScreenEvent {
+  const HomeFeedRetryRequested();
 }

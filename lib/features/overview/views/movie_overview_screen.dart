@@ -12,6 +12,7 @@ import 'widgets/friend_activity.dart';
 import 'widgets/overview_panel.dart';
 import 'widgets/status_row.dart';
 import 'widgets/where_to_watch_card.dart';
+import '../../../core/widgets/game_button.dart';
 
 class MovieOverviewScreen extends StatefulWidget {
   const MovieOverviewScreen({
@@ -93,7 +94,11 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: FilmHeroHeader(movie: detail ?? summary, stills: _stills),
+            child: FilmHeroHeader(
+              movie: detail ?? summary,
+              stills: _stills,
+              overviewMode: true,
+            ),
           ),
           _contentSliver([
             if (_loading)
@@ -152,11 +157,12 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
     return [
       StatusRow(movie: detail),
       SizedBox(height: tokens.spaceLg),
-      const UserStarsRow(),
-      SizedBox(height: tokens.spaceLg),
       WhereToWatchCard(providers: detail.watchProviders),
       SizedBox(height: tokens.spaceMd),
-      const FriendActivity(),
+      FriendActivity(
+        movieId: widget.film.imdbId,
+        repository: widget.reviewRepository,
+      ),
     ];
   }
 }
@@ -184,9 +190,10 @@ class _ErrorCard extends StatelessWidget {
                   ),
             ),
             SizedBox(height: tokens.spaceSm),
-            FilledButton(
+            GameButton(
+              label: l10n.findDetailsRetry,
+              style: GameButtonStyle.blue,
               onPressed: onRetry,
-              child: Text(l10n.findDetailsRetry),
             ),
           ],
         ),
