@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -69,7 +70,9 @@ class _TopicVoteRowState extends State<TopicVoteRow> {
       final other = kind == TopicVote.like ? TopicVote.dislike : TopicVote.like;
       final otherCount = _counts[other] ?? 0;
       final clearsOther = _mine.contains(other);
-      _mine = {..._mine}..remove(other)..add(kind);
+      _mine = {..._mine}
+        ..remove(other)
+        ..add(kind);
       _counts = {
         ..._counts,
         kind: count + 1,
@@ -94,28 +97,28 @@ class _TopicVoteRowState extends State<TopicVoteRow> {
       children: [
         if (widget.luxe) ...[
           LuxeCounter(
-            icon: Icons.thumb_up_alt_outlined,
+            icon: BootstrapIcons.hand_thumbs_up,
             count: _counts[TopicVote.like] ?? 0,
             selected: likeActive,
             onTap: likeTap,
           ),
           const SizedBox(width: 8),
           LuxeCounter(
-            icon: Icons.thumb_down_alt_outlined,
+            icon: BootstrapIcons.hand_thumbs_down,
             count: _counts[TopicVote.dislike] ?? 0,
             selected: dislikeActive,
             onTap: dislikeTap,
           ),
         ] else ...[
           GameCounter(
-            icon: Icons.thumb_up_alt_outlined,
+            icon: BootstrapIcons.hand_thumbs_up,
             count: _counts[TopicVote.like] ?? 0,
             active: likeActive,
             onTap: likeTap,
           ),
           const SizedBox(width: 8),
           GameCounter(
-            icon: Icons.thumb_down_alt_outlined,
+            icon: BootstrapIcons.hand_thumbs_down,
             count: _counts[TopicVote.dislike] ?? 0,
             active: dislikeActive,
             onTap: dislikeTap,

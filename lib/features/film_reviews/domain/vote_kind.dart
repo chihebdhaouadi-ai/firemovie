@@ -1,7 +1,8 @@
+/// A reader's verdict on a review: one of up, draw or down.
 enum VoteKind {
-  changedMyMind('changed_my_mind'),
-  wellArgued('well_argued'),
-  disagreeButFair('disagree_but_fair');
+  up('up'),
+  draw('draw'),
+  down('down');
 
   const VoteKind(this.apiValue);
 

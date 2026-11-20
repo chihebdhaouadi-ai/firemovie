@@ -165,7 +165,7 @@ class _DebateWaitingPageState extends State<DebateWaitingPage> {
 
     return switch (_phase) {
       _Phase.inviting || _Phase.waiting => _column([
-          const CircularProgressIndicator(color: AppColors.accent),
+          CircularProgressIndicator(color: AppColors.accent),
           SizedBox(height: tokens.spaceMd * 2),
           Text(
             l10n.debateWaitingTitle(name),
@@ -197,7 +197,10 @@ class _DebateWaitingPageState extends State<DebateWaitingPage> {
       _Phase.failed => _column([
           Text(_failure, textAlign: TextAlign.center, style: body),
           SizedBox(height: tokens.spaceMd * 2),
-          GameButton(label: l10n.debateRetry, style: GameButtonStyle.blue, onPressed: _retry),
+          GameButton(
+              label: l10n.debateRetry,
+              style: GameButtonStyle.blue,
+              onPressed: _retry),
           cancel,
         ]),
     };

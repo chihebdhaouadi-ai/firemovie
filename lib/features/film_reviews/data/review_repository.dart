@@ -5,6 +5,7 @@ import '../domain/film_reaction.dart';
 import '../domain/movie_review_summary.dart';
 import '../domain/review_stance.dart';
 import '../domain/take.dart';
+import '../domain/take_skin.dart';
 import '../domain/take_tag.dart';
 import '../domain/topic_vote.dart';
 import '../domain/vote_kind.dart';
@@ -20,6 +21,8 @@ abstract interface class ReviewRepository {
     String filmId, {
     required String body,
     TakeTag tag = TakeTag.review,
+    TakeSkin skin = TakeSkin.normal,
+    bool spoiler = false,
   });
 
   /// Posts a question, discussion, hot take, poll or scene. [filmId] is
@@ -34,6 +37,8 @@ abstract interface class ReviewRepository {
     String? scene,
     String? timecode,
     bool spoiler = false,
+    TakeSkin skin = TakeSkin.normal,
+    String title = '',
   });
 
   /// Newest takes, questions and discussions across all films.
@@ -53,6 +58,12 @@ abstract interface class ReviewRepository {
   /// Like or dislike on a question or discussion.
   Future<Take> setTopicVote(int takeId, TopicVote kind, {required bool active});
 
+  /// Saves someone's take to come back to, or unsaves it.
+  Future<Take> setSaved(int takeId, {required bool active});
+
+  /// The takes the viewer saved, most recently saved first.
+  Future<List<FeedItem>> fetchSavedTakes();
+
   /// Sets the viewer's choice on a poll, replacing any earlier choice.
   /// Returns the poll with fresh counts.
   Future<Take> setPollVote(int takeId, int optionId);
@@ -71,6 +82,9 @@ abstract interface class ReviewRepository {
     required String body,
     int? parentId,
     ReviewStance? stance,
+
+    /// An optional photo; the body may then be empty.
+    XFile? image,
   });
 
   Future<List<FriendFilmActivity>> fetchFriendActivity(String filmId);

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../home/views/widgets/take_summary_card.dart' show absoluteApiUrl;
 
 /// Photo attached to a question or discussion. Hidden if it fails to load.
 class TakePhoto extends StatelessWidget {
@@ -17,10 +18,10 @@ class TakePhoto extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 4 / 3,
         child: CachedNetworkImage(
-          imageUrl: url,
+          // The server may send a path ("/media/...") rather than a full URL.
+          imageUrl: absoluteApiUrl(url) ?? url,
           fit: BoxFit.cover,
-          placeholder: (_, __) =>
-              const ColoredBox(color: AppColors.surfaceRaised),
+          placeholder: (_, __) => ColoredBox(color: AppColors.surfaceRaised),
           errorWidget: (_, __, ___) => const SizedBox.shrink(),
         ),
       ),

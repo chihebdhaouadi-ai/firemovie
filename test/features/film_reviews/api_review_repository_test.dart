@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:film_wise_mobile/features/film_reviews/data/api_review_repository.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/film_reaction.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/review_stance.dart';
+import 'package:film_wise_mobile/features/film_reviews/domain/take_skin.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/take_tag.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/topic_vote.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/vote_kind.dart';
@@ -36,8 +37,8 @@ final _takeBody = {
   'reaction': 'blew_mind',
   'body': 'A slow burn.',
   'created_at': '2026-10-21T10:00:00Z',
-  'votes': {'changed_my_mind': 0, 'well_argued': 3, 'disagree_but_fair': 1},
-  'my_votes': ['well_argued'],
+  'votes': {'up': 0, 'draw': 3, 'down': 1},
+  'my_votes': ['draw'],
   'comment_count': 2,
   'is_most_helpful': true,
 };
@@ -162,8 +163,8 @@ void main() {
     expect(takes.single.id, 4);
     expect(takes.single.authorName, 'Ada');
     expect(takes.single.reaction, FilmReaction.blewMind);
-    expect(takes.single.votesOf(VoteKind.wellArgued), 3);
-    expect(takes.single.hasVoted(VoteKind.wellArgued), isTrue);
+    expect(takes.single.votesOf(VoteKind.draw), 3);
+    expect(takes.single.hasVoted(VoteKind.draw), isTrue);
     expect(takes.single.commentCount, 2);
     expect(takes.single.isMostHelpful, isTrue);
   });
@@ -186,6 +187,46 @@ void main() {
     expect(jsonDecode(seen.single.body),
         {'body': 'A slow burn.', 'tag': 'review'});
     expect(take.body, 'A slow burn.');
+  });
+
+  test('postTake sends the picked skin and reads it back', () async {
+    final seen = <http.Request>[];
+    final repository = _repository(
+      (_) async => http.Response(
+        jsonEncode({..._takeBody, 'skin': 'electric_thunder'}),
+        201,
+        headers: _json,
+      ),
+      seen,
+    );
+
+    final take = await repository.postTake(
+      'tt1',
+      body: 'A slow burn.',
+      skin: TakeSkin.electricThunder,
+    );
+
+    expect(jsonDecode(seen.single.body), {
+      'body': 'A slow burn.',
+      'tag': 'review',
+      'skin': 'electric_thunder',
+    });
+    expect(take.skin, TakeSkin.electricThunder);
+  });
+
+  test('a take without a known skin falls back to normal', () async {
+    final repository = _repository(
+      (_) async => http.Response(
+        jsonEncode({..._takeBody, 'skin': 'rainbow'}),
+        201,
+        headers: _json,
+      ),
+      <http.Request>[],
+    );
+
+    final take = await repository.postTake('tt1', body: 'A slow burn.');
+
+    expect(take.skin, TakeSkin.normal);
   });
 
   test('postTake maps a second take to a ServerFailure with its code',
@@ -221,12 +262,12 @@ void main() {
       seen,
     );
 
-    await repository.setVote(4, VoteKind.disagreeButFair, active: false);
+    await repository.setVote(4, VoteKind.down, active: false);
 
     expect(seen.single.method, 'PUT');
     expect(
       seen.single.url.path,
-      '/api/takes/takes/4/votes/disagree_but_fair/',
+      '/api/takes/takes/4/votes/down/',
     );
     expect(jsonDecode(seen.single.body), {'active': false});
   });

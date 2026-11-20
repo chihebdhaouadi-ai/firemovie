@@ -7,6 +7,7 @@ import '../domain/movie_review_summary.dart';
 import '../../home/data/home_models.dart';
 import '../domain/review_stance.dart';
 import '../domain/take.dart';
+import '../domain/take_skin.dart';
 import '../domain/take_tag.dart';
 import '../domain/topic_vote.dart';
 import '../domain/vote_kind.dart';
@@ -58,11 +59,19 @@ class ApiReviewRepository implements ReviewRepository {
     String filmId, {
     required String body,
     TakeTag tag = TakeTag.review,
+    TakeSkin skin = TakeSkin.normal,
+    bool spoiler = false,
   }) async {
     return ReviewParser.take(
       await _client.postJson(
         '/api/takes/films/$filmId/takes/',
-        body: {'body': body, 'tag': tag.apiValue},
+        body: {
+          'body': body,
+          'tag': tag.apiValue,
+          // Sent only when picked, so plain takes keep the same request.
+          if (skin != TakeSkin.normal) 'skin': skin.apiValue,
+          if (spoiler) 'spoiler': true,
+        },
       ),
     );
   }
@@ -77,11 +86,14 @@ class ApiReviewRepository implements ReviewRepository {
     String? scene,
     String? timecode,
     bool spoiler = false,
+    TakeSkin skin = TakeSkin.normal,
+    String title = '',
   }) async {
     return ReviewParser.take(
       await _client.postMultipart(
         '/api/takes/topics/',
         fields: {
+          if (title.trim().isNotEmpty) 'title': title.trim(),
           'body': body,
           'tag': tag.apiValue,
           if (filmId != null) 'film_id': filmId,
@@ -89,6 +101,7 @@ class ApiReviewRepository implements ReviewRepository {
           if (timecode != null && timecode.isNotEmpty) 'timecode': timecode,
           // Sent only when set, so ordinary topics keep the same request.
           if (spoiler) 'spoiler': 'true',
+          if (skin != TakeSkin.normal) 'skin': skin.apiValue,
         },
         fieldLists: {
           if (options.isNotEmpty) 'options': options,
@@ -150,6 +163,23 @@ class ApiReviewRepository implements ReviewRepository {
   }
 
   @override
+  Future<Take> setSaved(int takeId, {required bool active}) async {
+    return ReviewParser.take(
+      await _client.putJson(
+        '/api/takes/takes/$takeId/save/',
+        body: {'active': active},
+      ),
+    );
+  }
+
+  @override
+  Future<List<FeedItem>> fetchSavedTakes() async {
+    return ReviewParser.exploreItems(
+      await _client.getList('/api/takes/saved/'),
+    );
+  }
+
+  @override
   Future<Take> setPollVote(int takeId, int optionId) async {
     return ReviewParser.take(
       await _client.postJson(
@@ -186,7 +216,22 @@ class ApiReviewRepository implements ReviewRepository {
     required String body,
     int? parentId,
     ReviewStance? stance,
+    XFile? image,
   }) async {
+    if (image != null) {
+      return ReviewParser.comment(
+        await _client.postMultipart(
+          '/api/takes/takes/$takeId/comments/',
+          fields: {
+            'body': body,
+            if (parentId != null) 'parent_id': '$parentId',
+            if (stance != null) 'stance': stance.apiValue,
+          },
+          file: image,
+          fileType: topicImageType(image),
+        ),
+      );
+    }
     return ReviewParser.comment(
       await _client.postJson(
         '/api/takes/takes/$takeId/comments/',

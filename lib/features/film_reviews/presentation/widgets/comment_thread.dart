@@ -1,16 +1,23 @@
+import 'dart:typed_data';
+
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/luxe_palette.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/review_stance.dart';
 import '../../domain/take.dart';
 import '../../domain/topic_vote.dart';
+import '../../../social/data/social_models.dart';
+import 'mention_suggestions.dart';
+import '../../../../core/widgets/avatar_frame.dart';
+import '../../../home/views/widgets/take_summary_card.dart' show absoluteApiUrl;
+import 'take_photo.dart';
 import 'translatable_text.dart';
 
 const _maxIndentDepth = 5;
-const _accentText = Color(0xFF8DB8FF);
-const _avatarText = Color(0xFFCFD3DE);
 
 class CommentThread extends StatelessWidget {
   const CommentThread({
@@ -19,9 +26,16 @@ class CommentThread extends StatelessWidget {
     required this.onReply,
     this.onVote,
     this.showReviewStance = false,
+    this.highlightId,
+    this.highlightKey,
   });
 
   final List<TakeComment> comments;
+
+  /// A comment to flash (the one that tagged you), found by [highlightKey]
+  /// so the page can scroll to it.
+  final int? highlightId;
+  final GlobalKey? highlightKey;
   final ValueChanged<TakeComment> onReply;
 
   /// Shows like and dislike on each comment when set.
@@ -42,6 +56,8 @@ class CommentThread extends StatelessWidget {
             onReply: onReply,
             onVote: onVote,
             showReviewStance: showReviewStance,
+            highlightId: highlightId,
+            highlightKey: highlightKey,
           ),
       ],
     );
@@ -83,8 +99,12 @@ class _CommentNode extends StatefulWidget {
     required this.onReply,
     this.onVote,
     required this.showReviewStance,
+    this.highlightId,
+    this.highlightKey,
   });
 
+  final int? highlightId;
+  final GlobalKey? highlightKey;
   final TakeComment comment;
   final _CommentTree tree;
   final int depth;
@@ -111,15 +131,20 @@ class _CommentNodeState extends State<_CommentNode> {
 
     final header = Row(
       children: [
-        CircleAvatar(
-          radius: top ? 16 : 13,
-          backgroundColor: LuxeColors.surface2,
-          child: Text(
-            initial,
-            style: TextStyle(
-              color: _avatarText,
-              fontSize: top ? 13 : 11,
-              fontWeight: FontWeight.w700,
+        // The commenter's photo wearing their frame (the initial when
+        // there is no photo).
+        SizedBox.square(
+          dimension: top ? 40 : 32,
+          child: Center(
+            child: AvatarFrame(
+              key: Key('comment-avatar-${comment.id}'),
+              size: top ? 30 : 24,
+              frame: comment.authorFrame,
+              avatarUrl: absoluteApiUrl(comment.authorAvatarUrl),
+              initial: initial,
+              backgroundColor: LuxeColors.surface2,
+              ringWidth: 0,
+              animate: false,
             ),
           ),
         ),
@@ -128,7 +153,7 @@ class _CommentNodeState extends State<_CommentNode> {
           child: Text(
             comment.authorName,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               color: LuxeColors.text,
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -155,7 +180,7 @@ class _CommentNodeState extends State<_CommentNode> {
               _relativeTime(l10n, createdAt),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: LuxeColors.muted, fontSize: 12),
+              style: TextStyle(color: LuxeColors.muted, fontSize: 12),
             ),
           ),
         ],
@@ -171,7 +196,7 @@ class _CommentNodeState extends State<_CommentNode> {
             onVote: (kind) => widget.onVote!(comment, kind),
           ),
         _GhostAction(
-          icon: Icons.reply_rounded,
+          icon: BootstrapIcons.reply_fill,
           label: l10n.reviewReply,
           onTap: () => widget.onReply(comment),
         ),
@@ -183,17 +208,38 @@ class _CommentNodeState extends State<_CommentNode> {
       children: [
         header,
         const SizedBox(height: 6),
-        Padding(
-          padding: const EdgeInsets.only(left: 2),
-          child: TranslatableText(
-            text: comment.body,
-            style: const TextStyle(
-              color: LuxeColors.text,
-              fontSize: 15,
-              height: 1.45,
+        if (comment.body.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 2),
+            child: TranslatableText(
+              text: comment.body,
+              style: TextStyle(
+                color: LuxeColors.text,
+                fontSize: 15,
+                height: 1.45,
+              ),
             ),
           ),
-        ),
+        if (comment.imageUrl case final url?)
+          Padding(
+            padding: const EdgeInsets.only(top: 8, left: 2),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 260),
+              child: GestureDetector(
+                key: Key('comment-photo-${comment.id}'),
+                onTap: () => showDialog<void>(
+                  context: context,
+                  builder: (context) => GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: InteractiveViewer(
+                      child: Center(child: TakePhoto(url: url)),
+                    ),
+                  ),
+                ),
+                child: TakePhoto(url: url),
+              ),
+            ),
+          ),
         const SizedBox(height: 4),
         Transform.translate(offset: const Offset(-8, 0), child: actions),
         if (children.isNotEmpty)
@@ -224,6 +270,8 @@ class _CommentNodeState extends State<_CommentNode> {
               onReply: widget.onReply,
               onVote: widget.onVote,
               showReviewStance: widget.showReviewStance,
+              highlightId: widget.highlightId,
+              highlightKey: widget.highlightKey,
             ),
         ],
       );
@@ -234,7 +282,7 @@ class _CommentNodeState extends State<_CommentNode> {
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(
-                    color: LuxeColors.accent.withValues(alpha: .28),
+                    color: LuxeColors.hair,
                     width: 2,
                   ),
                 ),
@@ -247,7 +295,10 @@ class _CommentNodeState extends State<_CommentNode> {
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        body,
+        if (comment.id == widget.highlightId)
+          _CommentFlash(key: widget.highlightKey, child: body)
+        else
+          body,
         if (repliesBlock != null) repliesBlock,
       ],
     );
@@ -256,7 +307,7 @@ class _CommentNodeState extends State<_CommentNode> {
     return top
         ? Container(
             padding: const EdgeInsets.symmetric(vertical: 14),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               border: Border(bottom: BorderSide(color: LuxeColors.hair)),
             ),
             child: content,
@@ -270,6 +321,53 @@ class _CommentNodeState extends State<_CommentNode> {
     if (elapsed.inHours < 1) return l10n.reviewTimeMinutes(elapsed.inMinutes);
     if (elapsed.inDays < 1) return l10n.reviewTimeHours(elapsed.inHours);
     return l10n.reviewTimeDays(elapsed.inDays);
+  }
+}
+
+/// Tints a comment for a moment, then fades back, so the eye lands on it.
+class _CommentFlash extends StatefulWidget {
+  const _CommentFlash({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<_CommentFlash> createState() => _CommentFlashState();
+}
+
+class _CommentFlashState extends State<_CommentFlash> {
+  bool _lit = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<void>.delayed(const Duration(milliseconds: 1600), () {
+      if (mounted) setState(() => _lit = false);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // The tint reaches a little past the comment without moving it.
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          left: -8,
+          right: -8,
+          top: -6,
+          bottom: -6,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
+              color: LuxeColors.text.withValues(alpha: _lit ? .08 : 0),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        widget.child,
+      ],
+    );
   }
 }
 
@@ -288,7 +386,7 @@ class _WriterChip extends StatelessWidget {
       ),
       child: Text(
         label.toUpperCase(),
-        style: const TextStyle(
+        style: TextStyle(
           color: LuxeColors.accent,
           fontSize: 10,
           fontWeight: FontWeight.w700,
@@ -308,8 +406,8 @@ class _StanceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = stance == ReviewStance.changedMyMind
-        ? const Color(0xFF62C995)
-        : const Color(0xFFE78383);
+        ? themed(const Color(0xFF62C995), const Color(0xFF276B40))
+        : themed(const Color(0xFFE78383), const Color(0xFFA83A3A));
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
@@ -377,7 +475,7 @@ class _GhostAction extends StatelessWidget {
   }
 }
 
-/// "View N replies" / "Hide replies" pill with a rotating arrow.
+/// "View N replies" / "Hide replies" link with a rotating arrow.
 class _RepliesToggle extends StatelessWidget {
   const _RepliesToggle({
     required this.open,
@@ -397,29 +495,24 @@ class _RepliesToggle extends StatelessWidget {
         onTap: onTap,
         child: Container(
           margin: const EdgeInsets.only(top: 6),
-          padding: const EdgeInsetsDirectional.fromSTEB(8, 5, 12, 5),
-          decoration: BoxDecoration(
-            color: LuxeColors.accent.withValues(alpha: .1),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: LuxeColors.accent.withValues(alpha: .28)),
-          ),
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 5, 12, 5),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               AnimatedRotation(
                 turns: open ? .5 : 0,
                 duration: const Duration(milliseconds: 250),
-                child: const Icon(
-                  Icons.keyboard_arrow_down_rounded,
+                child: Icon(
+                  BootstrapIcons.chevron_down,
                   size: 18,
-                  color: _accentText,
+                  color: LuxeColors.muted,
                 ),
               ),
               const SizedBox(width: 4),
               Text(
                 label,
-                style: const TextStyle(
-                  color: _accentText,
+                style: TextStyle(
+                  color: LuxeColors.muted,
                   fontSize: 12.5,
                   fontWeight: FontWeight.w600,
                 ),
@@ -449,13 +542,13 @@ class _CommentVoteRow extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _GhostAction(
-          icon: Icons.thumb_up_alt_outlined,
+          icon: BootstrapIcons.hand_thumbs_up,
           label: '${comment.likes}',
           active: liked,
           onTap: enabled ? () => onVote(TopicVote.like) : null,
         ),
         _GhostAction(
-          icon: Icons.thumb_down_alt_outlined,
+          icon: BootstrapIcons.hand_thumbs_down,
           label: '${comment.dislikes}',
           active: disliked,
           onTap: enabled ? () => onVote(TopicVote.dislike) : null,
@@ -474,7 +567,18 @@ class CommentComposer extends StatelessWidget {
     required this.onSend,
     this.replyingTo,
     this.onCancelReply,
+    this.mentionFriends = const [],
+    this.onPickPhoto,
+    this.photo,
+    this.onRemovePhoto,
   });
+
+  /// Shows a photo button in the field when set.
+  final VoidCallback? onPickPhoto;
+
+  /// The chosen photo's bytes, previewed above the field until sent.
+  final Uint8List? photo;
+  final VoidCallback? onRemovePhoto;
 
   final TextEditingController controller;
   final FocusNode focusNode;
@@ -482,6 +586,9 @@ class CommentComposer extends StatelessWidget {
   final VoidCallback onSend;
   final String? replyingTo;
   final VoidCallback? onCancelReply;
+
+  /// Friends suggested while typing `@name`; tagged friends get notified.
+  final List<SocialUser> mentionFriends;
 
   @override
   Widget build(BuildContext context) {
@@ -501,7 +608,7 @@ class CommentComposer extends StatelessWidget {
                   child: Text(
                     l10n.reviewReplyingTo(target),
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: LuxeColors.muted,
                       fontSize: 12,
                     ),
@@ -514,14 +621,58 @@ class CommentComposer extends StatelessWidget {
                     child: Container(
                       width: 24,
                       height: 24,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: LuxeColors.surface2,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.close_rounded,
+                      child: Icon(
+                        BootstrapIcons.x_lg,
                         size: 14,
                         color: LuxeColors.muted,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (mentionFriends.isNotEmpty)
+          MentionSuggestions(controller: controller, friends: mentionFriends),
+        if (photo case final bytes?)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.memory(
+                    bytes,
+                    key: const Key('comment-photo-preview'),
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: -6,
+                  right: -6,
+                  child: GestureDetector(
+                    onTap: onRemovePhoto,
+                    child: Tooltip(
+                      message: l10n.commentRemovePhoto,
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: LuxeColors.text,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          BootstrapIcons.x_lg,
+                          size: 12,
+                          color: LuxeColors.bg,
+                        ),
                       ),
                     ),
                   ),
@@ -538,7 +689,7 @@ class CommentComposer extends StatelessWidget {
                 maxLength: 300,
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => onSend(),
-                style: const TextStyle(color: LuxeColors.text, fontSize: 15),
+                style: TextStyle(color: LuxeColors.text, fontSize: 15),
                 buildCounter: (_,
                         {required currentLength,
                         required isFocused,
@@ -546,7 +697,19 @@ class CommentComposer extends StatelessWidget {
                     null,
                 decoration: InputDecoration(
                   hintText: l10n.reviewCommentHint,
-                  hintStyle: const TextStyle(color: LuxeColors.muted),
+                  hintStyle: TextStyle(color: LuxeColors.muted),
+                  prefixIcon: onPickPhoto == null
+                      ? null
+                      : IconButton(
+                          key: const Key('comment-add-photo'),
+                          tooltip: l10n.commentAddPhoto,
+                          onPressed: sending ? null : onPickPhoto,
+                          icon: Icon(
+                            BootstrapIcons.image,
+                            size: 18,
+                            color: LuxeColors.muted,
+                          ),
+                        ),
                   filled: true,
                   fillColor: LuxeColors.surface,
                   isDense: true,
@@ -556,7 +719,7 @@ class CommentComposer extends StatelessWidget {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: const BorderSide(color: LuxeColors.hair),
+                    borderSide: BorderSide(color: LuxeColors.hair),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
@@ -569,7 +732,7 @@ class CommentComposer extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LuxeColors.accentGradient,
               ),
@@ -577,7 +740,7 @@ class CommentComposer extends StatelessWidget {
                 tooltip: l10n.reviewSend,
                 onPressed: sending ? null : onSend,
                 icon: const Icon(
-                  Icons.send_rounded,
+                  BootstrapIcons.send_fill,
                   size: 20,
                   color: Colors.white,
                 ),

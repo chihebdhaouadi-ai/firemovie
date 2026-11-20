@@ -99,11 +99,7 @@ class _TakesList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (var index = 0; index < takes.length; index++) ...[
-          if (index > 0)
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: tokens.spaceMd),
-              child: const Divider(height: 1, color: AppColors.panelBorder),
-            ),
+          if (index > 0) SizedBox(height: tokens.spaceMd),
           _TakeEntry(
             key: ValueKey(takes[index].id),
             take: takes[index],
@@ -132,10 +128,19 @@ class _TakeEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = TakeCard(
-      take: take,
-      isMostHelpful: isMostHelpful,
-      isHighlighted: isHighlighted,
+    final tokens = context.tokens;
+    final card = Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(tokens.spaceMd),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceRaised,
+        borderRadius: BorderRadius.circular(tokens.radiusMd),
+      ),
+      child: TakeCard(
+        take: take,
+        isMostHelpful: isMostHelpful,
+        isHighlighted: isHighlighted,
+      ),
     );
     if (take.commentCount <= _flameCommentThreshold) return card;
 
@@ -145,8 +150,8 @@ class _TakeEntry extends StatelessWidget {
         children: [
           card,
           Positioned(
-            top: 0,
-            right: 0,
+            top: 4,
+            right: 4,
             child: IgnorePointer(
               child: ExcludeSemantics(
                 child: Lottie.asset(

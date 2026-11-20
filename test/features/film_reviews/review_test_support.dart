@@ -59,9 +59,9 @@ Map<String, Object?> takeJson({
     'body': body,
     'created_at': '2026-01-01T12:00:00Z',
     'votes': {
-      'changed_my_mind': 0,
-      'well_argued': wellArgued,
-      'disagree_but_fair': 0,
+      'up': 0,
+      'draw': wellArgued,
+      'down': 0,
     },
     'my_votes': myVotes,
     'comment_count': commentCount,
@@ -178,6 +178,15 @@ class ReviewApi {
   }
 
   http.Response _postTake(String body) {
+    if (failing.contains('postTakeNoFeeling')) {
+      return jsonResponse(
+        {
+          'detail': 'Pick a reaction before sharing a take.',
+          'code': 'reaction_required'
+        },
+        400,
+      );
+    }
     if (failing.contains('postTake')) {
       return jsonResponse(
         {

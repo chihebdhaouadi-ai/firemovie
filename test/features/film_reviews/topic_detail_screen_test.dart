@@ -1,15 +1,18 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
-import 'package:film_wise_mobile/core/widgets/luxe_palette.dart';
 import 'package:film_wise_mobile/features/film_reviews/data/review_repository.dart';
+import 'package:film_wise_mobile/features/film_reviews/domain/film_reaction.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/take.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/review_stance.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/take_tag.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/topic_vote.dart';
 import 'package:film_wise_mobile/features/film_reviews/presentation/topic_detail_screen.dart';
+import 'package:film_wise_mobile/features/film_reviews/presentation/widgets/take_actions.dart';
 import 'package:film_wise_mobile/features/home/data/home_models.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/trending_topics_section.dart';
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const _viewport = Size(800, 900);
@@ -77,6 +80,7 @@ class _TopicReviews implements ReviewRepository {
     required String body,
     int? parentId,
     ReviewStance? stance,
+    XFile? image,
   }) async {
     posted.add(body);
     final comment = TakeComment(
@@ -94,8 +98,34 @@ class _TopicReviews implements ReviewRepository {
 
   @override
   Future<Take> setTopicVote(int takeId, TopicVote kind,
-          {required bool active}) =>
-      throw UnimplementedError();
+      {required bool active}) async {
+    topicVoteCalls.add((takeId, kind, active));
+    final topic = _topic();
+    return Take(
+      id: topic.id,
+      authorId: topic.authorId,
+      authorName: topic.authorName,
+      isMine: false,
+      reaction: null,
+      body: topic.body,
+      votes: const {},
+      myVotes: const {},
+      commentCount: topic.commentCount,
+      isMostHelpful: false,
+      tag: topic.tag,
+      topicVotes: {TopicVote.like: active ? 4 : 3},
+      myTopicVotes: {if (active) TopicVote.like},
+    );
+  }
+
+  final List<(int, TopicVote, bool)> topicVoteCalls = [];
+  final List<(int, bool)> saveCalls = [];
+
+  @override
+  Future<Take> setSaved(int takeId, {required bool active}) async {
+    saveCalls.add((takeId, active));
+    return _topic().copyWith(isSaved: active);
+  }
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -146,7 +176,7 @@ void main() {
     expect(find.text('Be the first to answer.'), findsOneWidget);
   });
 
-  testWidgets('liking a comment bumps the count and reports the vote',
+  testWidgets('topics and their comments have no like or dislike',
       (tester) async {
     final reviews = _TopicReviews(comments: [_comment(likes: 2)]);
     await _pump(
@@ -154,39 +184,111 @@ void main() {
       TopicDetailScreen(item: _item(), repository: reviews),
     );
 
-    // The topic's own vote row comes first, so the comment's like is last.
-    await tester.tap(find.byIcon(Icons.thumb_up_alt_outlined).last);
-    await tester.pumpAndSettle();
-
-    expect(reviews.voteCalls, [(9, TopicVote.like, true)]);
-    expect(find.text('3'), findsWidgets);
-    // The comment's like is the last thumb-up; an active vote is accent-colored.
-    final likeIcon = tester.widget<Icon>(
-      find.byIcon(Icons.thumb_up_alt_outlined).last,
-    );
-    expect(likeIcon.color, LuxeColors.accent);
+    expect(find.byIcon(BootstrapIcons.hand_thumbs_up), findsNothing);
+    expect(find.byIcon(BootstrapIcons.hand_thumbs_down), findsNothing);
+    expect(find.text('Reply'), findsWidgets);
   });
 
-  testWidgets('a dislike replaces an earlier like on the same comment',
+  testWidgets('a topic has one reaction, a heart, saved as a like',
       (tester) async {
-    final reviews = _TopicReviews(comments: [_comment(likes: 1)]);
+    final reviews = _TopicReviews();
     await _pump(
       tester,
       TopicDetailScreen(item: _item(), repository: reviews),
     );
 
-    await tester.tap(find.byIcon(Icons.thumb_up_alt_outlined).last);
-    await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.thumb_down_alt_outlined).last);
+    final heart = find.byKey(const Key('take-heart-42'));
+    expect(heart, findsOneWidget);
+    expect(
+      find.descendant(of: heart, matching: find.text('3')),
+      findsOneWidget,
+    );
+
+    await tester.tap(heart);
     await tester.pumpAndSettle();
 
-    expect(reviews.voteCalls, [
-      (9, TopicVote.like, true),
-      (9, TopicVote.dislike, true),
-    ]);
-    final comment = reviews.comments.single;
-    expect((comment.likes, comment.dislikes, comment.myVote),
-        (1, 1, TopicVote.dislike));
+    expect(reviews.topicVoteCalls, [(42, TopicVote.like, true)]);
+    expect(find.byIcon(BootstrapIcons.heart_fill), findsOneWidget);
+    expect(
+      find.descendant(of: heart, matching: find.text('4')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('the comments can fill the page and shrink back', (tester) async {
+    final reviews = _TopicReviews(comments: [_comment(likes: 0)]);
+    await _pump(
+      tester,
+      TopicDetailScreen(item: _item(), repository: reviews),
+    );
+    // The take's options button sits in the app bar, so it stays in view.
+    final topicMenu = find.byType(TakeTopActions).hitTestable();
+    expect(topicMenu, findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('topic-comments-expand')));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(BootstrapIcons.arrows_angle_contract), findsOneWidget);
+    expect(topicMenu, findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('topic-comments-expand')));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(BootstrapIcons.arrows_angle_expand), findsOneWidget);
+    expect(topicMenu, findsOneWidget);
+  });
+
+  testWidgets('comments can show a photo, and the box offers one',
+      (tester) async {
+    const photo = TakeComment(
+      id: 12,
+      authorId: 5,
+      authorName: 'leo',
+      body: '',
+      isWriter: false,
+      imageUrl: 'https://example.com/still.jpg',
+    );
+    await _pump(
+      tester,
+      TopicDetailScreen(
+        item: _item(),
+        repository: _TopicReviews(comments: [photo]),
+      ),
+    );
+
+    expect(find.byKey(const Key('comment-photo-12')), findsOneWidget);
+    expect(find.byKey(const Key('comment-add-photo')), findsOneWidget);
+  });
+
+  testWidgets('a take opens on the same page, with feelings instead of a tag',
+      (tester) async {
+    final take = Take(
+      id: 43,
+      authorId: 7,
+      authorName: 'maya',
+      isMine: false,
+      reaction: FilmReaction.loved,
+      authorReactions: const [FilmReaction.loved, FilmReaction.shocked],
+      body: 'A heist film with a soul.',
+      votes: const {},
+      myVotes: const {},
+      commentCount: 1,
+      isMostHelpful: false,
+      createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+      tag: TakeTag.review,
+    );
+    await _pump(
+      tester,
+      TopicDetailScreen(
+        item: FeedItem(film: _heat, take: take),
+        repository: _TopicReviews(),
+      ),
+    );
+
+    expect(find.text('Take'), findsOneWidget);
+    expect(find.text('QUESTION'), findsNothing);
+    expect(find.byKey(const Key('take-feelings')), findsOneWidget);
+    expect(find.text('Loved it'), findsOneWidget);
+    expect(find.text('A heist film with a soul.'), findsOneWidget);
+    expect(find.text('Totally a cop-out.'), findsOneWidget);
   });
 
   testWidgets('posting a comment appends it to the thread', (tester) async {
@@ -197,7 +299,7 @@ void main() {
     );
 
     await tester.enterText(find.byType(TextField), 'Not at all, it is fair.');
-    await tester.tap(find.byIcon(Icons.send_rounded));
+    await tester.tap(find.byIcon(BootstrapIcons.send_fill));
     await tester.pumpAndSettle();
 
     expect(reviews.posted, ['Not at all, it is fair.']);
@@ -220,6 +322,77 @@ void main() {
 
     expect(find.byType(TopicDetailScreen), findsOneWidget);
     expect(find.text('Topic'), findsWidgets);
+  });
+
+  testWidgets(
+      'the topic page\'s ⋯ options show Share, Save and Report; the author gets Edit and Delete instead',
+      (tester) async {
+    await _pump(
+      tester,
+      TopicDetailScreen(item: _item(), repository: _TopicReviews()),
+    );
+    expect(find.byKey(const Key('take-top-share')), findsNothing);
+    await tester.tap(find.byKey(const Key('take-top-menu')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('take-top-share')), findsOneWidget);
+    expect(find.byKey(const Key('take-top-save')), findsOneWidget);
+    expect(find.byKey(const Key('take-top-report')), findsOneWidget);
+    expect(find.byKey(const Key('take-top-edit')), findsNothing);
+    expect(find.byKey(const Key('take-top-delete')), findsNothing);
+  });
+
+  testWidgets('saving someone else\'s topic fills the bookmark and says where it went',
+      (tester) async {
+    final reviews = _TopicReviews();
+    await _pump(
+      tester,
+      TopicDetailScreen(item: _item(), repository: reviews),
+    );
+
+    await tester.tap(find.byKey(const Key('take-top-menu')));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(BootstrapIcons.bookmark), findsOneWidget);
+    await tester.tap(find.byKey(const Key('take-top-save')));
+    await tester.pumpAndSettle();
+
+    expect(reviews.saveCalls, [(42, true)]);
+    expect(find.text('Saved to your profile'), findsOneWidget);
+    // Reopened, the options now offer to unsave.
+    await tester.tap(find.byKey(const Key('take-top-menu')));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(BootstrapIcons.bookmark_fill), findsOneWidget);
+  });
+
+  testWidgets('the author of a topic sees Edit and Delete in the ⋯ options',
+      (tester) async {
+    final mine = FeedItem(
+      film: _heat,
+      take: Take(
+        id: 43,
+        authorId: 1,
+        authorName: 'me',
+        isMine: true,
+        reaction: null,
+        body: 'My own question',
+        votes: const {},
+        myVotes: const {},
+        commentCount: 0,
+        isMostHelpful: false,
+        tag: TakeTag.question,
+      ),
+    );
+    await _pump(
+      tester,
+      TopicDetailScreen(item: mine, repository: _TopicReviews()),
+    );
+    await tester.tap(find.byKey(const Key('take-top-menu')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('take-top-share')), findsOneWidget);
+    expect(find.byKey(const Key('take-top-edit')), findsOneWidget);
+    expect(find.byKey(const Key('take-top-delete')), findsOneWidget);
+    expect(find.byKey(const Key('take-top-report')), findsNothing);
+    // You can't save your own topic.
+    expect(find.byKey(const Key('take-top-save')), findsNothing);
   });
 }
 
