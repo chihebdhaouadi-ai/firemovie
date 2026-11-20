@@ -61,10 +61,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homePopularThisWeekTitle => 'أفلام شائعة';
 
   @override
-  String get homeFriendsFilmsTitle => 'أفلام الأصدقاء هذا الأسبوع';
+  String get homeFriendsFilmsTitle => 'الأكثر شعبية بين الأصدقاء';
 
   @override
-  String get homeFriendsReviewsTitle => 'أحدث مراجعات الأصدقاء';
+  String get homeFriendsReviewsTitle => 'أحدث آراء الأصدقاء';
 
   @override
   String get homeMyTakesTitle => 'آرائي';
@@ -73,7 +73,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeComingSoon => 'قريباً';
 
   @override
-  String get homeFriendsReviewsEmpty => 'لم يكتب أصدقاؤك أي مراجعات بعد.';
+  String get homeInboxTitle => 'الرسائل';
+
+  @override
+  String get homeInboxSoonTitle => 'قيد الإنشاء';
+
+  @override
+  String get homeInboxSoonBody => 'ستصل رسائلك مع أصدقائك إلى هنا قريبًا.';
+
+  @override
+  String get homeFriendsReviewsEmpty => 'لم يشارك أصدقاؤك أي آراء بعد.';
 
   @override
   String get homeMyTakesEmpty => 'لم تشارك أي آراء بعد.';
@@ -91,10 +100,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exploreCaughtUp => 'لقد شاهدت كل شيء';
 
   @override
-  String get exploreReviewButton => 'مراجعة';
+  String get exploreReviewButton => 'رأي';
 
   @override
-  String get exploreSubtitle => 'اكتشف مراجعات ونقاشات وأسئلة حول الأفلام.';
+  String get exploreSubtitle => 'اكتشف آراء ونقاشات وأسئلة حول الأفلام.';
 
   @override
   String get createSceneMovieHint => 'يظهر مشهدك في نقاش هذا الفيلم.';
@@ -118,7 +127,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exploreFilterQuestions => 'أسئلة';
 
   @override
-  String get exploreFilterReviews => 'مراجعات';
+  String get exploreFilterReviews => 'آراء';
 
   @override
   String get exploreSpoilerReveal => 'اضغط للكشف';
@@ -280,10 +289,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeCollectionsResizeLabel => 'تغيير حجم المجموعات';
 
   @override
-  String get homeFeedTitle => 'المراجعات من مجموعاتك';
+  String get homeFeedTitle => 'الآراء من مجموعاتك';
 
   @override
-  String get homeFeedEmpty => 'لا توجد مراجعات للأفلام في مجموعاتك بعد.';
+  String get homeFeedEmpty => 'لا توجد آراء حول الأفلام في مجموعاتك بعد.';
 
   @override
   String get homeFeedShowAsRow => 'عرض أفقي';
@@ -621,19 +630,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get overviewShowLess => 'أقل';
 
   @override
-  String get overviewReviewsTitle => 'المراجعات';
+  String get overviewReviewsTitle => 'الآراء';
 
   @override
-  String get overviewAddReviewHint => 'أضف مراجعة…';
+  String get overviewAddReviewHint => 'أضف رأيًا…';
 
   @override
-  String get overviewYourReview => 'مراجعتك';
+  String get overviewYourReview => 'رأيك';
 
   @override
-  String get overviewFriendsReviews => 'مراجعات أصدقائك';
+  String get overviewFriendsReviews => 'آراء أصدقائك';
 
   @override
-  String get overviewPopularReviews => 'المراجعات الشائعة';
+  String get overviewPopularReviews => 'الآراء الشائعة';
 
   @override
   String get overviewSeeAll => 'عرض الكل';
@@ -729,7 +738,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reviewSummaryFailed => 'تعذّر تحميل التفاعلات.';
 
   @override
-  String get reviewDetailTitle => 'المراجعات';
+  String get reviewDetailTitle => 'رأي';
 
   @override
   String get reviewTakesTitle => 'ماذا قال الناس';
@@ -841,7 +850,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String overviewReviewBy(String name, String date) {
-    return 'مراجعة $name بتاريخ $date';
+    return 'رأي $name بتاريخ $date';
   }
 
   @override
@@ -913,7 +922,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileStatWatchlist => 'قائمة المشاهدة';
 
   @override
-  String get profileStatReviews => 'المراجعات';
+  String get profileStatReviews => 'الآراء';
 
   @override
   String get profileStatRewards => 'المكافآت';
@@ -944,6 +953,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileLanguageSystem => 'لغة النظام';
+
+  @override
+  String get profileThemeButton => 'المظهر';
+
+  @override
+  String get profileThemeDialogTitle => 'المظهر';
+
+  @override
+  String get profileThemeSystem => 'حسب النظام';
+
+  @override
+  String get profileThemeLight => 'فاتح';
+
+  @override
+  String get profileThemeDark => 'داكن';
 
   @override
   String get onboardingFinishLater => 'إنهاء لاحقاً';
@@ -1439,7 +1463,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get topicTypeLabel => 'النوع';
 
   @override
-  String get topicTagReview => 'مراجعة';
+  String get topicTagReview => 'رأي';
 
   @override
   String get topicTagQuestion => 'سؤال';
@@ -1451,10 +1475,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get topicTagHotTake => 'Hot Take';
 
   @override
-  String get topicReviewHint => 'تتطلب المراجعة تفاعلك مع الفيلم.';
+  String get topicReviewHint => 'يتطلب الرأي تفاعلك مع الفيلم.';
 
   @override
-  String get topicBodyHint => 'اكتب مراجعتك أو سؤالك أو نقطة النقاش';
+  String get topicBodyHint => 'اكتب رأيك أو سؤالك أو نقطة النقاش';
 
   @override
   String get topicPostButton => 'نشر';
@@ -1484,7 +1508,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get createTypeHotTakeSubtitle => 'Share a bold take about a film.';
 
   @override
-  String get createWriteReviewTitle => 'Write your review';
+  String get createWriteReviewTitle => 'Write your take';
 
   @override
   String get createWriteQuestionTitle => 'Write your question';
@@ -1500,13 +1524,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get createReviewMovieHint =>
-      'Your review appears on that movie\'s page.';
+      'Your take appears on that movie\'s page.';
 
   @override
   String get createFeelTitle => 'How did it make you feel?';
 
   @override
-  String get createFeelHint => 'Pick one reaction. It shows with your review.';
+  String get createFeelHint => 'Pick one reaction. It shows with your take.';
 
   @override
   String get createSubjectTitle => 'What is it about?';
@@ -1534,10 +1558,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get leaderboardTabLabel => 'المتصدرون';
 
   @override
-  String get leaderboardTitle => 'أفضل المراجعين';
+  String get leaderboardTitle => 'أفضل النقاد';
 
   @override
-  String get leaderboardSubtitle => 'مرتبون حسب التفاعلات على مراجعاتهم';
+  String get leaderboardSubtitle => 'مرتبون حسب التفاعلات على آرائهم';
 
   @override
   String get leaderboardHowItWorks => 'كيف يعمل';
@@ -1570,8 +1594,8 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مراجعات',
-      one: 'مراجعة واحدة',
+      other: '$count آراء',
+      one: 'رأي واحد',
     );
     return '$_temp0';
   }
@@ -1592,11 +1616,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get howRankingTitle => 'كيف يعمل الترتيب';
 
   @override
-  String get howStep1Title => 'اكتب مراجعة';
+  String get howStep1Title => 'اكتب رأيًا';
 
   @override
   String get howStep1Body =>
-      'قيّم أي فيلم. ستظهر مراجعتك في الاستكشاف والأصدقاء.';
+      'شارك رأيك في أي فيلم. سيظهر في الاستكشاف والأصدقاء.';
 
   @override
   String get howStep2Title => 'اجمع التفاعلات';
@@ -1609,8 +1633,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get howStep3Title => 'تسلّق القائمة';
 
   @override
-  String get howStep3Body =>
-      'يصعد المراجعون الأكثر تفاعلاً في الفترة إلى المنصة.';
+  String get howStep3Body => 'يصعد النقاد الأكثر تفاعلاً في الفترة إلى المنصة.';
 
   @override
   String get howNoteReset =>
@@ -1618,10 +1641,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get howNoteOncePerReview =>
-      'يمكن لكل شخص التفاعل مرة واحدة لكل مراجعة. التفاعل مع مراجعتك لا يُحتسب.';
+      'يمكن لكل شخص التفاعل مرة واحدة لكل رأي. التفاعل مع رأيك لا يُحتسب.';
 
   @override
-  String get howNoteTie => 'إذا تعادل مراجعان، يتقدم من وصل إلى المجموع أولاً.';
+  String get howNoteTie => 'إذا تعادل ناقدان، يتقدم من وصل إلى المجموع أولاً.';
 
   @override
   String get howNotePodium =>
@@ -1631,7 +1654,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get howLevelsTitle => 'المستويات والخبرة';
 
   @override
-  String get howXpReview => 'كتابة مراجعة';
+  String get howXpReview => 'كتابة رأي';
 
   @override
   String get howXpComment => 'اكتب تعليقًا';
@@ -1684,14 +1707,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get badgeFirstTakeTitle => 'أول رأي';
 
   @override
-  String get badgeFirstTakeDesc => 'كن أول من يقيّم فيلمًا.';
+  String get badgeFirstTakeDesc => 'كن أول من يشارك رأيه في فيلم.';
 
   @override
   String get achFilmCriticTitle => 'ناقد أفلام';
 
   @override
   String achFilmCriticDesc(int count) {
-    return 'اكتب $count مراجعة.';
+    return 'اكتب $count رأيًا.';
   }
 
   @override
@@ -1707,7 +1730,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String achLocalCinemaDesc(int count) {
-    return 'قيّم $count فيلمًا تونسيًا.';
+    return 'شارك رأيك في $count فيلمًا تونسيًا.';
   }
 
   @override
@@ -1805,7 +1828,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authReasonProfile => 'Log in to open your profile';
 
   @override
-  String get authReasonExplore => 'Log in to explore reviews and takes';
+  String get authReasonExplore => 'Log in to explore takes and topics';
 
   @override
   String get authReasonNotifications => 'Log in to see your notifications';
@@ -1822,4 +1845,1736 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get authGuestPromptBody =>
       'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.';
+
+  @override
+  String get browseSectionDiscover => 'اكتشف';
+
+  @override
+  String get browseTopTakes => 'أفضل 100 رأي';
+
+  @override
+  String get browsePopularFilms => 'الأفلام الأكثر شعبية';
+
+  @override
+  String get browseByYear => 'تصفح حسب السنة';
+
+  @override
+  String get browseByStreaming => 'تصفح حسب منصة البث';
+
+  @override
+  String get browseSectionTopics => 'المواضيع الأكثر شعبية';
+
+  @override
+  String get browsePolls => 'استطلاعات';
+
+  @override
+  String get browseConversations => 'محادثات';
+
+  @override
+  String get browseScenes => 'مشاهد';
+
+  @override
+  String get browseQuestions => 'أسئلة';
+
+  @override
+  String get browseHotTakes => 'آراء جريئة';
+
+  @override
+  String get browseSectionFilmSage => 'FilmSage';
+
+  @override
+  String get browseNewHere => 'جديد هنا؟';
+
+  @override
+  String get browseSocialMedia => 'وسائل التواصل الاجتماعي';
+
+  @override
+  String get browseFollowUs => 'تابعنا';
+
+  @override
+  String get browseGifts => 'هدايا';
+
+  @override
+  String get browseContact => 'اتصل بنا';
+
+  @override
+  String get browseTerms => 'شروط الاستخدام / سياسة المجتمع';
+
+  @override
+  String get browseYearsTitle => 'اختر سنة';
+
+  @override
+  String browseDecade(String decade) {
+    return 'عقد $decade';
+  }
+
+  @override
+  String get browseServicesTitle => 'اختر منصة بث';
+
+  @override
+  String get browseServicesEmpty => 'لا توجد منصات بث متاحة.';
+
+  @override
+  String get browseFilmsEmpty => 'لا توجد أفلام هنا بعد.';
+
+  @override
+  String get browseTakesEmpty => 'لم يُنشر شيء هنا بعد.';
+
+  @override
+  String get browseComingSoonTitle => 'قريبًا';
+
+  @override
+  String get browseComingSoonBody => 'ما زلنا نعمل على هذه الصفحة. عد قريبًا.';
+
+  @override
+  String get browseByGenre => 'تصفح حسب النوع';
+
+  @override
+  String get browseByCountry => 'تصفح حسب البلد';
+
+  @override
+  String get browseByLanguage => 'تصفح حسب اللغة';
+
+  @override
+  String get browseGenresTitle => 'اختر نوعًا';
+
+  @override
+  String get browseCountriesTitle => 'اختر بلدًا';
+
+  @override
+  String get browseCountriesHint => 'الأفلام الشائعة المتاحة للبث في كل بلد.';
+
+  @override
+  String browseStreamingIn(String country) {
+    return 'متاح للبث في $country';
+  }
+
+  @override
+  String get browseLanguagesTitle => 'اختر لغة';
+
+  @override
+  String get browsePickEmpty => 'لا توجد خيارات حاليًا.';
+
+  @override
+  String get browseLanguageEn => 'الإنجليزية';
+
+  @override
+  String get browseLanguageFr => 'الفرنسية';
+
+  @override
+  String get browseLanguageEs => 'الإسبانية';
+
+  @override
+  String get browseLanguageIt => 'الإيطالية';
+
+  @override
+  String get browseLanguageDe => 'الألمانية';
+
+  @override
+  String get browseLanguagePt => 'البرتغالية';
+
+  @override
+  String get browseLanguageRu => 'الروسية';
+
+  @override
+  String get browseLanguageAr => 'العربية';
+
+  @override
+  String get browseLanguageTr => 'التركية';
+
+  @override
+  String get browseLanguageHi => 'الهندية';
+
+  @override
+  String get browseLanguageKo => 'الكورية';
+
+  @override
+  String get browseLanguageJa => 'اليابانية';
+
+  @override
+  String get browseLanguageZh => 'الصينية';
+
+  @override
+  String get browseLanguageSv => 'السويدية';
+
+  @override
+  String get overviewPlayTrailer => 'تشغيل الإعلان';
+
+  @override
+  String get overviewTrailerUnavailable => 'تعذّر فتح الإعلان.';
+
+  @override
+  String get overviewLoading => 'جارٍ التحميل…';
+
+  @override
+  String get overviewNoCastCrew => 'لا توجد معلومات عن طاقم العمل بعد.';
+
+  @override
+  String get overviewOfferStream => 'بث';
+
+  @override
+  String get overviewOfferFree => 'مجانًا';
+
+  @override
+  String get overviewOfferTvProvider => 'مع مزوّد تلفزيون';
+
+  @override
+  String get overviewOfferRent => 'استئجار';
+
+  @override
+  String get overviewOfferBuy => 'شراء';
+
+  @override
+  String get overviewCloseTrailer => 'إغلاق الإعلان';
+
+  @override
+  String get filmSuggest => 'اقترح';
+
+  @override
+  String get filmListFailed => 'تعذّر تحديث قائمتك. حاول مجددًا.';
+
+  @override
+  String get filmFeelingsEmpty => 'اضغط لتخبرنا بما شعرت';
+
+  @override
+  String get filmFeelingsHint => 'اختر حتى 3 مشاعر.';
+
+  @override
+  String filmFeelingsCount(String count) {
+    return 'تم اختيار $count من 3';
+  }
+
+  @override
+  String get filmFeelingsSave => 'حفظ';
+
+  @override
+  String get filmFeelingsClear => 'مسح';
+
+  @override
+  String get filmAudienceTitle => 'الجمهور';
+
+  @override
+  String get filmAudienceEmpty =>
+      'لا توجد تفاعلات بعد. كن أول من يخبرنا بما شعر.';
+
+  @override
+  String get filmAudiencePositive => 'استمتعوا به';
+
+  @override
+  String filmAudiencePeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تفاعل $count أشخاص',
+      one: 'تفاعل شخص واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmYourTakeTitle => 'رأيك';
+
+  @override
+  String filmTakeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count آراء',
+      one: 'رأي واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmTopTake => 'أفضل رأي';
+
+  @override
+  String filmShowMoreTakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'عرض $count آراء أخرى',
+      one: 'عرض رأي آخر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmShowLessTakes => 'عرض أقل';
+
+  @override
+  String get filmShareYourTake => 'شارك رأيك';
+
+  @override
+  String get filmAddTake => 'أضف رأيًا';
+
+  @override
+  String overviewFriendStoryNew(String name, String feeling) {
+    return '$name، جديد: $feeling';
+  }
+
+  @override
+  String overviewFriendStorySeen(String name, String feeling) {
+    return '$name: $feeling';
+  }
+
+  @override
+  String filmPersonFeelings(String feelings) {
+    return 'الشعور: $feelings';
+  }
+
+  @override
+  String filmTakeComments(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تعليقات',
+      one: 'تعليق واحد',
+      zero: 'لا تعليقات',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmFeelingsDone => 'تم';
+
+  @override
+  String get personBiography => 'السيرة الذاتية';
+
+  @override
+  String get personFilmography => 'الأفلام';
+
+  @override
+  String get personHeight => 'الطول';
+
+  @override
+  String get personBorn => 'تاريخ الميلاد';
+
+  @override
+  String get personDied => 'تاريخ الوفاة';
+
+  @override
+  String get personNoFilms => 'لا توجد أفلام لهذا الشخص بعد.';
+
+  @override
+  String get personLoadFailed => 'تعذّر تحميل صفحة هذا الشخص.';
+
+  @override
+  String personAsCharacter(String character) {
+    return 'بدور $character';
+  }
+
+  @override
+  String get takeSkinTitle => 'مظهر البطاقة';
+
+  @override
+  String get takeSkinNormal => 'عادي';
+
+  @override
+  String get takeSkinElectricThunder => 'رعد كهربائي';
+
+  @override
+  String get takeSkinPreview => 'معاينة';
+
+  @override
+  String get takeSkinPreviewEmpty => 'سيظهر رأيك هنا.';
+
+  @override
+  String get takeSkinWriteTitle => 'اكتب رأيك';
+
+  @override
+  String get reviewAlreadyShared => 'لقد شاركت رأيك في هذا الفيلم من قبل.';
+
+  @override
+  String get reviewNeedsFeeling =>
+      'اختر أولاً شعورك تجاه الفيلم، ثم شارك رأيك.';
+
+  @override
+  String get reviewYourTake => 'رأيك — يتفاعل معه الآخرون';
+
+  @override
+  String get reviewBeFirstComment => 'كن أول من يعلّق على هذا الرأي.';
+
+  @override
+  String get takeMenuTooltip => 'خيارات أخرى';
+
+  @override
+  String get takeActionShare => 'إرسال إلى الأصدقاء';
+
+  @override
+  String get takeActionEdit => 'تعديل';
+
+  @override
+  String get takeActionDelete => 'حذف';
+
+  @override
+  String get takeActionReport => 'إبلاغ';
+
+  @override
+  String get takeEdited => 'مُعدَّل';
+
+  @override
+  String get takeCancel => 'إلغاء';
+
+  @override
+  String get takeEditTitle => 'تعديل رأيك';
+
+  @override
+  String get takeEditSave => 'حفظ';
+
+  @override
+  String get takeEditSaved => 'تم تحديث رأيك.';
+
+  @override
+  String get takeEditFailed => 'تعذّر حفظ التعديلات. حاول مرة أخرى.';
+
+  @override
+  String get takeDeleteTitle => 'حذف هذا الرأي؟';
+
+  @override
+  String get takeDeleteBody => 'سيُحذف للجميع مع تعليقاته.';
+
+  @override
+  String get takeDeleted => 'تم حذف الرأي.';
+
+  @override
+  String get takeDeleteFailed => 'تعذّر الحذف. حاول مرة أخرى.';
+
+  @override
+  String get takeReportTitle => 'الإبلاغ عن هذا الرأي';
+
+  @override
+  String get takeReportHint => 'لماذا تبلّغ عنه؟ المشرفون فقط يرون البلاغات.';
+
+  @override
+  String get takeReportSpam => 'رسائل مزعجة';
+
+  @override
+  String get takeReportHarassment => 'تحرّش أو تنمّر';
+
+  @override
+  String get takeReportHate => 'خطاب كراهية';
+
+  @override
+  String get takeReportSpoiler => 'حرق أحداث دون تنبيه';
+
+  @override
+  String get takeReportOther => 'سبب آخر';
+
+  @override
+  String get takeReportDetailsHint => 'أضف تفاصيل (اختياري)';
+
+  @override
+  String get takeReportSend => 'إرسال البلاغ';
+
+  @override
+  String get takeReportThanks => 'شكرًا. سيراجعه فريقنا.';
+
+  @override
+  String get takeReportFailed => 'تعذّر إرسال البلاغ. حاول مرة أخرى.';
+
+  @override
+  String get takeShareTitle => 'إرسال إلى الأصدقاء';
+
+  @override
+  String get takeShareMessageHint => 'أضف رسالة (اختياري)';
+
+  @override
+  String get takeShareNoFriends => 'أضف أصدقاء لترسل لهم الآراء.';
+
+  @override
+  String get takeShareFriendsFailed => 'تعذّر تحميل أصدقائك.';
+
+  @override
+  String get takeShareFailed => 'تعذّر الإرسال. حاول مرة أخرى.';
+
+  @override
+  String get notificationTakeGone => 'هذا الرأي لم يعد متاحًا.';
+
+  @override
+  String get mentionSuggestionsLabel => 'أشر إلى صديق';
+
+  @override
+  String takeShareSend(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'إرسال إلى $count أصدقاء',
+      one: 'إرسال إلى صديق واحد',
+      zero: 'إرسال',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String takeShareSent(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'أُرسل إلى $count أصدقاء',
+      one: 'أُرسل إلى صديق واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationTakeShared(String name) {
+    return 'أرسل لك $name رأيًا';
+  }
+
+  @override
+  String notificationTakeMention(String name) {
+    return 'أشار إليك $name في تعليق';
+  }
+
+  @override
+  String get takeSpoilerTitle => 'هل يحتوي على حرق للأحداث؟';
+
+  @override
+  String get takeSpoilerNo => 'لا حرق للأحداث';
+
+  @override
+  String get takeSpoilerHint => 'اختر واحدًا ليعرف القراء ما ينتظرهم.';
+
+  @override
+  String get takeSpoilerRequired =>
+      'حدّد إن كان رأيك يحتوي على حرق للأحداث قبل المشاركة.';
+
+  @override
+  String get takeSpoilerBlurNote => 'سيراه الآخرون ضبابيًا حتى يضغطوا للكشف.';
+
+  @override
+  String get reviewVoteUp => 'مع';
+
+  @override
+  String get reviewVoteDraw => 'تعادل';
+
+  @override
+  String get reviewVoteDown => 'ضد';
+
+  @override
+  String storyTake(String film) {
+    return 'شارك رأيًا عن $film';
+  }
+
+  @override
+  String storyQuestion(String film) {
+    return 'سأل عن $film';
+  }
+
+  @override
+  String storyDiscussion(String film) {
+    return 'بدأ نقاشًا حول $film';
+  }
+
+  @override
+  String storyHotTake(String film) {
+    return 'طرح رأيًا جريئًا عن $film';
+  }
+
+  @override
+  String storyPoll(String film) {
+    return 'أنشأ استطلاعًا عن $film';
+  }
+
+  @override
+  String storyScene(String film) {
+    return 'شارك مشهدًا من $film';
+  }
+
+  @override
+  String storyComment(String film) {
+    return 'علّق على منشور عن $film';
+  }
+
+  @override
+  String get storyUnknownFilm => 'فيلم';
+
+  @override
+  String get storyOpen => 'فتح';
+
+  @override
+  String get storyClose => 'إغلاق';
+
+  @override
+  String storyRingLabel(String name) {
+    return 'قصة $name';
+  }
+
+  @override
+  String get storiesTitle => 'قصص الأصدقاء';
+
+  @override
+  String get inboxSearch => 'بحث';
+
+  @override
+  String get inboxSearchHint => 'ابحث في المحادثات';
+
+  @override
+  String get inboxCloseSearch => 'إغلاق البحث';
+
+  @override
+  String get inboxUnreadOnly => 'غير المقروءة فقط';
+
+  @override
+  String get inboxAddFriend => 'إضافة صديق';
+
+  @override
+  String get inboxCreate => 'محادثة جديدة';
+
+  @override
+  String get inboxNewMessage => 'رسالة جديدة';
+
+  @override
+  String get inboxCreateGroup => 'إنشاء مجموعة';
+
+  @override
+  String get inboxCreateTopic => 'إنشاء موضوع خاص';
+
+  @override
+  String get inboxPrivateTopics => 'مواضيع خاصة';
+
+  @override
+  String get inboxNoTopics => 'لا مواضيع بعد. ابدأ واحدًا مع أصدقائك.';
+
+  @override
+  String get inboxNewTopic => 'موضوع خاص جديد';
+
+  @override
+  String get inboxAllChats => 'كل المحادثات';
+
+  @override
+  String get inboxEmptyTitle => 'لا محادثات بعد';
+
+  @override
+  String get inboxEmptyBody => 'راسل صديقًا لتبدأ الدردشة.';
+
+  @override
+  String get inboxNoResults => 'لا توجد محادثات';
+
+  @override
+  String get inboxLoadFailed => 'تعذّر تحميل رسائلك.';
+
+  @override
+  String inboxYouSaid(String text) {
+    return 'أنت: $text';
+  }
+
+  @override
+  String get inboxNoMessagesYet => 'لا رسائل بعد';
+
+  @override
+  String get inboxGroupName => 'اسم المجموعة';
+
+  @override
+  String get inboxTopicName => 'اسم الموضوع';
+
+  @override
+  String get inboxPickFriends => 'اختر أصدقاء';
+
+  @override
+  String get inboxPickFriend => 'راسل صديقًا';
+
+  @override
+  String get inboxNoFriends => 'أضف أصدقاء أولًا للدردشة معهم.';
+
+  @override
+  String get inboxCreateAction => 'إنشاء';
+
+  @override
+  String get inboxCancel => 'إلغاء';
+
+  @override
+  String get inboxCreateFailed => 'تعذّر الإنشاء. حاول مجددًا.';
+
+  @override
+  String inboxMembers(int count) {
+    return '$count أعضاء';
+  }
+
+  @override
+  String get inboxGroupPhoto => 'أضف صورة للمجموعة';
+
+  @override
+  String get inboxGroupDescription => 'الوصف (اختياري)';
+
+  @override
+  String get inboxPhotoFailed => 'تم الإنشاء، لكن الصورة لم تُرفع.';
+
+  @override
+  String get chatOpenInfo => 'معلومات المجموعة';
+
+  @override
+  String get groupInfoTitle => 'معلومات المجموعة';
+
+  @override
+  String get groupInfoTopicTitle => 'معلومات الموضوع';
+
+  @override
+  String get groupInfoDescription => 'الوصف';
+
+  @override
+  String get groupInfoNoDescription => 'لا يوجد وصف بعد.';
+
+  @override
+  String groupInfoMembers(int count) {
+    return 'الأعضاء · $count';
+  }
+
+  @override
+  String get groupInfoYou => 'أنت';
+
+  @override
+  String get groupInfoCreator => 'المنشئ';
+
+  @override
+  String inboxUnreadLabel(int count) {
+    return '$count غير مقروءة';
+  }
+
+  @override
+  String get chatHint => 'اكتب رسالة';
+
+  @override
+  String get chatSend => 'إرسال';
+
+  @override
+  String get chatStart => 'ابدأ المحادثة';
+
+  @override
+  String get chatSendFailed => 'لم تُرسل الرسالة. حاول مجددًا.';
+
+  @override
+  String get chatPrivateTopic => 'موضوع خاص · يراه الأعضاء فقط';
+
+  @override
+  String get inboxSelectChat => 'اختر محادثة لتبدأ الدردشة';
+
+  @override
+  String get chatMenu => 'قائمة المجموعة';
+
+  @override
+  String get chatShareGroup => 'مشاركة المجموعة';
+
+  @override
+  String get chatBoostGroup => 'ترويج المجموعة';
+
+  @override
+  String get chatReport => 'إبلاغ';
+
+  @override
+  String get chatLeaveGroup => 'مغادرة المجموعة';
+
+  @override
+  String get chatShareBody => 'أرسل المجموعة إلى محادثة.';
+
+  @override
+  String chatSharedTo(String name) {
+    return 'تمت المشاركة في $name';
+  }
+
+  @override
+  String chatBoosted(String name) {
+    return 'بدأ ترويج $name';
+  }
+
+  @override
+  String get chatReportTitle => 'الإبلاغ عن هذه المجموعة';
+
+  @override
+  String get chatReportBody => 'أخبرنا بما هو خطأ. لن يتم إعلام الأعضاء.';
+
+  @override
+  String get chatReportSpam => 'رسائل مزعجة أو احتيال';
+
+  @override
+  String get chatReportHarassment => 'تحرش';
+
+  @override
+  String get chatReportOther => 'شيء آخر';
+
+  @override
+  String get chatReportSent => 'تم إرسال البلاغ';
+
+  @override
+  String get chatCancel => 'إلغاء';
+
+  @override
+  String get chatClose => 'إغلاق';
+
+  @override
+  String get chatBack => 'رجوع';
+
+  @override
+  String get chatActionFailed => 'لم ينجح ذلك. حاول مرة أخرى.';
+
+  @override
+  String get chatPinned => 'مثبّتة';
+
+  @override
+  String chatPinnedCount(int count) {
+    return 'مثبّتة ($count)';
+  }
+
+  @override
+  String get chatReply => 'رد';
+
+  @override
+  String chatReplyingTo(String name) {
+    return 'رد على $name';
+  }
+
+  @override
+  String get chatCancelReply => 'إلغاء الرد';
+
+  @override
+  String get chatPin => 'تثبيت الرسالة';
+
+  @override
+  String get chatUnpin => 'إلغاء تثبيت الرسالة';
+
+  @override
+  String get chatMessagePinned => 'تم تثبيت الرسالة';
+
+  @override
+  String get chatMessageUnpinned => 'تم إلغاء تثبيت الرسالة';
+
+  @override
+  String chatMention(String name) {
+    return 'الإشارة إلى $name';
+  }
+
+  @override
+  String get chatViewProfile => 'عرض الملف الشخصي';
+
+  @override
+  String get chatMoreReactions => 'تفاعلات أكثر';
+
+  @override
+  String chatNotified(String names) {
+    return 'تم إعلام $names';
+  }
+
+  @override
+  String get chatNoMatch => 'لا يوجد تطابق';
+
+  @override
+  String get chatAdd => 'إضافة صورة أو فيديو أو فيلم أو استطلاع';
+
+  @override
+  String get chatEmojiButton => 'إيموجي وصور متحركة وملصقات';
+
+  @override
+  String get chatAddTitle => 'إضافة إلى المحادثة';
+
+  @override
+  String get chatPhoto => 'صورة';
+
+  @override
+  String get chatPhotoBody => 'اختر صورة من جهازك.';
+
+  @override
+  String get chatVideo => 'فيديو';
+
+  @override
+  String get chatVideoBody => 'اختر فيديو من جهازك.';
+
+  @override
+  String get chatMovie => 'فيلم';
+
+  @override
+  String get chatMovieBody => 'ابحث عن فيلم وشاركه كبطاقة.';
+
+  @override
+  String get chatPoll => 'استطلاع';
+
+  @override
+  String get chatPollBody => 'اطرح سؤالًا على المجموعة.';
+
+  @override
+  String get chatSendPhoto => 'إرسال الصورة';
+
+  @override
+  String get chatSendVideo => 'إرسال الفيديو';
+
+  @override
+  String get chatShareMovie => 'مشاركة الفيلم';
+
+  @override
+  String get chatNewPoll => 'استطلاع جديد';
+
+  @override
+  String get chatCaption => 'أضف تعليقًا';
+
+  @override
+  String get chatPollQuestion => 'اطرح سؤالًا';
+
+  @override
+  String chatPollOption(int number) {
+    return 'الخيار $number';
+  }
+
+  @override
+  String get chatAddOption => 'إضافة خيار';
+
+  @override
+  String get chatAllowedReactions => 'التفاعلات المسموح بها على هذا المنشور';
+
+  @override
+  String get chatAllowedReactionsBody =>
+      'يمكن للأعضاء التفاعل بالإيموجي التي تختارها. يضغطون مطولًا على الرسالة لرؤيتها.';
+
+  @override
+  String get chatPollInvalid => 'أضف سؤالًا وخيارين على الأقل';
+
+  @override
+  String get chatFileTooBig => 'هذا الملف كبير جدًا (12 ميغابايت كحد أقصى)';
+
+  @override
+  String get chatSearchMovie => 'البحث عن فيلم';
+
+  @override
+  String get chatSearchMovieHint => 'عنوان الفيلم';
+
+  @override
+  String get chatNoMovie => 'لم يتم العثور على فيلم.';
+
+  @override
+  String chatVotes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count أصوات',
+      one: 'صوت واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatPlayVideo => 'تشغيل الفيديو';
+
+  @override
+  String get chatGif => 'صورة متحركة';
+
+  @override
+  String get chatSticker => 'ملصق';
+
+  @override
+  String get chatTabEmoji => 'إيموجي';
+
+  @override
+  String get chatTabGif => 'GIF';
+
+  @override
+  String get chatTabStickers => 'ملصقات';
+
+  @override
+  String get chatSearchEmoji => 'ابحث عن الإيموجي المناسب';
+
+  @override
+  String get chatSearchGif => 'البحث عن صور متحركة';
+
+  @override
+  String get chatSearchStickers => 'البحث عن ملصقات';
+
+  @override
+  String chatNothingFound(String query) {
+    return 'لا نتائج لـ «$query».';
+  }
+
+  @override
+  String get chatCatFrequent => 'الأكثر استخدامًا';
+
+  @override
+  String get chatCatFaces => 'وجوه';
+
+  @override
+  String get chatCatHands => 'أيادٍ';
+
+  @override
+  String get chatCatObjects => 'أشياء';
+
+  @override
+  String get chatCatSymbols => 'رموز';
+
+  @override
+  String get chatClosePicker => 'إغلاق اللوحة';
+
+  @override
+  String sysPinned(String name) {
+    return 'ثبّت $name رسالة';
+  }
+
+  @override
+  String sysRemoved(String name, String target) {
+    return 'أزال $name $target من المجموعة';
+  }
+
+  @override
+  String sysLeft(String name) {
+    return 'غادر $name المجموعة';
+  }
+
+  @override
+  String sysHeritage(String name, String target) {
+    return 'جعل $name $target المنشئ الوريث';
+  }
+
+  @override
+  String sysPassed(String name, String target) {
+    return 'نقل $name دور المنشئ إلى $target وغادر';
+  }
+
+  @override
+  String sysVoteStarted(String name) {
+    return 'بدأ $name تصويتًا على إبقاء هذه المجموعة';
+  }
+
+  @override
+  String sysVoteCancelled(String name) {
+    return 'ألغى $name التصويت';
+  }
+
+  @override
+  String get sysVoteKeep =>
+      'صوّت معظم الأعضاء لإبقاء المجموعة. اختاروا الآن مالكًا جديدًا.';
+
+  @override
+  String sysVoteOwnerWon(String target) {
+    return 'فاز $target بالتصويت وأصبح المنشئ الوريث';
+  }
+
+  @override
+  String get voteKeepTitle => 'إبقاء هذه المجموعة؟';
+
+  @override
+  String voteKeepBody(String name, String time) {
+    return 'طلب $name المغادرة. أمام الأعضاء $time للتصويت. الأغلبية تقرر، والتعادل يبقي المجموعة.';
+  }
+
+  @override
+  String get voteStay => 'إبقاء';
+
+  @override
+  String get voteDelete => 'حذف';
+
+  @override
+  String voteKeepTally(int stay, int delete) {
+    return 'إبقاء $stay · حذف $delete';
+  }
+
+  @override
+  String get voteOwnPoll => 'لا يمكنك التصويت في استطلاعك.';
+
+  @override
+  String get voteCancel => 'إلغاء التصويت والبقاء منشئًا';
+
+  @override
+  String get voteOwnerTitle => 'من يجب أن يملك هذه المجموعة؟';
+
+  @override
+  String voteOwnerBody(String time) {
+    return 'المجموعة باقية. اختر عضوًا غيرك. المتبقي $time.';
+  }
+
+  @override
+  String get voteOwnerHint => 'اضغط على عضو للتصويت.';
+
+  @override
+  String get voteOwnerChange => 'يمكنك تغيير صوتك حتى نهاية التصويت.';
+
+  @override
+  String voteTimeLeft(int hours, int minutes) {
+    return '$hours س $minutes د';
+  }
+
+  @override
+  String get voteRunning => 'هناك تصويت جارٍ بالفعل';
+
+  @override
+  String get leaveCreatorTitle => 'أنت أنشأت هذه المجموعة';
+
+  @override
+  String get leaveCreatorBody => 'قبل أن تغادر، اختر ماذا يحدث للمجموعة.';
+
+  @override
+  String get leavePass => 'نقل دور المنشئ';
+
+  @override
+  String get leavePassBody => 'اختر عضوًا. سيتولى المجموعة فورًا.';
+
+  @override
+  String get leaveVote => 'دع المجموعة تقرر';
+
+  @override
+  String get leaveVoteBody =>
+      'يصوّت الأعضاء على إبقاء المجموعة أو حذفها، ثم على مالكها. كل تصويت يستغرق 24 ساعة.';
+
+  @override
+  String get leavePickTitle => 'من سيتولى المجموعة؟';
+
+  @override
+  String get leavePickBody =>
+      'يحصل على دور المنشئ الوريث ويحتفظ بالإبلاغ والمشاركة والترويج.';
+
+  @override
+  String get leaveContinue => 'متابعة';
+
+  @override
+  String leavePassConfirmTitle(String name) {
+    return 'نقل الدور إلى $name والمغادرة؟';
+  }
+
+  @override
+  String leavePassConfirmBody(String name) {
+    return 'يصبح $name المنشئ الوريث فورًا. ستغادر المجموعة.';
+  }
+
+  @override
+  String get leavePassConfirm => 'نقل الدور والمغادرة';
+
+  @override
+  String get leaveVoteConfirmTitle => 'بدء تصويت المجموعة؟';
+
+  @override
+  String get leaveVoteConfirmBody =>
+      'الخطوة 1: يصوّت الأعضاء على إبقاء المجموعة أو حذفها لمدة 24 ساعة. إذا اختارت الأغلبية الإبقاء، يختارون في الخطوة 2 المالك الجديد لمدة 24 ساعة أخرى. تبقى المنشئ حتى النهاية.';
+
+  @override
+  String get leaveVoteConfirm => 'بدء التصويت';
+
+  @override
+  String leaveSimpleTitle(String group) {
+    return 'مغادرة $group؟';
+  }
+
+  @override
+  String get leaveSimpleBody => 'لن ترى رسائل هذه المجموعة بعد الآن.';
+
+  @override
+  String confirmType(String name) {
+    return 'للتأكيد، اكتب $name';
+  }
+
+  @override
+  String get groupInfoSearch => 'البحث عن أعضاء';
+
+  @override
+  String groupInfoNoMatch(String query) {
+    return 'لا يوجد أعضاء يطابقون «$query».';
+  }
+
+  @override
+  String get groupInfoHeritage => 'المنشئ الوريث';
+
+  @override
+  String memberViewProfileBody(String name) {
+    return 'شاهد أفلام $name ومجموعاته.';
+  }
+
+  @override
+  String get memberMakeHeritage => 'تعيين منشئ وريث';
+
+  @override
+  String memberMakeHeritageBody(String name) {
+    return 'يتولى $name المجموعة. تصبح عضوًا عاديًا.';
+  }
+
+  @override
+  String get memberRemove => 'إزالة من المجموعة';
+
+  @override
+  String memberRemoveBody(String name) {
+    return 'يفقد $name الوصول إلى المجموعة ورسائلها.';
+  }
+
+  @override
+  String memberMakeHeritageTitle(String name) {
+    return 'تعيين $name منشئًا وريثًا؟';
+  }
+
+  @override
+  String memberMakeHeritageConfirmBody(String name) {
+    return 'يحصل $name على دور المنشئ الوريث ويمكنه الإبلاغ عن المجموعة ومشاركتها وترويجها. تبقى في المجموعة كعضو عادي.';
+  }
+
+  @override
+  String memberRemoveTitle(String name) {
+    return 'إزالة $name؟';
+  }
+
+  @override
+  String memberRemoveConfirmBody(String name, String group) {
+    return 'سيفقد $name الوصول إلى $group ولن يرى الرسائل الجديدة.';
+  }
+
+  @override
+  String memberRemoveConfirm(String name) {
+    return 'إزالة $name';
+  }
+
+  @override
+  String get chatVideoFailed => 'تعذّر تشغيل هذا الفيديو.';
+
+  @override
+  String get chatPauseVideo => 'إيقاف الفيديو مؤقتًا';
+
+  @override
+  String get chatFullScreen => 'ملء الشاشة';
+
+  @override
+  String get chatMute => 'كتم';
+
+  @override
+  String get chatUnmute => 'إلغاء الكتم';
+
+  @override
+  String get chatMutedToast => 'تم كتم المحادثة';
+
+  @override
+  String get chatUnmutedToast => 'تم إلغاء كتم المحادثة';
+
+  @override
+  String get chatPinChat => 'تثبيت في الأعلى';
+
+  @override
+  String get chatUnpinChat => 'إلغاء التثبيت';
+
+  @override
+  String get chatMarkUnread => 'تعليم كغير مقروء';
+
+  @override
+  String get chatMarkRead => 'تعليم كمقروء';
+
+  @override
+  String get chatClearHistory => 'مسح السجل';
+
+  @override
+  String get chatClearTitle => 'مسح السجل؟';
+
+  @override
+  String get chatClearBody =>
+      'تختفي كل الرسائل حتى الآن بالنسبة لك. يظل الآخرون يرونها.';
+
+  @override
+  String get chatCleared => 'تم مسح السجل';
+
+  @override
+  String get chatDeleteChat => 'حذف المحادثة';
+
+  @override
+  String get chatDeleteChatTitle => 'حذف هذه المحادثة؟';
+
+  @override
+  String chatDeleteChatBody(String name) {
+    return 'ستختفي من صندوقك ويُمسح سجلها لديك. ستعود إذا كتب $name مرة أخرى.';
+  }
+
+  @override
+  String get chatChatDeleted => 'تم حذف المحادثة';
+
+  @override
+  String chatBlock(String name) {
+    return 'حظر $name';
+  }
+
+  @override
+  String chatUnblock(String name) {
+    return 'إلغاء حظر $name';
+  }
+
+  @override
+  String chatBlockTitle(String name) {
+    return 'حظر $name؟';
+  }
+
+  @override
+  String get chatBlockBody =>
+      'لن يتمكن أي منكما من مراسلة الآخر حتى تلغي الحظر. لن يتم إخباره.';
+
+  @override
+  String chatBlockedToast(String name) {
+    return 'تم حظر $name';
+  }
+
+  @override
+  String chatUnblockedToast(String name) {
+    return 'تم إلغاء حظر $name';
+  }
+
+  @override
+  String chatYouBlocked(String name) {
+    return 'لقد حظرت $name.';
+  }
+
+  @override
+  String get chatBlockedYou => 'لا يمكنك الرد على هذه المحادثة.';
+
+  @override
+  String get chatBlockedPeople => 'الأشخاص المحظورون';
+
+  @override
+  String get chatNoBlocked => 'لم تحظر أحدًا.';
+
+  @override
+  String get chatUnblockShort => 'إلغاء الحظر';
+
+  @override
+  String get chatCopy => 'نسخ النص';
+
+  @override
+  String get chatCopied => 'تم النسخ';
+
+  @override
+  String get chatEdit => 'تعديل';
+
+  @override
+  String get chatEditing => 'تعديل الرسالة';
+
+  @override
+  String get chatCancelEdit => 'إلغاء التعديل';
+
+  @override
+  String get chatDeleteMessage => 'حذف';
+
+  @override
+  String get chatDeleteMessageTitle => 'حذف هذه الرسالة؟';
+
+  @override
+  String get chatDeleteMessageBody => 'ستُحذف لدى الجميع في المحادثة.';
+
+  @override
+  String get chatMessageDeleted => 'تم حذف هذه الرسالة';
+
+  @override
+  String get chatEdited => 'معدّلة';
+
+  @override
+  String get chatReportMessage => 'الإبلاغ عن الرسالة';
+
+  @override
+  String get chatReportHate => 'خطاب كراهية';
+
+  @override
+  String get chatReportNsfw => 'محتوى جنسي';
+
+  @override
+  String get chatSeen => 'شوهدت';
+
+  @override
+  String get chatAddMembers => 'إضافة أعضاء';
+
+  @override
+  String chatAddMembersTitle(String name) {
+    return 'إضافة إلى $name';
+  }
+
+  @override
+  String get chatAddMembersNone => 'كل أصدقائك هنا بالفعل.';
+
+  @override
+  String get chatAddSelected => 'إضافة';
+
+  @override
+  String get chatMembersAdded => 'تمت إضافة الأعضاء';
+
+  @override
+  String get chatConfirm => 'تأكيد';
+
+  @override
+  String get chatViewProfileMenu => 'عرض الملف';
+
+  @override
+  String inboxChatOptions(String name) {
+    return 'خيارات $name';
+  }
+
+  @override
+  String get inboxPinnedLabel => 'مثبتة';
+
+  @override
+  String get inboxMutedLabel => 'مكتومة';
+
+  @override
+  String sysAdded(String name, String target) {
+    return 'أضاف $name $target';
+  }
+
+  @override
+  String get homeTopicFirstReply => 'كن أول من يرد';
+
+  @override
+  String get homeFriendsActivityTitle => 'نشاط الأصدقاء';
+
+  @override
+  String get homeFriendsActivityResize => 'تغيير حجم نشاط الأصدقاء';
+
+  @override
+  String get topicTitleHint => 'العنوان (اختياري)';
+
+  @override
+  String get topicSeeMore => 'عرض المزيد';
+
+  @override
+  String get topicCommentsExpand => 'توسيع التعليقات';
+
+  @override
+  String get topicCommentsShrink => 'تصغير التعليقات';
+
+  @override
+  String get chatTakeShared => 'شارك رأيًا';
+
+  @override
+  String get chatTopicShared => 'شارك موضوعًا';
+
+  @override
+  String get chatTaggedYou => 'أشار إليك في تعليق';
+
+  @override
+  String get chatYouTagged => 'أشرت إليه في تعليق';
+
+  @override
+  String get chatTaggedThem => 'أشار إليه في تعليق';
+
+  @override
+  String get chatYouSharedTopic => 'شاركت موضوعًا';
+
+  @override
+  String get chatYouSharedTake => 'شاركت رأيًا';
+
+  @override
+  String get commentAddPhoto => 'إضافة صورة';
+
+  @override
+  String get commentRemovePhoto => 'إزالة الصورة';
+
+  @override
+  String get takeFeltLabel => 'شعر بـ';
+
+  @override
+  String homeEditList(String list) {
+    return 'تعديل $list';
+  }
+
+  @override
+  String get homeEditListAdd => 'إضافة فيلم';
+
+  @override
+  String homeEditListRemove(String title) {
+    return 'إزالة $title';
+  }
+
+  @override
+  String get homeEditListEmpty => 'لا توجد أفلام هنا بعد.';
+
+  @override
+  String get homeEditListFull => 'قائمة أفضل 5 ممتلئة. أزل فيلمًا لإضافة آخر.';
+
+  @override
+  String get homeWatchedHint => 'أفلام شاهدتها بالفعل';
+
+  @override
+  String get homeWatchlistHint => 'أفلام تريد مشاهدتها';
+
+  @override
+  String get homeLensHint => 'مرّر إصبعك فوق الملصقات';
+
+  @override
+  String homeLensOpen(String title) {
+    return 'فتح $title';
+  }
+
+  @override
+  String get homeListMore => 'خيارات أخرى';
+
+  @override
+  String get homeListShare => 'شارك قائمتك';
+
+  @override
+  String get homeListRandom => 'اختيار عشوائي';
+
+  @override
+  String get homeListShuffle => 'اختر فيلمًا آخر';
+
+  @override
+  String homeListShareText(String list) {
+    return 'قائمتي $list على FilmSage:';
+  }
+
+  @override
+  String get takeHeartLike => 'إعجاب';
+
+  @override
+  String takeHeartCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count إعجاب',
+      many: '$count إعجابًا',
+      few: '$count إعجابات',
+      two: 'إعجابان',
+      one: 'إعجاب واحد',
+      zero: 'لا إعجابات',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myListsTitle => 'قوائمي';
+
+  @override
+  String get myListsHint => 'القوائم التي أنشأتها ونشرتها';
+
+  @override
+  String get friendsListsTitle => 'قوائم أصدقائك';
+
+  @override
+  String get friendsListsHint => 'ما جمعه أصدقاؤك';
+
+  @override
+  String get listNew => 'قائمة جديدة';
+
+  @override
+  String get listsEmptyMine =>
+      'أنشئ قائمتك الأولى: اختر لها اسمًا وبعض الأفلام.';
+
+  @override
+  String get listCreateTitle => 'قائمة جديدة';
+
+  @override
+  String get listNameLabel => 'اسم القائمة';
+
+  @override
+  String get listNameHint => 'أفضل أفلام السرقة';
+
+  @override
+  String get listSearchHint => 'ابحث عن أفلام لإضافتها';
+
+  @override
+  String listAddFilm(String title) {
+    return 'إضافة $title';
+  }
+
+  @override
+  String listRemoveFilm(String title) {
+    return 'إزالة $title';
+  }
+
+  @override
+  String get listPost => 'نشر القائمة';
+
+  @override
+  String listFilmCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count فيلم',
+      many: '$count فيلمًا',
+      few: '$count أفلام',
+      two: 'فيلمان',
+      one: 'فيلم واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String listBy(String name) {
+    return 'بواسطة $name';
+  }
+
+  @override
+  String get listCommentsTitle => 'التعليقات';
+
+  @override
+  String get listCommentHint => 'أضف تعليقًا';
+
+  @override
+  String get listCommentsEmpty =>
+      'لا توجد تعليقات بعد. قل رأيك في هذه القائمة.';
+
+  @override
+  String listCommentCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تعليق',
+      many: '$count تعليقًا',
+      few: '$count تعليقات',
+      two: 'تعليقان',
+      one: 'تعليق واحد',
+      zero: 'لا تعليقات',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listDelete => 'حذف القائمة';
+
+  @override
+  String get listDeleteConfirm => 'حذف هذه القائمة؟ لا يمكن التراجع.';
+
+  @override
+  String get listCancel => 'إلغاء';
+
+  @override
+  String get listPostFailed => 'تعذّر نشر القائمة. حاول مجددًا.';
+
+  @override
+  String get listLoadFailed => 'تعذّر تحميل القوائم.';
+
+  @override
+  String listPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تم اختيار $count فيلم',
+      many: 'تم اختيار $count فيلمًا',
+      few: 'تم اختيار $count أفلام',
+      two: 'تم اختيار فيلمين',
+      one: 'تم اختيار فيلم واحد',
+      zero: 'لا أفلام بعد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listSearchEmpty => 'لم يتم العثور على أفلام.';
+
+  @override
+  String get listSendFailed => 'تعذّر الإرسال. حاول مجددًا.';
+
+  @override
+  String get takeActionSave => 'حفظ';
+
+  @override
+  String get takeActionUnsave => 'إزالة من المحفوظات';
+
+  @override
+  String get takeSavedToast => 'تم الحفظ في ملفك الشخصي';
+
+  @override
+  String get takeUnsavedToast => 'تمت الإزالة من مواضيعك المحفوظة';
+
+  @override
+  String get takeSaveFailed => 'تعذّر الحفظ. حاول مجددًا.';
+
+  @override
+  String get profileSavedTitle => 'المحفوظات';
+
+  @override
+  String get profileSavedEmpty => 'المواضيع التي تحفظها تظهر هنا.';
+
+  @override
+  String get listShare => 'مشاركة القائمة';
+
+  @override
+  String listShareText(String name, String owner) {
+    return '$name — قائمة من $owner على Film Wise';
+  }
+
+  @override
+  String get listSave => 'حفظ القائمة';
+
+  @override
+  String get listUnsave => 'إزالة من المحفوظات';
+
+  @override
+  String get listSavedToast => 'تم حفظ القائمة في ملفك الشخصي';
+
+  @override
+  String get listUnsavedToast => 'تمت إزالة القائمة من قوائمك المحفوظة';
+
+  @override
+  String get listSaveFailed => 'تعذّر حفظ القائمة. حاول مجددًا.';
+
+  @override
+  String get listEdit => 'تعديل القائمة';
+
+  @override
+  String get listEditTitle => 'تعديل القائمة';
+
+  @override
+  String get listSaveChanges => 'حفظ التغييرات';
+
+  @override
+  String get savedListsTitle => 'القوائم المحفوظة';
+
+  @override
+  String get savedListsHint => 'قوائم الآخرين التي احتفظت بها';
+
+  @override
+  String get listMenuTooltip => 'المزيد';
+
+  @override
+  String get listShareNoFriends => 'أضف أصدقاء لترسل لهم القوائم.';
+
+  @override
+  String get chatListShared => 'شارك قائمة';
+
+  @override
+  String get chatYouSharedList => 'شاركت قائمة';
+
+  @override
+  String get notificationsMarkAllRead => 'تعليم الكل كمقروء';
+
+  @override
+  String get notificationsTabAll => 'الكل';
+
+  @override
+  String get notificationsTabTakes => 'الآراء';
+
+  @override
+  String get notificationsTabMentions => 'الإشارات';
+
+  @override
+  String get notificationsTabRequests => 'الطلبات';
+
+  @override
+  String get notificationsGroupRequests => 'طلبات الصداقة';
+
+  @override
+  String get notificationsGroupNew => 'جديد';
+
+  @override
+  String get notificationsGroupEarlier => 'سابقًا';
+
+  @override
+  String get notificationsNowFriends => 'أصبحتما صديقين الآن';
+
+  @override
+  String notificationsRequestDeclined(String name) {
+    return 'تم رفض طلب $name';
+  }
+
+  @override
+  String get notificationsUndo => 'تراجع';
+
+  @override
+  String get notificationsNothingHere => 'لا شيء هنا بعد.';
+
+  @override
+  String get notificationsTimeNow => 'الآن';
+
+  @override
+  String notificationsTimeMinutes(int count) {
+    return '$count د';
+  }
+
+  @override
+  String notificationsTimeHours(int count) {
+    return '$count س';
+  }
+
+  @override
+  String get notificationsTimeYesterday => 'أمس';
+
+  @override
+  String notificationsTimeDays(int count) {
+    return '$count ي';
+  }
+
+  @override
+  String notificationsUnreadCount(int count) {
+    return '$count غير مقروء';
+  }
 }

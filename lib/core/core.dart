@@ -10,16 +10,15 @@ class SizeConfig {
 
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
-    screenWidth = _mediaQueryData!.size.width; 
+    screenWidth = _mediaQueryData!.size.width;
     screenHeight = _mediaQueryData!.size.height;
     blockSizeHorizontal = screenWidth! / 100;
     blockSizeVertical = screenHeight! / 100;
   }
 }
 
-
-bool loaded_home=false;
-List<String>options_movie_detail =["GENRES","CAST","CREW","PROD"];
+bool loaded_home = false;
+List<String> options_movie_detail = ["GENRES", "CAST", "CREW", "PROD"];
 
 List<dynamic> sidebar_data = [
   {"option_name": "Home", "icon_data": BootstrapIcons.house_fill},
@@ -35,8 +34,7 @@ List<dynamic> sidebar_data = [
 List<dynamic> top_bar_searchfilm = [
   {"btn_string": "Action", "is_active": false},
   {"btn_string": "Adventure", "is_active": false},
-    {"btn_string": "Fantasy", "is_active": false},
-
+  {"btn_string": "Fantasy", "is_active": false},
   {"btn_string": "Romance", "is_active": false}
 ];
 
@@ -44,14 +42,12 @@ List<dynamic> top_bar_search = [
   {"btn_string": "Films", "is_active": false},
   {"btn_string": "Acticles", "is_active": false},
   {"btn_string": "Members", "is_active": false},
-    {"btn_string": "Crew", "is_active": false}
-
+  {"btn_string": "Crew", "is_active": false}
 ];
 
-
-
-Map<String, String> streaming_platform = 
-  {"prime": "assets/prime.png","apple":"assets/appletv1.png","hbo":"assets/hbo.png","netflix":"assets/netflix.png"}
- 
-;
-
+Map<String, String> streaming_platform = {
+  "prime": "assets/prime.png",
+  "apple": "assets/appletv1.png",
+  "hbo": "assets/hbo.png",
+  "netflix": "assets/netflix.png"
+};

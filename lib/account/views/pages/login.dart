@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -19,7 +20,7 @@ import '../../../core/widgets/game_button.dart';
 const _emailPattern = r'^[^@\s]+@[^@\s]+\.[^@\s]+$';
 final _emailRegExp = RegExp(_emailPattern);
 const _successColor = Color(0xFF31FC2A);
-const _fieldTextStyle = TextStyle(color: AppColors.textPrimary, fontSize: 15);
+TextStyle get _fieldTextStyle => TextStyle(color: AppColors.textPrimary, fontSize: 15);
 const _backdropHeightRatio = 480 / 792;
 const _popupUrl =
     'https://lottie.host/2041a391-2eeb-4eac-bf8b-a9fc2a5d7b62/Ygg9wslNj9.json';
@@ -191,7 +192,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   child: IconButton(
                     tooltip: context.l10n.authClose,
                     icon:
-                        const Icon(Icons.close, color: AppColors.textSecondary),
+                        Icon(BootstrapIcons.x_lg, color: AppColors.textSecondary),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
@@ -232,13 +233,23 @@ class _AuthBackdrop extends StatelessWidget {
                   asset: 'assets/createbg.png',
                   fadesOut: false,
                 ),
-                const DecoratedBox(
+                DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      stops: [0.4, 1],
-                      colors: [AppColors.transparent, AppColors.background],
+                      // Light mode washes the photo into paper sooner so the
+                      // ink headline over it stays readable.
+                      stops: AppPalette.current.isDark
+                          ? const [0.4, 1]
+                          : const [0.05, 0.5, 0.85],
+                      colors: AppPalette.current.isDark
+                          ? [AppColors.transparent, AppColors.background]
+                          : [
+                              AppColors.background.withValues(alpha: 0),
+                              AppColors.background.withValues(alpha: .88),
+                              AppColors.background,
+                            ],
                     ),
                   ),
                 ),
@@ -334,7 +345,7 @@ class _AuthPage extends StatelessWidget {
                   SizedBox(height: tokens.spaceLg),
                   Text(
                     context.l10n.authTagline,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.accentGlow,
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -352,7 +363,7 @@ class _AuthPage extends StatelessWidget {
                   SizedBox(height: tokens.spaceXs),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 14,
                       height: 1.4,
@@ -442,7 +453,7 @@ class _SignInFormState extends State<_SignInForm> {
           context,
           controller: _email,
           label: l10n.authEmail,
-          icon: Icons.email_outlined,
+          icon: BootstrapIcons.envelope,
           keyboardType: TextInputType.emailAddress,
           autofillHints: const [AutofillHints.email],
           validator: (value) => _validateEmail(value, l10n),
@@ -453,7 +464,7 @@ class _SignInFormState extends State<_SignInForm> {
           context,
           controller: _password,
           label: l10n.authPassword,
-          icon: Icons.lock_outline_rounded,
+          icon: BootstrapIcons.lock,
           obscure: !_passwordVisible,
           suffixIcon: _visibilityToggle(
             context,
@@ -551,7 +562,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           context,
           controller: _username,
           label: l10n.authUsername,
-          icon: Icons.person_outline_rounded,
+          icon: BootstrapIcons.person,
           helperText: l10n.authMinLengthHint,
           autofillHints: const [AutofillHints.username],
           validator: (value) => _validateUsername(value, l10n),
@@ -562,7 +573,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           context,
           controller: _email,
           label: l10n.authEmail,
-          icon: Icons.email_outlined,
+          icon: BootstrapIcons.envelope,
           keyboardType: TextInputType.emailAddress,
           autofillHints: const [AutofillHints.email],
           validator: (value) => _validateEmail(value, l10n),
@@ -573,7 +584,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           context,
           controller: _password,
           label: l10n.authPassword,
-          icon: Icons.lock_outline_rounded,
+          icon: BootstrapIcons.lock,
           helperText: l10n.authMinLengthHint,
           obscure: !_passwordVisible,
           suffixIcon: _visibilityToggle(
@@ -591,7 +602,7 @@ class _SignUpFormState extends State<_SignUpForm> {
           context,
           controller: _repeatPassword,
           label: l10n.authRepeatPassword,
-          icon: Icons.lock_outline_rounded,
+          icon: BootstrapIcons.lock,
           obscure: !_repeatVisible,
           suffixIcon: _visibilityToggle(
             context,
@@ -703,14 +714,14 @@ InputDecoration _fieldDecoration(
   return InputDecoration(
     labelText: label,
     helperText: helperText,
-    helperStyle: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+    helperStyle: TextStyle(color: AppColors.textMuted, fontSize: 12),
     filled: true,
     fillColor: AppColors.surface,
     prefixIcon: Icon(icon, color: AppColors.textMuted),
     suffixIcon: suffixIcon,
-    labelStyle: const TextStyle(color: AppColors.textSecondary),
-    floatingLabelStyle: const TextStyle(color: AppColors.accentGlow),
-    errorStyle: const TextStyle(color: AppColors.error, fontSize: 12),
+    labelStyle: TextStyle(color: AppColors.textSecondary),
+    floatingLabelStyle: TextStyle(color: AppColors.accentGlow),
+    errorStyle: TextStyle(color: AppColors.error, fontSize: 12),
     contentPadding: EdgeInsets.symmetric(
       horizontal: tokens.spaceLg,
       vertical: tokens.spaceLg,
@@ -733,7 +744,7 @@ Widget _visibilityToggle(
     tooltip: visible ? l10n.authHidePassword : l10n.authShowPassword,
     onPressed: onPressed,
     icon: Icon(
-      visible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+      visible ? BootstrapIcons.eye_slash : BootstrapIcons.eye,
       color: AppColors.textMuted,
     ),
   );
@@ -783,13 +794,13 @@ class _ReasonLine extends StatelessWidget {
     final tokens = context.tokens;
     return Row(
       children: [
-        Icon(Icons.lock_outline_rounded,
+        Icon(BootstrapIcons.lock,
             color: AppColors.accentGlow, size: tokens.iconSmall),
         SizedBox(width: tokens.spaceSm),
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 14,
               height: 1.4,
@@ -816,7 +827,7 @@ class _SuccessBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.check_circle_outline,
+          Icon(BootstrapIcons.check_circle,
               color: _successColor, size: tokens.iconSmall),
           SizedBox(width: tokens.spaceSm),
           Expanded(
@@ -838,15 +849,15 @@ class _OrDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(child: Divider(color: AppColors.outline)),
+        Expanded(child: Divider(color: AppColors.outline)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.tokens.spaceMd),
           child: Text(
             context.l10n.authOr,
-            style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 13),
           ),
         ),
-        const Expanded(child: Divider(color: AppColors.outline)),
+        Expanded(child: Divider(color: AppColors.outline)),
       ],
     );
   }
@@ -890,7 +901,7 @@ class _SwitchPrompt extends StatelessWidget {
       children: [
         Text(
           prompt,
-          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+          style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
         ),
         TextButton(
           onPressed: onTap,

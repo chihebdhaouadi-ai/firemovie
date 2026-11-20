@@ -60,7 +60,7 @@ class SocialAuthButton extends StatelessWidget {
             dimension: 22,
             child: CustomPaint(painter: _GoogleGlyphPainter()),
           ),
-        SocialProvider.apple => const Icon(
+        SocialProvider.apple => Icon(
             BootstrapIcons.apple,
             size: 24,
             color: AppColors.textPrimary,

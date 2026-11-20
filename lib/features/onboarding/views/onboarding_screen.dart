@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -343,7 +344,7 @@ class _PhotoStep extends StatelessWidget {
           Row(
             children: [
               Icon(
-                Icons.check_circle_outline,
+                BootstrapIcons.check_circle,
                 size: tokens.iconSmall,
                 color: AppColors.accentGlow,
               ),
@@ -360,7 +361,7 @@ class _PhotoStep extends StatelessWidget {
         ],
         OutlinedButton.icon(
           onPressed: busy ? null : onPick,
-          icon: const Icon(Icons.photo_library_outlined),
+          icon: const Icon(BootstrapIcons.images),
           style: OutlinedButton.styleFrom(
             minimumSize: Size(0, tokens.minTouchTarget),
           ),
@@ -401,7 +402,7 @@ class _MoviesStep extends StatelessWidget {
         SizedBox(height: tokens.spaceMd),
         OutlinedButton.icon(
           onPressed: busy ? null : onSearch,
-          icon: const Icon(Icons.search),
+          icon: const Icon(BootstrapIcons.search),
           style: OutlinedButton.styleFrom(
             minimumSize: Size(0, tokens.minTouchTarget),
           ),

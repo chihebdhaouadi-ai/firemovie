@@ -201,13 +201,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeFriendsFilmsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Friends\' films this week'**
+  /// **'Popular with Friends'**
   String get homeFriendsFilmsTitle;
 
   /// No description provided for @homeFriendsReviewsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Friends\' latest reviews'**
+  /// **'Friends\' latest takes'**
   String get homeFriendsReviewsTitle;
 
   /// No description provided for @homeMyTakesTitle.
@@ -222,10 +222,28 @@ abstract class AppLocalizations {
   /// **'Coming soon'**
   String get homeComingSoon;
 
+  /// Friends tab heading for the messaging inbox
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox'**
+  String get homeInboxTitle;
+
+  /// Shown while messaging is not built yet
+  ///
+  /// In en, this message translates to:
+  /// **'Under construction'**
+  String get homeInboxSoonTitle;
+
+  /// No description provided for @homeInboxSoonBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages with your friends will land here soon.'**
+  String get homeInboxSoonBody;
+
   /// No description provided for @homeFriendsReviewsEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Your friends haven\'t posted any reviews yet.'**
+  /// **'Your friends haven\'t posted any takes yet.'**
   String get homeFriendsReviewsEmpty;
 
   /// No description provided for @homeMyTakesEmpty.
@@ -261,13 +279,13 @@ abstract class AppLocalizations {
   /// No description provided for @exploreReviewButton.
   ///
   /// In en, this message translates to:
-  /// **'Review'**
+  /// **'Take'**
   String get exploreReviewButton;
 
   /// No description provided for @exploreSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Discover reviews, conversations and questions about films.'**
+  /// **'Discover takes, conversations and questions about films.'**
   String get exploreSubtitle;
 
   /// No description provided for @createSceneMovieHint.
@@ -315,7 +333,7 @@ abstract class AppLocalizations {
   /// No description provided for @exploreFilterReviews.
   ///
   /// In en, this message translates to:
-  /// **'Reviews'**
+  /// **'Takes'**
   String get exploreFilterReviews;
 
   /// No description provided for @exploreSpoilerReveal.
@@ -555,13 +573,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeFeedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Reviews From Your Collections'**
+  /// **'Takes From Your Collections'**
   String get homeFeedTitle;
 
   /// No description provided for @homeFeedEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No reviews on the films in your collections yet.'**
+  /// **'No takes on the films in your collections yet.'**
   String get homeFeedEmpty;
 
   /// No description provided for @homeFeedShowAsRow.
@@ -1144,31 +1162,31 @@ abstract class AppLocalizations {
   /// No description provided for @overviewReviewsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Reviews'**
+  /// **'Takes'**
   String get overviewReviewsTitle;
 
   /// No description provided for @overviewAddReviewHint.
   ///
   /// In en, this message translates to:
-  /// **'Add a review...'**
+  /// **'Add a take...'**
   String get overviewAddReviewHint;
 
   /// No description provided for @overviewYourReview.
   ///
   /// In en, this message translates to:
-  /// **'Your Review'**
+  /// **'Your Take'**
   String get overviewYourReview;
 
   /// No description provided for @overviewFriendsReviews.
   ///
   /// In en, this message translates to:
-  /// **'Friends Reviews'**
+  /// **'Friends\' Takes'**
   String get overviewFriendsReviews;
 
   /// No description provided for @overviewPopularReviews.
   ///
   /// In en, this message translates to:
-  /// **'Popular Reviews'**
+  /// **'Popular Takes'**
   String get overviewPopularReviews;
 
   /// No description provided for @overviewSeeAll.
@@ -1354,7 +1372,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewDetailTitle.
   ///
   /// In en, this message translates to:
-  /// **'Reviews'**
+  /// **'Take'**
   String get reviewDetailTitle;
 
   /// No description provided for @reviewTakesTitle.
@@ -1528,7 +1546,7 @@ abstract class AppLocalizations {
   /// No description provided for @overviewReviewBy.
   ///
   /// In en, this message translates to:
-  /// **'Review by {name} on {date}'**
+  /// **'Take by {name} on {date}'**
   String overviewReviewBy(String name, String date);
 
   /// No description provided for @homeOpenProfile.
@@ -1654,7 +1672,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileStatReviews.
   ///
   /// In en, this message translates to:
-  /// **'Reviews'**
+  /// **'Takes'**
   String get profileStatReviews;
 
   /// No description provided for @profileStatRewards.
@@ -1716,6 +1734,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System default'**
   String get profileLanguageSystem;
+
+  /// Profile: button that opens the light / dark appearance picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profileThemeButton;
+
+  /// Title of the appearance (light / dark) picker dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profileThemeDialogTitle;
+
+  /// Appearance option that follows the device light or dark setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Match system'**
+  String get profileThemeSystem;
+
+  /// Appearance option: light mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get profileThemeLight;
+
+  /// Appearance option: dark mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get profileThemeDark;
 
   /// No description provided for @onboardingFinishLater.
   ///
@@ -2200,7 +2248,7 @@ abstract class AppLocalizations {
   /// No description provided for @angelBirdReviewQuestion.
   ///
   /// In en, this message translates to:
-  /// **'Want to open a debate about this review? Pick someone from this conversation to talk with.'**
+  /// **'Want to open a debate about this take? Pick someone from this conversation to talk with.'**
   String get angelBirdReviewQuestion;
 
   /// No description provided for @angelBirdPickPerson.
@@ -2212,13 +2260,13 @@ abstract class AppLocalizations {
   /// No description provided for @angelBirdNoPeople.
   ///
   /// In en, this message translates to:
-  /// **'Nobody to debate with yet. Wait for a comment on this review.'**
+  /// **'Nobody to debate with yet. Wait for a comment on this take.'**
   String get angelBirdNoPeople;
 
   /// No description provided for @angelBirdPeopleFailed.
   ///
   /// In en, this message translates to:
-  /// **'Could not load the people in this review.'**
+  /// **'Could not load the people in this take.'**
   String get angelBirdPeopleFailed;
 
   /// No description provided for @debateWaitingTitle.
@@ -2602,7 +2650,7 @@ abstract class AppLocalizations {
   /// No description provided for @topicTagReview.
   ///
   /// In en, this message translates to:
-  /// **'Review'**
+  /// **'Take'**
   String get topicTagReview;
 
   /// No description provided for @topicTagQuestion.
@@ -2626,13 +2674,13 @@ abstract class AppLocalizations {
   /// No description provided for @topicReviewHint.
   ///
   /// In en, this message translates to:
-  /// **'Reviews are about one movie and need how it made you feel.'**
+  /// **'Takes are about one movie and need how it made you feel.'**
   String get topicReviewHint;
 
   /// No description provided for @topicBodyHint.
   ///
   /// In en, this message translates to:
-  /// **'Write your review, question or discussion'**
+  /// **'Write your take, question or discussion'**
   String get topicBodyHint;
 
   /// No description provided for @topicPostButton.
@@ -2686,7 +2734,7 @@ abstract class AppLocalizations {
   /// No description provided for @createWriteReviewTitle.
   ///
   /// In en, this message translates to:
-  /// **'Write your review'**
+  /// **'Write your take'**
   String get createWriteReviewTitle;
 
   /// No description provided for @createWriteQuestionTitle.
@@ -2716,7 +2764,7 @@ abstract class AppLocalizations {
   /// No description provided for @createReviewMovieHint.
   ///
   /// In en, this message translates to:
-  /// **'Your review appears on that movie\'s page.'**
+  /// **'Your take appears on that movie\'s page.'**
   String get createReviewMovieHint;
 
   /// No description provided for @createFeelTitle.
@@ -2728,7 +2776,7 @@ abstract class AppLocalizations {
   /// No description provided for @createFeelHint.
   ///
   /// In en, this message translates to:
-  /// **'Pick one reaction. It shows with your review.'**
+  /// **'Pick one reaction. It shows with your take.'**
   String get createFeelHint;
 
   /// No description provided for @createSubjectTitle.
@@ -2782,13 +2830,13 @@ abstract class AppLocalizations {
   /// No description provided for @leaderboardTitle.
   ///
   /// In en, this message translates to:
-  /// **'Top reviewers'**
+  /// **'Top critics'**
   String get leaderboardTitle;
 
   /// No description provided for @leaderboardSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Ranked by reactions on their reviews'**
+  /// **'Ranked by reactions on their takes'**
   String get leaderboardSubtitle;
 
   /// No description provided for @leaderboardHowItWorks.
@@ -2830,7 +2878,7 @@ abstract class AppLocalizations {
   /// No description provided for @leaderboardReviewsCount.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 review} other{{count} reviews}}'**
+  /// **'{count, plural, =1{1 take} other{{count} takes}}'**
   String leaderboardReviewsCount(int count);
 
   /// No description provided for @leaderboardYouSuffix.
@@ -2866,13 +2914,13 @@ abstract class AppLocalizations {
   /// No description provided for @howStep1Title.
   ///
   /// In en, this message translates to:
-  /// **'Write a review'**
+  /// **'Write a take'**
   String get howStep1Title;
 
   /// No description provided for @howStep1Body.
   ///
   /// In en, this message translates to:
-  /// **'Review any film. It shows up in Explore and Friends.'**
+  /// **'Share a take on any film. It shows up in Explore and Friends.'**
   String get howStep1Body;
 
   /// No description provided for @howStep2Title.
@@ -2896,7 +2944,7 @@ abstract class AppLocalizations {
   /// No description provided for @howStep3Body.
   ///
   /// In en, this message translates to:
-  /// **'The reviewers with the most reactions in the period take the podium.'**
+  /// **'The critics with the most reactions in the period take the podium.'**
   String get howStep3Body;
 
   /// No description provided for @howNoteReset.
@@ -2908,13 +2956,13 @@ abstract class AppLocalizations {
   /// No description provided for @howNoteOncePerReview.
   ///
   /// In en, this message translates to:
-  /// **'Each person can react once per review. Reacting to your own review doesn\'t count.'**
+  /// **'Each person can react once per take. Reacting to your own take doesn\'t count.'**
   String get howNoteOncePerReview;
 
   /// No description provided for @howNoteTie.
   ///
   /// In en, this message translates to:
-  /// **'If two reviewers tie, the one who reached the total first ranks higher.'**
+  /// **'If two critics tie, the one who reached the total first ranks higher.'**
   String get howNoteTie;
 
   /// No description provided for @howNotePodium.
@@ -2932,7 +2980,7 @@ abstract class AppLocalizations {
   /// No description provided for @howXpReview.
   ///
   /// In en, this message translates to:
-  /// **'Write a review'**
+  /// **'Write a take'**
   String get howXpReview;
 
   /// No description provided for @howXpComment.
@@ -3022,7 +3070,7 @@ abstract class AppLocalizations {
   /// No description provided for @badgeFirstTakeDesc.
   ///
   /// In en, this message translates to:
-  /// **'Be the first person to review a film.'**
+  /// **'Be the first person to share a take on a film.'**
   String get badgeFirstTakeDesc;
 
   /// No description provided for @achFilmCriticTitle.
@@ -3034,7 +3082,7 @@ abstract class AppLocalizations {
   /// No description provided for @achFilmCriticDesc.
   ///
   /// In en, this message translates to:
-  /// **'Write {count} reviews.'**
+  /// **'Write {count} takes.'**
   String achFilmCriticDesc(int count);
 
   /// No description provided for @achDebaterTitle.
@@ -3058,7 +3106,7 @@ abstract class AppLocalizations {
   /// No description provided for @achLocalCinemaDesc.
   ///
   /// In en, this message translates to:
-  /// **'Review {count} Tunisian films.'**
+  /// **'Share takes on {count} Tunisian films.'**
   String achLocalCinemaDesc(int count);
 
   /// No description provided for @achComingSoon.
@@ -3220,7 +3268,7 @@ abstract class AppLocalizations {
   /// No description provided for @authReasonExplore.
   ///
   /// In en, this message translates to:
-  /// **'Log in to explore reviews and takes'**
+  /// **'Log in to explore takes and topics'**
   String get authReasonExplore;
 
   /// No description provided for @authReasonNotifications.
@@ -3252,6 +3300,2928 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.'**
   String get authGuestPromptBody;
+
+  /// No description provided for @browseSectionDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get browseSectionDiscover;
+
+  /// No description provided for @browseTopTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Top 100 takes'**
+  String get browseTopTakes;
+
+  /// No description provided for @browsePopularFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'Most popular films'**
+  String get browsePopularFilms;
+
+  /// No description provided for @browseByYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by year'**
+  String get browseByYear;
+
+  /// No description provided for @browseByStreaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by streaming service'**
+  String get browseByStreaming;
+
+  /// No description provided for @browseSectionTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Most popular topics'**
+  String get browseSectionTopics;
+
+  /// No description provided for @browsePolls.
+  ///
+  /// In en, this message translates to:
+  /// **'Polls'**
+  String get browsePolls;
+
+  /// No description provided for @browseConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversations'**
+  String get browseConversations;
+
+  /// No description provided for @browseScenes.
+  ///
+  /// In en, this message translates to:
+  /// **'Scenes'**
+  String get browseScenes;
+
+  /// No description provided for @browseQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get browseQuestions;
+
+  /// No description provided for @browseHotTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot takes'**
+  String get browseHotTakes;
+
+  /// No description provided for @browseSectionFilmSage.
+  ///
+  /// In en, this message translates to:
+  /// **'FilmSage'**
+  String get browseSectionFilmSage;
+
+  /// No description provided for @browseNewHere.
+  ///
+  /// In en, this message translates to:
+  /// **'New here?'**
+  String get browseNewHere;
+
+  /// No description provided for @browseSocialMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Social media'**
+  String get browseSocialMedia;
+
+  /// No description provided for @browseFollowUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us'**
+  String get browseFollowUs;
+
+  /// No description provided for @browseGifts.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get browseGifts;
+
+  /// No description provided for @browseContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get browseContact;
+
+  /// No description provided for @browseTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use / Community policy'**
+  String get browseTerms;
+
+  /// No description provided for @browseYearsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a year'**
+  String get browseYearsTitle;
+
+  /// Decade heading on the Browse by year page, e.g. 1990s.
+  ///
+  /// In en, this message translates to:
+  /// **'{decade}s'**
+  String browseDecade(String decade);
+
+  /// No description provided for @browseServicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a streaming service'**
+  String get browseServicesTitle;
+
+  /// No description provided for @browseServicesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No streaming services available.'**
+  String get browseServicesEmpty;
+
+  /// No description provided for @browseFilmsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No films here yet.'**
+  String get browseFilmsEmpty;
+
+  /// No description provided for @browseTakesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing posted here yet.'**
+  String get browseTakesEmpty;
+
+  /// No description provided for @browseComingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get browseComingSoonTitle;
+
+  /// No description provided for @browseComingSoonBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re still working on this page. Check back soon.'**
+  String get browseComingSoonBody;
+
+  /// No description provided for @browseByGenre.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by genre'**
+  String get browseByGenre;
+
+  /// No description provided for @browseByCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by country'**
+  String get browseByCountry;
+
+  /// No description provided for @browseByLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by language'**
+  String get browseByLanguage;
+
+  /// No description provided for @browseGenresTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a genre'**
+  String get browseGenresTitle;
+
+  /// No description provided for @browseCountriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a country'**
+  String get browseCountriesTitle;
+
+  /// No description provided for @browseCountriesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular films streaming in each country.'**
+  String get browseCountriesHint;
+
+  /// Title of the film list for one country.
+  ///
+  /// In en, this message translates to:
+  /// **'Streaming in {country}'**
+  String browseStreamingIn(String country);
+
+  /// No description provided for @browseLanguagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a language'**
+  String get browseLanguagesTitle;
+
+  /// No description provided for @browsePickEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to pick from right now.'**
+  String get browsePickEmpty;
+
+  /// No description provided for @browseLanguageEn.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get browseLanguageEn;
+
+  /// No description provided for @browseLanguageFr.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get browseLanguageFr;
+
+  /// No description provided for @browseLanguageEs.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get browseLanguageEs;
+
+  /// No description provided for @browseLanguageIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get browseLanguageIt;
+
+  /// No description provided for @browseLanguageDe.
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get browseLanguageDe;
+
+  /// No description provided for @browseLanguagePt.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get browseLanguagePt;
+
+  /// No description provided for @browseLanguageRu.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get browseLanguageRu;
+
+  /// No description provided for @browseLanguageAr.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get browseLanguageAr;
+
+  /// No description provided for @browseLanguageTr.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get browseLanguageTr;
+
+  /// No description provided for @browseLanguageHi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hindi'**
+  String get browseLanguageHi;
+
+  /// No description provided for @browseLanguageKo.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get browseLanguageKo;
+
+  /// No description provided for @browseLanguageJa.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese'**
+  String get browseLanguageJa;
+
+  /// No description provided for @browseLanguageZh.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get browseLanguageZh;
+
+  /// No description provided for @browseLanguageSv.
+  ///
+  /// In en, this message translates to:
+  /// **'Swedish'**
+  String get browseLanguageSv;
+
+  /// No description provided for @overviewPlayTrailer.
+  ///
+  /// In en, this message translates to:
+  /// **'Play trailer'**
+  String get overviewPlayTrailer;
+
+  /// No description provided for @overviewTrailerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the trailer.'**
+  String get overviewTrailerUnavailable;
+
+  /// No description provided for @overviewLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get overviewLoading;
+
+  /// No description provided for @overviewNoCastCrew.
+  ///
+  /// In en, this message translates to:
+  /// **'No cast and crew information yet.'**
+  String get overviewNoCastCrew;
+
+  /// No description provided for @overviewOfferStream.
+  ///
+  /// In en, this message translates to:
+  /// **'Stream'**
+  String get overviewOfferStream;
+
+  /// No description provided for @overviewOfferFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get overviewOfferFree;
+
+  /// No description provided for @overviewOfferTvProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'With a TV provider'**
+  String get overviewOfferTvProvider;
+
+  /// No description provided for @overviewOfferRent.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get overviewOfferRent;
+
+  /// No description provided for @overviewOfferBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get overviewOfferBuy;
+
+  /// No description provided for @overviewCloseTrailer.
+  ///
+  /// In en, this message translates to:
+  /// **'Close trailer'**
+  String get overviewCloseTrailer;
+
+  /// No description provided for @filmSuggest.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest'**
+  String get filmSuggest;
+
+  /// No description provided for @filmListFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update your list. Try again.'**
+  String get filmListFailed;
+
+  /// No description provided for @filmFeelingsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to say how it made you feel'**
+  String get filmFeelingsEmpty;
+
+  /// No description provided for @filmFeelingsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up to 3 feelings.'**
+  String get filmFeelingsHint;
+
+  /// No description provided for @filmFeelingsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 3 picked'**
+  String filmFeelingsCount(String count);
+
+  /// No description provided for @filmFeelingsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get filmFeelingsSave;
+
+  /// No description provided for @filmFeelingsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get filmFeelingsClear;
+
+  /// No description provided for @filmAudienceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The audience'**
+  String get filmAudienceTitle;
+
+  /// No description provided for @filmAudienceEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No reactions yet. Be the first to say how it made you feel.'**
+  String get filmAudienceEmpty;
+
+  /// No description provided for @filmAudiencePositive.
+  ///
+  /// In en, this message translates to:
+  /// **'enjoyed it'**
+  String get filmAudiencePositive;
+
+  /// No description provided for @filmAudiencePeople.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person reacted} other{{count} people reacted}}'**
+  String filmAudiencePeople(int count);
+
+  /// No description provided for @filmYourTakeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your take'**
+  String get filmYourTakeTitle;
+
+  /// No description provided for @filmTakeCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 take} other{{count} takes}}'**
+  String filmTakeCount(int count);
+
+  /// No description provided for @filmTopTake.
+  ///
+  /// In en, this message translates to:
+  /// **'TOP TAKE'**
+  String get filmTopTake;
+
+  /// No description provided for @filmShowMoreTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Show 1 more take} other{Show {count} more takes}}'**
+  String filmShowMoreTakes(int count);
+
+  /// No description provided for @filmShowLessTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get filmShowLessTakes;
+
+  /// No description provided for @filmShareYourTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your take'**
+  String get filmShareYourTake;
+
+  /// No description provided for @filmAddTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Add take'**
+  String get filmAddTake;
+
+  /// No description provided for @overviewFriendStoryNew.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, new: {feeling}'**
+  String overviewFriendStoryNew(String name, String feeling);
+
+  /// No description provided for @overviewFriendStorySeen.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {feeling}'**
+  String overviewFriendStorySeen(String name, String feeling);
+
+  /// No description provided for @filmPersonFeelings.
+  ///
+  /// In en, this message translates to:
+  /// **'Felt: {feelings}'**
+  String filmPersonFeelings(String feelings);
+
+  /// No description provided for @filmTakeComments.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No comments} =1{1 comment} other{{count} comments}}'**
+  String filmTakeComments(int count);
+
+  /// No description provided for @filmFeelingsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get filmFeelingsDone;
+
+  /// No description provided for @personBiography.
+  ///
+  /// In en, this message translates to:
+  /// **'Biography'**
+  String get personBiography;
+
+  /// No description provided for @personFilmography.
+  ///
+  /// In en, this message translates to:
+  /// **'Movies'**
+  String get personFilmography;
+
+  /// No description provided for @personHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get personHeight;
+
+  /// No description provided for @personBorn.
+  ///
+  /// In en, this message translates to:
+  /// **'Born'**
+  String get personBorn;
+
+  /// No description provided for @personDied.
+  ///
+  /// In en, this message translates to:
+  /// **'Died'**
+  String get personDied;
+
+  /// No description provided for @personNoFilms.
+  ///
+  /// In en, this message translates to:
+  /// **'No movies found for this person yet.'**
+  String get personNoFilms;
+
+  /// No description provided for @personLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this person\'s page.'**
+  String get personLoadFailed;
+
+  /// No description provided for @personAsCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'as {character}'**
+  String personAsCharacter(String character);
+
+  /// No description provided for @takeSkinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card skin'**
+  String get takeSkinTitle;
+
+  /// No description provided for @takeSkinNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get takeSkinNormal;
+
+  /// No description provided for @takeSkinElectricThunder.
+  ///
+  /// In en, this message translates to:
+  /// **'Electric thunder'**
+  String get takeSkinElectricThunder;
+
+  /// No description provided for @takeSkinPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get takeSkinPreview;
+
+  /// No description provided for @takeSkinPreviewEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your take will appear here.'**
+  String get takeSkinPreviewEmpty;
+
+  /// No description provided for @takeSkinWriteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your take'**
+  String get takeSkinWriteTitle;
+
+  /// No description provided for @reviewAlreadyShared.
+  ///
+  /// In en, this message translates to:
+  /// **'You already shared a take for this film.'**
+  String get reviewAlreadyShared;
+
+  /// No description provided for @reviewNeedsFeeling.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick how the film made you feel first, then share your take.'**
+  String get reviewNeedsFeeling;
+
+  /// No description provided for @reviewYourTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Your take — others react to it'**
+  String get reviewYourTake;
+
+  /// No description provided for @reviewBeFirstComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Be the first to comment on this take.'**
+  String get reviewBeFirstComment;
+
+  /// No description provided for @takeMenuTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get takeMenuTooltip;
+
+  /// No description provided for @takeActionShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to friends'**
+  String get takeActionShare;
+
+  /// No description provided for @takeActionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get takeActionEdit;
+
+  /// No description provided for @takeActionDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get takeActionDelete;
+
+  /// No description provided for @takeActionReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get takeActionReport;
+
+  /// No description provided for @takeEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'edited'**
+  String get takeEdited;
+
+  /// No description provided for @takeCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get takeCancel;
+
+  /// No description provided for @takeEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your take'**
+  String get takeEditTitle;
+
+  /// No description provided for @takeEditSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get takeEditSave;
+
+  /// No description provided for @takeEditSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your take was updated.'**
+  String get takeEditSaved;
+
+  /// No description provided for @takeEditFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your changes. Try again.'**
+  String get takeEditFailed;
+
+  /// No description provided for @takeDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this take?'**
+  String get takeDeleteTitle;
+
+  /// No description provided for @takeDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It will be removed for everyone, along with its comments.'**
+  String get takeDeleteBody;
+
+  /// No description provided for @takeDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Take deleted.'**
+  String get takeDeleted;
+
+  /// No description provided for @takeDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete it. Try again.'**
+  String get takeDeleteFailed;
+
+  /// No description provided for @takeReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this take'**
+  String get takeReportTitle;
+
+  /// No description provided for @takeReportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you reporting it? Only moderators see reports.'**
+  String get takeReportHint;
+
+  /// No description provided for @takeReportSpam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam'**
+  String get takeReportSpam;
+
+  /// No description provided for @takeReportHarassment.
+  ///
+  /// In en, this message translates to:
+  /// **'Harassment or bullying'**
+  String get takeReportHarassment;
+
+  /// No description provided for @takeReportHate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hate speech'**
+  String get takeReportHate;
+
+  /// No description provided for @takeReportSpoiler.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmarked spoiler'**
+  String get takeReportSpoiler;
+
+  /// No description provided for @takeReportOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get takeReportOther;
+
+  /// No description provided for @takeReportDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add details (optional)'**
+  String get takeReportDetailsHint;
+
+  /// No description provided for @takeReportSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report'**
+  String get takeReportSend;
+
+  /// No description provided for @takeReportThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks. Our team will review it.'**
+  String get takeReportThanks;
+
+  /// No description provided for @takeReportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the report. Try again.'**
+  String get takeReportFailed;
+
+  /// No description provided for @takeShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to friends'**
+  String get takeShareTitle;
+
+  /// No description provided for @takeShareMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a message (optional)'**
+  String get takeShareMessageHint;
+
+  /// No description provided for @takeShareNoFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friends to send them takes.'**
+  String get takeShareNoFriends;
+
+  /// No description provided for @takeShareFriendsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your friends.'**
+  String get takeShareFriendsFailed;
+
+  /// No description provided for @takeShareFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send it. Try again.'**
+  String get takeShareFailed;
+
+  /// No description provided for @notificationTakeGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This take is no longer available.'**
+  String get notificationTakeGone;
+
+  /// No description provided for @mentionSuggestionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mention a friend'**
+  String get mentionSuggestionsLabel;
+
+  /// No description provided for @takeShareSend.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Send} =1{Send to 1 friend} other{Send to {count} friends}}'**
+  String takeShareSend(int count);
+
+  /// No description provided for @takeShareSent.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Sent to 1 friend} other{Sent to {count} friends}}'**
+  String takeShareSent(int count);
+
+  /// No description provided for @notificationTakeShared.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} sent you a take'**
+  String notificationTakeShared(String name);
+
+  /// No description provided for @notificationTakeMention.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} mentioned you in a comment'**
+  String notificationTakeMention(String name);
+
+  /// Spoiler question shown when sharing a take.
+  ///
+  /// In en, this message translates to:
+  /// **'Does it have spoilers?'**
+  String get takeSpoilerTitle;
+
+  /// Spoiler question shown when sharing a take.
+  ///
+  /// In en, this message translates to:
+  /// **'No spoilers'**
+  String get takeSpoilerNo;
+
+  /// Spoiler question shown when sharing a take.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick one so readers know what to expect.'**
+  String get takeSpoilerHint;
+
+  /// Spoiler question shown when sharing a take.
+  ///
+  /// In en, this message translates to:
+  /// **'Say whether your take has spoilers before sharing.'**
+  String get takeSpoilerRequired;
+
+  /// Spoiler question shown when sharing a take.
+  ///
+  /// In en, this message translates to:
+  /// **'Others will see it blurred until they tap to reveal.'**
+  String get takeSpoilerBlurNote;
+
+  /// Name of a review vote, read by screen readers and tooltips; the button shows only an icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Up'**
+  String get reviewVoteUp;
+
+  /// Name of a review vote, read by screen readers and tooltips; the button shows only an icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw'**
+  String get reviewVoteDraw;
+
+  /// Name of a review vote, read by screen readers and tooltips; the button shows only an icon.
+  ///
+  /// In en, this message translates to:
+  /// **'Down'**
+  String get reviewVoteDown;
+
+  /// No description provided for @storyTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared a take on {film}'**
+  String storyTake(String film);
+
+  /// No description provided for @storyQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Asked about {film}'**
+  String storyQuestion(String film);
+
+  /// No description provided for @storyDiscussion.
+  ///
+  /// In en, this message translates to:
+  /// **'Started a discussion on {film}'**
+  String storyDiscussion(String film);
+
+  /// No description provided for @storyHotTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Dropped a hot take on {film}'**
+  String storyHotTake(String film);
+
+  /// No description provided for @storyPoll.
+  ///
+  /// In en, this message translates to:
+  /// **'Made a poll about {film}'**
+  String storyPoll(String film);
+
+  /// No description provided for @storyScene.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared a scene from {film}'**
+  String storyScene(String film);
+
+  /// No description provided for @storyComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Commented on a post about {film}'**
+  String storyComment(String film);
+
+  /// No description provided for @storyUnknownFilm.
+  ///
+  /// In en, this message translates to:
+  /// **'a film'**
+  String get storyUnknownFilm;
+
+  /// No description provided for @storyOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get storyOpen;
+
+  /// No description provided for @storyClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get storyClose;
+
+  /// No description provided for @storyRingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}\'s story'**
+  String storyRingLabel(String name);
+
+  /// No description provided for @storiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends\' stories'**
+  String get storiesTitle;
+
+  /// No description provided for @inboxSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get inboxSearch;
+
+  /// No description provided for @inboxSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search conversations'**
+  String get inboxSearchHint;
+
+  /// No description provided for @inboxCloseSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Close search'**
+  String get inboxCloseSearch;
+
+  /// No description provided for @inboxUnreadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Show only unread'**
+  String get inboxUnreadOnly;
+
+  /// No description provided for @inboxAddFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friend'**
+  String get inboxAddFriend;
+
+  /// No description provided for @inboxCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat'**
+  String get inboxCreate;
+
+  /// No description provided for @inboxNewMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'New message'**
+  String get inboxNewMessage;
+
+  /// No description provided for @inboxCreateGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a group'**
+  String get inboxCreateGroup;
+
+  /// No description provided for @inboxCreateTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a private topic'**
+  String get inboxCreateTopic;
+
+  /// No description provided for @inboxPrivateTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Private topics'**
+  String get inboxPrivateTopics;
+
+  /// No description provided for @inboxNoTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'No topics yet. Start one with friends.'**
+  String get inboxNoTopics;
+
+  /// No description provided for @inboxNewTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'New private topic'**
+  String get inboxNewTopic;
+
+  /// No description provided for @inboxAllChats.
+  ///
+  /// In en, this message translates to:
+  /// **'All chats'**
+  String get inboxAllChats;
+
+  /// No description provided for @inboxEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get inboxEmptyTitle;
+
+  /// No description provided for @inboxEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Message a friend to start chatting.'**
+  String get inboxEmptyBody;
+
+  /// No description provided for @inboxNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations found'**
+  String get inboxNoResults;
+
+  /// No description provided for @inboxLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your messages.'**
+  String get inboxLoadFailed;
+
+  /// No description provided for @inboxYouSaid.
+  ///
+  /// In en, this message translates to:
+  /// **'You: {text}'**
+  String inboxYouSaid(String text);
+
+  /// No description provided for @inboxNoMessagesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get inboxNoMessagesYet;
+
+  /// No description provided for @inboxGroupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get inboxGroupName;
+
+  /// No description provided for @inboxTopicName.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic name'**
+  String get inboxTopicName;
+
+  /// No description provided for @inboxPickFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose friends'**
+  String get inboxPickFriends;
+
+  /// No description provided for @inboxPickFriend.
+  ///
+  /// In en, this message translates to:
+  /// **'Message a friend'**
+  String get inboxPickFriend;
+
+  /// No description provided for @inboxNoFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friends first to chat with them.'**
+  String get inboxNoFriends;
+
+  /// No description provided for @inboxCreateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get inboxCreateAction;
+
+  /// No description provided for @inboxCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get inboxCancel;
+
+  /// No description provided for @inboxCreateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create it. Try again.'**
+  String get inboxCreateFailed;
+
+  /// No description provided for @inboxMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} members'**
+  String inboxMembers(int count);
+
+  /// No description provided for @inboxGroupPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a group photo'**
+  String get inboxGroupPhoto;
+
+  /// No description provided for @inboxGroupDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description (optional)'**
+  String get inboxGroupDescription;
+
+  /// No description provided for @inboxPhotoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Created, but the photo didn\'t upload.'**
+  String get inboxPhotoFailed;
+
+  /// No description provided for @chatOpenInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Group info'**
+  String get chatOpenInfo;
+
+  /// No description provided for @groupInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Group info'**
+  String get groupInfoTitle;
+
+  /// No description provided for @groupInfoTopicTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic info'**
+  String get groupInfoTopicTitle;
+
+  /// No description provided for @groupInfoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get groupInfoDescription;
+
+  /// No description provided for @groupInfoNoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description yet.'**
+  String get groupInfoNoDescription;
+
+  /// No description provided for @groupInfoMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members · {count}'**
+  String groupInfoMembers(int count);
+
+  /// No description provided for @groupInfoYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get groupInfoYou;
+
+  /// No description provided for @groupInfoCreator.
+  ///
+  /// In en, this message translates to:
+  /// **'Creator'**
+  String get groupInfoCreator;
+
+  /// No description provided for @inboxUnreadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String inboxUnreadLabel(int count);
+
+  /// No description provided for @chatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a message'**
+  String get chatHint;
+
+  /// No description provided for @chatSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get chatSend;
+
+  /// No description provided for @chatStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start the conversation'**
+  String get chatStart;
+
+  /// No description provided for @chatSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Message not sent. Try again.'**
+  String get chatSendFailed;
+
+  /// No description provided for @chatPrivateTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Private topic · only members can see it'**
+  String get chatPrivateTopic;
+
+  /// No description provided for @inboxSelectChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a conversation to start chatting'**
+  String get inboxSelectChat;
+
+  /// No description provided for @chatMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Group menu'**
+  String get chatMenu;
+
+  /// No description provided for @chatShareGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Share group'**
+  String get chatShareGroup;
+
+  /// No description provided for @chatBoostGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost group'**
+  String get chatBoostGroup;
+
+  /// No description provided for @chatReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get chatReport;
+
+  /// No description provided for @chatLeaveGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave group'**
+  String get chatLeaveGroup;
+
+  /// No description provided for @chatShareBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Send the group to a conversation.'**
+  String get chatShareBody;
+
+  /// No description provided for @chatSharedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared to {name}'**
+  String chatSharedTo(String name);
+
+  /// No description provided for @chatBoosted.
+  ///
+  /// In en, this message translates to:
+  /// **'Boost started for {name}'**
+  String chatBoosted(String name);
+
+  /// No description provided for @chatReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this group'**
+  String get chatReportTitle;
+
+  /// No description provided for @chatReportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what is wrong. Members are not notified.'**
+  String get chatReportBody;
+
+  /// No description provided for @chatReportSpam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam or scam'**
+  String get chatReportSpam;
+
+  /// No description provided for @chatReportHarassment.
+  ///
+  /// In en, this message translates to:
+  /// **'Harassment'**
+  String get chatReportHarassment;
+
+  /// No description provided for @chatReportOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get chatReportOther;
+
+  /// No description provided for @chatReportSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Report sent'**
+  String get chatReportSent;
+
+  /// No description provided for @chatCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get chatCancel;
+
+  /// No description provided for @chatClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get chatClose;
+
+  /// No description provided for @chatBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get chatBack;
+
+  /// No description provided for @chatActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'That didn\'t work. Try again.'**
+  String get chatActionFailed;
+
+  /// No description provided for @chatPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned'**
+  String get chatPinned;
+
+  /// No description provided for @chatPinnedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned ({count})'**
+  String chatPinnedCount(int count);
+
+  /// No description provided for @chatReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get chatReply;
+
+  /// No description provided for @chatReplyingTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to {name}'**
+  String chatReplyingTo(String name);
+
+  /// No description provided for @chatCancelReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel reply'**
+  String get chatCancelReply;
+
+  /// No description provided for @chatPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin message'**
+  String get chatPin;
+
+  /// No description provided for @chatUnpin.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin message'**
+  String get chatUnpin;
+
+  /// No description provided for @chatMessagePinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Message pinned'**
+  String get chatMessagePinned;
+
+  /// No description provided for @chatMessageUnpinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Message unpinned'**
+  String get chatMessageUnpinned;
+
+  /// No description provided for @chatMention.
+  ///
+  /// In en, this message translates to:
+  /// **'Mention {name}'**
+  String chatMention(String name);
+
+  /// No description provided for @chatViewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View profile'**
+  String get chatViewProfile;
+
+  /// No description provided for @chatMoreReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'More reactions'**
+  String get chatMoreReactions;
+
+  /// No description provided for @chatNotified.
+  ///
+  /// In en, this message translates to:
+  /// **'Notified {names}'**
+  String chatNotified(String names);
+
+  /// No description provided for @chatNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No one matches'**
+  String get chatNoMatch;
+
+  /// No description provided for @chatAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photo, video, movie or poll'**
+  String get chatAdd;
+
+  /// No description provided for @chatEmojiButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Emoji, GIFs and stickers'**
+  String get chatEmojiButton;
+
+  /// No description provided for @chatAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to chat'**
+  String get chatAddTitle;
+
+  /// No description provided for @chatPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get chatPhoto;
+
+  /// No description provided for @chatPhotoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a photo from your device.'**
+  String get chatPhotoBody;
+
+  /// No description provided for @chatVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get chatVideo;
+
+  /// No description provided for @chatVideoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a video from your device.'**
+  String get chatVideoBody;
+
+  /// No description provided for @chatMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie'**
+  String get chatMovie;
+
+  /// No description provided for @chatMovieBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Search a film and share it as a card.'**
+  String get chatMovieBody;
+
+  /// No description provided for @chatPoll.
+  ///
+  /// In en, this message translates to:
+  /// **'Poll'**
+  String get chatPoll;
+
+  /// No description provided for @chatPollBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the group a question.'**
+  String get chatPollBody;
+
+  /// No description provided for @chatSendPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Send photo'**
+  String get chatSendPhoto;
+
+  /// No description provided for @chatSendVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Send video'**
+  String get chatSendVideo;
+
+  /// No description provided for @chatShareMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'Share movie'**
+  String get chatShareMovie;
+
+  /// No description provided for @chatNewPoll.
+  ///
+  /// In en, this message translates to:
+  /// **'New poll'**
+  String get chatNewPoll;
+
+  /// No description provided for @chatCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a caption'**
+  String get chatCaption;
+
+  /// No description provided for @chatPollQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a question'**
+  String get chatPollQuestion;
+
+  /// No description provided for @chatPollOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Option {number}'**
+  String chatPollOption(int number);
+
+  /// No description provided for @chatAddOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Add option'**
+  String get chatAddOption;
+
+  /// No description provided for @chatAllowedReactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Reactions allowed on this post'**
+  String get chatAllowedReactions;
+
+  /// No description provided for @chatAllowedReactionsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Members can react with the emojis you choose. They hold a message to see them.'**
+  String get chatAllowedReactionsBody;
+
+  /// No description provided for @chatPollInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a question and at least two options'**
+  String get chatPollInvalid;
+
+  /// No description provided for @chatFileTooBig.
+  ///
+  /// In en, this message translates to:
+  /// **'That file is too big (12 MB max)'**
+  String get chatFileTooBig;
+
+  /// No description provided for @chatSearchMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'Search a movie'**
+  String get chatSearchMovie;
+
+  /// No description provided for @chatSearchMovieHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Film title'**
+  String get chatSearchMovieHint;
+
+  /// No description provided for @chatNoMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'No movie found.'**
+  String get chatNoMovie;
+
+  /// No description provided for @chatVotes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 vote} other{{count} votes}}'**
+  String chatVotes(int count);
+
+  /// No description provided for @chatPlayVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Play video'**
+  String get chatPlayVideo;
+
+  /// No description provided for @chatGif.
+  ///
+  /// In en, this message translates to:
+  /// **'GIF'**
+  String get chatGif;
+
+  /// No description provided for @chatSticker.
+  ///
+  /// In en, this message translates to:
+  /// **'Sticker'**
+  String get chatSticker;
+
+  /// No description provided for @chatTabEmoji.
+  ///
+  /// In en, this message translates to:
+  /// **'Emoji'**
+  String get chatTabEmoji;
+
+  /// No description provided for @chatTabGif.
+  ///
+  /// In en, this message translates to:
+  /// **'GIF'**
+  String get chatTabGif;
+
+  /// No description provided for @chatTabStickers.
+  ///
+  /// In en, this message translates to:
+  /// **'Stickers'**
+  String get chatTabStickers;
+
+  /// No description provided for @chatSearchEmoji.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the perfect emoji'**
+  String get chatSearchEmoji;
+
+  /// No description provided for @chatSearchGif.
+  ///
+  /// In en, this message translates to:
+  /// **'Search GIFs'**
+  String get chatSearchGif;
+
+  /// No description provided for @chatSearchStickers.
+  ///
+  /// In en, this message translates to:
+  /// **'Search stickers'**
+  String get chatSearchStickers;
+
+  /// No description provided for @chatNothingFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing found for “{query}”.'**
+  String chatNothingFound(String query);
+
+  /// No description provided for @chatCatFrequent.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently used'**
+  String get chatCatFrequent;
+
+  /// No description provided for @chatCatFaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Faces'**
+  String get chatCatFaces;
+
+  /// No description provided for @chatCatHands.
+  ///
+  /// In en, this message translates to:
+  /// **'Hands'**
+  String get chatCatHands;
+
+  /// No description provided for @chatCatObjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Objects'**
+  String get chatCatObjects;
+
+  /// No description provided for @chatCatSymbols.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbols'**
+  String get chatCatSymbols;
+
+  /// No description provided for @chatClosePicker.
+  ///
+  /// In en, this message translates to:
+  /// **'Close picker'**
+  String get chatClosePicker;
+
+  /// No description provided for @sysPinned.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} pinned a message'**
+  String sysPinned(String name);
+
+  /// No description provided for @sysRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} removed {target} from the group'**
+  String sysRemoved(String name, String target);
+
+  /// No description provided for @sysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} left the group'**
+  String sysLeft(String name);
+
+  /// No description provided for @sysHeritage.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} made {target} Heritage creator'**
+  String sysHeritage(String name, String target);
+
+  /// No description provided for @sysPassed.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} passed the creator tag to {target} and left'**
+  String sysPassed(String name, String target);
+
+  /// No description provided for @sysVoteStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} started a vote on keeping this group'**
+  String sysVoteStarted(String name);
+
+  /// No description provided for @sysVoteCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} cancelled the vote'**
+  String sysVoteCancelled(String name);
+
+  /// No description provided for @sysVoteKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Most members voted to keep the group. Now choose a new owner.'**
+  String get sysVoteKeep;
+
+  /// No description provided for @sysVoteOwnerWon.
+  ///
+  /// In en, this message translates to:
+  /// **'{target} won the vote and is now Heritage creator'**
+  String sysVoteOwnerWon(String target);
+
+  /// No description provided for @voteKeepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep this group?'**
+  String get voteKeepTitle;
+
+  /// No description provided for @voteKeepBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} asked to leave. Members have {time} left to vote. Most votes decide; a tie keeps the group.'**
+  String voteKeepBody(String name, String time);
+
+  /// No description provided for @voteStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get voteStay;
+
+  /// No description provided for @voteDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get voteDelete;
+
+  /// No description provided for @voteKeepTally.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay {stay} · Delete {delete}'**
+  String voteKeepTally(int stay, int delete);
+
+  /// No description provided for @voteOwnPoll.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t vote on your own poll.'**
+  String get voteOwnPoll;
+
+  /// No description provided for @voteCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel poll and stay creator'**
+  String get voteCancel;
+
+  /// No description provided for @voteOwnerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who should own this group?'**
+  String get voteOwnerTitle;
+
+  /// No description provided for @voteOwnerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The group is staying. Pick one member other than yourself. {time} left.'**
+  String voteOwnerBody(String time);
+
+  /// No description provided for @voteOwnerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a member to vote.'**
+  String get voteOwnerHint;
+
+  /// No description provided for @voteOwnerChange.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change your vote until the poll ends.'**
+  String get voteOwnerChange;
+
+  /// No description provided for @voteTimeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String voteTimeLeft(int hours, int minutes);
+
+  /// No description provided for @voteRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'A vote is already running'**
+  String get voteRunning;
+
+  /// No description provided for @leaveCreatorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You created this group'**
+  String get leaveCreatorTitle;
+
+  /// No description provided for @leaveCreatorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you leave, choose what happens to the group.'**
+  String get leaveCreatorBody;
+
+  /// No description provided for @leavePass.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass the creator tag'**
+  String get leavePass;
+
+  /// No description provided for @leavePassBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a member. They take over right away.'**
+  String get leavePassBody;
+
+  /// No description provided for @leaveVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Let the group decide'**
+  String get leaveVote;
+
+  /// No description provided for @leaveVoteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Members vote on keeping or deleting the group, then on who owns it. Each vote takes 24 hours.'**
+  String get leaveVoteBody;
+
+  /// No description provided for @leavePickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who takes over?'**
+  String get leavePickTitle;
+
+  /// No description provided for @leavePickBody.
+  ///
+  /// In en, this message translates to:
+  /// **'They get the Heritage creator tag and keep report, share and boost.'**
+  String get leavePickBody;
+
+  /// No description provided for @leaveContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get leaveContinue;
+
+  /// No description provided for @leavePassConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass the tag to {name} and leave?'**
+  String leavePassConfirmTitle(String name);
+
+  /// No description provided for @leavePassConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} becomes Heritage creator right away. You will leave the group.'**
+  String leavePassConfirmBody(String name);
+
+  /// No description provided for @leavePassConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass tag and leave'**
+  String get leavePassConfirm;
+
+  /// No description provided for @leaveVoteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start the group vote?'**
+  String get leaveVoteConfirmTitle;
+
+  /// No description provided for @leaveVoteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 1: members vote to keep or delete the group for 24 hours. If most vote Stay, step 2 lets them choose the new owner for another 24 hours. You stay creator until it ends.'**
+  String get leaveVoteConfirmBody;
+
+  /// No description provided for @leaveVoteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Start vote'**
+  String get leaveVoteConfirm;
+
+  /// No description provided for @leaveSimpleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave {group}?'**
+  String leaveSimpleTitle(String group);
+
+  /// No description provided for @leaveSimpleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will stop seeing messages from this group.'**
+  String get leaveSimpleBody;
+
+  /// No description provided for @confirmType.
+  ///
+  /// In en, this message translates to:
+  /// **'To confirm, type {name}'**
+  String confirmType(String name);
+
+  /// No description provided for @groupInfoSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search members'**
+  String get groupInfoSearch;
+
+  /// No description provided for @groupInfoNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No members match “{query}”.'**
+  String groupInfoNoMatch(String query);
+
+  /// No description provided for @groupInfoHeritage.
+  ///
+  /// In en, this message translates to:
+  /// **'Heritage creator'**
+  String get groupInfoHeritage;
+
+  /// No description provided for @memberViewProfileBody.
+  ///
+  /// In en, this message translates to:
+  /// **'See {name}\'s films and collections.'**
+  String memberViewProfileBody(String name);
+
+  /// No description provided for @memberMakeHeritage.
+  ///
+  /// In en, this message translates to:
+  /// **'Make Heritage creator'**
+  String get memberMakeHeritage;
+
+  /// No description provided for @memberMakeHeritageBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} takes over the group. You become a regular member.'**
+  String memberMakeHeritageBody(String name);
+
+  /// No description provided for @memberRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from group'**
+  String get memberRemove;
+
+  /// No description provided for @memberRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} loses access to the group and its messages.'**
+  String memberRemoveBody(String name);
+
+  /// No description provided for @memberMakeHeritageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make {name} Heritage creator?'**
+  String memberMakeHeritageTitle(String name);
+
+  /// No description provided for @memberMakeHeritageConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} gets the Heritage creator tag and can report, share and boost the group. You stay in the group as a regular member.'**
+  String memberMakeHeritageConfirmBody(String name);
+
+  /// No description provided for @memberRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}?'**
+  String memberRemoveTitle(String name);
+
+  /// No description provided for @memberRemoveConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} will lose access to {group} and won\'t see new messages.'**
+  String memberRemoveConfirmBody(String name, String group);
+
+  /// No description provided for @memberRemoveConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}'**
+  String memberRemoveConfirm(String name);
+
+  /// No description provided for @chatVideoFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t play this video.'**
+  String get chatVideoFailed;
+
+  /// No description provided for @chatPauseVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause video'**
+  String get chatPauseVideo;
+
+  /// No description provided for @chatFullScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Full screen'**
+  String get chatFullScreen;
+
+  /// No description provided for @chatMute.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute'**
+  String get chatMute;
+
+  /// No description provided for @chatUnmute.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute'**
+  String get chatUnmute;
+
+  /// No description provided for @chatMutedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat muted'**
+  String get chatMutedToast;
+
+  /// No description provided for @chatUnmutedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat unmuted'**
+  String get chatUnmutedToast;
+
+  /// No description provided for @chatPinChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin to top'**
+  String get chatPinChat;
+
+  /// No description provided for @chatUnpinChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpin from top'**
+  String get chatUnpinChat;
+
+  /// No description provided for @chatMarkUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as unread'**
+  String get chatMarkUnread;
+
+  /// No description provided for @chatMarkRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as read'**
+  String get chatMarkRead;
+
+  /// No description provided for @chatClearHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear history'**
+  String get chatClearHistory;
+
+  /// No description provided for @chatClearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear the history?'**
+  String get chatClearTitle;
+
+  /// No description provided for @chatClearBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Every message so far disappears for you. The others still see them.'**
+  String get chatClearBody;
+
+  /// No description provided for @chatCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'History cleared'**
+  String get chatCleared;
+
+  /// No description provided for @chatDeleteChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete chat'**
+  String get chatDeleteChat;
+
+  /// No description provided for @chatDeleteChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this chat?'**
+  String get chatDeleteChatTitle;
+
+  /// No description provided for @chatDeleteChatBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It leaves your inbox and its history is cleared for you. It comes back if {name} writes again.'**
+  String chatDeleteChatBody(String name);
+
+  /// No description provided for @chatChatDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat deleted'**
+  String get chatChatDeleted;
+
+  /// No description provided for @chatBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}'**
+  String chatBlock(String name);
+
+  /// No description provided for @chatUnblock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock {name}'**
+  String chatUnblock(String name);
+
+  /// No description provided for @chatBlockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}?'**
+  String chatBlockTitle(String name);
+
+  /// No description provided for @chatBlockBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Neither of you can message the other until you unblock them. They won\'t be told.'**
+  String get chatBlockBody;
+
+  /// No description provided for @chatBlockedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is blocked'**
+  String chatBlockedToast(String name);
+
+  /// No description provided for @chatUnblockedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is unblocked'**
+  String chatUnblockedToast(String name);
+
+  /// No description provided for @chatYouBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You blocked {name}.'**
+  String chatYouBlocked(String name);
+
+  /// No description provided for @chatBlockedYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t reply to this conversation.'**
+  String get chatBlockedYou;
+
+  /// No description provided for @chatBlockedPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked people'**
+  String get chatBlockedPeople;
+
+  /// No description provided for @chatNoBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t blocked anyone.'**
+  String get chatNoBlocked;
+
+  /// No description provided for @chatUnblockShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock'**
+  String get chatUnblockShort;
+
+  /// No description provided for @chatCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy text'**
+  String get chatCopy;
+
+  /// No description provided for @chatCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get chatCopied;
+
+  /// No description provided for @chatEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get chatEdit;
+
+  /// No description provided for @chatEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Editing message'**
+  String get chatEditing;
+
+  /// No description provided for @chatCancelEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel editing'**
+  String get chatCancelEdit;
+
+  /// No description provided for @chatDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get chatDeleteMessage;
+
+  /// No description provided for @chatDeleteMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this message?'**
+  String get chatDeleteMessageTitle;
+
+  /// No description provided for @chatDeleteMessageBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s deleted for everyone in the chat.'**
+  String get chatDeleteMessageBody;
+
+  /// No description provided for @chatMessageDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'This message was deleted'**
+  String get chatMessageDeleted;
+
+  /// No description provided for @chatEdited.
+  ///
+  /// In en, this message translates to:
+  /// **'edited'**
+  String get chatEdited;
+
+  /// No description provided for @chatReportMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Report message'**
+  String get chatReportMessage;
+
+  /// No description provided for @chatReportHate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hate speech'**
+  String get chatReportHate;
+
+  /// No description provided for @chatReportNsfw.
+  ///
+  /// In en, this message translates to:
+  /// **'Sexual content'**
+  String get chatReportNsfw;
+
+  /// No description provided for @chatSeen.
+  ///
+  /// In en, this message translates to:
+  /// **'Seen'**
+  String get chatSeen;
+
+  /// No description provided for @chatAddMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Add members'**
+  String get chatAddMembers;
+
+  /// No description provided for @chatAddMembersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to {name}'**
+  String chatAddMembersTitle(String name);
+
+  /// No description provided for @chatAddMembersNone.
+  ///
+  /// In en, this message translates to:
+  /// **'All your friends are already here.'**
+  String get chatAddMembersNone;
+
+  /// No description provided for @chatAddSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get chatAddSelected;
+
+  /// No description provided for @chatMembersAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Members added'**
+  String get chatMembersAdded;
+
+  /// No description provided for @chatConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get chatConfirm;
+
+  /// No description provided for @chatViewProfileMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'View profile'**
+  String get chatViewProfileMenu;
+
+  /// No description provided for @inboxChatOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Options for {name}'**
+  String inboxChatOptions(String name);
+
+  /// No description provided for @inboxPinnedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pinned'**
+  String get inboxPinnedLabel;
+
+  /// No description provided for @inboxMutedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Muted'**
+  String get inboxMutedLabel;
+
+  /// No description provided for @sysAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added {target}'**
+  String sysAdded(String name, String target);
+
+  /// No description provided for @homeTopicFirstReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Be the first to reply'**
+  String get homeTopicFirstReply;
+
+  /// No description provided for @homeFriendsActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends Activity'**
+  String get homeFriendsActivityTitle;
+
+  /// No description provided for @homeFriendsActivityResize.
+  ///
+  /// In en, this message translates to:
+  /// **'Resize friends activity'**
+  String get homeFriendsActivityResize;
+
+  /// No description provided for @topicTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Title (optional)'**
+  String get topicTitleHint;
+
+  /// No description provided for @topicSeeMore.
+  ///
+  /// In en, this message translates to:
+  /// **'See more'**
+  String get topicSeeMore;
+
+  /// No description provided for @topicCommentsExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand comments'**
+  String get topicCommentsExpand;
+
+  /// No description provided for @topicCommentsShrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Shrink comments'**
+  String get topicCommentsShrink;
+
+  /// No description provided for @chatTakeShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared a take'**
+  String get chatTakeShared;
+
+  /// No description provided for @chatTopicShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared a topic'**
+  String get chatTopicShared;
+
+  /// No description provided for @chatTaggedYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Tagged you in a comment'**
+  String get chatTaggedYou;
+
+  /// No description provided for @chatYouTagged.
+  ///
+  /// In en, this message translates to:
+  /// **'You tagged them in a comment'**
+  String get chatYouTagged;
+
+  /// No description provided for @chatTaggedThem.
+  ///
+  /// In en, this message translates to:
+  /// **'Tagged them in a comment'**
+  String get chatTaggedThem;
+
+  /// No description provided for @chatYouSharedTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'You shared a topic'**
+  String get chatYouSharedTopic;
+
+  /// No description provided for @chatYouSharedTake.
+  ///
+  /// In en, this message translates to:
+  /// **'You shared a take'**
+  String get chatYouSharedTake;
+
+  /// No description provided for @commentAddPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo'**
+  String get commentAddPhoto;
+
+  /// No description provided for @commentRemovePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get commentRemovePhoto;
+
+  /// No description provided for @takeFeltLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Felt'**
+  String get takeFeltLabel;
+
+  /// Title and pen-button label for editing a home film list.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {list}'**
+  String homeEditList(String list);
+
+  /// Edit film list page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a film'**
+  String get homeEditListAdd;
+
+  /// Remove button label on the edit list page.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {title}'**
+  String homeEditListRemove(String title);
+
+  /// Edit film list page.
+  ///
+  /// In en, this message translates to:
+  /// **'No films here yet.'**
+  String get homeEditListEmpty;
+
+  /// Edit film list page.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Top 5 is full. Remove a film to add another.'**
+  String get homeEditListFull;
+
+  /// Small line under the Watched section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Films you\'ve already seen'**
+  String get homeWatchedHint;
+
+  /// Small line under the Watchlist section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Films you want to watch'**
+  String get homeWatchlistHint;
+
+  /// Hint on the Watchlist edit page's cover wall before the first touch.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag your finger over the covers'**
+  String get homeLensHint;
+
+  /// Open button for the picked film on the cover wall.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {title}'**
+  String homeLensOpen(String title);
+
+  /// Tooltip of the ⋮ menu on the edit list page.
+  ///
+  /// In en, this message translates to:
+  /// **'More options'**
+  String get homeListMore;
+
+  /// Menu item that shares the list as text.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your list'**
+  String get homeListShare;
+
+  /// Menu item and page title: the cover wall that lands on a random film.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at random'**
+  String get homeListRandom;
+
+  /// Button on the random page that picks another film.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick another'**
+  String get homeListShuffle;
+
+  /// First line of a shared list.
+  ///
+  /// In en, this message translates to:
+  /// **'My {list} on FilmSage:'**
+  String homeListShareText(String list);
+
+  /// The heart reaction on takes and topics (tooltip and screen reader).
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get takeHeartLike;
+
+  /// Screen reader count of hearts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No likes} =1{1 like} other{{count} likes}}'**
+  String takeHeartCount(int count);
+
+  /// Movie lists: myListsTitle
+  ///
+  /// In en, this message translates to:
+  /// **'My lists'**
+  String get myListsTitle;
+
+  /// Movie lists: myListsHint
+  ///
+  /// In en, this message translates to:
+  /// **'Lists you made and posted'**
+  String get myListsHint;
+
+  /// Movie lists: friendsListsTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Friends\' lists'**
+  String get friendsListsTitle;
+
+  /// Movie lists: friendsListsHint
+  ///
+  /// In en, this message translates to:
+  /// **'What your friends put together'**
+  String get friendsListsHint;
+
+  /// Movie lists: listNew
+  ///
+  /// In en, this message translates to:
+  /// **'New list'**
+  String get listNew;
+
+  /// Movie lists: listsEmptyMine
+  ///
+  /// In en, this message translates to:
+  /// **'Make your first list: give it a name and pick some films.'**
+  String get listsEmptyMine;
+
+  /// Movie lists: listCreateTitle
+  ///
+  /// In en, this message translates to:
+  /// **'New list'**
+  String get listCreateTitle;
+
+  /// Movie lists: listNameLabel
+  ///
+  /// In en, this message translates to:
+  /// **'List name'**
+  String get listNameLabel;
+
+  /// Movie lists: listNameHint
+  ///
+  /// In en, this message translates to:
+  /// **'Best heist films'**
+  String get listNameHint;
+
+  /// Movie lists: listSearchHint
+  ///
+  /// In en, this message translates to:
+  /// **'Search films to add'**
+  String get listSearchHint;
+
+  /// Movie lists: listAddFilm
+  ///
+  /// In en, this message translates to:
+  /// **'Add {title}'**
+  String listAddFilm(String title);
+
+  /// Movie lists: listRemoveFilm
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {title}'**
+  String listRemoveFilm(String title);
+
+  /// Movie lists: listPost
+  ///
+  /// In en, this message translates to:
+  /// **'Post list'**
+  String get listPost;
+
+  /// Movie lists: listFilmCount
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 film} other{{count} films}}'**
+  String listFilmCount(int count);
+
+  /// Movie lists: listBy
+  ///
+  /// In en, this message translates to:
+  /// **'By {name}'**
+  String listBy(String name);
+
+  /// Movie lists: listCommentsTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get listCommentsTitle;
+
+  /// Movie lists: listCommentHint
+  ///
+  /// In en, this message translates to:
+  /// **'Add a comment'**
+  String get listCommentHint;
+
+  /// Movie lists: listCommentsEmpty
+  ///
+  /// In en, this message translates to:
+  /// **'No comments yet. Say what you think of this list.'**
+  String get listCommentsEmpty;
+
+  /// Movie lists: listCommentCount
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No comments} =1{1 comment} other{{count} comments}}'**
+  String listCommentCount(int count);
+
+  /// Movie lists: listDelete
+  ///
+  /// In en, this message translates to:
+  /// **'Delete list'**
+  String get listDelete;
+
+  /// Movie lists: listDeleteConfirm
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this list? This can\'t be undone.'**
+  String get listDeleteConfirm;
+
+  /// Movie lists: listCancel
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get listCancel;
+
+  /// Movie lists: listPostFailed
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t post the list. Try again.'**
+  String get listPostFailed;
+
+  /// Movie lists: listLoadFailed
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load lists.'**
+  String get listLoadFailed;
+
+  /// Movie lists: listPicked
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No films yet} =1{1 film picked} other{{count} films picked}}'**
+  String listPicked(int count);
+
+  /// Movie lists: listSearchEmpty
+  ///
+  /// In en, this message translates to:
+  /// **'No films found.'**
+  String get listSearchEmpty;
+
+  /// Movie lists: listSendFailed
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send. Try again.'**
+  String get listSendFailed;
+
+  /// Top-right button on a topic you did not write: save it to your profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get takeActionSave;
+
+  /// Tooltip of the Save button once the topic is saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from saved'**
+  String get takeActionUnsave;
+
+  /// Shown after saving a topic.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your profile'**
+  String get takeSavedToast;
+
+  /// Shown after unsaving a topic.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from your saved topics'**
+  String get takeUnsavedToast;
+
+  /// Shown when saving a topic failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save. Try again.'**
+  String get takeSaveFailed;
+
+  /// Profile section with the topics you saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get profileSavedTitle;
+
+  /// Empty state of the saved topics section.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics you save show up here.'**
+  String get profileSavedEmpty;
+
+  /// Top-right button on a list page: share it.
+  ///
+  /// In en, this message translates to:
+  /// **'Share list'**
+  String get listShare;
+
+  /// First line of the shared text of a list; the films follow, one per line.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} — a list by {owner} on Film Wise'**
+  String listShareText(String name, String owner);
+
+  /// Top-right button on someone else's list: save it to your profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save list'**
+  String get listSave;
+
+  /// Tooltip of the Save button once the list is saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from saved'**
+  String get listUnsave;
+
+  /// Shown after saving a list.
+  ///
+  /// In en, this message translates to:
+  /// **'List saved to your profile'**
+  String get listSavedToast;
+
+  /// Shown after unsaving a list.
+  ///
+  /// In en, this message translates to:
+  /// **'List removed from your saved lists'**
+  String get listUnsavedToast;
+
+  /// Shown when saving a list failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the list. Try again.'**
+  String get listSaveFailed;
+
+  /// Top-right button on your own list: edit it.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit list'**
+  String get listEdit;
+
+  /// Title of the screen that edits a list.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit list'**
+  String get listEditTitle;
+
+  /// Button that saves the edited list.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get listSaveChanges;
+
+  /// Profile section with the lists you saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved lists'**
+  String get savedListsTitle;
+
+  /// Subtitle of the saved lists section.
+  ///
+  /// In en, this message translates to:
+  /// **'Lists you kept from others'**
+  String get savedListsHint;
+
+  /// Tooltip of the ⋮ menu on a list page (Share, Edit, Delete, Save).
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get listMenuTooltip;
+
+  /// Share sheet of a list when you have no friends yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add friends to send them lists.'**
+  String get listShareNoFriends;
+
+  /// Label on a list card a friend sent you in the chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared a list'**
+  String get chatListShared;
+
+  /// Label on a list card you sent in the chat.
+  ///
+  /// In en, this message translates to:
+  /// **'You shared a list'**
+  String get chatYouSharedList;
+
+  /// Notifications: top-right action that marks every notification read.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notificationsMarkAllRead;
+
+  /// Notifications: filter tab showing everything.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get notificationsTabAll;
+
+  /// Notifications: filter tab for takes friends sent you.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes'**
+  String get notificationsTabTakes;
+
+  /// Notifications: filter tab for comments that tagged you.
+  ///
+  /// In en, this message translates to:
+  /// **'Mentions'**
+  String get notificationsTabMentions;
+
+  /// Notifications: filter tab for friend requests.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests'**
+  String get notificationsTabRequests;
+
+  /// Notifications: section heading over pending friend requests.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend requests'**
+  String get notificationsGroupRequests;
+
+  /// Notifications: section heading over unread notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get notificationsGroupNew;
+
+  /// Notifications: section heading over read notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get notificationsGroupEarlier;
+
+  /// Notifications: shown on a friend request after accepting it.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re now friends'**
+  String get notificationsNowFriends;
+
+  /// Notifications: toast after declining a friend request, with Undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Request from {name} declined'**
+  String notificationsRequestDeclined(String name);
+
+  /// Notifications: action on the decline toast that brings the request back.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get notificationsUndo;
+
+  /// Notifications: empty state of a filter tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here yet.'**
+  String get notificationsNothingHere;
+
+  /// Notifications: short time for something under a minute old.
+  ///
+  /// In en, this message translates to:
+  /// **'now'**
+  String get notificationsTimeNow;
+
+  /// Notifications: short time in minutes, like 5m.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m'**
+  String notificationsTimeMinutes(int count);
+
+  /// Notifications: short time in hours, like 3h.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h'**
+  String notificationsTimeHours(int count);
+
+  /// Notifications: time for something from yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get notificationsTimeYesterday;
+
+  /// Notifications: short time in days, like 4d.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}d'**
+  String notificationsTimeDays(int count);
+
+  /// Notifications: screen-reader label for a tab's unread count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} unread'**
+  String notificationsUnreadCount(int count);
 }
 
 class _AppLocalizationsDelegate

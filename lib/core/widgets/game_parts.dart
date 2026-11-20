@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
+import '../theme/app_palette.dart';
 
 import 'game_button.dart';
 
 /// SAGE game palette used by the home screen cards and chips.
 abstract final class GameColors {
-  static const background = Color(0xFF121214);
-  static const panel = Color(0xFF1A1C22);
-  static const edge = Color(0xFF10141D);
-  static const deep = Color(0xFF0B0E14);
+  static Color get background =>
+      themed(const Color(0xFF121214), const Color(0xFFF2EEE6));
+  static Color get panel =>
+      themed(const Color(0xFF1A1C22), const Color(0xFFE9E4DA));
+  static Color get edge =>
+      themed(const Color(0xFF10141D), const Color(0xFFD6CFC2));
+  static Color get deep =>
+      themed(const Color(0xFF0B0E14), const Color(0xFFCFC8BA));
   static const blue1 = Color(0xFF4A8CF0);
   static const blue2 = Color(0xFF1D4CB5);
   static const blueEdge = Color(0xFF12306F);
   static const hotTop = Color(0xFFFF8A4A);
   static const hotBottom = Color(0xFFD83A1C);
   static const hotEdge = Color(0xFF6B1A0A);
-  static const muted = Color(0xFF9A9CA6);
+  static Color get muted =>
+      themed(const Color(0xFF9A9CA6), const Color(0xFF615B50));
   static const goldText = Color(0xFF3A2600);
   static const gold = GameButtonStyle(
     Color(0xFFFFD75E),
@@ -47,9 +53,10 @@ class GameCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         border: Border.all(color: GameColors.edge, width: 2),
         boxShadow: [
-          const BoxShadow(color: GameColors.edge, offset: Offset(0, 5)),
+          BoxShadow(color: GameColors.edge, offset: Offset(0, 5)),
           BoxShadow(
-            color: Colors.black.withValues(alpha: .4),
+            color: themed(
+                Colors.black.withValues(alpha: .4), const Color(0x221A1814)),
             offset: const Offset(0, 9),
             blurRadius: 12,
           ),
@@ -86,7 +93,9 @@ class GameIconButton extends StatelessWidget {
       onPressed: onPressed ?? () {},
       radius: 14,
       padding: const EdgeInsets.all(9),
-      child: child ?? Icon(icon, size: size, color: Colors.white),
+      child: child ??
+          Icon(icon,
+              size: size, color: themed(Colors.white, const Color(0xFF1A1814))),
     );
     final message = tooltip;
     return message == null ? button : Tooltip(message: message, child: button);

@@ -60,24 +60,31 @@ class QuickActionMenu extends StatelessWidget {
               ),
             ),
           ),
-          CompositedTransformFollower(
-            link: link,
-            showWhenUnlinked: false,
-            targetAnchor: Alignment.center,
-            followerAnchor: Alignment.center,
-            child: SizedBox.square(
-              dimension: _hitExtent,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Positioned.fill(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: onDismiss,
+          // Positioned, so the fan keeps its own size instead of being
+          // stretched to the whole screen (which would push the bubbles away
+          // from the SAGE button).
+          Positioned(
+            left: 0,
+            top: 0,
+            child: CompositedTransformFollower(
+              link: link,
+              showWhenUnlinked: false,
+              targetAnchor: Alignment.center,
+              followerAnchor: Alignment.center,
+              child: SizedBox.square(
+                dimension: _hitExtent,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fill(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: onDismiss,
+                      ),
                     ),
-                  ),
-                  for (var i = 0; i < actions.length; i++) _bubble(i),
-                ],
+                    for (var i = 0; i < actions.length; i++) _bubble(i),
+                  ],
+                ),
               ),
             ),
           ),

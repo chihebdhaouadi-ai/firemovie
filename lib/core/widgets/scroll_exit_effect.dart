@@ -1,55 +1,65 @@
 import 'dart:math' as math;
-import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 
-/// Makes its child blur, narrow toward the center and fade as it scrolls out
-/// of the top of the enclosing scrollable.
+import '../motion.dart';
+
+/// Where the exit line sits, in pixels below the top of the scroll viewport,
+/// for a given scroll offset (a collapsing header moves it as it shrinks).
+typedef ExitInset = double Function(double scrollPixels);
+
+/// Fades out the part of its child that has scrolled past a pinned,
+/// see-through header, and narrows the child toward its center as it goes.
 ///
-/// The effect starts when the child's top edge crosses [exitInset] pixels
-/// below the top of the scroll viewport (use the pinned header's height), and
-/// reaches full strength after the child has moved [range] pixels further up.
-/// Content that is still on screen below that line is left untouched.
+/// The child is fully visible below the exit line ([exitInset]) and fades to
+/// nothing over [fade] pixels above it, with a soft edge rather than a hard
+/// band. The rest of the child is untouched until it reaches the line. The narrowing grows with how far the
+/// child has gone under, reaching [maxShrink] after [range] pixels.
 class ScrollExitEffect extends StatefulWidget {
   const ScrollExitEffect({
     super.key,
     required this.child,
-    this.exitInset = 0,
+    required this.exitInset,
+    this.fade = 56,
     this.range = 180,
-    this.maxBlur = 10,
     this.maxShrink = 0.2,
-    this.minOpacity = 0.4,
   });
 
   final Widget child;
 
-  /// Y offset from the top of the scroll viewport where the exit begins.
-  final double exitInset;
+  /// The exit line for the current scroll offset.
+  final ExitInset exitInset;
 
-  /// Distance over which the effect ramps from 0 to full strength.
+  /// Distance above the line over which the child fades out.
+  final double fade;
+
+  /// Distance under the line over which the narrowing reaches full strength
+  /// (or the child's height, if shorter).
   final double range;
-
-  /// Blur sigma at full strength.
-  final double maxBlur;
 
   /// Fraction of the width removed at full strength, split evenly between the
   /// left and right edges.
   final double maxShrink;
-
-  /// Opacity at full strength.
-  final double minOpacity;
 
   @override
   State<ScrollExitEffect> createState() => _ScrollExitEffectState();
 }
 
 class _ScrollExitEffectState extends State<ScrollExitEffect> {
-  final ValueNotifier<double> _progress = ValueNotifier<double>(0);
+  /// Height, in pixels, of the child's slice that sits above the exit line.
+  final ValueNotifier<double> _covered = ValueNotifier<double>(0);
   ScrollableState? _scrollable;
+
+  /// How far under the line the child must go for full narrowing.
+  double _reach = 1;
+
+  /// The child's height at the last measurement.
+  double _height = 0;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (!scrollEffectsEnabled) return;
     final scrollable = Scrollable.maybeOf(context);
     if (!identical(scrollable, _scrollable)) {
       _scrollable?.position.removeListener(_measure);
@@ -62,13 +72,13 @@ class _ScrollExitEffectState extends State<ScrollExitEffect> {
   @override
   void didUpdateWidget(ScrollExitEffect oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _schedule();
+    if (scrollEffectsEnabled) _schedule();
   }
 
   @override
   void dispose() {
     _scrollable?.position.removeListener(_measure);
-    _progress.dispose();
+    _covered.dispose();
     super.dispose();
   }
 
@@ -79,41 +89,71 @@ class _ScrollExitEffectState extends State<ScrollExitEffect> {
 
   void _measure() {
     if (!mounted) return;
+    final scrollable = _scrollable;
     final child = context.findRenderObject();
-    final viewport = _scrollable?.context.findRenderObject();
+    final viewport = scrollable?.context.findRenderObject();
+    if (scrollable == null) return;
     if (child is! RenderBox || !child.hasSize) return;
     if (viewport is! RenderBox || !viewport.hasSize) return;
 
+    final pixels =
+        scrollable.position.hasPixels ? scrollable.position.pixels : 0.0;
     final top = child.localToGlobal(Offset.zero).dy;
-    final exitLine = viewport.localToGlobal(Offset.zero).dy + widget.exitInset;
-    final range = math.min(widget.range, math.max(child.size.height, 1.0));
-    final t = ((exitLine - top) / range).clamp(0.0, 1.0);
-    if (t != _progress.value) _progress.value = t;
+    final exitLine =
+        viewport.localToGlobal(Offset.zero).dy + widget.exitInset(pixels);
+    // Past the child's height too, so its bottom edge finishes fading.
+    final covered =
+        (exitLine - top).clamp(0.0, child.size.height + widget.fade);
+    _reach = math.min(widget.range, child.size.height);
+    _height = child.size.height;
+    if (covered != _covered.value) _covered.value = covered;
   }
 
   @override
   Widget build(BuildContext context) {
+    // Web: no scroll effect at all; the header is opaque there instead.
+    if (!scrollEffectsEnabled) return widget.child;
     // Re-measure after every rebuild, since the child may have resized.
     _schedule();
     return ValueListenableBuilder<double>(
-      valueListenable: _progress,
+      valueListenable: _covered,
       child: widget.child,
-      builder: (context, t, child) {
-        // Always the same widget tree (a zero blur, scale of 1 and full
-        // opacity are no-ops), so the child keeps its state when t crosses 0.
-        final sigma = widget.maxBlur * t;
-        final scale = 1 - widget.maxShrink * t;
-        final opacity = 1 - (1 - widget.minOpacity) * t;
-        return RepaintBoundary(
-          child: Opacity(
-            opacity: opacity,
+      builder: (context, covered, child) {
+        final reach = _reach;
+        final t = reach <= 0 ? 0.0 : (covered / reach).clamp(0.0, 1.0);
+        // Fully faded: paint nothing at all, so no edge can show through.
+        final gone = covered >= _height + widget.fade;
+        // Always the same tree (at rest the mask is fully opaque, the scale
+        // is 1 and the opacity is 1), so the child keeps its state. The mask
+        // sits outside the narrowing so it also covers the narrowed edges.
+        return Opacity(
+          opacity: gone ? 0 : 1,
+          child: ShaderMask(
+            blendMode: BlendMode.dstIn,
+            shaderCallback: (rect) {
+              final h = rect.height <= 0 ? 1.0 : rect.height;
+              final fade = widget.fade;
+              // Opaque below the line (at [covered]), fading to nothing
+              // [fade] px above it.
+              double alphaAt(double y) =>
+                  ((y - (covered - fade)) / fade).clamp(0.0, 1.0);
+              final y0 = (covered - fade).clamp(0.0, h);
+              final y1 = covered.clamp(y0, h);
+              return LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.fromRGBO(0, 0, 0, alphaAt(y0)),
+                  Color.fromRGBO(0, 0, 0, alphaAt(y1)),
+                ],
+                stops: [y0 / h, y1 / h],
+              ).createShader(rect);
+            },
             child: Transform(
-              alignment: Alignment.topCenter,
-              transform: Matrix4.diagonal3Values(scale, 1, 1),
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
-                child: child,
-              ),
+              alignment: Alignment.center,
+              transform:
+                  Matrix4.diagonal3Values(1 - widget.maxShrink * t, 1, 1),
+              child: child,
             ),
           ),
         );

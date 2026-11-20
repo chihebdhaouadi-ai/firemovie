@@ -61,10 +61,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homePopularThisWeekTitle => 'Популярные фильмы';
 
   @override
-  String get homeFriendsFilmsTitle => 'Фильмы друзей за неделю';
+  String get homeFriendsFilmsTitle => 'Популярно у друзей';
 
   @override
-  String get homeFriendsReviewsTitle => 'Последние отзывы друзей';
+  String get homeFriendsReviewsTitle => 'Последние мнения друзей';
 
   @override
   String get homeMyTakesTitle => 'Мои мнения';
@@ -73,7 +73,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeComingSoon => 'Скоро';
 
   @override
-  String get homeFriendsReviewsEmpty => 'Друзья ещё не оставили отзывов.';
+  String get homeInboxTitle => 'Входящие';
+
+  @override
+  String get homeInboxSoonTitle => 'В разработке';
+
+  @override
+  String get homeInboxSoonBody => 'Скоро здесь появятся сообщения от друзей.';
+
+  @override
+  String get homeFriendsReviewsEmpty => 'Друзья ещё не поделились мнениями.';
 
   @override
   String get homeMyTakesEmpty => 'Ты ещё не делился мнениями.';
@@ -91,11 +100,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get exploreCaughtUp => 'Вы всё просмотрели';
 
   @override
-  String get exploreReviewButton => 'Отзыв';
+  String get exploreReviewButton => 'Мнение';
 
   @override
   String get exploreSubtitle =>
-      'Открывай отзывы, обсуждения и вопросы о фильмах.';
+      'Открывай мнения, обсуждения и вопросы о фильмах.';
 
   @override
   String get createSceneMovieHint =>
@@ -120,7 +129,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get exploreFilterQuestions => 'Вопросы';
 
   @override
-  String get exploreFilterReviews => 'Отзывы';
+  String get exploreFilterReviews => 'Мнения';
 
   @override
   String get exploreSpoilerReveal => 'Нажмите, чтобы открыть';
@@ -289,10 +298,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeCollectionsResizeLabel => 'Изменить размер коллекций';
 
   @override
-  String get homeFeedTitle => 'Отзывы из твоих коллекций';
+  String get homeFeedTitle => 'Мнения из твоих коллекций';
 
   @override
-  String get homeFeedEmpty => 'Пока нет отзывов на фильмы из твоих коллекций.';
+  String get homeFeedEmpty => 'Пока нет мнений о фильмах из твоих коллекций.';
 
   @override
   String get homeFeedShowAsRow => 'Показать в ряд';
@@ -636,19 +645,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get overviewShowLess => 'свернуть';
 
   @override
-  String get overviewReviewsTitle => 'Отзывы';
+  String get overviewReviewsTitle => 'Мнения';
 
   @override
-  String get overviewAddReviewHint => 'Написать отзыв...';
+  String get overviewAddReviewHint => 'Поделиться мнением...';
 
   @override
-  String get overviewYourReview => 'Твой отзыв';
+  String get overviewYourReview => 'Твоё мнение';
 
   @override
-  String get overviewFriendsReviews => 'Отзывы друзей';
+  String get overviewFriendsReviews => 'Мнения друзей';
 
   @override
-  String get overviewPopularReviews => 'Популярные отзывы';
+  String get overviewPopularReviews => 'Популярные мнения';
 
   @override
   String get overviewSeeAll => 'Смотреть все';
@@ -746,7 +755,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reviewSummaryFailed => 'Не удалось загрузить реакции.';
 
   @override
-  String get reviewDetailTitle => 'Отзывы';
+  String get reviewDetailTitle => 'Мнение';
 
   @override
   String get reviewTakesTitle => 'Что говорят люди';
@@ -865,7 +874,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String overviewReviewBy(String name, String date) {
-    return 'Отзыв от $name, $date';
+    return 'Мнение от $name, $date';
   }
 
   @override
@@ -939,7 +948,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileStatWatchlist => 'Хочу посмотреть';
 
   @override
-  String get profileStatReviews => 'Отзывы';
+  String get profileStatReviews => 'Мнения';
 
   @override
   String get profileStatRewards => 'Награды';
@@ -970,6 +979,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileLanguageSystem => 'Как в системе';
+
+  @override
+  String get profileThemeButton => 'Оформление';
+
+  @override
+  String get profileThemeDialogTitle => 'Оформление';
+
+  @override
+  String get profileThemeSystem => 'Как в системе';
+
+  @override
+  String get profileThemeLight => 'Светлое';
+
+  @override
+  String get profileThemeDark => 'Тёмное';
 
   @override
   String get onboardingFinishLater => 'Завершить позже';
@@ -1248,18 +1272,18 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get angelBirdReviewQuestion =>
-      'Хочешь начать дебаты об этом отзыве? Выбери собеседника из этой переписки.';
+      'Хочешь начать дебаты об этом мнении? Выбери собеседника из этой переписки.';
 
   @override
   String get angelBirdPickPerson => 'С кем ты хочешь поспорить?';
 
   @override
   String get angelBirdNoPeople =>
-      'Пока не с кем спорить. Дождись комментария к этому отзыву.';
+      'Пока не с кем спорить. Дождись комментария к этому мнению.';
 
   @override
   String get angelBirdPeopleFailed =>
-      'Не удалось загрузить участников этого отзыва.';
+      'Не удалось загрузить участников этого мнения.';
 
   @override
   String debateWaitingTitle(String name) {
@@ -1480,7 +1504,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get topicTypeLabel => 'Тип';
 
   @override
-  String get topicTagReview => 'Отзыв';
+  String get topicTagReview => 'Мнение';
 
   @override
   String get topicTagQuestion => 'Вопрос';
@@ -1492,10 +1516,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get topicTagHotTake => 'Hot Take';
 
   @override
-  String get topicReviewHint => 'Для отзыва нужна твоя реакция на фильм.';
+  String get topicReviewHint => 'Для мнения нужна твоя реакция на фильм.';
 
   @override
-  String get topicBodyHint => 'Напиши отзыв, вопрос или тему для обсуждения';
+  String get topicBodyHint => 'Напиши мнение, вопрос или тему для обсуждения';
 
   @override
   String get topicPostButton => 'Опубликовать';
@@ -1525,7 +1549,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get createTypeHotTakeSubtitle => 'Share a bold take about a film.';
 
   @override
-  String get createWriteReviewTitle => 'Write your review';
+  String get createWriteReviewTitle => 'Write your take';
 
   @override
   String get createWriteQuestionTitle => 'Write your question';
@@ -1541,13 +1565,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get createReviewMovieHint =>
-      'Your review appears on that movie\'s page.';
+      'Your take appears on that movie\'s page.';
 
   @override
   String get createFeelTitle => 'How did it make you feel?';
 
   @override
-  String get createFeelHint => 'Pick one reaction. It shows with your review.';
+  String get createFeelHint => 'Pick one reaction. It shows with your take.';
 
   @override
   String get createSubjectTitle => 'What is it about?';
@@ -1575,10 +1599,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get leaderboardTabLabel => 'Рейтинг';
 
   @override
-  String get leaderboardTitle => 'Лучшие рецензенты';
+  String get leaderboardTitle => 'Лучшие критики';
 
   @override
-  String get leaderboardSubtitle => 'Рейтинг по реакциям на их рецензии';
+  String get leaderboardSubtitle => 'Рейтинг по реакциям на их мнения';
 
   @override
   String get leaderboardHowItWorks => 'Как это работает';
@@ -1611,10 +1635,10 @@ class AppLocalizationsRu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count рецензии',
-      many: '$count рецензий',
-      few: '$count рецензии',
-      one: '$count рецензия',
+      other: '$count мнения',
+      many: '$count мнений',
+      few: '$count мнения',
+      one: '$count мнение',
     );
     return '$_temp0';
   }
@@ -1635,11 +1659,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get howRankingTitle => 'Как работает рейтинг';
 
   @override
-  String get howStep1Title => 'Напишите рецензию';
+  String get howStep1Title => 'Поделитесь мнением';
 
   @override
   String get howStep1Body =>
-      'Напишите рецензию на любой фильм. Она появится в разделах «Обзор» и «Друзья».';
+      'Поделитесь мнением о любом фильме. Оно появится в разделах «Обзор» и «Друзья».';
 
   @override
   String get howStep2Title => 'Соберите реакции';
@@ -1653,7 +1677,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get howStep3Body =>
-      'Рецензенты с наибольшим числом реакций за период займут пьедестал.';
+      'Критики с наибольшим числом реакций за период займут пьедестал.';
 
   @override
   String get howNoteReset =>
@@ -1661,11 +1685,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get howNoteOncePerReview =>
-      'Каждый может отреагировать один раз на рецензию. Реакция на собственную рецензию не засчитывается.';
+      'Каждый может отреагировать один раз на мнение. Реакция на собственное мнение не засчитывается.';
 
   @override
   String get howNoteTie =>
-      'Если у двух рецензентов равный счёт, выше тот, кто первым набрал это число.';
+      'Если у двух критиков равный счёт, выше тот, кто первым набрал это число.';
 
   @override
   String get howNotePodium =>
@@ -1675,7 +1699,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get howLevelsTitle => 'Уровни и XP';
 
   @override
-  String get howXpReview => 'Написать рецензию';
+  String get howXpReview => 'Поделиться мнением';
 
   @override
   String get howXpComment => 'Написать комментарий';
@@ -1730,14 +1754,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get badgeFirstTakeDesc =>
-      'Станьте первым, кто оставит рецензию на фильм.';
+      'Станьте первым, кто поделится мнением о фильме.';
 
   @override
   String get achFilmCriticTitle => 'Киновед';
 
   @override
   String achFilmCriticDesc(int count) {
-    return 'Напишите $count рецензий.';
+    return 'Поделитесь $count мнениями.';
   }
 
   @override
@@ -1753,7 +1777,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String achLocalCinemaDesc(int count) {
-    return 'Напишите рецензии на $count тунисских фильмов.';
+    return 'Поделитесь мнением о $count тунисских фильмах.';
   }
 
   @override
@@ -1855,7 +1879,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get authReasonProfile => 'Log in to open your profile';
 
   @override
-  String get authReasonExplore => 'Log in to explore reviews and takes';
+  String get authReasonExplore => 'Log in to explore takes and topics';
 
   @override
   String get authReasonNotifications => 'Log in to see your notifications';
@@ -1872,4 +1896,1758 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get authGuestPromptBody =>
       'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.';
+
+  @override
+  String get browseSectionDiscover => 'Обзор';
+
+  @override
+  String get browseTopTakes => 'Топ-100 отзывов';
+
+  @override
+  String get browsePopularFilms => 'Самые популярные фильмы';
+
+  @override
+  String get browseByYear => 'По году выхода';
+
+  @override
+  String get browseByStreaming => 'По стриминговому сервису';
+
+  @override
+  String get browseSectionTopics => 'Популярные темы';
+
+  @override
+  String get browsePolls => 'Опросы';
+
+  @override
+  String get browseConversations => 'Обсуждения';
+
+  @override
+  String get browseScenes => 'Сцены';
+
+  @override
+  String get browseQuestions => 'Вопросы';
+
+  @override
+  String get browseHotTakes => 'Смелые мнения';
+
+  @override
+  String get browseSectionFilmSage => 'FilmSage';
+
+  @override
+  String get browseNewHere => 'Впервые здесь?';
+
+  @override
+  String get browseSocialMedia => 'Соцсети';
+
+  @override
+  String get browseFollowUs => 'Подписывайтесь на нас';
+
+  @override
+  String get browseGifts => 'Подарки';
+
+  @override
+  String get browseContact => 'Контакты';
+
+  @override
+  String get browseTerms => 'Условия использования / Правила сообщества';
+
+  @override
+  String get browseYearsTitle => 'Выберите год';
+
+  @override
+  String browseDecade(String decade) {
+    return '$decade-е';
+  }
+
+  @override
+  String get browseServicesTitle => 'Выберите сервис';
+
+  @override
+  String get browseServicesEmpty => 'Нет доступных сервисов.';
+
+  @override
+  String get browseFilmsEmpty => 'Здесь пока нет фильмов.';
+
+  @override
+  String get browseTakesEmpty => 'Здесь пока ничего нет.';
+
+  @override
+  String get browseComingSoonTitle => 'Скоро';
+
+  @override
+  String get browseComingSoonBody =>
+      'Мы ещё работаем над этой страницей. Загляните позже.';
+
+  @override
+  String get browseByGenre => 'По жанру';
+
+  @override
+  String get browseByCountry => 'По стране';
+
+  @override
+  String get browseByLanguage => 'По языку';
+
+  @override
+  String get browseGenresTitle => 'Выберите жанр';
+
+  @override
+  String get browseCountriesTitle => 'Выберите страну';
+
+  @override
+  String get browseCountriesHint =>
+      'Популярные фильмы, доступные для просмотра в каждой стране.';
+
+  @override
+  String browseStreamingIn(String country) {
+    return 'Смотреть в стране: $country';
+  }
+
+  @override
+  String get browseLanguagesTitle => 'Выберите язык';
+
+  @override
+  String get browsePickEmpty => 'Пока выбрать не из чего.';
+
+  @override
+  String get browseLanguageEn => 'Английский';
+
+  @override
+  String get browseLanguageFr => 'Французский';
+
+  @override
+  String get browseLanguageEs => 'Испанский';
+
+  @override
+  String get browseLanguageIt => 'Итальянский';
+
+  @override
+  String get browseLanguageDe => 'Немецкий';
+
+  @override
+  String get browseLanguagePt => 'Португальский';
+
+  @override
+  String get browseLanguageRu => 'Русский';
+
+  @override
+  String get browseLanguageAr => 'Арабский';
+
+  @override
+  String get browseLanguageTr => 'Турецкий';
+
+  @override
+  String get browseLanguageHi => 'Хинди';
+
+  @override
+  String get browseLanguageKo => 'Корейский';
+
+  @override
+  String get browseLanguageJa => 'Японский';
+
+  @override
+  String get browseLanguageZh => 'Китайский';
+
+  @override
+  String get browseLanguageSv => 'Шведский';
+
+  @override
+  String get overviewPlayTrailer => 'Смотреть трейлер';
+
+  @override
+  String get overviewTrailerUnavailable => 'Не удалось открыть трейлер.';
+
+  @override
+  String get overviewLoading => 'Загрузка…';
+
+  @override
+  String get overviewNoCastCrew =>
+      'Пока нет данных об актёрах и съёмочной группе.';
+
+  @override
+  String get overviewOfferStream => 'Подписка';
+
+  @override
+  String get overviewOfferFree => 'Бесплатно';
+
+  @override
+  String get overviewOfferTvProvider => 'С ТВ-провайдером';
+
+  @override
+  String get overviewOfferRent => 'Аренда';
+
+  @override
+  String get overviewOfferBuy => 'Покупка';
+
+  @override
+  String get overviewCloseTrailer => 'Закрыть трейлер';
+
+  @override
+  String get filmSuggest => 'Посоветовать';
+
+  @override
+  String get filmListFailed =>
+      'Не удалось обновить список. Попробуйте ещё раз.';
+
+  @override
+  String get filmFeelingsEmpty =>
+      'Нажмите, чтобы рассказать, что вы почувствовали';
+
+  @override
+  String get filmFeelingsHint => 'Выберите до 3 чувств.';
+
+  @override
+  String filmFeelingsCount(String count) {
+    return 'Выбрано $count из 3';
+  }
+
+  @override
+  String get filmFeelingsSave => 'Сохранить';
+
+  @override
+  String get filmFeelingsClear => 'Очистить';
+
+  @override
+  String get filmAudienceTitle => 'Зрители';
+
+  @override
+  String get filmAudienceEmpty =>
+      'Реакций пока нет. Будьте первым, кто расскажет о своих чувствах.';
+
+  @override
+  String get filmAudiencePositive => 'понравилось';
+
+  @override
+  String filmAudiencePeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Отреагировали $count человека',
+      many: 'Отреагировали $count человек',
+      few: 'Отреагировали $count человека',
+      one: 'Отреагировал 1 человек',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmYourTakeTitle => 'Ваше мнение';
+
+  @override
+  String filmTakeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count мнения',
+      many: '$count мнений',
+      few: '$count мнения',
+      one: '1 мнение',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmTopTake => 'ЛУЧШЕЕ МНЕНИЕ';
+
+  @override
+  String filmShowMoreTakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ещё $count мнения',
+      many: 'Ещё $count мнений',
+      few: 'Ещё $count мнения',
+      one: 'Ещё 1 мнение',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmShowLessTakes => 'Свернуть';
+
+  @override
+  String get filmShareYourTake => 'Поделиться мнением';
+
+  @override
+  String get filmAddTake => 'Добавить мнение';
+
+  @override
+  String overviewFriendStoryNew(String name, String feeling) {
+    return '$name, новое: $feeling';
+  }
+
+  @override
+  String overviewFriendStorySeen(String name, String feeling) {
+    return '$name: $feeling';
+  }
+
+  @override
+  String filmPersonFeelings(String feelings) {
+    return 'Чувства: $feelings';
+  }
+
+  @override
+  String filmTakeComments(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count комментария',
+      many: '$count комментариев',
+      few: '$count комментария',
+      one: '1 комментарий',
+      zero: 'Нет комментариев',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmFeelingsDone => 'Готово';
+
+  @override
+  String get personBiography => 'Биография';
+
+  @override
+  String get personFilmography => 'Фильмы';
+
+  @override
+  String get personHeight => 'Рост';
+
+  @override
+  String get personBorn => 'Дата рождения';
+
+  @override
+  String get personDied => 'Дата смерти';
+
+  @override
+  String get personNoFilms => 'Фильмы этого человека пока не найдены.';
+
+  @override
+  String get personLoadFailed =>
+      'Не удалось загрузить страницу этого человека.';
+
+  @override
+  String personAsCharacter(String character) {
+    return 'в роли $character';
+  }
+
+  @override
+  String get takeSkinTitle => 'Оформление карточки';
+
+  @override
+  String get takeSkinNormal => 'Обычное';
+
+  @override
+  String get takeSkinElectricThunder => 'Электрическая гроза';
+
+  @override
+  String get takeSkinPreview => 'Предпросмотр';
+
+  @override
+  String get takeSkinPreviewEmpty => 'Здесь появится ваше мнение.';
+
+  @override
+  String get takeSkinWriteTitle => 'Напишите своё мнение';
+
+  @override
+  String get reviewAlreadyShared => 'Вы уже поделились мнением об этом фильме.';
+
+  @override
+  String get reviewNeedsFeeling =>
+      'Сначала выберите, что вы почувствовали, затем поделитесь мнением.';
+
+  @override
+  String get reviewYourTake => 'Ваше мнение — другие на него реагируют';
+
+  @override
+  String get reviewBeFirstComment => 'Прокомментируйте это мнение первым.';
+
+  @override
+  String get takeMenuTooltip => 'Ещё';
+
+  @override
+  String get takeActionShare => 'Отправить друзьям';
+
+  @override
+  String get takeActionEdit => 'Изменить';
+
+  @override
+  String get takeActionDelete => 'Удалить';
+
+  @override
+  String get takeActionReport => 'Пожаловаться';
+
+  @override
+  String get takeEdited => 'изменено';
+
+  @override
+  String get takeCancel => 'Отмена';
+
+  @override
+  String get takeEditTitle => 'Изменить мнение';
+
+  @override
+  String get takeEditSave => 'Сохранить';
+
+  @override
+  String get takeEditSaved => 'Мнение обновлено.';
+
+  @override
+  String get takeEditFailed => 'Не удалось сохранить. Попробуйте ещё раз.';
+
+  @override
+  String get takeDeleteTitle => 'Удалить это мнение?';
+
+  @override
+  String get takeDeleteBody => 'Оно исчезнет для всех вместе с комментариями.';
+
+  @override
+  String get takeDeleted => 'Мнение удалено.';
+
+  @override
+  String get takeDeleteFailed => 'Не удалось удалить. Попробуйте ещё раз.';
+
+  @override
+  String get takeReportTitle => 'Пожаловаться на мнение';
+
+  @override
+  String get takeReportHint =>
+      'Почему вы жалуетесь? Жалобы видят только модераторы.';
+
+  @override
+  String get takeReportSpam => 'Спам';
+
+  @override
+  String get takeReportHarassment => 'Травля или оскорбления';
+
+  @override
+  String get takeReportHate => 'Язык вражды';
+
+  @override
+  String get takeReportSpoiler => 'Спойлер без пометки';
+
+  @override
+  String get takeReportOther => 'Другое';
+
+  @override
+  String get takeReportDetailsHint => 'Подробности (необязательно)';
+
+  @override
+  String get takeReportSend => 'Отправить жалобу';
+
+  @override
+  String get takeReportThanks => 'Спасибо. Мы всё проверим.';
+
+  @override
+  String get takeReportFailed =>
+      'Не удалось отправить жалобу. Попробуйте ещё раз.';
+
+  @override
+  String get takeShareTitle => 'Отправить друзьям';
+
+  @override
+  String get takeShareMessageHint => 'Сообщение (необязательно)';
+
+  @override
+  String get takeShareNoFriends =>
+      'Добавьте друзей, чтобы отправлять им мнения.';
+
+  @override
+  String get takeShareFriendsFailed => 'Не удалось загрузить друзей.';
+
+  @override
+  String get takeShareFailed => 'Не удалось отправить. Попробуйте ещё раз.';
+
+  @override
+  String get notificationTakeGone => 'Это мнение больше недоступно.';
+
+  @override
+  String get mentionSuggestionsLabel => 'Упомянуть друга';
+
+  @override
+  String takeShareSend(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Отправить друзьям: $count',
+      one: 'Отправить 1 другу',
+      zero: 'Отправить',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String takeShareSent(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Отправлено друзьям: $count',
+      one: 'Отправлено 1 другу',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationTakeShared(String name) {
+    return '$name отправил(а) вам мнение';
+  }
+
+  @override
+  String notificationTakeMention(String name) {
+    return '$name упомянул(а) вас в комментарии';
+  }
+
+  @override
+  String get takeSpoilerTitle => 'Есть ли спойлеры?';
+
+  @override
+  String get takeSpoilerNo => 'Без спойлеров';
+
+  @override
+  String get takeSpoilerHint =>
+      'Выберите вариант, чтобы читатели знали, чего ждать.';
+
+  @override
+  String get takeSpoilerRequired =>
+      'Перед публикацией укажите, есть ли в отзыве спойлеры.';
+
+  @override
+  String get takeSpoilerBlurNote =>
+      'Другие увидят его размытым, пока не нажмут, чтобы открыть.';
+
+  @override
+  String get reviewVoteUp => 'За';
+
+  @override
+  String get reviewVoteDraw => 'Ничья';
+
+  @override
+  String get reviewVoteDown => 'Против';
+
+  @override
+  String storyTake(String film) {
+    return 'Поделился мнением о $film';
+  }
+
+  @override
+  String storyQuestion(String film) {
+    return 'Спросил о $film';
+  }
+
+  @override
+  String storyDiscussion(String film) {
+    return 'Начал обсуждение $film';
+  }
+
+  @override
+  String storyHotTake(String film) {
+    return 'Высказал смелое мнение о $film';
+  }
+
+  @override
+  String storyPoll(String film) {
+    return 'Создал опрос о $film';
+  }
+
+  @override
+  String storyScene(String film) {
+    return 'Поделился сценой из $film';
+  }
+
+  @override
+  String storyComment(String film) {
+    return 'Прокомментировал пост о $film';
+  }
+
+  @override
+  String get storyUnknownFilm => 'фильм';
+
+  @override
+  String get storyOpen => 'Открыть';
+
+  @override
+  String get storyClose => 'Закрыть';
+
+  @override
+  String storyRingLabel(String name) {
+    return 'История $name';
+  }
+
+  @override
+  String get storiesTitle => 'Истории друзей';
+
+  @override
+  String get inboxSearch => 'Поиск';
+
+  @override
+  String get inboxSearchHint => 'Поиск по чатам';
+
+  @override
+  String get inboxCloseSearch => 'Закрыть поиск';
+
+  @override
+  String get inboxUnreadOnly => 'Только непрочитанные';
+
+  @override
+  String get inboxAddFriend => 'Добавить друга';
+
+  @override
+  String get inboxCreate => 'Новый чат';
+
+  @override
+  String get inboxNewMessage => 'Новое сообщение';
+
+  @override
+  String get inboxCreateGroup => 'Создать группу';
+
+  @override
+  String get inboxCreateTopic => 'Создать приватную тему';
+
+  @override
+  String get inboxPrivateTopics => 'Приватные темы';
+
+  @override
+  String get inboxNoTopics => 'Тем пока нет. Начните с друзьями.';
+
+  @override
+  String get inboxNewTopic => 'Новая приватная тема';
+
+  @override
+  String get inboxAllChats => 'Все чаты';
+
+  @override
+  String get inboxEmptyTitle => 'Пока нет чатов';
+
+  @override
+  String get inboxEmptyBody => 'Напишите другу, чтобы начать.';
+
+  @override
+  String get inboxNoResults => 'Чаты не найдены';
+
+  @override
+  String get inboxLoadFailed => 'Не удалось загрузить сообщения.';
+
+  @override
+  String inboxYouSaid(String text) {
+    return 'Вы: $text';
+  }
+
+  @override
+  String get inboxNoMessagesYet => 'Сообщений пока нет';
+
+  @override
+  String get inboxGroupName => 'Название группы';
+
+  @override
+  String get inboxTopicName => 'Название темы';
+
+  @override
+  String get inboxPickFriends => 'Выберите друзей';
+
+  @override
+  String get inboxPickFriend => 'Написать другу';
+
+  @override
+  String get inboxNoFriends => 'Сначала добавьте друзей.';
+
+  @override
+  String get inboxCreateAction => 'Создать';
+
+  @override
+  String get inboxCancel => 'Отмена';
+
+  @override
+  String get inboxCreateFailed => 'Не удалось создать. Попробуйте снова.';
+
+  @override
+  String inboxMembers(int count) {
+    return 'Участников: $count';
+  }
+
+  @override
+  String get inboxGroupPhoto => 'Добавить фото группы';
+
+  @override
+  String get inboxGroupDescription => 'Описание (необязательно)';
+
+  @override
+  String get inboxPhotoFailed => 'Создано, но фото не загрузилось.';
+
+  @override
+  String get chatOpenInfo => 'О группе';
+
+  @override
+  String get groupInfoTitle => 'О группе';
+
+  @override
+  String get groupInfoTopicTitle => 'О теме';
+
+  @override
+  String get groupInfoDescription => 'Описание';
+
+  @override
+  String get groupInfoNoDescription => 'Описания пока нет.';
+
+  @override
+  String groupInfoMembers(int count) {
+    return 'Участники · $count';
+  }
+
+  @override
+  String get groupInfoYou => 'Вы';
+
+  @override
+  String get groupInfoCreator => 'Создатель';
+
+  @override
+  String inboxUnreadLabel(int count) {
+    return 'Непрочитанных: $count';
+  }
+
+  @override
+  String get chatHint => 'Сообщение';
+
+  @override
+  String get chatSend => 'Отправить';
+
+  @override
+  String get chatStart => 'Начните разговор';
+
+  @override
+  String get chatSendFailed => 'Сообщение не отправлено. Попробуйте снова.';
+
+  @override
+  String get chatPrivateTopic => 'Приватная тема · видна только участникам';
+
+  @override
+  String get inboxSelectChat => 'Выберите чат, чтобы начать переписку';
+
+  @override
+  String get chatMenu => 'Меню группы';
+
+  @override
+  String get chatShareGroup => 'Поделиться группой';
+
+  @override
+  String get chatBoostGroup => 'Продвинуть группу';
+
+  @override
+  String get chatReport => 'Пожаловаться';
+
+  @override
+  String get chatLeaveGroup => 'Покинуть группу';
+
+  @override
+  String get chatShareBody => 'Отправьте группу в чат.';
+
+  @override
+  String chatSharedTo(String name) {
+    return 'Отправлено в $name';
+  }
+
+  @override
+  String chatBoosted(String name) {
+    return 'Продвижение $name запущено';
+  }
+
+  @override
+  String get chatReportTitle => 'Пожаловаться на группу';
+
+  @override
+  String get chatReportBody => 'Расскажите, что не так. Участники не узнают.';
+
+  @override
+  String get chatReportSpam => 'Спам или мошенничество';
+
+  @override
+  String get chatReportHarassment => 'Травля';
+
+  @override
+  String get chatReportOther => 'Другое';
+
+  @override
+  String get chatReportSent => 'Жалоба отправлена';
+
+  @override
+  String get chatCancel => 'Отмена';
+
+  @override
+  String get chatClose => 'Закрыть';
+
+  @override
+  String get chatBack => 'Назад';
+
+  @override
+  String get chatActionFailed => 'Не получилось. Попробуйте ещё раз.';
+
+  @override
+  String get chatPinned => 'Закреплено';
+
+  @override
+  String chatPinnedCount(int count) {
+    return 'Закреплено ($count)';
+  }
+
+  @override
+  String get chatReply => 'Ответить';
+
+  @override
+  String chatReplyingTo(String name) {
+    return 'Ответ $name';
+  }
+
+  @override
+  String get chatCancelReply => 'Отменить ответ';
+
+  @override
+  String get chatPin => 'Закрепить сообщение';
+
+  @override
+  String get chatUnpin => 'Открепить сообщение';
+
+  @override
+  String get chatMessagePinned => 'Сообщение закреплено';
+
+  @override
+  String get chatMessageUnpinned => 'Сообщение откреплено';
+
+  @override
+  String chatMention(String name) {
+    return 'Упомянуть $name';
+  }
+
+  @override
+  String get chatViewProfile => 'Открыть профиль';
+
+  @override
+  String get chatMoreReactions => 'Другие реакции';
+
+  @override
+  String chatNotified(String names) {
+    return 'Уведомлены: $names';
+  }
+
+  @override
+  String get chatNoMatch => 'Никого не найдено';
+
+  @override
+  String get chatAdd => 'Добавить фото, видео, фильм или опрос';
+
+  @override
+  String get chatEmojiButton => 'Эмодзи, GIF и стикеры';
+
+  @override
+  String get chatAddTitle => 'Добавить в чат';
+
+  @override
+  String get chatPhoto => 'Фото';
+
+  @override
+  String get chatPhotoBody => 'Выберите фото на устройстве.';
+
+  @override
+  String get chatVideo => 'Видео';
+
+  @override
+  String get chatVideoBody => 'Выберите видео на устройстве.';
+
+  @override
+  String get chatMovie => 'Фильм';
+
+  @override
+  String get chatMovieBody => 'Найдите фильм и отправьте его карточкой.';
+
+  @override
+  String get chatPoll => 'Опрос';
+
+  @override
+  String get chatPollBody => 'Задайте группе вопрос.';
+
+  @override
+  String get chatSendPhoto => 'Отправить фото';
+
+  @override
+  String get chatSendVideo => 'Отправить видео';
+
+  @override
+  String get chatShareMovie => 'Поделиться фильмом';
+
+  @override
+  String get chatNewPoll => 'Новый опрос';
+
+  @override
+  String get chatCaption => 'Добавьте подпись';
+
+  @override
+  String get chatPollQuestion => 'Задайте вопрос';
+
+  @override
+  String chatPollOption(int number) {
+    return 'Вариант $number';
+  }
+
+  @override
+  String get chatAddOption => 'Добавить вариант';
+
+  @override
+  String get chatAllowedReactions => 'Разрешённые реакции';
+
+  @override
+  String get chatAllowedReactionsBody =>
+      'Участники могут реагировать выбранными эмодзи. Они видят их, удерживая сообщение.';
+
+  @override
+  String get chatPollInvalid => 'Добавьте вопрос и хотя бы два варианта';
+
+  @override
+  String get chatFileTooBig => 'Файл слишком большой (максимум 12 МБ)';
+
+  @override
+  String get chatSearchMovie => 'Найти фильм';
+
+  @override
+  String get chatSearchMovieHint => 'Название фильма';
+
+  @override
+  String get chatNoMovie => 'Фильм не найден.';
+
+  @override
+  String chatVotes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count голоса',
+      many: '$count голосов',
+      few: '$count голоса',
+      one: '1 голос',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatPlayVideo => 'Смотреть видео';
+
+  @override
+  String get chatGif => 'GIF';
+
+  @override
+  String get chatSticker => 'Стикер';
+
+  @override
+  String get chatTabEmoji => 'Эмодзи';
+
+  @override
+  String get chatTabGif => 'GIF';
+
+  @override
+  String get chatTabStickers => 'Стикеры';
+
+  @override
+  String get chatSearchEmoji => 'Найдите нужный эмодзи';
+
+  @override
+  String get chatSearchGif => 'Поиск GIF';
+
+  @override
+  String get chatSearchStickers => 'Поиск стикеров';
+
+  @override
+  String chatNothingFound(String query) {
+    return 'По запросу «$query» ничего нет.';
+  }
+
+  @override
+  String get chatCatFrequent => 'Часто используемые';
+
+  @override
+  String get chatCatFaces => 'Лица';
+
+  @override
+  String get chatCatHands => 'Руки';
+
+  @override
+  String get chatCatObjects => 'Предметы';
+
+  @override
+  String get chatCatSymbols => 'Символы';
+
+  @override
+  String get chatClosePicker => 'Закрыть панель';
+
+  @override
+  String sysPinned(String name) {
+    return '$name закрепил(а) сообщение';
+  }
+
+  @override
+  String sysRemoved(String name, String target) {
+    return '$name удалил(а) $target из группы';
+  }
+
+  @override
+  String sysLeft(String name) {
+    return '$name покинул(а) группу';
+  }
+
+  @override
+  String sysHeritage(String name, String target) {
+    return '$name сделал(а) $target наследным создателем';
+  }
+
+  @override
+  String sysPassed(String name, String target) {
+    return '$name передал(а) роль создателя $target и вышел(а)';
+  }
+
+  @override
+  String sysVoteStarted(String name) {
+    return '$name начал(а) голосование о судьбе группы';
+  }
+
+  @override
+  String sysVoteCancelled(String name) {
+    return '$name отменил(а) голосование';
+  }
+
+  @override
+  String get sysVoteKeep =>
+      'Большинство решило оставить группу. Теперь выберите нового владельца.';
+
+  @override
+  String sysVoteOwnerWon(String target) {
+    return '$target победил(а) в голосовании и стал(а) наследным создателем';
+  }
+
+  @override
+  String get voteKeepTitle => 'Оставить группу?';
+
+  @override
+  String voteKeepBody(String name, String time) {
+    return '$name хочет уйти. На голосование осталось $time. Решает большинство; при ничьей группа остаётся.';
+  }
+
+  @override
+  String get voteStay => 'Оставить';
+
+  @override
+  String get voteDelete => 'Удалить';
+
+  @override
+  String voteKeepTally(int stay, int delete) {
+    return 'Оставить $stay · Удалить $delete';
+  }
+
+  @override
+  String get voteOwnPoll => 'Нельзя голосовать в своём опросе.';
+
+  @override
+  String get voteCancel => 'Отменить опрос и остаться создателем';
+
+  @override
+  String get voteOwnerTitle => 'Кто будет владельцем группы?';
+
+  @override
+  String voteOwnerBody(String time) {
+    return 'Группа остаётся. Выберите участника, кроме себя. Осталось $time.';
+  }
+
+  @override
+  String get voteOwnerHint => 'Нажмите на участника, чтобы проголосовать.';
+
+  @override
+  String get voteOwnerChange => 'Голос можно изменить до конца опроса.';
+
+  @override
+  String voteTimeLeft(int hours, int minutes) {
+    return '$hours ч $minutes мин';
+  }
+
+  @override
+  String get voteRunning => 'Голосование уже идёт';
+
+  @override
+  String get leaveCreatorTitle => 'Вы создали эту группу';
+
+  @override
+  String get leaveCreatorBody =>
+      'Прежде чем уйти, решите, что будет с группой.';
+
+  @override
+  String get leavePass => 'Передать роль создателя';
+
+  @override
+  String get leavePassBody => 'Выберите участника. Он сразу станет главным.';
+
+  @override
+  String get leaveVote => 'Пусть решит группа';
+
+  @override
+  String get leaveVoteBody =>
+      'Участники голосуют, оставить ли группу, а затем выбирают владельца. Каждое голосование длится 24 часа.';
+
+  @override
+  String get leavePickTitle => 'Кто станет главным?';
+
+  @override
+  String get leavePickBody =>
+      'Он получит роль наследного создателя и сохранит жалобы, отправку и продвижение.';
+
+  @override
+  String get leaveContinue => 'Продолжить';
+
+  @override
+  String leavePassConfirmTitle(String name) {
+    return 'Передать роль $name и уйти?';
+  }
+
+  @override
+  String leavePassConfirmBody(String name) {
+    return '$name сразу станет наследным создателем. Вы покинете группу.';
+  }
+
+  @override
+  String get leavePassConfirm => 'Передать роль и уйти';
+
+  @override
+  String get leaveVoteConfirmTitle => 'Начать голосование?';
+
+  @override
+  String get leaveVoteConfirmBody =>
+      'Шаг 1: 24 часа участники голосуют, оставить или удалить группу. Если большинство за, на шаге 2 они ещё 24 часа выбирают нового владельца. До конца вы остаётесь создателем.';
+
+  @override
+  String get leaveVoteConfirm => 'Начать голосование';
+
+  @override
+  String leaveSimpleTitle(String group) {
+    return 'Покинуть $group?';
+  }
+
+  @override
+  String get leaveSimpleBody =>
+      'Вы больше не будете видеть сообщения этой группы.';
+
+  @override
+  String confirmType(String name) {
+    return 'Для подтверждения введите $name';
+  }
+
+  @override
+  String get groupInfoSearch => 'Поиск участников';
+
+  @override
+  String groupInfoNoMatch(String query) {
+    return 'Нет участников по запросу «$query».';
+  }
+
+  @override
+  String get groupInfoHeritage => 'Наследный создатель';
+
+  @override
+  String memberViewProfileBody(String name) {
+    return 'Фильмы и коллекции $name.';
+  }
+
+  @override
+  String get memberMakeHeritage => 'Сделать наследным создателем';
+
+  @override
+  String memberMakeHeritageBody(String name) {
+    return '$name станет главным в группе. Вы станете обычным участником.';
+  }
+
+  @override
+  String get memberRemove => 'Удалить из группы';
+
+  @override
+  String memberRemoveBody(String name) {
+    return '$name потеряет доступ к группе и её сообщениям.';
+  }
+
+  @override
+  String memberMakeHeritageTitle(String name) {
+    return 'Сделать $name наследным создателем?';
+  }
+
+  @override
+  String memberMakeHeritageConfirmBody(String name) {
+    return '$name получит роль наследного создателя и сможет жаловаться, делиться и продвигать группу. Вы останетесь обычным участником.';
+  }
+
+  @override
+  String memberRemoveTitle(String name) {
+    return 'Удалить $name?';
+  }
+
+  @override
+  String memberRemoveConfirmBody(String name, String group) {
+    return '$name потеряет доступ к $group и не увидит новых сообщений.';
+  }
+
+  @override
+  String memberRemoveConfirm(String name) {
+    return 'Удалить $name';
+  }
+
+  @override
+  String get chatVideoFailed => 'Не удалось воспроизвести видео.';
+
+  @override
+  String get chatPauseVideo => 'Пауза';
+
+  @override
+  String get chatFullScreen => 'Во весь экран';
+
+  @override
+  String get chatMute => 'Без звука';
+
+  @override
+  String get chatUnmute => 'Включить звук';
+
+  @override
+  String get chatMutedToast => 'Чат без звука';
+
+  @override
+  String get chatUnmutedToast => 'Звук включён';
+
+  @override
+  String get chatPinChat => 'Закрепить вверху';
+
+  @override
+  String get chatUnpinChat => 'Открепить';
+
+  @override
+  String get chatMarkUnread => 'Отметить непрочитанным';
+
+  @override
+  String get chatMarkRead => 'Отметить прочитанным';
+
+  @override
+  String get chatClearHistory => 'Очистить историю';
+
+  @override
+  String get chatClearTitle => 'Очистить историю?';
+
+  @override
+  String get chatClearBody =>
+      'Все сообщения до этого момента исчезнут у вас. Остальные их по-прежнему видят.';
+
+  @override
+  String get chatCleared => 'История очищена';
+
+  @override
+  String get chatDeleteChat => 'Удалить чат';
+
+  @override
+  String get chatDeleteChatTitle => 'Удалить этот чат?';
+
+  @override
+  String chatDeleteChatBody(String name) {
+    return 'Чат исчезнет из входящих, а история очистится у вас. Он вернётся, если $name напишет снова.';
+  }
+
+  @override
+  String get chatChatDeleted => 'Чат удалён';
+
+  @override
+  String chatBlock(String name) {
+    return 'Заблокировать $name';
+  }
+
+  @override
+  String chatUnblock(String name) {
+    return 'Разблокировать $name';
+  }
+
+  @override
+  String chatBlockTitle(String name) {
+    return 'Заблокировать $name?';
+  }
+
+  @override
+  String get chatBlockBody =>
+      'Вы не сможете писать друг другу, пока вы не разблокируете его. Он не узнает об этом.';
+
+  @override
+  String chatBlockedToast(String name) {
+    return '$name заблокирован';
+  }
+
+  @override
+  String chatUnblockedToast(String name) {
+    return '$name разблокирован';
+  }
+
+  @override
+  String chatYouBlocked(String name) {
+    return 'Вы заблокировали $name.';
+  }
+
+  @override
+  String get chatBlockedYou => 'Вы не можете ответить в этом чате.';
+
+  @override
+  String get chatBlockedPeople => 'Заблокированные';
+
+  @override
+  String get chatNoBlocked => 'Вы никого не заблокировали.';
+
+  @override
+  String get chatUnblockShort => 'Разблокировать';
+
+  @override
+  String get chatCopy => 'Копировать текст';
+
+  @override
+  String get chatCopied => 'Скопировано';
+
+  @override
+  String get chatEdit => 'Изменить';
+
+  @override
+  String get chatEditing => 'Редактирование';
+
+  @override
+  String get chatCancelEdit => 'Отменить редактирование';
+
+  @override
+  String get chatDeleteMessage => 'Удалить';
+
+  @override
+  String get chatDeleteMessageTitle => 'Удалить это сообщение?';
+
+  @override
+  String get chatDeleteMessageBody => 'Оно удалится у всех в чате.';
+
+  @override
+  String get chatMessageDeleted => 'Сообщение удалено';
+
+  @override
+  String get chatEdited => 'изменено';
+
+  @override
+  String get chatReportMessage => 'Пожаловаться';
+
+  @override
+  String get chatReportHate => 'Язык вражды';
+
+  @override
+  String get chatReportNsfw => 'Сексуальный контент';
+
+  @override
+  String get chatSeen => 'Просмотрено';
+
+  @override
+  String get chatAddMembers => 'Добавить участников';
+
+  @override
+  String chatAddMembersTitle(String name) {
+    return 'Добавить в $name';
+  }
+
+  @override
+  String get chatAddMembersNone => 'Все ваши друзья уже здесь.';
+
+  @override
+  String get chatAddSelected => 'Добавить';
+
+  @override
+  String get chatMembersAdded => 'Участники добавлены';
+
+  @override
+  String get chatConfirm => 'Подтвердить';
+
+  @override
+  String get chatViewProfileMenu => 'Открыть профиль';
+
+  @override
+  String inboxChatOptions(String name) {
+    return 'Действия для $name';
+  }
+
+  @override
+  String get inboxPinnedLabel => 'Закреплён';
+
+  @override
+  String get inboxMutedLabel => 'Без звука';
+
+  @override
+  String sysAdded(String name, String target) {
+    return '$name добавил(а) $target';
+  }
+
+  @override
+  String get homeTopicFirstReply => 'Ответьте первым';
+
+  @override
+  String get homeFriendsActivityTitle => 'Активность друзей';
+
+  @override
+  String get homeFriendsActivityResize => 'Изменить размер блока друзей';
+
+  @override
+  String get topicTitleHint => 'Заголовок (необязательно)';
+
+  @override
+  String get topicSeeMore => 'Ещё';
+
+  @override
+  String get topicCommentsExpand => 'Развернуть комментарии';
+
+  @override
+  String get topicCommentsShrink => 'Свернуть комментарии';
+
+  @override
+  String get chatTakeShared => 'Поделился мнением';
+
+  @override
+  String get chatTopicShared => 'Поделился темой';
+
+  @override
+  String get chatTaggedYou => 'Отметил вас в комментарии';
+
+  @override
+  String get chatYouTagged => 'Вы отметили его в комментарии';
+
+  @override
+  String get chatTaggedThem => 'Отметили в комментарии';
+
+  @override
+  String get chatYouSharedTopic => 'Вы поделились темой';
+
+  @override
+  String get chatYouSharedTake => 'Вы поделились мнением';
+
+  @override
+  String get commentAddPhoto => 'Добавить фото';
+
+  @override
+  String get commentRemovePhoto => 'Убрать фото';
+
+  @override
+  String get takeFeltLabel => 'Чувства';
+
+  @override
+  String homeEditList(String list) {
+    return 'Изменить: $list';
+  }
+
+  @override
+  String get homeEditListAdd => 'Добавить фильм';
+
+  @override
+  String homeEditListRemove(String title) {
+    return 'Убрать «$title»';
+  }
+
+  @override
+  String get homeEditListEmpty => 'Здесь пока нет фильмов.';
+
+  @override
+  String get homeEditListFull =>
+      'Ваш топ-5 заполнен. Уберите фильм, чтобы добавить другой.';
+
+  @override
+  String get homeWatchedHint => 'Фильмы, которые ты уже посмотрел';
+
+  @override
+  String get homeWatchlistHint => 'Фильмы, которые ты хочешь посмотреть';
+
+  @override
+  String get homeLensHint => 'Проведи пальцем по обложкам';
+
+  @override
+  String homeLensOpen(String title) {
+    return 'Открыть «$title»';
+  }
+
+  @override
+  String get homeListMore => 'Ещё';
+
+  @override
+  String get homeListShare => 'Поделиться списком';
+
+  @override
+  String get homeListRandom => 'Случайный выбор';
+
+  @override
+  String get homeListShuffle => 'Выбрать другой';
+
+  @override
+  String homeListShareText(String list) {
+    return 'Мой список «$list» в FilmSage:';
+  }
+
+  @override
+  String get takeHeartLike => 'Нравится';
+
+  @override
+  String takeHeartCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count отметки',
+      many: '$count отметок',
+      few: '$count отметки',
+      one: '$count отметка',
+      zero: 'Нет отметок',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myListsTitle => 'Мои списки';
+
+  @override
+  String get myListsHint => 'Списки, которые ты создал и опубликовал';
+
+  @override
+  String get friendsListsTitle => 'Списки друзей';
+
+  @override
+  String get friendsListsHint => 'Что собрали твои друзья';
+
+  @override
+  String get listNew => 'Новый список';
+
+  @override
+  String get listsEmptyMine =>
+      'Создай первый список: дай ему название и выбери фильмы.';
+
+  @override
+  String get listCreateTitle => 'Новый список';
+
+  @override
+  String get listNameLabel => 'Название списка';
+
+  @override
+  String get listNameHint => 'Лучшие фильмы об ограблениях';
+
+  @override
+  String get listSearchHint => 'Найди фильмы, чтобы добавить';
+
+  @override
+  String listAddFilm(String title) {
+    return 'Добавить «$title»';
+  }
+
+  @override
+  String listRemoveFilm(String title) {
+    return 'Убрать «$title»';
+  }
+
+  @override
+  String get listPost => 'Опубликовать';
+
+  @override
+  String listFilmCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count фильма',
+      many: '$count фильмов',
+      few: '$count фильма',
+      one: '$count фильм',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String listBy(String name) {
+    return 'Автор: $name';
+  }
+
+  @override
+  String get listCommentsTitle => 'Комментарии';
+
+  @override
+  String get listCommentHint => 'Написать комментарий';
+
+  @override
+  String get listCommentsEmpty =>
+      'Комментариев пока нет. Скажи, что думаешь об этом списке.';
+
+  @override
+  String listCommentCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count комментария',
+      many: '$count комментариев',
+      few: '$count комментария',
+      one: '$count комментарий',
+      zero: 'Нет комментариев',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listDelete => 'Удалить список';
+
+  @override
+  String get listDeleteConfirm => 'Удалить этот список? Это нельзя отменить.';
+
+  @override
+  String get listCancel => 'Отмена';
+
+  @override
+  String get listPostFailed =>
+      'Не удалось опубликовать список. Попробуй ещё раз.';
+
+  @override
+  String get listLoadFailed => 'Не удалось загрузить списки.';
+
+  @override
+  String listPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Выбрано $count фильма',
+      many: 'Выбрано $count фильмов',
+      few: 'Выбрано $count фильма',
+      one: 'Выбран $count фильм',
+      zero: 'Пока нет фильмов',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listSearchEmpty => 'Фильмы не найдены.';
+
+  @override
+  String get listSendFailed => 'Не удалось отправить. Попробуй ещё раз.';
+
+  @override
+  String get takeActionSave => 'Сохранить';
+
+  @override
+  String get takeActionUnsave => 'Убрать из сохранённого';
+
+  @override
+  String get takeSavedToast => 'Сохранено в профиле';
+
+  @override
+  String get takeUnsavedToast => 'Убрано из сохранённых тем';
+
+  @override
+  String get takeSaveFailed => 'Не удалось сохранить. Попробуй ещё раз.';
+
+  @override
+  String get profileSavedTitle => 'Сохранённое';
+
+  @override
+  String get profileSavedEmpty =>
+      'Темы, которые ты сохраняешь, появятся здесь.';
+
+  @override
+  String get listShare => 'Поделиться списком';
+
+  @override
+  String listShareText(String name, String owner) {
+    return '$name — список от $owner в Film Wise';
+  }
+
+  @override
+  String get listSave => 'Сохранить список';
+
+  @override
+  String get listUnsave => 'Убрать из сохранённого';
+
+  @override
+  String get listSavedToast => 'Список сохранён в профиле';
+
+  @override
+  String get listUnsavedToast => 'Список убран из сохранённых';
+
+  @override
+  String get listSaveFailed => 'Не удалось сохранить список. Попробуй ещё раз.';
+
+  @override
+  String get listEdit => 'Изменить список';
+
+  @override
+  String get listEditTitle => 'Изменить список';
+
+  @override
+  String get listSaveChanges => 'Сохранить изменения';
+
+  @override
+  String get savedListsTitle => 'Сохранённые списки';
+
+  @override
+  String get savedListsHint => 'Чужие списки, которые ты сохранил';
+
+  @override
+  String get listMenuTooltip => 'Ещё';
+
+  @override
+  String get listShareNoFriends => 'Добавь друзей, чтобы отправлять им списки.';
+
+  @override
+  String get chatListShared => 'Поделился списком';
+
+  @override
+  String get chatYouSharedList => 'Ты поделился списком';
+
+  @override
+  String get notificationsMarkAllRead => 'Прочитать все';
+
+  @override
+  String get notificationsTabAll => 'Все';
+
+  @override
+  String get notificationsTabTakes => 'Мнения';
+
+  @override
+  String get notificationsTabMentions => 'Упоминания';
+
+  @override
+  String get notificationsTabRequests => 'Заявки';
+
+  @override
+  String get notificationsGroupRequests => 'Заявки в друзья';
+
+  @override
+  String get notificationsGroupNew => 'Новые';
+
+  @override
+  String get notificationsGroupEarlier => 'Ранее';
+
+  @override
+  String get notificationsNowFriends => 'Теперь вы друзья';
+
+  @override
+  String notificationsRequestDeclined(String name) {
+    return 'Заявка от $name отклонена';
+  }
+
+  @override
+  String get notificationsUndo => 'Отменить';
+
+  @override
+  String get notificationsNothingHere => 'Здесь пока ничего нет.';
+
+  @override
+  String get notificationsTimeNow => 'сейчас';
+
+  @override
+  String notificationsTimeMinutes(int count) {
+    return '$count мин';
+  }
+
+  @override
+  String notificationsTimeHours(int count) {
+    return '$count ч';
+  }
+
+  @override
+  String get notificationsTimeYesterday => 'Вчера';
+
+  @override
+  String notificationsTimeDays(int count) {
+    return '$count д';
+  }
+
+  @override
+  String notificationsUnreadCount(int count) {
+    return 'Непрочитанных: $count';
+  }
 }

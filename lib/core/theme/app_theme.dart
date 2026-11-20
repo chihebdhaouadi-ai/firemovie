@@ -1,34 +1,46 @@
 import 'package:flutter/material.dart';
 
+import 'app_palette.dart';
+
+export 'app_palette.dart';
+
 /// Font family names registered in pubspec.yaml.
+///
+/// The whole app uses Pangram Sans, the FILMSAGE wordmark font, so titles,
+/// body text and labels read as one family. The roles stay separate so a
+/// role can change again without touching every screen.
 abstract final class AppFonts {
-  static const display = 'SpaceGrotesk'; // headings and titles
-  static const body = 'Inter'; // body copy and UI text
-  static const mono = 'SpaceMono'; // labels and small metadata
   static const brand = 'PangramSans'; // FILMSAGE wordmark
+  static const display = brand; // headings and titles
+  static const body = brand; // body copy and UI text
+  static const mono = brand; // labels and small metadata
 }
 
+/// App colour roles. Each reads the palette for the current light or dark
+/// mode (see [AppPalette]), so these are getters, not constants.
 abstract final class AppColors {
-  static const background = Color(0xFF151515);
-  static const surface = Color(0xFF1F1F1F);
-  static const surfaceRaised = Color(0xFF2A2A2A);
-  static const textPrimary = Color(0xFFF2F2F2);
-  static const textSecondary = Color(0xFFD9D9D9);
-  static const textMuted = Color(0xFFA8A8A8);
-  static const accent = Color(0xFF1B8CE0);
-  static const accentGlow = Color(0xFF35B6FF);
-  static const primaryButton = Color(0xFF084C7C);
-  static const outline = Color(0xFF5D697A);
-  static const panelBorder = Color(0xFF1C6BA8);
-  static const star = Color(0xFFD4A21A);
-  static const error = Color(0xFFFF6B6B);
-  static const onPrimaryButton = Color(0xFFFFFFFF);
+  static AppPalette get _p => AppPalette.current;
+
+  static Color get background => _p.background;
+  static Color get surface => _p.surface;
+  static Color get surfaceRaised => _p.surfaceRaised;
+  static Color get textPrimary => _p.textPrimary;
+  static Color get textSecondary => _p.textSecondary;
+  static Color get textMuted => _p.textMuted;
+  static Color get accent => _p.accent;
+  static Color get accentGlow => _p.accentGlow;
+  static Color get primaryButton => _p.primaryButton;
+  static Color get outline => _p.outline;
+  static Color get panelBorder => _p.panelBorder;
+  static Color get star => _p.star;
+  static Color get error => _p.error;
+  static Color get onPrimaryButton => _p.onPrimaryButton;
   static const transparent = Color(0x00000000);
-  static const tabSelected = Color(0xFF0077DE);
-  static const tabUnselected = Color(0xFF28313A);
-  static const cardPill = Color(0xFF1E1F24);
-  static const reactionCount = Color(0xFF2F6FD6);
-  static const movieReference = Color(0xFF8A8F9C);
+  static Color get tabSelected => _p.tabSelected;
+  static Color get tabUnselected => _p.tabUnselected;
+  static Color get cardPill => _p.cardPill;
+  static Color get reactionCount => _p.reactionCount;
+  static Color get movieReference => _p.movieReference;
 }
 
 class AppTokens extends ThemeExtension<AppTokens> {
@@ -201,19 +213,40 @@ class AppTokens extends ThemeExtension<AppTokens> {
 }
 
 abstract final class AppTheme {
-  static ThemeData dark() {
-    const scheme = ColorScheme.dark(
-      primary: AppColors.accent,
-      onPrimary: AppColors.onPrimaryButton,
-      secondary: AppColors.accentGlow,
-      onSecondary: AppColors.background,
-      surface: AppColors.surface,
-      onSurface: AppColors.textPrimary,
-      onSurfaceVariant: AppColors.textMuted,
-      outline: AppColors.outline,
-      error: AppColors.error,
-      onError: AppColors.background,
-    );
+  /// The original dark theme; the reference look.
+  static ThemeData dark() => forPalette(AppPalette.dark);
+
+  /// Warm paper light theme with black buttons.
+  static ThemeData light() => forPalette(AppPalette.light);
+
+  static ThemeData forPalette(AppPalette p) {
+    final scheme = p.isDark
+        ? ColorScheme.dark(
+            primary: p.accent,
+            onPrimary: p.onPrimaryButton,
+            secondary: p.accentGlow,
+            onSecondary: p.background,
+            surface: p.surface,
+            onSurface: p.textPrimary,
+            onSurfaceVariant: p.textMuted,
+            outline: p.outline,
+            error: p.error,
+            onError: p.background,
+          )
+        : ColorScheme.light(
+            primary: p.primaryButton,
+            onPrimary: p.onPrimaryButton,
+            secondary: p.accentGlow,
+            onSecondary: p.onPrimaryButton,
+            surface: p.surface,
+            onSurface: p.textPrimary,
+            onSurfaceVariant: p.textMuted,
+            surfaceContainerHighest: p.surfaceRaised,
+            outline: p.outline,
+            outlineVariant: p.panelBorder,
+            error: p.error,
+            onError: p.onPrimaryButton,
+          );
 
     // Typography roles:
     //  - Space Grotesk: headings and titles
@@ -269,32 +302,87 @@ abstract final class AppTheme {
           letterSpacing: 0.15),
     );
 
-    return ThemeData(
+    final theme = ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: p.brightness,
       colorScheme: scheme,
-      scaffoldBackgroundColor: AppColors.background,
+      scaffoldBackgroundColor: p.background,
       fontFamily: AppFonts.body,
       textTheme: base.apply(
-        bodyColor: AppColors.textPrimary,
-        displayColor: AppColors.textPrimary,
+        bodyColor: p.textPrimary,
+        displayColor: p.textPrimary,
       ),
-      iconTheme: const IconThemeData(color: AppColors.textSecondary, size: 24),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
+      iconTheme: IconThemeData(color: p.textSecondary, size: 24),
+      appBarTheme: AppBarTheme(
+        backgroundColor: p.background,
+        foregroundColor: p.textPrimary,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
       ),
-      snackBarTheme: const SnackBarThemeData(
-        backgroundColor: AppColors.surfaceRaised,
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: p.surfaceRaised,
         contentTextStyle:
-            TextStyle(color: AppColors.textPrimary, fontFamily: 'Inter'),
-        actionTextColor: AppColors.accentGlow,
+            TextStyle(color: p.textPrimary, fontFamily: AppFonts.body),
+        actionTextColor: p.accentGlow,
         behavior: SnackBarBehavior.floating,
       ),
-      extensions: const [AppTokens.light],
+      extensions: [AppTokens.light, p],
+    );
+    if (p.isDark) return theme;
+
+    // Light only: black filled buttons with white labels, ink-coloured text
+    // buttons, warm surfaces for sheets and dialogs, soft hairlines.
+    final buttonShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    );
+    return theme.copyWith(
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: p.primaryButton,
+          foregroundColor: p.onPrimaryButton,
+          shape: buttonShape,
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: p.primaryButton,
+          foregroundColor: p.onPrimaryButton,
+          elevation: 0,
+          shape: buttonShape,
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: p.textPrimary,
+          side: BorderSide(color: p.textPrimary),
+          shape: buttonShape,
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: p.textPrimary),
+      ),
+      dividerTheme: DividerThemeData(color: p.luxeHair, thickness: 1),
+      dialogTheme: DialogThemeData(backgroundColor: p.background),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: p.background,
+        modalBackgroundColor: p.background,
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: p.textPrimary,
+        linearTrackColor: p.surfaceRaised,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: p.textPrimary,
+        selectionColor: p.textPrimary.withValues(alpha: 0.18),
+        selectionHandleColor: p.textPrimary,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: p.textMuted),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: p.textPrimary, width: 2),
+        ),
+      ),
     );
   }
 }
