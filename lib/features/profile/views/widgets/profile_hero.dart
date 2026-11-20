@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/avatar_frames.dart';
@@ -61,7 +62,7 @@ class ProfileHero extends StatelessWidget {
                     tooltip: l10n.profileEditPhoto,
                     onPressed: onEditAvatar,
                     style: GameButtonStyle.blue,
-                    icon: Icons.camera_alt_outlined,
+                    icon: BootstrapIcons.camera,
                     size: 18,
                   ),
                 ),
@@ -135,7 +136,7 @@ class _Bio extends StatelessWidget {
           IconButton(
             tooltip: l10n.profileEditBio,
             onPressed: onEdit,
-            icon: const Icon(Icons.edit_outlined, size: 18),
+            icon: const Icon(BootstrapIcons.pencil, size: 18),
           ),
         ],
       ],

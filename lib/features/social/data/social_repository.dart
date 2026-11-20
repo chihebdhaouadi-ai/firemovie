@@ -29,15 +29,18 @@ class SocialRepository {
   }
 
   Future<void> acceptFriendRequest(int requestId) {
-    return _client.postNoContent('/api/social/friend-requests/$requestId/accept');
+    return _client
+        .postNoContent('/api/social/friend-requests/$requestId/accept');
   }
 
   Future<void> declineFriendRequest(int requestId) {
-    return _client.postNoContent('/api/social/friend-requests/$requestId/decline');
+    return _client
+        .postNoContent('/api/social/friend-requests/$requestId/decline');
   }
 
   Future<void> cancelFriendRequest(int requestId) {
-    return _client.postNoContent('/api/social/friend-requests/$requestId/cancel');
+    return _client
+        .postNoContent('/api/social/friend-requests/$requestId/cancel');
   }
 
   Future<NotificationsPage> notifications() async {
@@ -47,6 +50,11 @@ class SocialRepository {
 
   Future<void> markNotificationsRead() {
     return _client.postNoContent('/api/social/notifications/read');
+  }
+
+  /// Marks one notification read, when it is opened from the list.
+  Future<void> markNotificationRead(int id) {
+    return _client.postNoContent('/api/social/notifications/$id/read');
   }
 
   Future<int> sendMovieSuggestion({
