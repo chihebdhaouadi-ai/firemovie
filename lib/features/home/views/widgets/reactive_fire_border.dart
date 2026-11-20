@@ -14,15 +14,15 @@ const _flickerDuration = Duration(milliseconds: 2400);
 const _emberColor = Color(0xFFFF8A3D);
 
 int _weightOf(VoteKind kind) => switch (kind) {
-      VoteKind.changedMyMind => 3,
-      VoteKind.wellArgued => 2,
-      VoteKind.disagreeButFair => 1,
+      VoteKind.up => 3,
+      VoteKind.draw => 2,
+      VoteKind.down => 1,
     };
 
 Color _colorOf(VoteKind kind) => switch (kind) {
-      VoteKind.changedMyMind => const Color(0xFF4ADE80),
-      VoteKind.wellArgued => const Color(0xFFFFC53D),
-      VoteKind.disagreeButFair => const Color(0xFF4DA3FF),
+      VoteKind.up => const Color(0xFF4ADE80),
+      VoteKind.draw => const Color(0xFFFFC53D),
+      VoteKind.down => const Color(0xFFFF5C7A),
     };
 
 double fireHeatFor(Take take) {

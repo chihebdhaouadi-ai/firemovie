@@ -4,17 +4,22 @@ import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/luxe_palette.dart';
 import '../../../film_reviews/data/review_repository.dart';
-import '../../../film_reviews/domain/review_stance.dart';
 import '../../../film_reviews/domain/take.dart';
 import '../../../film_reviews/domain/take_tag.dart';
 import '../../../film_reviews/domain/topic_vote.dart';
 import '../../../film_reviews/presentation/widgets/comment_thread.dart';
+import '../../../film_reviews/presentation/widgets/mention_suggestions.dart';
+import '../../../social/data/social_models.dart';
 import '../../data/home_models.dart';
 
-const _sheetSurface = Color(0xFF1B1D23);
-const _sheetLine = Color(0xFF2A2D36);
-const _sheetText = Color(0xFFE8E9EE);
-const _sheetMuted = Color(0xFF8D919D);
+Color get _sheetSurface =>
+    themed(const Color(0xFF1B1D23), const Color(0xFFE9E4DA));
+Color get _sheetLine =>
+    themed(const Color(0xFF2A2D36), const Color(0xFFD6CFC2));
+Color get _sheetText =>
+    themed(const Color(0xFFE8E9EE), const Color(0xFF1A1814));
+Color get _sheetMuted =>
+    themed(const Color(0xFF8D919D), const Color(0xFF615B50));
 
 Future<void> showExploreThreadSheet(
   BuildContext context, {
@@ -47,12 +52,14 @@ class _ExploreThreadSheet extends StatefulWidget {
 }
 
 class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
+  /// Friends offered while typing `@name` in the composer.
+  List<SocialUser> _mentionFriends = const [];
+
   final _input = TextEditingController();
   final _focus = FocusNode();
 
   List<TakeComment>? _comments;
   TakeComment? _replyTo;
-  ReviewStance? _stance;
   bool _loading = true;
   bool _sending = false;
   bool _sendFailed = false;
@@ -60,6 +67,9 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
   @override
   void initState() {
     super.initState();
+    MentionFriends.load().then((friends) {
+      if (mounted) setState(() => _mentionFriends = friends);
+    });
     _loadComments();
   }
 
@@ -125,17 +135,11 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
   }
 
   void _startReply(TakeComment comment) {
-    setState(() {
-      _replyTo = comment;
-      _stance = null;
-    });
+    setState(() => _replyTo = comment);
     _focus.requestFocus();
   }
 
-  void _cancelReply() => setState(() {
-        _replyTo = null;
-        _stance = null;
-      });
+  void _cancelReply() => setState(() => _replyTo = null);
 
   Future<void> _send() async {
     final body = _input.text.trim();
@@ -152,15 +156,11 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
         widget.item.take.id,
         body: body,
         parentId: _replyTo?.id,
-        stance: _replyTo == null && widget.item.take.tag == TakeTag.review
-            ? _stance
-            : null,
       );
       if (!mounted) return;
       setState(() {
         _comments = [...?_comments, comment];
         _replyTo = null;
-        _stance = null;
         _sending = false;
         _input.clear();
       });
@@ -190,7 +190,7 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
           child: Material(
             key: const ValueKey('explore-thread-sheet'),
             color: _sheetSurface,
-            shape: const RoundedRectangleBorder(
+            shape: RoundedRectangleBorder(
               side: BorderSide(color: _sheetLine),
               borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
             ),
@@ -237,9 +237,9 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
                       ],
                     ),
                   ),
-                  const Divider(height: 1, color: _sheetLine),
+                  Divider(height: 1, color: _sheetLine),
                   Expanded(child: _threadContent()),
-                  const Divider(height: 1, color: _sheetLine),
+                  Divider(height: 1, color: _sheetLine),
                   SafeArea(
                     top: false,
                     child: Padding(
@@ -248,8 +248,8 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (_showStancePicker) _stancePicker(),
                           CommentComposer(
+                            mentionFriends: _mentionFriends,
                             controller: _input,
                             focusNode: _focus,
                             sending: _sending || _loading,
@@ -262,7 +262,7 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
                               padding: const EdgeInsets.only(top: 6),
                               child: Text(
                                 l10n.reviewCommentFailed,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.error,
                                   fontSize: 12,
                                 ),
@@ -284,7 +284,7 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
   Widget _threadContent() {
     final l10n = context.l10n;
     if (_loading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: LuxeColors.accent),
       );
     }
@@ -296,7 +296,7 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
           children: [
             Text(
               l10n.reviewCommentsFailed,
-              style: const TextStyle(color: LuxeColors.muted),
+              style: TextStyle(color: LuxeColors.muted),
             ),
             TextButton(
               onPressed: _loadComments,
@@ -313,7 +313,7 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
           child: Text(
             l10n.topicBeFirst,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: LuxeColors.muted, height: 1.5),
+            style: TextStyle(color: LuxeColors.muted, height: 1.5),
           ),
         ),
       );
@@ -325,37 +325,6 @@ class _ExploreThreadSheetState extends State<_ExploreThreadSheet> {
         onReply: _startReply,
         onVote: _voteComment,
         showReviewStance: widget.item.take.tag == TakeTag.review,
-      ),
-    );
-  }
-
-  bool get _showStancePicker =>
-      widget.item.take.tag == TakeTag.review && _replyTo == null;
-
-  Widget _stancePicker() {
-    final l10n = context.l10n;
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8),
-      child: Wrap(
-        spacing: 8,
-        runSpacing: 4,
-        children: [
-          for (final stance in ReviewStance.values)
-            ChoiceChip(
-              key: ValueKey('review-stance-${stance.apiValue}'),
-              label: Text(
-                stance == ReviewStance.changedMyMind
-                    ? l10n.reviewVoteChangedMyMind
-                    : l10n.reviewVoteDisagreeFair,
-              ),
-              selected: _stance == stance,
-              onSelected: _sending
-                  ? null
-                  : (selected) => setState(
-                        () => _stance = selected ? stance : null,
-                      ),
-            ),
-        ],
       ),
     );
   }

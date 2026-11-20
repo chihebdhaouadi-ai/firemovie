@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
 import 'package:film_wise_mobile/features/find/data/api_client.dart';
 import 'package:film_wise_mobile/features/find/data/find_repository.dart';
-import 'package:film_wise_mobile/features/film_reviews/presentation/review_detail_screen.dart';
+import 'package:film_wise_mobile/features/film_reviews/presentation/topic_detail_screen.dart';
 import 'package:film_wise_mobile/features/home/data/home_models.dart';
 import 'package:film_wise_mobile/features/overview/views/movie_overview_screen.dart';
 import 'package:film_wise_mobile/features/profile/views/profile_screen.dart';
@@ -66,6 +66,12 @@ Future<void> _pump(WidgetTester tester, http.Client client) {
       theme: AppTheme.dark(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      // Friends' typing bubbles loop; reduced motion keeps them still so
+      // pumpAndSettle can finish.
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(disableAnimations: true),
+        child: child!,
+      ),
       home: MovieOverviewScreen(
         film: _dune,
         repository: FindRepository(client: ApiClient(httpClient: client)),
@@ -183,7 +189,7 @@ void main() {
     expect(find.text(_en.overviewShowMore), findsNothing);
   });
 
-  testWidgets('friend take opens the review detail', (tester) async {
+  testWidgets('friend take opens the take page', (tester) async {
     final client = _client(
       (_) async => http.Response(_detailBody, 200, headers: _json),
       ReviewApi(friends: [
@@ -193,6 +199,8 @@ void main() {
           'take': {'id': 3, 'body': 'Stunning visuals'},
           'updated_at': '2026-01-01T12:00:00Z',
         },
+      ], takes: [
+        takeJson(id: 3, body: 'Stunning visuals'),
       ]),
     );
     await _pump(tester, client);
@@ -200,13 +208,13 @@ void main() {
 
     await tester.ensureVisible(find.text('maya'));
     await tester.pump();
+    // Friends show as story bubbles: name only; the take opens on tap.
     expect(find.text('maya'), findsOneWidget);
-    expect(find.text('Stunning visuals'), findsOneWidget);
 
     await tester.tap(find.text('maya'));
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
-    expect(find.byType(ReviewDetailScreen), findsOneWidget);
+    expect(find.byType(TopicDetailScreen), findsOneWidget);
     expect(find.byType(ProfileScreen), findsNothing);
   });
 
@@ -232,7 +240,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(seconds: 1));
     expect(find.byType(ProfileScreen), findsOneWidget);
-    expect(find.byType(ReviewDetailScreen), findsNothing);
+    expect(find.byType(TopicDetailScreen), findsNothing);
   });
 
   testWidgets('no friend activity shows an empty state', (tester) async {

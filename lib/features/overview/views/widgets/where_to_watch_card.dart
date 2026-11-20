@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -41,7 +42,7 @@ class WhereToWatchCard extends StatelessWidget {
                     width: tokens.borderWidth,
                   ),
                 ),
-                icon: Icon(Icons.play_arrow_rounded, size: tokens.iconSmall),
+                icon: Icon(BootstrapIcons.play_fill, size: tokens.iconSmall),
                 label: Text(l10n.overviewTrailer),
               ),
             ],
@@ -70,4 +71,3 @@ class WhereToWatchCard extends StatelessWidget {
     );
   }
 }
-

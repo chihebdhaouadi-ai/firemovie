@@ -30,7 +30,7 @@ class PosterSkeleton extends StatelessWidget {
       aspectRatio: tokens.posterAspectRatio,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(tokens.radiusMd),
-        child: const ColoredBox(color: AppColors.surfaceRaised),
+        child: ColoredBox(color: AppColors.surfaceRaised),
       ),
     );
   }

@@ -152,7 +152,7 @@ if (!callint){
                                   style: TextStyle(
                                     color: Color.fromARGB(255, 48, 255, 33), // Set the text color
                                     fontFamily:
-                                        'Inter', // Set the font family
+                                        'PangramSans', // Set the font family
                                     fontWeight:
                                         FontWeight.w400, // Set the font weight
                                     fontSize: 12, // Set the font size
@@ -200,14 +200,14 @@ if (!callint){
                               padding: const EdgeInsets.fromLTRB(5, 30, 5, 15),
                               child: Row(
                                 children: [
-                                  Icon(Icons.notifications),
+                                  Icon(BootstrapIcons.bell_fill),
                                   Text(
                                     'NOTIFICATIONS',
                                     style: TextStyle(
                                       color: Color.fromARGB(
                                           255, 216, 216, 216), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight:
                                           FontWeight.w400, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -242,7 +242,7 @@ if (!callint){
                                                   color: Color.fromARGB(
                                                       255, 216, 216, 216), // Set the text color
                                                   fontFamily:
-                                                      'Inter', // Set the font family
+                                                      'PangramSans', // Set the font family
                                                   fontWeight:
                                                       FontWeight.w400, // Set the font weight
                                                   fontSize: 8, // Set the font size
@@ -294,7 +294,7 @@ floating: true,
                 Visibility(
                   visible: false,
                   child: IconButton(
-                    icon: Icon(Icons.add),
+                    icon: Icon(BootstrapIcons.plus_lg),
                     onPressed: () {
                       // Your button's onPressed logic here
                     },
@@ -374,7 +374,7 @@ return Container(
                                     style: TextStyle(
                                       color: Color.fromARGB(200, 216, 216, 216), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight:
                                           FontWeight.w300, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -386,7 +386,7 @@ SizedBox(height: 2,),
                                     style: TextStyle(
                                       color: Color.fromARGB(250, 216, 216, 216), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight:
                                           FontWeight.w400, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -427,7 +427,7 @@ SizedBox(height: 2,),
                                           padding: const EdgeInsets.fromLTRB(
                                               10, 2, 0, 0),
                                           child: Icon(
-                                            Icons.search,
+                                            BootstrapIcons.search,
                                             color: Color.fromARGB(255, 1, 116, 229),
                                             size: 28,
                                           ),
@@ -504,7 +504,7 @@ SizedBox(height: 2,),
                                                     EdgeInsets.only(right: 0),
                                                 child: Center(
                                                   child: Icon(
-                                                    Icons.add,
+                                                    BootstrapIcons.plus_lg,
                                                     color: Color.fromARGB(255, 121, 121, 121),
                                                     size: 25,
                                                   ),
@@ -647,7 +647,7 @@ SizedBox(height: 2,),
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
                                   fontFamily:
-                                      'Inter', // Set the font family
+                                      'PangramSans', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -835,7 +835,7 @@ SizedBox(height: 2,),
                                     color: Color.fromARGB(255, 217, 217,
                                         217), // Set the text color
                                     fontFamily:
-                                        'Inter', // Set the font family
+                                        'PangramSans', // Set the font family
                                     fontWeight: FontWeight
                                         .w400, // Set the font weight
                                     fontSize:
@@ -1106,7 +1106,7 @@ SizedBox(height: 2,),
                                                             255,
                                                             255), // Set the text color
                                                         fontFamily:
-                                                            'Inter', // Set the font family
+                                                            'PangramSans', // Set the font family
                                                         fontWeight: FontWeight
                                                             .bold, // Set the font weight
                                                         fontSize:
@@ -1133,7 +1133,7 @@ SizedBox(height: 2,),
                                                             style: TextStyle(
                                                               color: Color.fromRGBO(255, 255, 255, 1), // Set the text color
                                                               fontFamily:
-                                                                  'Inter', // Set the font family
+                                                                  'PangramSans', // Set the font family
                                                               fontWeight: FontWeight
                                                                   .normal, // Set the font weight
                                                               fontSize:
@@ -1176,7 +1176,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1209,7 +1209,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1236,7 +1236,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1367,7 +1367,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1400,7 +1400,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1426,7 +1426,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1573,7 +1573,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1606,7 +1606,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1632,7 +1632,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1767,7 +1767,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1780,7 +1780,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1795,7 +1795,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1872,7 +1872,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1885,7 +1885,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -1900,7 +1900,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -1976,7 +1976,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -1989,7 +1989,7 @@ SizedBox(height: 2,),
                                       color: Color.fromARGB(255, 0, 122,
                                           204), // Set the text color
                                       fontFamily:
-                                          'Inter', // Set the font family
+                                          'PangramSans', // Set the font family
                                       fontWeight: FontWeight
                                           .bold, // Set the font weight
                                       fontSize: 12, // Set the font size
@@ -2004,7 +2004,7 @@ SizedBox(height: 2,),
                   
                                   color: Color.fromARGB(
                                       255, 88, 99, 116), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight:
                                       FontWeight.w400, // Set the font weight
                                   fontSize: 12, // Set the font size
@@ -2075,7 +2075,7 @@ SizedBox(height: 2,),
                                               Color.fromARGB(255, 88, 99,
                                                   116), // Set the text color
                                           fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                           fontWeight: FontWeight
                                               .w400, // Set the font weight
                                           fontSize: 12 // Set the font size
@@ -2099,7 +2099,7 @@ SizedBox(height: 2,),
                                     color: Color.fromARGB(255, 255, 255,
                                         255), // Set the text color
                                     fontFamily:
-                                        'Inter', // Set the font family
+                                        'PangramSans', // Set the font family
                                     fontWeight: FontWeight
                                         .w400, // Set the font weight
                                     fontSize: (SizeConfig.screenWidth! * 12) /
@@ -2172,7 +2172,7 @@ class popupdashboardbutton extends StatelessWidget {
             "$text",
             style: TextStyle(
               color: color, // Set the text color
-              fontFamily: 'Inter', // Set the font family
+              fontFamily: 'PangramSans', // Set the font family
               fontWeight: FontWeight.w400, // Set the font weight
               fontSize: 10, // Set the font size
             ),

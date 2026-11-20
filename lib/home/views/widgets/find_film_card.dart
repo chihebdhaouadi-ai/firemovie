@@ -229,7 +229,7 @@ if(widget.come_from == "watchlist")
                                 style: TextStyle(
                                   color: Color.fromARGB(
                                       255, 255, 255, 255), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight: FontWeight.w300, // Set the font weight
                                   fontSize: 15, // Set the font size
                                   height: 0,
@@ -244,7 +244,7 @@ if(widget.come_from == "watchlist")
                                   
                                   color: Color.fromARGB(
                                       255, 217, 217, 217), // Set the text color
-                                  fontFamily: 'Inter', // Set the font family
+                                  fontFamily: 'PangramSans', // Set the font family
                                   fontWeight: FontWeight.w100, // Set the font weight
                                   fontSize: 10,
                                   height: 0, // Set the font size
@@ -260,7 +260,7 @@ if(widget.come_from == "watchlist")
                               style: TextStyle(
                                 color: Color.fromARGB(
                                     255, 217, 217, 217), // Set the text color
-                                fontFamily: 'Inter', // Set the font family
+                                fontFamily: 'PangramSans', // Set the font family
                                 fontWeight: FontWeight.w100, // Set the font weight
                                 fontSize: 12,
                                 height: 1.2, // Set the font size
@@ -271,7 +271,7 @@ if(widget.come_from == "watchlist")
                               style: TextStyle(
                                 color: Color.fromARGB(
                                     255, 217, 217, 217), // Set the text color
-                                fontFamily: 'Inter', // Set the font family
+                                fontFamily: 'PangramSans', // Set the font family
                                 fontWeight: FontWeight.w300, // Set the font weight
                                 fontSize: 12,
                                 height: 1.2, // Set the font size

@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -17,7 +18,7 @@ class Top5Row extends StatelessWidget {
     required this.onRetry,
     required this.onAddSlot,
     required this.onOpenFilm,
-    required this.onRemove,
+    this.onRemove,
   });
 
   final String title;
@@ -27,7 +28,7 @@ class Top5Row extends StatelessWidget {
   /// Invoked with the 1-based slot (1..5) when the user taps an empty slot.
   final ValueChanged<int> onAddSlot;
   final ValueChanged<Film> onOpenFilm;
-  final ValueChanged<Film> onRemove;
+  final ValueChanged<Film>? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class Top5Row extends StatelessWidget {
         ),
       SectionError() => SectionStatusCard(
           message: l10n.homeSectionErrorTitle,
-          actionIcon: Icons.refresh,
+          actionIcon: BootstrapIcons.arrow_clockwise,
           actionLabel: l10n.homeSectionErrorRetry,
           onAction: onRetry,
         ),
@@ -77,7 +78,7 @@ class _Top5Slots extends StatelessWidget {
     required this.placeholder,
     required this.onAddSlot,
     required this.onOpenFilm,
-    required this.onRemove,
+    this.onRemove,
   });
 
   final String title;
@@ -85,7 +86,7 @@ class _Top5Slots extends StatelessWidget {
   final bool placeholder;
   final ValueChanged<int> onAddSlot;
   final ValueChanged<Film> onOpenFilm;
-  final ValueChanged<Film> onRemove;
+  final ValueChanged<Film>? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +111,10 @@ class _Top5Slots extends StatelessWidget {
                         l10n.homeFilmTileSemantics(film.displayTitle, title),
                     removeLabel: l10n.homeRemoveFilm(film.displayTitle),
                     onTap: () => onOpenFilm(film),
-                    onRemove: () => onRemove(film),
+                    onRemove: switch (onRemove) {
+                      final remove? => () => remove(film),
+                      null => null,
+                    },
                   );
                 }
                 if (placeholder) {

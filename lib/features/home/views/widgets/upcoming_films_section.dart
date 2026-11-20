@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ import '../../../../core/widgets/game_parts.dart';
 import '../../../upcoming/data/upcoming_film.dart';
 import '../../../upcoming/data/upcoming_repository.dart';
 import 'section_header.dart';
+import 'shelf_poster_card.dart';
 import 'section_status.dart';
 import 'horizontal_scroll_hint.dart';
 
@@ -61,7 +63,7 @@ class _UpcomingFilmsSectionState extends State<UpcomingFilmsSection> {
               SectionHeader(title: widget.title),
               SectionStatusCard(
                 message: l10n.homeSectionErrorTitle,
-                actionIcon: Icons.refresh,
+                actionIcon: BootstrapIcons.arrow_clockwise,
                 actionLabel: l10n.homeSectionErrorRetry,
                 onAction: _retry,
               ),
@@ -74,7 +76,7 @@ class _UpcomingFilmsSectionState extends State<UpcomingFilmsSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SectionHeader(title: widget.title),
-              const LinearProgressIndicator(
+              LinearProgressIndicator(
                 color: AppColors.accentGlow,
                 backgroundColor: AppColors.surfaceRaised,
               ),
@@ -87,15 +89,14 @@ class _UpcomingFilmsSectionState extends State<UpcomingFilmsSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionHeader(title: widget.title),
-            SizedBox(height: tokens.spaceSm),
+            const SizedBox(height: SectionHeader.contentGap),
             HorizontalScrollHint(
               controller: _scroll,
-              height: 190,
+              height: ShelfPosterCard.rowHeight,
               child: ListView.separated(
                 controller: _scroll,
                 scrollDirection: Axis.horizontal,
-                // Room for the poster lip and shadow.
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                padding: EdgeInsets.zero,
                 itemCount: films.length,
                 separatorBuilder: (_, __) => SizedBox(width: tokens.spaceMd),
                 itemBuilder: (context, index) => _UpcomingFilmCard(
@@ -126,9 +127,10 @@ class _UpcomingFilmCard extends StatelessWidget {
   final ScrollController scrollController;
   final VoidCallback onTap;
 
-  static const _posterWidth = 90.0;
+  // 40% smaller than the original 90 px covers.
+  static const _posterWidth = 54.0;
   static const _posterHeight = _posterWidth * 3 / 2;
-  static const _minPosterHeight = 96.0;
+  static const _minPosterHeight = 58.0;
   static const _shrinkZone = _posterWidth;
 
   double _posterHeightFor(double gap) {
@@ -147,7 +149,7 @@ class _UpcomingFilmCard extends StatelessWidget {
     return SizedBox(
       width: _posterWidth,
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(9),
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,23 +170,24 @@ class _UpcomingFilmCard extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: GameColors.panel,
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(9),
                       border: Border.all(color: GameColors.edge, width: 2),
                       boxShadow: [
-                        const BoxShadow(
+                        BoxShadow(
                           color: GameColors.edge,
-                          offset: Offset(0, 5),
+                          offset: Offset(0, 3),
                         ),
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: .4),
-                          offset: const Offset(0, 9),
+                          color: themed(Colors.black.withValues(alpha: .4),
+                              const Color(0x221A1814)),
+                          offset: const Offset(0, 6),
                           blurRadius: 12,
                         ),
                       ],
                     ),
                     // Gloss across the top of the poster.
                     foregroundDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(7),
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: const Alignment(0, -.4),
@@ -197,7 +200,7 @@ class _UpcomingFilmCard extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: poster.isEmpty
-                          ? const ColoredBox(color: AppColors.surfaceRaised)
+                          ? ColoredBox(color: AppColors.surfaceRaised)
                           : CachedNetworkImage(
                               imageUrl: poster,
                               fit: BoxFit.cover,
@@ -206,10 +209,10 @@ class _UpcomingFilmCard extends StatelessWidget {
                                   (_posterWidth * pixelRatio).round(),
                               memCacheHeight:
                                   (_posterHeight * pixelRatio).round(),
-                              placeholder: (_, __) => const ColoredBox(
+                              placeholder: (_, __) => ColoredBox(
                                 color: AppColors.surfaceRaised,
                               ),
-                              errorWidget: (_, __, ___) => const ColoredBox(
+                              errorWidget: (_, __, ___) => ColoredBox(
                                 color: AppColors.surfaceRaised,
                               ),
                             ),
@@ -222,11 +225,12 @@ class _UpcomingFilmCard extends StatelessWidget {
               film.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: AppFonts.brand,
-                fontSize: 12,
+                fontSize: 8,
                 fontWeight: FontWeight.w400,
-                color: Color.fromARGB(191, 255, 255, 255),
+                color: themed(const Color.fromARGB(191, 255, 255, 255),
+                    const Color(0xFF36322B)),
                 decoration: TextDecoration.none,
               ),
             ),

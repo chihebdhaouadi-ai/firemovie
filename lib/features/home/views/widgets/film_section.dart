@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -20,6 +21,8 @@ class FilmSection extends StatelessWidget {
     this.onAdd,
     this.onRemove,
     this.onOpenFilm,
+    this.onEdit,
+    this.subtitle,
   });
 
   final String title;
@@ -30,6 +33,12 @@ class FilmSection extends StatelessWidget {
   final ValueChanged<Film>? onRemove;
   final ValueChanged<Film>? onOpenFilm;
 
+  /// Opens the list's edit page from the pen beside the title.
+  final VoidCallback? onEdit;
+
+  /// A small line under the title; the film count follows it.
+  final String? subtitle;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -39,13 +48,13 @@ class FilmSection extends StatelessWidget {
       SectionLoading() => PosterSkeletonRow(tileWidth: tileWidth),
       SectionEmpty() => SectionStatusCard(
           message: l10n.homeSectionEmptyTitle,
-          actionIcon: Icons.add,
+          actionIcon: BootstrapIcons.plus_lg,
           actionLabel: add == null ? null : l10n.homeSectionEmptyAction,
           onAction: add,
         ),
       SectionError() => SectionStatusCard(
           message: l10n.homeSectionErrorTitle,
-          actionIcon: Icons.refresh,
+          actionIcon: BootstrapIcons.arrow_clockwise,
           actionLabel: l10n.homeSectionErrorRetry,
           onAction: onRetry,
         ),
@@ -67,7 +76,17 @@ class FilmSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionHeader(title: title, trailing: trailing),
+        SectionHeader(
+          title: title,
+          subtitle: subtitle == null
+              ? null
+              : [subtitle!, if (trailing != null) trailing].join(' · '),
+          trailing: subtitle == null ? trailing : null,
+          onEdit: onEdit,
+          editLabel: l10n.homeEditList(title),
+        ),
+        // Same gap under the header as Your Top 5.
+        SizedBox(height: context.tokens.spaceSm),
         body,
       ],
     );

@@ -259,7 +259,7 @@ class _Find extends State<Find> with TickerProviderStateMixin {
                           child: IconButton(
                             onPressed: () {
 Navigator.of(context).pop();                            },
-                            icon: Icon(Icons.arrow_back_ios,
+                            icon: Icon(BootstrapIcons.chevron_left,
                                 color: Color.fromARGB(255, 93, 90, 90)),
                           ),
                         ),
@@ -270,7 +270,7 @@ Navigator.of(context).pop();                            },
                             margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                             width: (SizeConfig.screenWidth!! * 60) / 500,
                             child: Icon(
-                              Icons.search,
+                              BootstrapIcons.search,
                               color: Color.fromARGB(0, 93, 90, 90),
                               size: 10,
                             ),
@@ -358,7 +358,7 @@ Navigator.of(context).pop();                            },
                                               color: Color.fromARGB(255, 255, 255,
                                                   255), // Set the text color
                                               fontFamily:
-                                                  'Inter', // Set the font family
+                                                  'PangramSans', // Set the font family
                                               fontWeight: FontWeight
                                                   .w500, // Set the font weight
                                               fontSize: 12, // Set the font size
@@ -452,7 +452,7 @@ if(show_under_list)
                                           padding: const EdgeInsets.fromLTRB(
                                               10, 2, 0, 0),
                                           child: Icon(
-                                            Icons.search,
+                                            BootstrapIcons.search,
                                             color: Color.fromARGB(255, 1, 116, 229),
                                             size: 28,
                                           ),

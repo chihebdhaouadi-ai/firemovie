@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,7 +46,7 @@ class _LatestArticlesSectionState extends State<LatestArticlesSection> {
               SectionHeader(title: widget.title),
               SectionStatusCard(
                 message: l10n.homeSectionErrorTitle,
-                actionIcon: Icons.refresh,
+                actionIcon: BootstrapIcons.arrow_clockwise,
                 actionLabel: l10n.homeSectionErrorRetry,
                 onAction: _retry,
               ),
@@ -58,7 +59,7 @@ class _LatestArticlesSectionState extends State<LatestArticlesSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SectionHeader(title: widget.title),
-              const LinearProgressIndicator(
+              LinearProgressIndicator(
                 color: AppColors.accentGlow,
                 backgroundColor: AppColors.surfaceRaised,
               ),
@@ -71,7 +72,7 @@ class _LatestArticlesSectionState extends State<LatestArticlesSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionHeader(title: widget.title),
-            SizedBox(height: tokens.spaceSm),
+            const SizedBox(height: SectionHeader.contentGap),
             SizedBox(
               height: 232,
               child: ListView.separated(
@@ -115,9 +116,9 @@ class _ArticleCard extends StatelessWidget {
                 imageUrl: article.coverUrl,
                 fit: BoxFit.cover,
                 placeholder: (_, __) =>
-                    const ColoredBox(color: AppColors.surfaceRaised),
+                    ColoredBox(color: AppColors.surfaceRaised),
                 errorWidget: (_, __, ___) =>
-                    const ColoredBox(color: AppColors.surfaceRaised),
+                    ColoredBox(color: AppColors.surfaceRaised),
               ),
             ),
             Padding(
@@ -126,11 +127,11 @@ class _ArticleCard extends StatelessWidget {
                 article.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
                   height: 1.35,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: themed(Colors.white, const Color(0xFF1A1814)),
                 ),
               ),
             ),

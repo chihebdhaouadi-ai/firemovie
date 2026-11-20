@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -240,7 +241,7 @@ class _ExploreCarouselState extends State<_ExploreCarousel> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.done_all,
+              BootstrapIcons.check_all,
               size: tokens.iconLarge,
               color: AppColors.textMuted,
             ),

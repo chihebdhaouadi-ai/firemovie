@@ -102,7 +102,7 @@ class _MovieOverviewScreenState extends State<MovieOverviewScreen> {
           ),
           _contentSliver([
             if (_loading)
-              const LinearProgressIndicator(
+              LinearProgressIndicator(
                 color: AppColors.accentGlow,
                 backgroundColor: AppColors.surfaceRaised,
               ),

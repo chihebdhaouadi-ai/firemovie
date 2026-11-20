@@ -24,9 +24,9 @@ void main() {
   });
 
   test('heat rises with weighted reactions and stays below full fire', () {
-    final few = fireHeatFor(_take(const {VoteKind.disagreeButFair: 1}));
-    final some = fireHeatFor(_take(const {VoteKind.wellArgued: 3}));
-    final many = fireHeatFor(_take(const {VoteKind.changedMyMind: 40}));
+    final few = fireHeatFor(_take(const {VoteKind.down: 1}));
+    final some = fireHeatFor(_take(const {VoteKind.draw: 3}));
+    final many = fireHeatFor(_take(const {VoteKind.up: 40}));
 
     expect(few, greaterThan(0));
     expect(some, greaterThan(few));
@@ -35,8 +35,8 @@ void main() {
   });
 
   test('changed my mind weighs more than well argued', () {
-    final changed = fireHeatFor(_take(const {VoteKind.changedMyMind: 2}));
-    final argued = fireHeatFor(_take(const {VoteKind.wellArgued: 2}));
+    final changed = fireHeatFor(_take(const {VoteKind.up: 2}));
+    final argued = fireHeatFor(_take(const {VoteKind.draw: 2}));
 
     expect(changed, greaterThan(argued));
   });
@@ -44,17 +44,17 @@ void main() {
   test('the leading reaction picks the fire color', () {
     expect(
       fireColorFor(
-          _take(const {VoteKind.wellArgued: 5, VoteKind.changedMyMind: 2})),
+          _take(const {VoteKind.draw: 5, VoteKind.up: 2})),
       const Color(0xFFFFC53D),
     );
     expect(
       fireColorFor(_take(
-          const {VoteKind.changedMyMind: 4, VoteKind.disagreeButFair: 1})),
+          const {VoteKind.up: 4, VoteKind.down: 1})),
       const Color(0xFF4ADE80),
     );
     expect(
-      fireColorFor(_take(const {VoteKind.disagreeButFair: 3})),
-      const Color(0xFF4DA3FF),
+      fireColorFor(_take(const {VoteKind.down: 3})),
+      const Color(0xFFFF5C7A),
     );
   });
 

@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -38,7 +39,7 @@ class FilmPoster extends StatelessWidget {
         height: height,
         child: url == null
             ? const PosterPlaceholder()
-            : _PosterImage(url: url, width: width, height: height),
+            : PosterImage(url: url, width: width, height: height),
       ),
     );
 
@@ -47,8 +48,11 @@ class FilmPoster extends StatelessWidget {
   }
 }
 
-class _PosterImage extends StatefulWidget {
-  const _PosterImage({
+/// A poster image that retries failed loads (automatically, then with a
+/// manual retry button) instead of staying blank.
+class PosterImage extends StatefulWidget {
+  const PosterImage({
+    super.key,
     required this.url,
     required this.width,
     required this.height,
@@ -59,10 +63,10 @@ class _PosterImage extends StatefulWidget {
   final double height;
 
   @override
-  State<_PosterImage> createState() => _PosterImageState();
+  State<PosterImage> createState() => _PosterImageState();
 }
 
-class _PosterImageState extends State<_PosterImage> {
+class _PosterImageState extends State<PosterImage> {
   static const _autoRetryLimit = 2;
   static const _retryDelay = Duration(seconds: 2);
 
@@ -71,7 +75,7 @@ class _PosterImageState extends State<_PosterImage> {
   Timer? _retryTimer;
 
   @override
-  void didUpdateWidget(covariant _PosterImage oldWidget) {
+  void didUpdateWidget(covariant PosterImage oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.url != widget.url) {
       _retryTimer?.cancel();
@@ -142,7 +146,7 @@ class _PosterRetry extends StatelessWidget {
           child: Tooltip(
             message: context.l10n.homeSectionErrorRetry,
             child: Icon(
-              Icons.refresh,
+              BootstrapIcons.arrow_clockwise,
               color: AppColors.textMuted,
               size: context.tokens.iconLarge,
             ),
@@ -164,7 +168,7 @@ class PosterPlaceholder extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) => Center(
           child: Icon(
-            Icons.movie_outlined,
+            BootstrapIcons.film,
             color: AppColors.textMuted,
             size:
                 (constraints.biggest.shortestSide * 0.5).clamp(0.0, iconLarge),
@@ -239,12 +243,12 @@ class FilmTile extends StatelessWidget {
                   ),
                   icon: Container(
                     padding: EdgeInsets.all(tokens.spaceXs),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.background,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.close,
+                      BootstrapIcons.x_lg,
                       size: tokens.iconSmall,
                       color: AppColors.textPrimary,
                     ),

@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/l10n_context.dart';
@@ -7,7 +8,8 @@ import '../../create_topic/views/create_topic_screen.dart';
 import '../../film_reviews/data/review_repository.dart';
 import 'tabs/explore_tab.dart';
 
-const _exploreBackground = Color(0xFF131417);
+Color get _exploreBackground =>
+    themed(const Color(0xFF131417), const Color(0xFFF2EEE6));
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key, this.reviews, this.onBack});
@@ -70,21 +72,25 @@ class _ExplorePageState extends State<ExplorePage> {
                         button: true,
                         label: l10n.overviewBack,
                         child: Material(
-                          color: const Color(0xFF1B1D23),
-                          shape: const CircleBorder(
-                            side: BorderSide(color: Color(0xFF2A2D36)),
+                          color: themed(
+                              const Color(0xFF1B1D23), const Color(0xFFE9E4DA)),
+                          shape: CircleBorder(
+                            side: BorderSide(
+                                color: themed(const Color(0xFF2A2D36),
+                                    const Color(0xFFD6CFC2))),
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: InkWell(
                             customBorder: const CircleBorder(),
                             onTap: back,
-                            child: const SizedBox(
+                            child: SizedBox(
                               width: 40,
                               height: 40,
                               child: Icon(
-                                Icons.arrow_back_rounded,
+                                BootstrapIcons.arrow_left,
                                 size: 20,
-                                color: Color(0xFFE8E9EE),
+                                color: themed(const Color(0xFFE8E9EE),
+                                    const Color(0xFF1A1814)),
                               ),
                             ),
                           ),
@@ -98,7 +104,8 @@ class _ExplorePageState extends State<ExplorePage> {
                         child: Text(
                           l10n.homeTabExplore,
                           style: theme.textTheme.titleLarge?.copyWith(
-                            color: const Color(0xFFE8E9EE),
+                            color: themed(const Color(0xFFE8E9EE),
+                                const Color(0xFF1A1814)),
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                           ),
@@ -111,9 +118,12 @@ class _ExplorePageState extends State<ExplorePage> {
                         button: true,
                         label: l10n.exploreCreateButton,
                         child: Material(
-                          color: const Color(0xFF1B1D23),
-                          shape: const CircleBorder(
-                            side: BorderSide(color: Color(0xFF2A2D36)),
+                          color: themed(
+                              const Color(0xFF1B1D23), const Color(0xFFE9E4DA)),
+                          shape: CircleBorder(
+                            side: BorderSide(
+                                color: themed(const Color(0xFF2A2D36),
+                                    const Color(0xFFD6CFC2))),
                           ),
                           clipBehavior: Clip.antiAlias,
                           child: InkWell(
@@ -123,9 +133,10 @@ class _ExplorePageState extends State<ExplorePage> {
                               width: tokens.minTouchTarget,
                               height: tokens.minTouchTarget,
                               child: Icon(
-                                Icons.add_rounded,
+                                BootstrapIcons.plus_lg,
                                 size: tokens.iconSmall + 4,
-                                color: const Color(0xFFE8E9EE),
+                                color: themed(const Color(0xFFE8E9EE),
+                                    const Color(0xFF1A1814)),
                               ),
                             ),
                           ),
@@ -140,7 +151,8 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: Text(
                     l10n.exploreSubtitle,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF8D919D),
+                      color: themed(
+                          const Color(0xFF8D919D), const Color(0xFF615B50)),
                       fontSize: 14,
                     ),
                   ),
