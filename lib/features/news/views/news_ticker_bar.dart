@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -67,7 +68,7 @@ class NewsTickerBar extends StatelessWidget {
           IconButton(
             tooltip: 'All news',
             onPressed: onSeeAllTap,
-            icon: const Icon(Icons.chevron_right_rounded),
+            icon: const Icon(BootstrapIcons.chevron_right),
           ),
         ],
       ),

@@ -41,6 +41,10 @@ class Movie extends Equatable {
     this.voteAverage,
     this.watchProviders,
     this.inLists = const [],
+    this.trailerUrl,
+    this.trailerYoutubeId,
+    this.cast = const [],
+    this.crew = const [],
   });
 
   final String id;
@@ -55,6 +59,18 @@ class Movie extends Equatable {
   final double? voteAverage;
   final WatchProviders? watchProviders;
   final List<String> inLists;
+
+  /// Direct trailer link (usually YouTube); null when the source has none.
+  final String? trailerUrl;
+
+  /// YouTube video id of the trailer, for the in-app player.
+  final String? trailerYoutubeId;
+
+  /// Main cast, billing order.
+  final List<CastMember> cast;
+
+  /// Key crew (director, writers, producers, composer…).
+  final List<CrewMember> crew;
 
   bool get isTop5 => inLists.contains('top_5');
   bool get isWatched => inLists.contains('watched');
@@ -76,7 +92,59 @@ class Movie extends Equatable {
         voteAverage,
         watchProviders,
         inLists,
+        trailerUrl,
+        trailerYoutubeId,
+        cast,
+        crew,
       ];
+}
+
+/// An actor and the character they play.
+class CastMember extends Equatable {
+  const CastMember({required this.name, this.role = '', this.personId});
+
+  final String name;
+  final String role;
+
+  /// Backend person id for the person page; null when unknown.
+  final String? personId;
+
+  @override
+  List<Object?> get props => [name, role, personId];
+}
+
+/// A crew member and their job(s), e.g. "Director, Screenplay".
+class CrewMember extends Equatable {
+  const CrewMember({required this.name, this.job = '', this.personId});
+
+  final String name;
+  final String job;
+
+  /// Backend person id for the person page; null when unknown.
+  final String? personId;
+
+  @override
+  List<Object?> get props => [name, job, personId];
+}
+
+/// How a streaming option is offered.
+enum ProviderOffer {
+  subscription('sub'),
+  free('free'),
+  tvProvider('tve'),
+  rent('rent'),
+  buy('buy');
+
+  const ProviderOffer(this.apiValue);
+
+  final String apiValue;
+
+  static ProviderOffer? fromApi(Object? value) {
+    for (final offer in values) {
+      if (offer.apiValue == value) return offer;
+    }
+    return null;
+  }
 }
 
 class WatchProviders extends Equatable {
@@ -93,14 +161,26 @@ class WatchProviders extends Equatable {
 }
 
 class StreamingProvider extends Equatable {
-  const StreamingProvider({required this.name, this.logoUrl, this.url});
+  const StreamingProvider({
+    required this.name,
+    this.logoUrl,
+    this.url,
+    this.offer,
+    this.price,
+  });
 
   final String name;
   final String? logoUrl;
   final String? url;
 
+  /// Subscription, free, rent…; null when the source does not say.
+  final ProviderOffer? offer;
+
+  /// Rent/buy price in the streaming country's currency, when known.
+  final double? price;
+
   @override
-  List<Object?> get props => [name, logoUrl, url];
+  List<Object?> get props => [name, logoUrl, url, offer, price];
 }
 
 /// A page of search results.

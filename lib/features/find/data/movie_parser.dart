@@ -68,6 +68,30 @@ abstract final class MovieParser {
       runtime: json['runtime'] is int ? (json['runtime'] as int) : null,
       voteAverage: vote,
       inLists: inLists,
+      trailerUrl: _httpsUrl(json['trailer_url']),
+      trailerYoutubeId: _youtubeId(json['trailer_youtube_id']),
+      cast: [
+        if (json['cast'] case final List rows)
+          for (final row in rows)
+            if (row is Map<String, dynamic> &&
+                (_string(row['name']) ?? '').isNotEmpty)
+              CastMember(
+                name: _string(row['name'])!,
+                role: _string(row['role']) ?? '',
+                personId: _personId(row['person_id']),
+              ),
+      ],
+      crew: [
+        if (json['crew'] case final List rows)
+          for (final row in rows)
+            if (row is Map<String, dynamic> &&
+                (_string(row['name']) ?? '').isNotEmpty)
+              CrewMember(
+                name: _string(row['name'])!,
+                job: _string(row['job']) ?? '',
+                personId: _personId(row['person_id']),
+              ),
+      ],
     );
   }
 
@@ -107,6 +131,9 @@ abstract final class MovieParser {
               name: name,
               logoUrl: _httpsUrl(row['logo_url']),
               url: _httpsUrl(row['url']),
+              offer: ProviderOffer.fromApi(row['type']),
+              price:
+                  row['price'] is num ? (row['price'] as num).toDouble() : null,
             ));
           }
         }
@@ -114,6 +141,11 @@ abstract final class MovieParser {
     }
     return out;
   }
+
+  static final _youtubeIdPattern = RegExp(r'^[A-Za-z0-9_-]{11}$');
+
+  static String? _youtubeId(Object? value) =>
+      value is String && _youtubeIdPattern.hasMatch(value) ? value : null;
 
   static String? _httpsUrl(Object? value) {
     final url = _string(value);
@@ -146,6 +178,10 @@ extension MovieCopy on Movie {
       voteAverage: voteAverage,
       watchProviders: providers,
       inLists: inLists,
+      trailerUrl: trailerUrl,
+      trailerYoutubeId: trailerYoutubeId,
+      cast: cast,
+      crew: crew,
     );
   }
 
@@ -163,6 +199,16 @@ extension MovieCopy on Movie {
       voteAverage: voteAverage,
       watchProviders: watchProviders,
       inLists: value,
+      trailerUrl: trailerUrl,
+      trailerYoutubeId: trailerYoutubeId,
+      cast: cast,
+      crew: crew,
     );
   }
 }
+
+String? _personId(Object? value) => switch (value) {
+      final int id when id > 0 => '$id',
+      final String id when id.trim().isNotEmpty => id.trim(),
+      _ => null,
+    };

@@ -166,7 +166,12 @@ class FindFilmBloc extends Bloc<FindFilmEvent, FindFilmState> {
     if (query.length < minQueryLength) {
       _lastQuery = query;
       _seq++;
-      emit(FindFilmMinChars(recent: _recentOf(state)));
+      // An empty field goes back to recent searches and the browse menu.
+      emit(
+        query.isEmpty
+            ? FindFilmInitial(recent: _recentOf(state))
+            : FindFilmMinChars(recent: _recentOf(state)),
+      );
       return;
     }
     await _search(emit, query);

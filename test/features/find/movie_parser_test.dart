@@ -1,3 +1,4 @@
+import 'package:film_wise_mobile/features/find/data/movie.dart';
 import 'package:film_wise_mobile/features/find/data/movie_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -63,7 +64,11 @@ void main() {
         'watch_providers': {
           'link': 'https://www.justwatch.com/us/movie/x',
           'available': [
-            {'name': 'Netflix', 'logo_url': 'https://x/n.png', 'url': 'https://n/x'},
+            {
+              'name': 'Netflix',
+              'logo_url': 'https://x/n.png',
+              'url': 'https://n/x'
+            },
           ],
         },
         'in_lists': ['top_5'],
@@ -85,7 +90,11 @@ void main() {
         'watch_providers': {
           'available': [
             {'name': 'Max', 'logo_url': 'http://x/m.png', 'url': 'http://m/x'},
-            {'name': 'Hulu', 'logo_url': 'https://x/h.png', 'url': 'https://h/x'},
+            {
+              'name': 'Hulu',
+              'logo_url': 'https://x/h.png',
+              'url': 'https://h/x'
+            },
           ],
         },
       });
@@ -94,6 +103,53 @@ void main() {
       expect(providers[0].url, isNull);
       expect(providers[1].logoUrl, 'https://x/h.png');
       expect(providers[1].url, 'https://h/x');
+    });
+
+    test('parses trailer, cast, crew and provider offers', () {
+      final movie = MovieParser.detail({
+        'film_id': 'tt1345836',
+        'trailer_url': 'https://www.youtube.com/watch?v=x',
+        'trailer_youtube_id': 'tc-TXxekXWo',
+        'cast': [
+          {'name': 'Christian Bale', 'role': 'Bruce Wayne'},
+          {'name': '', 'role': 'Nobody'},
+        ],
+        'crew': [
+          {'name': 'Christopher Nolan', 'job': 'Director, Screenplay'},
+        ],
+        'watch_providers': {
+          'available': [
+            {'name': 'HBO Max', 'type': 'sub', 'url': 'https://max/x'},
+            {
+              'name': 'Amazon',
+              'type': 'rent',
+              'price': 3.99,
+              'url': 'https://a/x'
+            },
+            {'name': 'Odd', 'type': 'weird', 'url': 'https://o/x'},
+          ],
+        },
+      });
+      expect(movie.trailerUrl, 'https://www.youtube.com/watch?v=x');
+      expect(movie.trailerYoutubeId, 'tc-TXxekXWo');
+      expect(movie.cast,
+          const [CastMember(name: 'Christian Bale', role: 'Bruce Wayne')]);
+      expect(movie.crew.single.job, 'Director, Screenplay');
+      final providers = movie.watchProviders!.available;
+      expect(providers.map((p) => p.offer),
+          [ProviderOffer.subscription, ProviderOffer.rent, null]);
+      expect(providers[1].price, 3.99);
+    });
+
+    test('ignores a non-https trailer link', () {
+      final movie = MovieParser.detail({
+        'film_id': 'tt1',
+        'trailer_url': 'http://insecure/x',
+        'trailer_youtube_id': 'not a video id',
+      });
+      expect(movie.trailerUrl, isNull);
+      expect(movie.trailerYoutubeId, isNull);
+      expect(movie.cast, isEmpty);
     });
 
     test('defaults to the numeric id in the search payload', () {

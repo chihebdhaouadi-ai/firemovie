@@ -354,9 +354,8 @@ class _PodiumColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.tokens;
-    final duration = reduceMotion
-        ? Duration.zero
-        : const Duration(milliseconds: 900);
+    final duration =
+        reduceMotion ? Duration.zero : const Duration(milliseconds: 900);
 
     return GestureDetector(
       onTap: () => onOpen(entry.userId),
@@ -426,13 +425,14 @@ class _PodiumColumn extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: formatCount(value.round()),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       TextSpan(
-                        text: ' ${l10n.leaderboardReactionsWord(entry.reactions)}',
+                        text:
+                            ' ${l10n.leaderboardReactionsWord(entry.reactions)}',
                       ),
                     ],
                   ),
@@ -460,7 +460,7 @@ class _PodiumColumn extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [Color(0xFF1F2430), Color(0xFF16181D)],
                 ),
-                border: const Border(
+                border: Border(
                   top: BorderSide(color: AppColors.accent, width: 8),
                 ),
                 borderRadius: const BorderRadius.vertical(
@@ -501,7 +501,9 @@ class _RankRow extends StatelessWidget {
     final tokens = context.tokens;
     final theme = Theme.of(context);
     final rank = entry.rank;
-    final name = isMe ? '${entry.username} ${l10n.leaderboardYouSuffix}' : entry.username;
+    final name = isMe
+        ? '${entry.username} ${l10n.leaderboardYouSuffix}'
+        : entry.username;
 
     return Material(
       color: AppColors.surface,
@@ -516,9 +518,8 @@ class _RankRow extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(tokens.radiusLg),
-            border: isMe
-                ? Border.all(color: AppColors.accent, width: 1.5)
-                : null,
+            border:
+                isMe ? Border.all(color: AppColors.accent, width: 1.5) : null,
           ),
           child: Row(
             children: [
@@ -615,7 +616,10 @@ class _ErrorState extends StatelessWidget {
               ),
         ),
         const SizedBox(height: 12),
-        GameButton(label: l10n.leaderboardRetry, style: GameButtonStyle.blue, onPressed: onRetry),
+        GameButton(
+            label: l10n.leaderboardRetry,
+            style: GameButtonStyle.blue,
+            onPressed: onRetry),
       ],
     );
   }

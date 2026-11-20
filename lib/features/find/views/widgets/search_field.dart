@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -73,7 +74,7 @@ class _SearchFieldState extends State<SearchField> {
           hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: AppColors.textMuted,
               ),
-          prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
+          prefixIcon: Icon(BootstrapIcons.search, color: AppColors.textMuted),
           suffixIcon: hasText
               ? IconButton(
                   tooltip: clearLabel,
@@ -81,7 +82,7 @@ class _SearchFieldState extends State<SearchField> {
                     widget.controller.clear();
                     _update('');
                   },
-                  icon: const Icon(Icons.close, color: AppColors.textPrimary),
+                  icon: Icon(BootstrapIcons.x_lg, color: AppColors.textPrimary),
                 )
               : null,
           filled: true,

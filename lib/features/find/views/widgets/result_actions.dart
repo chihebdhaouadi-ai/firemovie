@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -30,9 +31,9 @@ class ResultActions {
 
   /// The icon used per target row.
   static IconData iconFor(AddTarget target) => switch (target) {
-        AddTarget.top5 => Icons.star_rounded,
-        AddTarget.watched => Icons.check_circle_outline,
-        AddTarget.watchlist => Icons.playlist_add,
+        AddTarget.top5 => BootstrapIcons.star_fill,
+        AddTarget.watched => BootstrapIcons.check_circle,
+        AddTarget.watchlist => BootstrapIcons.plus_square,
       };
 
   /// Shows a modal bottom sheet to choose a destination for [movie].

@@ -62,9 +62,18 @@ class LeaderboardHowItWorksScreen extends StatelessWidget {
             ),
             children: [
               _Title(text: l10n.howRankingTitle),
-              _Step(number: 1, title: l10n.howStep1Title, body: l10n.howStep1Body),
-              _Step(number: 2, title: l10n.howStep2Title, body: l10n.howStep2Body),
-              _Step(number: 3, title: l10n.howStep3Title, body: l10n.howStep3Body),
+              _Step(
+                  number: 1,
+                  title: l10n.howStep1Title,
+                  body: l10n.howStep1Body),
+              _Step(
+                  number: 2,
+                  title: l10n.howStep2Title,
+                  body: l10n.howStep2Body),
+              _Step(
+                  number: 3,
+                  title: l10n.howStep3Title,
+                  body: l10n.howStep3Body),
               SizedBox(height: tokens.spaceMd),
               Wrap(
                 spacing: tokens.spaceSm,
@@ -83,9 +92,15 @@ class LeaderboardHowItWorksScreen extends StatelessWidget {
               _Title(text: l10n.howLevelsTitle),
               _Card(
                 children: [
-                  _XpRow(label: l10n.howXpReview, value: l10n.howXpValue(_xpReview)),
-                  _XpRow(label: l10n.howXpComment, value: l10n.howXpValue(_xpComment)),
-                  _XpRow(label: l10n.howXpReaction, value: l10n.howXpValue(_xpReaction)),
+                  _XpRow(
+                      label: l10n.howXpReview,
+                      value: l10n.howXpValue(_xpReview)),
+                  _XpRow(
+                      label: l10n.howXpComment,
+                      value: l10n.howXpValue(_xpComment)),
+                  _XpRow(
+                      label: l10n.howXpReaction,
+                      value: l10n.howXpValue(_xpReaction)),
                 ],
               ),
               SizedBox(height: tokens.spaceSm),
@@ -107,7 +122,8 @@ class LeaderboardHowItWorksScreen extends StatelessWidget {
                 _IconRow(
                   asset: achievementInfo(l10n, entry.key, entry.value).asset!,
                   title: achievementInfo(l10n, entry.key, entry.value).title,
-                  body: achievementInfo(l10n, entry.key, entry.value).description,
+                  body:
+                      achievementInfo(l10n, entry.key, entry.value).description,
                 ),
               _Title(text: l10n.profileFramesTitle),
               for (final entry in _frameTargets.entries)
@@ -314,7 +330,8 @@ class _XpRow extends StatelessWidget {
 }
 
 class _IconRow extends StatelessWidget {
-  const _IconRow({required this.asset, required this.title, required this.body});
+  const _IconRow(
+      {required this.asset, required this.title, required this.body});
 
   final String asset;
   final String title;

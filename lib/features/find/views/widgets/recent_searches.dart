@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -53,8 +54,8 @@ class RecentSearches extends StatelessWidget {
             itemBuilder: (context, index) {
               final term = terms[index];
               return InputChip(
-                avatar: const Icon(
-                  Icons.history,
+                avatar: Icon(
+                  BootstrapIcons.clock_history,
                   size: 16,
                   color: AppColors.textMuted,
                 ),
@@ -89,7 +90,7 @@ class _EmptyRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.manage_search, color: AppColors.textMuted),
+          Icon(BootstrapIcons.search, color: AppColors.textMuted),
           SizedBox(width: context.tokens.spaceSm),
           Text(
             title,

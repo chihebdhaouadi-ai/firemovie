@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -66,7 +67,7 @@ class _AddButtonState extends State<AddButton> {
               child: AnimatedSwitcher(
                 duration: context.motion(tokens.durationFast),
                 child: widget.processing
-                    ? const SizedBox(
+                    ? SizedBox(
                         key: ValueKey('processing'),
                         width: 18,
                         height: 18,
@@ -76,14 +77,14 @@ class _AddButtonState extends State<AddButton> {
                         ),
                       )
                     : added
-                        ? const Icon(
-                            Icons.check_rounded,
+                        ? Icon(
+                            BootstrapIcons.check_lg,
                             key: ValueKey('added'),
                             size: 22,
                             color: AppColors.onPrimaryButton,
                           )
-                        : const Icon(
-                            Icons.add_rounded,
+                        : Icon(
+                            BootstrapIcons.plus_lg,
                             key: ValueKey('add'),
                             size: 24,
                             color: AppColors.onPrimaryButton,

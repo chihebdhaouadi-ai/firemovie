@@ -1,10 +1,13 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../data/movie.dart';
 
-/// A streaming platform tile showing its underlined name.
+/// A streaming platform tile with its logo, name and (rent/buy) price.
 /// The whole tile opens the platform's page for this film when it has a link.
 class StreamingProviderLogo extends StatelessWidget {
   const StreamingProviderLogo({super.key, required this.provider});
@@ -18,16 +21,8 @@ class StreamingProviderLogo extends StatelessWidget {
     final name = provider.name;
     final url = provider.url;
 
-    final nameText = Text(
-      name,
-      textAlign: TextAlign.center,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: theme.textTheme.labelMedium?.copyWith(
-        color: AppColors.textPrimary,
-        decoration: TextDecoration.underline,
-      ),
-    );
+    final logo = provider.logoUrl;
+    final price = provider.price;
 
     final tile = DecoratedBox(
       decoration: BoxDecoration(
@@ -40,7 +35,55 @@ class StreamingProviderLogo extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.all(tokens.spaceSm),
-        child: Center(child: nameText),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: SizedBox.square(
+                dimension: 32,
+                child: logo == null
+                    ? ColoredBox(
+                        color: AppColors.surface,
+                        child: Icon(
+                          BootstrapIcons.tv_fill,
+                          size: 18,
+                          color: AppColors.textMuted,
+                        ),
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: logo,
+                        fit: BoxFit.cover,
+                        memCacheWidth: 100,
+                      ),
+              ),
+            ),
+            SizedBox(width: tokens.spaceSm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  if (price != null)
+                    Text(
+                      // Prices are for the backend's STREAMING_COUNTRY (US).
+                      NumberFormat.simpleCurrency(name: 'USD').format(price),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
 

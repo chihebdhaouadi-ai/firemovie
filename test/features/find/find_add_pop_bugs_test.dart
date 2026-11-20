@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
 import 'package:film_wise_mobile/features/find/data/find_repository.dart';
 import 'package:film_wise_mobile/features/find/data/in_memory_lists_repository.dart';
@@ -97,7 +98,7 @@ void main() {
     expect(find.byType(ResultTile), findsOneWidget);
 
     // Tap the Add (+) button on the result -> adds to top5 and schedules a pop.
-    await tester.tap(find.byIcon(Icons.add_rounded));
+    await tester.tap(find.byIcon(BootstrapIcons.plus_lg));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
 

@@ -54,7 +54,7 @@ class _NewsTickerSectionState extends State<NewsTickerSection> {
                     imageUrl: article.coverUrl,
                     fit: BoxFit.cover,
                     errorWidget: (_, __, ___) =>
-                        const ColoredBox(color: AppColors.surfaceRaised),
+                        ColoredBox(color: AppColors.surfaceRaised),
                   ),
                 ),
               ),
@@ -62,7 +62,7 @@ class _NewsTickerSectionState extends State<NewsTickerSection> {
                 article.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: AppColors.textPrimary),
               ),
               onTap: () {
                 Navigator.of(sheetContext).pop();

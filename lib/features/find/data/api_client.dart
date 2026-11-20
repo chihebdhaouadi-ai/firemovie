@@ -57,6 +57,15 @@ class ApiClient {
     await _send(() => _inner.post(_uri(path), headers: _headers));
   }
 
+  /// Posts a JSON body to an endpoint that answers with no content.
+  Future<void> postJsonNoContent(
+    String path, {
+    Map<String, dynamic>? body,
+  }) async {
+    await _send(() => _inner.post(_uri(path),
+        headers: _headers, body: jsonEncode(body ?? const {})));
+  }
+
   Future<Map<String, dynamic>> postJson(
     String path, {
     Map<String, dynamic>? body,
@@ -139,6 +148,13 @@ class ApiClient {
       final streamed = await _inner.send(request);
       return http.Response.fromStream(streamed);
     });
+    return _decodeObject(response);
+  }
+
+  /// DELETE on an endpoint that answers with the changed object.
+  Future<Map<String, dynamic>> deleteJson(String path) async {
+    final response =
+        await _send(() => _inner.delete(_uri(path), headers: _headers));
     return _decodeObject(response);
   }
 

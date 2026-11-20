@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -176,10 +177,10 @@ class _PosterThumbFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
+    return ColoredBox(
       color: AppColors.surfaceRaised,
       child: Center(
-        child: Icon(Icons.movie_outlined, color: AppColors.textMuted),
+        child: Icon(BootstrapIcons.film, color: AppColors.textMuted),
       ),
     );
   }

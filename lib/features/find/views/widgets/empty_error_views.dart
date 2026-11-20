@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -58,7 +59,7 @@ class FindMessageView extends StatelessWidget {
                   height: tokens.minTouchTarget,
                   child: GameButton(
                     onPressed: action,
-                    icon: Icons.refresh,
+                    icon: BootstrapIcons.arrow_clockwise,
                     label: actionLabel ?? '',
                     style: GameButtonStyle.blue,
                   ),
@@ -80,7 +81,7 @@ class MinCharsPrompt extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return FindMessageView(
-      icon: Icons.search_off,
+      icon: BootstrapIcons.search,
       title: l10n.findMinCharsTitle,
       body: l10n.findMinCharsBody,
     );
@@ -97,7 +98,7 @@ class EmptyResults extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return FindMessageView(
-      icon: Icons.movie_filter_outlined,
+      icon: BootstrapIcons.camera_reels,
       title: l10n.findEmptyTitle(query),
       body: '${l10n.findEmptyTip1}\n${l10n.findEmptyTip2}',
     );
@@ -114,7 +115,7 @@ class SearchError extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return FindMessageView(
-      icon: Icons.cloud_off,
+      icon: BootstrapIcons.cloud_slash,
       title: l10n.findErrorTitle,
       actionLabel: l10n.findErrorRetry,
       onAction: onRetry,
@@ -130,7 +131,7 @@ class OfflineMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return FindMessageView(
-      icon: Icons.wifi_off,
+      icon: BootstrapIcons.wifi_off,
       title: l10n.findOfflineTitle,
       body: l10n.findOfflineBody,
     );
