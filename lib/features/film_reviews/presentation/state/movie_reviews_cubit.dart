@@ -1,20 +1,45 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../find/data/movie.dart' show ServerFailure;
+
+import '../../data/reactions_repository.dart';
 import '../../data/review_repository.dart';
 import '../../domain/film_reaction.dart';
 import '../../domain/movie_review_summary.dart';
+import '../../domain/review_stance.dart';
 import '../../domain/take.dart';
+import '../../domain/take_skin.dart';
 import '../../domain/vote_kind.dart';
 import 'movie_reviews_state.dart';
 
+/// How sharing a take ended, so the composer can say what to do next.
+enum ShareTakeOutcome {
+  shared,
+
+  /// The viewer has not picked how the film made them feel yet.
+  needsFeeling,
+
+  /// The viewer already shared a review of this film.
+  alreadyShared,
+
+  failed,
+}
+
 class MovieReviewsCubit extends Cubit<MovieReviewsState> {
-  MovieReviewsCubit(
-      {required this.filmId, required ReviewRepository repository})
-      : _repository = repository,
+  MovieReviewsCubit({
+    required this.filmId,
+    required ReviewRepository repository,
+    ReactionsRepository? reactions,
+  })  : _repository = repository,
+        _reactions = reactions,
         super(const MovieReviewsState());
 
   final String filmId;
   final ReviewRepository _repository;
+
+  /// Where this page saves its takes; widgets on the page share it.
+  ReviewRepository get repository => _repository;
+  final ReactionsRepository? _reactions;
 
   Future<void> load() async {
     emit(state.copyWith(
@@ -45,14 +70,64 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
     return true;
   }
 
-  Future<bool> shareTake(String body) async {
-    final Take take;
+  /// Saves up to three feelings at once (empty clears them). Shows the new
+  /// feelings straight away and rolls back if the save fails.
+  Future<bool> setFeelings(List<FilmReaction> feelings) async {
+    final picked =
+        feelings.take(MovieReviewSummary.maxFeelings).toList(growable: false);
+    final previous = state.summary;
+    final canRollBack = previous is AsyncReady<MovieReviewSummary>;
+    if (canRollBack) {
+      emit(state.copyWith(
+        summary: AsyncReady(previous.value.withFeelings(picked)),
+      ));
+    }
+    final MovieReviewSummary summary;
     try {
-      take = await _repository.postTake(filmId, body: body);
+      summary = await (_reactions ?? ApiReactionsRepository())
+          .setFeelings(filmId, picked);
     } catch (_) {
+      if (canRollBack && !isClosed) emit(state.copyWith(summary: previous));
       return false;
     }
     if (isClosed) return true;
+    emit(state.copyWith(summary: AsyncReady(summary)));
+    await _loadTakes();
+    return true;
+  }
+
+  Future<bool> shareTake(
+    String body, {
+    TakeSkin skin = TakeSkin.normal,
+    bool spoiler = false,
+  }) async =>
+      await shareTakeOutcome(body, skin: skin, spoiler: spoiler) ==
+      ShareTakeOutcome.shared;
+
+  /// Shares a take and says why it failed when the server refuses it.
+  Future<ShareTakeOutcome> shareTakeOutcome(
+    String body, {
+    TakeSkin skin = TakeSkin.normal,
+    bool spoiler = false,
+  }) async {
+    final Take take;
+    try {
+      take = await _repository.postTake(
+        filmId,
+        body: body,
+        skin: skin,
+        spoiler: spoiler,
+      );
+    } on ServerFailure catch (failure) {
+      return switch (failure.code) {
+        'reaction_required' => ShareTakeOutcome.needsFeeling,
+        'already_posted' => ShareTakeOutcome.alreadyShared,
+        _ => ShareTakeOutcome.failed,
+      };
+    } catch (_) {
+      return ShareTakeOutcome.failed;
+    }
+    if (isClosed) return ShareTakeOutcome.shared;
     final current = state.takes;
     if (current is AsyncReady<List<Take>>) {
       emit(state.copyWith(
@@ -61,7 +136,7 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
     } else {
       await _loadTakes();
     }
-    return true;
+    return ShareTakeOutcome.shared;
   }
 
   Future<bool> setVote(int takeId, VoteKind kind) async {
@@ -95,6 +170,7 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
     int takeId,
     String body, {
     int? parentId,
+    ReviewStance? stance,
   }) async {
     final TakeComment comment;
     try {
@@ -102,6 +178,7 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
         takeId,
         body: body,
         parentId: parentId,
+        stance: stance,
       );
     } catch (_) {
       return null;
@@ -110,6 +187,9 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
     return comment;
   }
 
+  /// Shows the author's edited take in place of the old one.
+  void takeEdited(Take updated) => _replaceTake(updated);
+
   Take? _findTake(int takeId) {
     final current = state.takes;
     if (current is! AsyncReady<List<Take>>) return null;
@@ -117,6 +197,11 @@ class MovieReviewsCubit extends Cubit<MovieReviewsState> {
       if (take.id == takeId) return take;
     }
     return null;
+  }
+
+  /// Keeps a take changed elsewhere on the page (a heart, say).
+  void takeChanged(Take updated) {
+    if (!isClosed) _replaceTake(updated);
   }
 
   void _replaceTake(Take updated) {

@@ -87,7 +87,7 @@ class SideMenu extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .primary, // Set the text color
-                                fontFamily: 'Inter', // Set the font family
+                                fontFamily: 'PangramSans', // Set the font family
                                 fontWeight:
                                     FontWeight.w100, // Set the font weight
                                 fontSize: 8,
@@ -101,7 +101,7 @@ class SideMenu extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .primary, // Set the text color
-                                fontFamily: 'Inter', // Set the font family
+                                fontFamily: 'PangramSans', // Set the font family
                                 fontWeight:
                                     FontWeight.w300, // Set the font weight
                                 fontSize: 23,
@@ -114,7 +114,7 @@ class SideMenu extends StatelessWidget {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .primary, // Set the text color
-                                fontFamily: 'Inter', // Set the font family
+                                fontFamily: 'PangramSans', // Set the font family
                                 fontWeight:
                                     FontWeight.w100, // Set the font weight
                                 fontSize: 8,
@@ -183,7 +183,7 @@ class SideMenu extends StatelessWidget {
                                                 .colorScheme
                                                 .primary, // Set the text color
                                             fontFamily:
-                                            'Inter', // Set the font family
+                                            'PangramSans', // Set the font family
                                             fontWeight:
                                             FontWeight.w300, // Set the font weight
                                             fontSize: 15, // Set the font size
@@ -194,7 +194,7 @@ class SideMenu extends StatelessWidget {
                                   ),
                                 )),
                           ),
-                                          trailing: Icon(Icons.arrow_drop_down),
+                                          trailing: Icon(BootstrapIcons.caret_down_fill),
                           children: [
 
                             Container(
@@ -213,7 +213,7 @@ class SideMenu extends StatelessWidget {
                                         Container(
                                           margin: EdgeInsets.only(bottom: 3),
                                           child: Icon(
-                                           Icons.access_alarm,
+                                           BootstrapIcons.alarm,
                                             color: Theme.of(context).colorScheme.primary,
                                             size: 29,
                                           ),
@@ -230,7 +230,7 @@ class SideMenu extends StatelessWidget {
                                                   .colorScheme
                                                   .primary, // Set the text color
                                               fontFamily:
-                                              'Inter', // Set the font family
+                                              'PangramSans', // Set the font family
                                               fontWeight:
                                               FontWeight.w300, // Set the font weight
                                               fontSize: 15, // Set the font size
@@ -294,7 +294,7 @@ class SideMenu extends StatelessWidget {
                                         .colorScheme
                                         .primary, // Set the text color
                                     fontFamily:
-                                        'Inter', // Set the font family
+                                        'PangramSans', // Set the font family
                                     fontWeight:
                                         FontWeight.w300, // Set the font weight
                                     fontSize: 15, // Set the font size

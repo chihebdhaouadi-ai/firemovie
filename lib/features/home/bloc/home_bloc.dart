@@ -45,7 +45,9 @@ class HomeBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       // Guests see public content only; the tabs show a sign-in prompt instead.
       emit(
         HomeLoaded(
-          sections: {for (final list in HomeList.values) list: const SectionEmpty()},
+          sections: {
+            for (final list in HomeList.values) list: const SectionEmpty()
+          },
           feed: const FeedEmpty(),
         ),
       );

@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,7 +69,7 @@ class _FriendsReviewsState extends State<_FriendsReviews> {
                         ),
                   ),
                 ),
-                const Icon(Icons.star_rounded, color: Colors.amber, size: 18),
+                const Icon(BootstrapIcons.star_fill, color: Colors.amber, size: 18),
                 SizedBox(width: tokens.spaceXs),
                 Text(
                   '${data.moyen}/5',
@@ -142,14 +143,14 @@ class _ReviewTile extends StatelessWidget {
             SizedBox(height: tokens.spaceXs),
             Row(
               children: [
-                const Icon(Icons.star_rounded, color: Colors.amber, size: 14),
+                const Icon(BootstrapIcons.star_fill, color: Colors.amber, size: 14),
                 Text(' ${review.rating}', style: muted),
                 SizedBox(width: tokens.spaceSm),
-                Icon(Icons.thumb_up_alt_outlined,
+                Icon(BootstrapIcons.hand_thumbs_up,
                     size: 14, color: AppColors.textMuted),
                 Text(' ${review.likes}', style: muted),
                 SizedBox(width: tokens.spaceSm),
-                Icon(Icons.thumb_down_alt_outlined,
+                Icon(BootstrapIcons.hand_thumbs_down,
                     size: 14, color: AppColors.textMuted),
                 Text(' ${review.Disliles}', style: muted),
               ],

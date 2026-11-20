@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -10,8 +11,11 @@ import '../../../l10n/app_localizations.dart';
 import '../../film_reviews/data/api_review_repository.dart';
 import '../../film_reviews/data/review_repository.dart';
 import '../../film_reviews/domain/film_reaction.dart';
+import '../../film_reviews/domain/take_skin.dart';
 import '../../film_reviews/domain/take_tag.dart';
 import '../../film_reviews/presentation/widgets/reaction_button.dart';
+import '../../film_reviews/presentation/widgets/spoiler_shield.dart';
+import '../../film_reviews/presentation/widgets/take_skin_background.dart';
 import '../../find/data/find_repository.dart';
 import '../../find/data/movie.dart';
 import '../../home/data/home_models.dart';
@@ -54,6 +58,9 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
 
   final _query = TextEditingController();
   final _body = TextEditingController();
+
+  /// Optional headline for questions, discussions and hot takes.
+  final _title = TextEditingController();
   final _sceneName = TextEditingController();
   final _timecode = TextEditingController();
   final List<TextEditingController> _options = [
@@ -76,7 +83,10 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
   FilmReaction? _reaction;
   _Subject _subject = _Subject.movie;
   XFile? _photo;
-  bool _spoiler = false;
+
+  /// The author's answer to "Does it have spoilers?"; null until picked.
+  bool? _spoiler;
+  TakeSkin _skin = TakeSkin.normal;
   bool _posting = false;
 
   static const _maxOptionLength = 80;
@@ -112,6 +122,7 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
     _debounce?.cancel();
     _query.dispose();
     _body.dispose();
+    _title.dispose();
     _sceneName.dispose();
     _timecode.dispose();
     for (final option in _options) {
@@ -125,19 +136,20 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
   /// Whether the current step has what it needs to move on.
   bool get _stepComplete => switch (_currentStep) {
         _Step.type => _tag != null,
-        _Step.write => _bodyFilled,
+        _Step.write => _bodyFilled && _spoiler != null,
         _Step.movie => _film != null,
         _Step.feeling => _reaction != null,
         _Step.subject =>
           _subject == _Subject.movie ? _film != null : _photo != null,
         _Step.options => _pollOptions.length >= 2,
-        _Step.scene => _sceneName.text.trim().isNotEmpty && _bodyFilled,
+        _Step.scene =>
+          _sceneName.text.trim().isNotEmpty && _bodyFilled && _spoiler != null,
       };
 
   void _chooseTag(TakeTag tag) {
     setState(() {
       _tag = tag;
-      _spoiler = false;
+      _spoiler = null;
       _stepIndex = 1;
     });
   }
@@ -263,6 +275,8 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
             film.id,
             body: _body.text.trim(),
             tag: TakeTag.review,
+            skin: _skin,
+            spoiler: _spoiler ?? false,
           );
         case TakeTag.scene:
           final timecode = _timecode.text.trim();
@@ -272,14 +286,16 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
             tag: TakeTag.scene,
             scene: _sceneName.text.trim(),
             timecode: timecode.isEmpty ? null : timecode,
-            spoiler: _spoiler,
+            spoiler: _spoiler ?? false,
+            skin: _skin,
           );
         case TakeTag.poll:
           await _reviews.postTopic(
             body: _body.text.trim(),
             tag: TakeTag.poll,
             options: _pollOptions,
-            spoiler: _spoiler,
+            spoiler: _spoiler ?? false,
+            skin: _skin,
           );
         case TakeTag.question:
         case TakeTag.discussion:
@@ -290,7 +306,9 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
             body: _body.text.trim(),
             tag: tag,
             image: usePhoto ? _photo : null,
-            spoiler: _spoiler,
+            spoiler: _spoiler ?? false,
+            skin: _skin,
+            title: _title.text.trim(),
           );
       }
       if (!mounted) return;
@@ -390,15 +408,18 @@ class _CreateTopicScreenState extends State<CreateTopicScreen> {
       _Step.type => _TypeStep(onChoose: _chooseTag),
       _Step.write => _WriteStep(
           title: _writeTitle(l10n),
+          // Polls are their own question; the other topics may add a title.
+          titleController: _tag == TakeTag.poll ? null : _title,
           controller: _body,
           maxLength: _maxBodyLength,
           hint: _tag == TakeTag.poll
               ? l10n.createPollQuestionHint
               : l10n.topicBodyHint,
           onChanged: () => setState(() {}),
-          showSpoiler: _tag != TakeTag.review,
           spoiler: _spoiler,
           onSpoilerChanged: (value) => setState(() => _spoiler = value),
+          skin: _skin,
+          onSkinChanged: (skin) => setState(() => _skin = skin),
         ),
       _Step.options => _OptionsStep(
           title: l10n.createPollOptionsTitle,
@@ -492,42 +513,42 @@ class _TypeStep extends StatelessWidget {
         ),
         SizedBox(height: tokens.spaceLg),
         _TypeCard(
-          icon: Icons.rate_review_outlined,
+          icon: BootstrapIcons.pencil_square,
           title: l10n.topicTagReview,
           subtitle: l10n.createTypeReviewSubtitle,
           onTap: () => onChoose(TakeTag.review),
         ),
         SizedBox(height: tokens.spaceMd),
         _TypeCard(
-          icon: Icons.help_outline,
+          icon: BootstrapIcons.question_circle,
           title: l10n.topicTagQuestion,
           subtitle: l10n.createTypeQuestionSubtitle,
           onTap: () => onChoose(TakeTag.question),
         ),
         SizedBox(height: tokens.spaceMd),
         _TypeCard(
-          icon: Icons.forum_outlined,
+          icon: BootstrapIcons.chat_square_text,
           title: l10n.topicTagDiscussion,
           subtitle: l10n.createTypeDiscussionSubtitle,
           onTap: () => onChoose(TakeTag.discussion),
         ),
         SizedBox(height: tokens.spaceMd),
         _TypeCard(
-          icon: Icons.local_fire_department_outlined,
+          icon: BootstrapIcons.fire,
           title: l10n.topicTagHotTake,
           subtitle: l10n.createTypeHotTakeSubtitle,
           onTap: () => onChoose(TakeTag.hotTake),
         ),
         SizedBox(height: tokens.spaceMd),
         _TypeCard(
-          icon: Icons.bar_chart_outlined,
+          icon: BootstrapIcons.bar_chart,
           title: l10n.topicTagPoll,
           subtitle: l10n.createTypePollSubtitle,
           onTap: () => onChoose(TakeTag.poll),
         ),
         SizedBox(height: tokens.spaceMd),
         _TypeCard(
-          icon: Icons.movie_outlined,
+          icon: BootstrapIcons.film,
           title: l10n.topicTagScene,
           subtitle: l10n.createTypeSceneSubtitle,
           onTap: () => onChoose(TakeTag.scene),
@@ -587,7 +608,7 @@ class _TypeCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, color: AppColors.textMuted),
+              Icon(BootstrapIcons.chevron_right, color: AppColors.textMuted),
             ],
           ),
         ),
@@ -597,26 +618,39 @@ class _TypeCard extends StatelessWidget {
 }
 
 /// Step 2: the text of the post.
+/// Longest topic title the server accepts.
+const maxTopicTitleLength = 120;
+
 class _WriteStep extends StatelessWidget {
   const _WriteStep({
     required this.title,
+    this.titleController,
     required this.controller,
     required this.maxLength,
     required this.hint,
     required this.onChanged,
-    this.showSpoiler = false,
-    this.spoiler = false,
+    this.spoiler,
     this.onSpoilerChanged,
+    this.skin = TakeSkin.normal,
+    this.onSkinChanged,
   });
 
   final String title;
+
+  /// The topic's optional title field; null hides it.
+  final TextEditingController? titleController;
   final TextEditingController controller;
   final int maxLength;
   final String hint;
   final VoidCallback onChanged;
-  final bool showSpoiler;
-  final bool spoiler;
+
+  /// The author's spoiler answer; null until picked.
+  final bool? spoiler;
   final ValueChanged<bool>? onSpoilerChanged;
+
+  /// The card skin picked for the post, shown live on [TakeSkinPreview].
+  final TakeSkin skin;
+  final ValueChanged<TakeSkin>? onSkinChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -626,11 +660,43 @@ class _WriteStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (onSkinChanged case final onSkinChanged?) ...[
+          Text(context.l10n.takeSkinTitle, style: theme.textTheme.titleSmall),
+          SizedBox(height: tokens.spaceSm),
+          TakeSkinPicker(selected: skin, onChanged: onSkinChanged),
+          SizedBox(height: tokens.spaceMd),
+          Text(context.l10n.takeSkinPreview, style: theme.textTheme.titleSmall),
+          SizedBox(height: tokens.spaceSm),
+          SpoilerShield(
+            key: ValueKey(spoiler),
+            hidden: spoiler == true,
+            child: TakeSkinPreview(skin: skin, text: controller.text),
+          ),
+          SizedBox(height: tokens.spaceLg),
+        ],
         Text(title, style: theme.textTheme.titleMedium),
         SizedBox(height: tokens.spaceMd),
+        if (titleController case final titleController?) ...[
+          TextField(
+            key: const Key('topic-title-field'),
+            controller: titleController,
+            autofocus: true,
+            maxLength: maxTopicTitleLength,
+            textCapitalization: TextCapitalization.sentences,
+            textInputAction: TextInputAction.next,
+            onChanged: (_) => onChanged(),
+            decoration: InputDecoration(
+              hintText: context.l10n.topicTitleHint,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(tokens.radiusMd),
+              ),
+            ),
+          ),
+          SizedBox(height: tokens.spaceSm),
+        ],
         TextField(
           controller: controller,
-          autofocus: true,
+          autofocus: titleController == null,
           minLines: 4,
           maxLines: 8,
           maxLength: maxLength,
@@ -642,28 +708,11 @@ class _WriteStep extends StatelessWidget {
             ),
           ),
         ),
-        if (showSpoiler && onSpoilerChanged != null)
-          _SpoilerCheckbox(value: spoiler, onChanged: onSpoilerChanged!),
+        if (onSpoilerChanged case final onSpoilerChanged?) ...[
+          SizedBox(height: tokens.spaceSm),
+          SpoilerChoice(value: spoiler, onChanged: onSpoilerChanged),
+        ],
       ],
-    );
-  }
-}
-
-/// Opt-in flag: the post body is hidden until a reader taps to reveal it.
-class _SpoilerCheckbox extends StatelessWidget {
-  const _SpoilerCheckbox({required this.value, required this.onChanged});
-
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return CheckboxListTile(
-      value: value,
-      onChanged: (checked) => onChanged(checked ?? false),
-      title: Text(context.l10n.topicSpoilerLabel),
-      contentPadding: EdgeInsets.zero,
-      controlAffinity: ListTileControlAffinity.leading,
     );
   }
 }
@@ -729,7 +778,7 @@ class _OptionsStep extends StatelessWidget {
                   IconButton(
                     tooltip: l10n.createPollRemoveOption,
                     onPressed: () => onRemove(i),
-                    icon: const Icon(Icons.remove_circle_outline),
+                    icon: const Icon(BootstrapIcons.dash_circle),
                   ),
               ],
             ),
@@ -739,7 +788,7 @@ class _OptionsStep extends StatelessWidget {
             alignment: AlignmentDirectional.centerStart,
             child: OutlinedButton.icon(
               onPressed: onAdd,
-              icon: const Icon(Icons.add, size: 18),
+              icon: const Icon(BootstrapIcons.plus_lg, size: 18),
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(0, tokens.minTouchTarget),
               ),
@@ -770,7 +819,7 @@ class _SceneStep extends StatelessWidget {
   final TextEditingController body;
   final int maxBodyLength;
   final VoidCallback onChanged;
-  final bool spoiler;
+  final bool? spoiler;
   final ValueChanged<bool> onSpoilerChanged;
 
   @override
@@ -822,7 +871,8 @@ class _SceneStep extends StatelessWidget {
             l10n.createSceneExplainHint,
           ),
         ),
-        _SpoilerCheckbox(value: spoiler, onChanged: onSpoilerChanged),
+        SizedBox(height: tokens.spaceSm),
+        SpoilerChoice(value: spoiler, onChanged: onSpoilerChanged),
       ],
     );
   }
@@ -935,12 +985,12 @@ class _SubjectStep extends StatelessWidget {
           segments: [
             ButtonSegment(
               value: _Subject.movie,
-              icon: const Icon(Icons.movie_outlined),
+              icon: const Icon(BootstrapIcons.film),
               label: Text(l10n.createSubjectMovie),
             ),
             ButtonSegment(
               value: _Subject.photo,
-              icon: const Icon(Icons.photo_outlined),
+              icon: const Icon(BootstrapIcons.image),
               label: Text(l10n.createSubjectPhoto),
             ),
           ],
@@ -1031,7 +1081,7 @@ class _PhotoSelector extends StatelessWidget {
     if (file == null) {
       return OutlinedButton.icon(
         onPressed: onPick,
-        icon: const Icon(Icons.add_photo_alternate_outlined),
+        icon: const Icon(BootstrapIcons.image),
         style: OutlinedButton.styleFrom(
           minimumSize: Size(0, tokens.minTouchTarget),
         ),
@@ -1135,7 +1185,7 @@ class _MovieSearch extends StatelessWidget {
           onSubmitted: onSubmitted,
           decoration: InputDecoration(
             hintText: l10n.topicSearchHint,
-            prefixIcon: Icon(Icons.search, size: tokens.iconSmall),
+            prefixIcon: Icon(BootstrapIcons.search, size: tokens.iconSmall),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(tokens.radiusMd),
             ),

@@ -12,8 +12,10 @@ import '../../bloc/home_bloc.dart';
 import '../../bloc/home_screen_event.dart';
 import '../../bloc/home_screen_state.dart';
 import '../../data/home_models.dart';
+import '../../../movie_lists/data/movie_list_repository.dart';
+import '../../../movie_lists/presentation/widgets/movie_lists_section.dart';
+import '../edit_film_list_screen.dart';
 import '../home_navigation.dart';
-import '../widgets/collections_box.dart';
 import '../widgets/film_section.dart';
 import '../widgets/section_header.dart';
 import '../widgets/take_list_section.dart';
@@ -26,16 +28,20 @@ class FilmsTab extends StatelessWidget {
     required this.exitInset,
     this.reviews,
     this.signedIn = true,
+    this.movieLists,
   });
 
   final HomeLoaded state;
 
   /// Pinned header height; sections blur and narrow once they pass it.
-  final double exitInset;
+  final ExitInset exitInset;
   final ReviewRepository? reviews;
 
   /// Lists belong to an account, so guests see a sign-in prompt.
   final bool signedIn;
+
+  /// Where "My lists" loads from; the real API when left out.
+  final MovieListRepository? movieLists;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +72,13 @@ class FilmsTab extends StatelessWidget {
             children: [
               SectionHeader(
                 title: l10n.homeTop5Title,
-                trailing: l10n.homeTop5Hint,
+                subtitle: l10n.homeTop5Hint,
+                onEdit: () => openEditFilmList(
+                  context,
+                  list: HomeList.top5,
+                  title: l10n.homeTop5Title,
+                ),
+                editLabel: l10n.homeEditList(l10n.homeTop5Title),
               ),
               SizedBox(height: tokens.spaceSm),
               Top5Row(
@@ -79,49 +91,62 @@ class FilmsTab extends StatelessWidget {
                   args: FindFilmRouteArgs(target: AddTarget.top5, slot: slot),
                 ),
                 onOpenFilm: (film) => openOverview(context, film),
-                onRemove: (film) =>
-                    bloc.add(HomeFilmRemoved(HomeList.top5, film)),
               ),
             ],
           ),
         ),
         SizedBox(height: tokens.spaceXl),
+        // Watched and Watchlist are plain sections, like Your Top 5.
         ScrollExitEffect(
           exitInset: exitInset,
-          child: CollectionsBox(
-            title: l10n.homeCollectionsTitle,
-            resizeLabel: l10n.homeCollectionsResizeLabel,
-            children: [
-              FilmSection(
-                title: l10n.homeWatchedTitle,
-                state: sections[HomeList.watched] ?? const SectionLoading(),
-                tileWidth: tokens.filmTileWidth,
-                onRetry: () => bloc
-                    .add(const HomeSectionRetryRequested(HomeList.watched)),
-                onAdd: () => openFind(
-                  context,
-                  args: const FindFilmRouteArgs(target: AddTarget.watched),
-                ),
-                onRemove: (film) =>
-                    bloc.add(HomeFilmRemoved(HomeList.watched, film)),
-                onOpenFilm: (film) => openOverview(context, film),
-              ),
-              SizedBox(height: tokens.spaceXl),
-              FilmSection(
-                title: l10n.homeWatchlistTitle,
-                state: sections[HomeList.watchlist] ?? const SectionLoading(),
-                tileWidth: tokens.filmTileWidth,
-                onRetry: () => bloc
-                    .add(const HomeSectionRetryRequested(HomeList.watchlist)),
-                onAdd: () => openFind(
-                  context,
-                  args: const FindFilmRouteArgs(target: AddTarget.watchlist),
-                ),
-                onRemove: (film) =>
-                    bloc.add(HomeFilmRemoved(HomeList.watchlist, film)),
-                onOpenFilm: (film) => openOverview(context, film),
-              ),
-            ],
+          child: FilmSection(
+            title: l10n.homeWatchedTitle,
+            subtitle: l10n.homeWatchedHint,
+            state: sections[HomeList.watched] ?? const SectionLoading(),
+            tileWidth: tokens.filmTileWidth,
+            onRetry: () =>
+                bloc.add(const HomeSectionRetryRequested(HomeList.watched)),
+            onAdd: () => openFind(
+              context,
+              args: const FindFilmRouteArgs(target: AddTarget.watched),
+            ),
+            onOpenFilm: (film) => openOverview(context, film),
+            onEdit: () => openEditFilmList(
+              context,
+              list: HomeList.watched,
+              title: l10n.homeWatchedTitle,
+            ),
+          ),
+        ),
+        SizedBox(height: tokens.spaceXl),
+        ScrollExitEffect(
+          exitInset: exitInset,
+          child: FilmSection(
+            title: l10n.homeWatchlistTitle,
+            subtitle: l10n.homeWatchlistHint,
+            state: sections[HomeList.watchlist] ?? const SectionLoading(),
+            tileWidth: tokens.filmTileWidth,
+            onRetry: () =>
+                bloc.add(const HomeSectionRetryRequested(HomeList.watchlist)),
+            onAdd: () => openFind(
+              context,
+              args: const FindFilmRouteArgs(target: AddTarget.watchlist),
+            ),
+            onOpenFilm: (film) => openOverview(context, film),
+            onEdit: () => openEditFilmList(
+              context,
+              list: HomeList.watchlist,
+              title: l10n.homeWatchlistTitle,
+            ),
+          ),
+        ),
+        SizedBox(height: tokens.spaceXl),
+        // Lists you made and posted, after your Watchlist.
+        ScrollExitEffect(
+          exitInset: exitInset,
+          child: MovieListsSection(
+            owner: MovieListsOwner.mine,
+            repository: movieLists,
           ),
         ),
         SizedBox(height: tokens.spaceXl),

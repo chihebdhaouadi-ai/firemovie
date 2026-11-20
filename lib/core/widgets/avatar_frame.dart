@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 
 import '../avatar_frames.dart';
 import '../theme/app_theme.dart';
+import '../stable_image_key.dart';
 
 /// Avatar wearing an animated cadre (frame). The frame ring is drawn at 180%
 /// of the avatar size, centred on it, the same way the design lays it out.
@@ -14,10 +15,11 @@ class AvatarFrame extends StatelessWidget {
     this.frame,
     this.avatarUrl,
     this.initial = '',
-    this.backgroundColor = AppColors.surfaceRaised,
+    this.backgroundColor,
     this.animate = true,
     this.ringWidth = 2,
     this.framed = true,
+    this.ringColor,
   });
 
   /// Diameter of the avatar itself (the frame overlays a bigger area).
@@ -27,26 +29,33 @@ class AvatarFrame extends StatelessWidget {
   final String? frame;
   final String? avatarUrl;
   final String initial;
-  final Color backgroundColor;
+
+  /// Fill behind the avatar; defaults to [AppColors.surfaceRaised].
+  final Color? backgroundColor;
   final bool animate;
   final double ringWidth;
 
   /// When false only the plain avatar is drawn (no cadre overlay).
   final bool framed;
 
+  /// Colour of the thin ring around the photo, inside the frame.
+  /// Ring colour; defaults to [AppColors.accentGlow].
+  final Color? ringColor;
+
   static const _ringScale = 1.8;
 
   @override
   Widget build(BuildContext context) {
     final overlay = size * _ringScale;
-    final frameKey = frame ?? defaultFrameKey;
+    final frameKey = frameKeyOrDefault(frame);
 
     final face = _Face(
       size: size,
       avatarUrl: avatarUrl,
       initial: initial,
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundColor ?? AppColors.surfaceRaised,
       ringWidth: ringWidth,
+      ringColor: ringColor ?? AppColors.accentGlow,
     );
     if (!framed) return face;
 
@@ -86,6 +95,7 @@ class _Face extends StatelessWidget {
     required this.initial,
     required this.backgroundColor,
     required this.ringWidth,
+    required this.ringColor,
   });
 
   final double size;
@@ -93,6 +103,7 @@ class _Face extends StatelessWidget {
   final String initial;
   final Color backgroundColor;
   final double ringWidth;
+  final Color ringColor;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +117,9 @@ class _Face extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: backgroundColor,
-        border: Border.all(color: AppColors.accentGlow, width: ringWidth),
+        border: ringWidth > 0
+            ? Border.all(color: ringColor, width: ringWidth)
+            : null,
       ),
       clipBehavior: Clip.antiAlias,
       alignment: Alignment.center,
@@ -121,6 +134,7 @@ class _Face extends StatelessWidget {
             )
           : CachedNetworkImage(
               imageUrl: url,
+              cacheKey: stableImageKey(url),
               fit: BoxFit.cover,
               width: size,
               height: size,

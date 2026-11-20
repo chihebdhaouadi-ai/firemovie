@@ -118,6 +118,22 @@ void main() {
       expect(bloc.state, isA<FindFilmMinChars>());
     });
 
+    test('clearing the query returns to the initial state', () async {
+      final h = _Harness();
+      final bloc = h.build();
+      addTearDown(bloc.close);
+
+      bloc.add(const QueryChanged('a'));
+      await Future.delayed(
+          debounceDuration + const Duration(milliseconds: 120));
+      bloc.add(const QueryChanged(''));
+      await Future.delayed(
+          debounceDuration + const Duration(milliseconds: 120));
+
+      expect(h.find.calls, 0);
+      expect(bloc.state, isA<FindFilmInitial>());
+    });
+
     test('ignores stale responses: newest query wins', () async {
       final h = _Harness();
       final bloc = h.build();

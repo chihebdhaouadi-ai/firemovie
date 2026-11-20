@@ -32,7 +32,7 @@ Take _take({
       isMine: false,
       reaction: tag == TakeTag.review ? FilmReaction.loved : null,
       body: body,
-      votes: const {VoteKind.changedMyMind: 0},
+      votes: const {VoteKind.up: 0},
       myVotes: const {},
       commentCount: 0,
       isMostHelpful: false,

@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,11 +22,15 @@ class MovieSuggestionScreen extends StatefulWidget {
     required this.socialRepository,
     required this.findRepository,
     this.preselectedUserIds = const {},
+    this.initialMovie,
   });
 
   final SocialRepository socialRepository;
   final FindRepository findRepository;
   final Set<int> preselectedUserIds;
+
+  /// The film to suggest, already picked (opened from a film page).
+  final Movie? initialMovie;
 
   @override
   State<MovieSuggestionScreen> createState() => _MovieSuggestionScreenState();
@@ -52,6 +57,7 @@ class _MovieSuggestionScreenState extends State<MovieSuggestionScreen> {
   void initState() {
     super.initState();
     _selected.addAll(widget.preselectedUserIds);
+    _movie = widget.initialMovie;
     _loadFriends();
   }
 
@@ -266,7 +272,7 @@ class _MovieSuggestionScreenState extends State<MovieSuggestionScreen> {
           onChanged: _onQueryChanged,
           decoration: InputDecoration(
             hintText: l10n.suggestionSearchHint,
-            prefixIcon: const Icon(Icons.search),
+            prefixIcon: const Icon(BootstrapIcons.search),
           ),
         ),
         SizedBox(height: tokens.spaceSm),
@@ -281,7 +287,7 @@ class _MovieSuggestionScreenState extends State<MovieSuggestionScreen> {
 
     if (_searchFailed) return _Message(text: l10n.suggestionSearchFailed);
     if (_searching) {
-      return const LinearProgressIndicator(
+      return LinearProgressIndicator(
         color: AppColors.accentGlow,
         backgroundColor: AppColors.surfaceRaised,
       );
@@ -296,7 +302,7 @@ class _MovieSuggestionScreenState extends State<MovieSuggestionScreen> {
               child: _MovieRow(
                 movie: movie,
                 onTap: () => _pickMovie(movie),
-                trailing: const Icon(Icons.chevron_right),
+                trailing: const Icon(BootstrapIcons.chevron_right),
               ),
             ),
         ],
@@ -315,7 +321,7 @@ class _MovieSuggestionScreenState extends State<MovieSuggestionScreen> {
     final l10n = context.l10n;
 
     if (_friendsLoading) {
-      return const LinearProgressIndicator(
+      return LinearProgressIndicator(
         color: AppColors.accentGlow,
         backgroundColor: AppColors.surfaceRaised,
       );
@@ -456,12 +462,12 @@ class _PosterThumb extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(tokens.radiusSm),
         child: poster == null
-            ? const ColoredBox(color: AppColors.panelBorder)
+            ? ColoredBox(color: AppColors.panelBorder)
             : CachedNetworkImage(
                 imageUrl: poster,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) =>
-                    const ColoredBox(color: AppColors.panelBorder),
+                    ColoredBox(color: AppColors.panelBorder),
               ),
       ),
     );

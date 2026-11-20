@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -222,11 +223,11 @@ class _FilmHeroHeaderState extends State<FilmHeroHeader> {
       child: SizedBox.expand(
         key: ValueKey(url),
         child: url == null
-            ? const ColoredBox(
+            ? ColoredBox(
                 color: AppColors.surface,
                 child: Center(
                   child: Icon(
-                    Icons.movie_outlined,
+                    BootstrapIcons.film,
                     size: 64,
                     color: AppColors.textMuted,
                   ),
@@ -235,10 +236,9 @@ class _FilmHeroHeaderState extends State<FilmHeroHeader> {
             : CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.cover,
-                placeholder: (_, __) =>
-                    const ColoredBox(color: AppColors.surface),
+                placeholder: (_, __) => ColoredBox(color: AppColors.surface),
                 errorWidget: (_, __, ___) =>
-                    const ColoredBox(color: AppColors.surface),
+                    ColoredBox(color: AppColors.surface),
               ),
       ),
     );
@@ -264,15 +264,14 @@ class _FilmHeroHeaderState extends State<FilmHeroHeader> {
       ),
       child: url == null
           ? Center(
-              child: Icon(Icons.movie_outlined, color: AppColors.textMuted),
+              child: Icon(BootstrapIcons.film, color: AppColors.textMuted),
             )
           : CachedNetworkImage(
               imageUrl: url,
               fit: BoxFit.cover,
-              placeholder: (_, __) =>
-                  const ColoredBox(color: AppColors.surface),
+              placeholder: (_, __) => ColoredBox(color: AppColors.surface),
               errorWidget: (_, __, ___) => Center(
-                child: Icon(Icons.movie_outlined, color: AppColors.textMuted),
+                child: Icon(BootstrapIcons.film, color: AppColors.textMuted),
               ),
             ),
     );

@@ -31,19 +31,29 @@
         "type": "String"
       }
     }
-  },    "homePopularThisWeekTitle": "Popular Films",
-  "homeFriendsFilmsTitle": "Friends' films this week",
-  "homeFriendsReviewsTitle": "Friends' latest reviews",
+  },
+  "homePopularThisWeekTitle": "Popular Films",
+  "homeFriendsFilmsTitle": "Popular with Friends",
+  "homeFriendsReviewsTitle": "Friends' latest takes",
   "homeMyTakesTitle": "My takes",
   "homeComingSoon": "Coming soon",
-  "homeFriendsReviewsEmpty": "Your friends haven't posted any reviews yet.",
+  "homeInboxTitle": "Inbox",
+  "homeInboxSoonTitle": "Under construction",
+  "homeInboxSoonBody": "Messages with your friends will land here soon.",
+  "@homeInboxTitle": {
+    "description": "Friends tab heading for the messaging inbox"
+  },
+  "@homeInboxSoonTitle": {
+    "description": "Shown while messaging is not built yet"
+  },
+  "homeFriendsReviewsEmpty": "Your friends haven't posted any takes yet.",
   "homeMyTakesEmpty": "You haven't shared any takes yet.",
   "homeUnderConstruction": "This section is under construction.",
   "exploreSkipStamp": "SKIP",
   "exploreOpenStamp": "OPEN",
   "exploreCaughtUp": "You are all caught up",
-  "exploreReviewButton": "Review",
-  "exploreSubtitle": "Discover reviews, conversations and questions about films.",
+  "exploreReviewButton": "Take",
+  "exploreSubtitle": "Discover takes, conversations and questions about films.",
   "createSceneMovieHint": "Your scene appears in that movie's discussion.",
   "createPollQuestionHint": "What do you want to ask?",
   "exploreFilterAll": "All",
@@ -51,7 +61,7 @@
   "exploreFilterPolls": "Polls",
   "exploreFilterScenes": "Scenes",
   "exploreFilterQuestions": "Questions",
-  "exploreFilterReviews": "Reviews",
+  "exploreFilterReviews": "Takes",
   "exploreSpoilerReveal": "Tap to reveal",
   "topicTagPoll": "Poll",
   "topicTagScene": "Scene",
@@ -161,8 +171,8 @@
   "exploreThanksVoting": "Thanks for voting",
   "exploreJoinConversation": "Join the conversation",
   "homeCollectionsResizeLabel": "Resize collections",
-  "homeFeedTitle": "Reviews From Your Collections",
-  "homeFeedEmpty": "No reviews on the films in your collections yet.",
+  "homeFeedTitle": "Takes From Your Collections",
+  "homeFeedEmpty": "No takes on the films in your collections yet.",
   "homeFeedShowAsRow": "Show as row",
   "homeFeedShowAsColumn": "Show as column",
   "homeQuickActionsLabel": "Quick actions",
@@ -413,11 +423,11 @@
   "overviewNoFriendActivity": "No activity from your friends yet.",
   "overviewShowMore": "more",
   "overviewShowLess": "less",
-  "overviewReviewsTitle": "Reviews",
-  "overviewAddReviewHint": "Add a review...",
-  "overviewYourReview": "Your Review",
-  "overviewFriendsReviews": "Friends Reviews",
-  "overviewPopularReviews": "Popular Reviews",
+  "overviewReviewsTitle": "Takes",
+  "overviewAddReviewHint": "Add a take...",
+  "overviewYourReview": "Your Take",
+  "overviewFriendsReviews": "Friends' Takes",
+  "overviewPopularReviews": "Popular Takes",
   "overviewSeeAll": "See All",
   "reviewTrustedLabel": "from trusted viewers",
   "reviewEveryoneTogether": "Everyone together: {value}",
@@ -455,7 +465,7 @@
   "reviewCountedThanks": "Thanks! Your reaction is counted.",
   "reviewReactionFailed": "Couldn't save your reaction. Try again.",
   "reviewSummaryFailed": "Couldn't load the reactions.",
-  "reviewDetailTitle": "Reviews",
+  "reviewDetailTitle": "Take",
   "reviewTakesTitle": "What people said",
   "reviewTakesHint": "Short takes from other viewers.",
   "reviewMostHelpful": "Most helpful take",
@@ -526,7 +536,7 @@
   "reviewTakesEmpty": "No takes here yet.",
   "reviewTakesFailed": "Couldn't load takes.",
   "reviewRetry": "Try again",
-  "overviewReviewBy": "Review by {name} on {date}",
+  "overviewReviewBy": "Take by {name} on {date}",
   "@overviewReviewBy": {
     "placeholders": {
       "name": {
@@ -564,7 +574,7 @@
   "profileStatisticsTitle": "Statistics",
   "profileStatWatched": "Watched",
   "profileStatWatchlist": "Watchlist",
-  "profileStatReviews": "Reviews",
+  "profileStatReviews": "Takes",
   "profileStatRewards": "Rewards",
   "profileBlockTitle": "You want to block this user?",
   "profileBlockReasonHint": "Why?…",
@@ -575,6 +585,26 @@
   "profileLanguageButton": "Manage languages",
   "profileLanguageDialogTitle": "App language",
   "profileLanguageSystem": "System default",
+  "profileThemeButton": "Appearance",
+  "@profileThemeButton": {
+    "description": "Profile: button that opens the light / dark appearance picker."
+  },
+  "profileThemeDialogTitle": "Appearance",
+  "@profileThemeDialogTitle": {
+    "description": "Title of the appearance (light / dark) picker dialog."
+  },
+  "profileThemeSystem": "Match system",
+  "@profileThemeSystem": {
+    "description": "Appearance option that follows the device light or dark setting."
+  },
+  "profileThemeLight": "Light",
+  "@profileThemeLight": {
+    "description": "Appearance option: light mode."
+  },
+  "profileThemeDark": "Dark",
+  "@profileThemeDark": {
+    "description": "Appearance option: dark mode."
+  },
   "onboardingFinishLater": "Finish later",
   "onboardingStepCounter": "Step {current} of {total}",
   "@onboardingStepCounter": {
@@ -703,10 +733,10 @@
   "angelBirdEmptyTop5": "Your top 5 is empty. Add five films to start a debate.",
   "angelBirdLoadFailed": "Couldn't load your top 5.",
   "angelBirdRetry": "Try again",
-  "angelBirdReviewQuestion": "Want to open a debate about this review? Pick someone from this conversation to talk with.",
+  "angelBirdReviewQuestion": "Want to open a debate about this take? Pick someone from this conversation to talk with.",
   "angelBirdPickPerson": "Who do you want to debate with?",
-  "angelBirdNoPeople": "Nobody to debate with yet. Wait for a comment on this review.",
-  "angelBirdPeopleFailed": "Could not load the people in this review.",
+  "angelBirdNoPeople": "Nobody to debate with yet. Wait for a comment on this take.",
+  "angelBirdPeopleFailed": "Could not load the people in this take.",
   "debateWaitingTitle": "Waiting for {name}",
   "@debateWaitingTitle": {
     "placeholders": {
@@ -852,12 +882,12 @@
   "topicNoResults": "No movies found",
   "topicChangeMovie": "Change",
   "topicTypeLabel": "Type",
-  "topicTagReview": "Review",
+  "topicTagReview": "Take",
   "topicTagQuestion": "Question",
   "topicTagDiscussion": "Discussion",
   "topicTagHotTake": "Hot Take",
-  "topicReviewHint": "Reviews are about one movie and need how it made you feel.",
-  "topicBodyHint": "Write your review, question or discussion",
+  "topicReviewHint": "Takes are about one movie and need how it made you feel.",
+  "topicBodyHint": "Write your take, question or discussion",
   "topicPostButton": "Post",
   "topicPostFailed": "Could not post. Please try again.",
   "topicSearchFailed": "Search failed. Please try again.",
@@ -866,14 +896,14 @@
   "createTypeQuestionSubtitle": "Ask about a movie or share a photo.",
   "createTypeDiscussionSubtitle": "Start a conversation about a movie or a photo.",
   "createTypeHotTakeSubtitle": "Share a bold take about a film.",
-  "createWriteReviewTitle": "Write your review",
+  "createWriteReviewTitle": "Write your take",
   "createWriteQuestionTitle": "Write your question",
   "createWriteDiscussionTitle": "Start the discussion",
   "createWriteHotTakeTitle": "Write your hot take",
   "createReviewMovieTitle": "Which movie is it about?",
-  "createReviewMovieHint": "Your review appears on that movie's page.",
+  "createReviewMovieHint": "Your take appears on that movie's page.",
   "createFeelTitle": "How did it make you feel?",
-  "createFeelHint": "Pick one reaction. It shows with your review.",
+  "createFeelHint": "Pick one reaction. It shows with your take.",
   "createSubjectTitle": "What is it about?",
   "createSubjectMovie": "A movie",
   "createSubjectPhoto": "A photo",
@@ -882,62 +912,116 @@
   "createPhotoFailed": "Could not open your photos. Please try again.",
   "createNext": "Next",
   "leaderboardTabLabel": "Leaderboard",
-  "leaderboardTitle": "Top reviewers",
-  "leaderboardSubtitle": "Ranked by reactions on their reviews",
+  "leaderboardTitle": "Top critics",
+  "leaderboardSubtitle": "Ranked by reactions on their takes",
   "leaderboardHowItWorks": "How it works",
   "leaderboardPeriodWeek": "This week",
   "leaderboardPeriodMonth": "This month",
   "leaderboardPeriodAll": "All time",
   "leaderboardReactionsLabel": "reactions",
   "leaderboardReactionsWord": "{count, plural, =1{reaction} other{reactions}}",
-  "@leaderboardReactionsWord": {"placeholders": {"count": {"type": "int"}}},
-  "leaderboardReviewsCount": "{count, plural, =1{1 review} other{{count} reviews}}",
-  "@leaderboardReviewsCount": {"placeholders": {"count": {"type": "int"}}},
+  "@leaderboardReactionsWord": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "leaderboardReviewsCount": "{count, plural, =1{1 take} other{{count} takes}}",
+  "@leaderboardReviewsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "leaderboardYouSuffix": "(you)",
   "leaderboardEmpty": "No reactions yet this period.",
   "leaderboardLoadFailed": "We couldn't load the leaderboard.",
   "leaderboardRetry": "Try again",
   "howRankingTitle": "How ranking works",
-  "howStep1Title": "Write a review",
-  "howStep1Body": "Review any film. It shows up in Explore and Friends.",
+  "howStep1Title": "Write a take",
+  "howStep1Body": "Share a take on any film. It shows up in Explore and Friends.",
   "howStep2Title": "Collect reactions",
   "howStep2Body": "Readers react to your take. Every reaction is worth one point.",
   "howStep3Title": "Climb the board",
-  "howStep3Body": "The reviewers with the most reactions in the period take the podium.",
+  "howStep3Body": "The critics with the most reactions in the period take the podium.",
   "howNoteReset": "This week resets every Monday at 00:00. This month and All time keep counting.",
-  "howNoteOncePerReview": "Each person can react once per review. Reacting to your own review doesn't count.",
-  "howNoteTie": "If two reviewers tie, the one who reached the total first ranks higher.",
+  "howNoteOncePerReview": "Each person can react once per take. Reacting to your own take doesn't count.",
+  "howNoteTie": "If two critics tie, the one who reached the total first ranks higher.",
   "howNotePodium": "The top three wear a podium frame (gold, blue, bronze) on the board for the period shown.",
   "howLevelsTitle": "Levels and XP",
-  "howXpReview": "Write a review",
+  "howXpReview": "Write a take",
   "howXpComment": "Write a comment",
   "howXpReaction": "Receive a reaction",
   "howXpValue": "+{xp} XP",
-  "@howXpValue": {"placeholders": {"xp": {"type": "int"}}},
+  "@howXpValue": {
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
+  },
   "howLevelFoot": "Each level needs 50 XP more than the one before.",
   "profileBadgesTitle": "Badges",
   "badgeWellArguedTitle": "Well argued",
   "badgeWellArguedDesc": "Receive {count} “Well argued” reactions.",
-  "@badgeWellArguedDesc": {"placeholders": {"count": {"type": "int"}}},
+  "@badgeWellArguedDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "badgeChangedMindTitle": "Changed my mind",
   "badgeChangedMindDesc": "Receive {count} “Changed my mind” reactions.",
-  "@badgeChangedMindDesc": {"placeholders": {"count": {"type": "int"}}},
+  "@badgeChangedMindDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "badgeDisagreeTitle": "Disagree but fair",
   "badgeDisagreeDesc": "Receive {count} “Disagree but fair” reactions.",
-  "@badgeDisagreeDesc": {"placeholders": {"count": {"type": "int"}}},
+  "@badgeDisagreeDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "badgeTopCriticTitle": "Top critic",
   "badgeTopCriticDesc": "Finish in the weekly top 3.",
   "badgeFirstTakeTitle": "First take",
-  "badgeFirstTakeDesc": "Be the first person to review a film.",
+  "badgeFirstTakeDesc": "Be the first person to share a take on a film.",
   "achFilmCriticTitle": "Film critic",
-  "achFilmCriticDesc": "Write {count} reviews.",
-  "@achFilmCriticDesc": {"placeholders": {"count": {"type": "int"}}},
+  "achFilmCriticDesc": "Write {count} takes.",
+  "@achFilmCriticDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "achDebaterTitle": "Debater",
   "achDebaterDesc": "Get {count} “Well argued” reactions.",
-  "@achDebaterDesc": {"placeholders": {"count": {"type": "int"}}},
+  "@achDebaterDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "achLocalCinemaTitle": "Local cinema",
-  "achLocalCinemaDesc": "Review {count} Tunisian films.",
-  "@achLocalCinemaDesc": {"placeholders": {"count": {"type": "int"}}},
+  "achLocalCinemaDesc": "Share takes on {count} Tunisian films.",
+  "@achLocalCinemaDesc": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "achComingSoon": "Coming soon",
   "frameNewcomerTitle": "Newcomer",
   "frameExplorerTitle": "Explorer",
@@ -946,21 +1030,51 @@
   "frameLegendTitle": "Legend",
   "frameAlwaysUnlocked": "Everyone starts with this frame.",
   "frameLevelRequirement": "Reach Level {level}.",
-  "@frameLevelRequirement": {"placeholders": {"level": {"type": "int"}}},
+  "@frameLevelRequirement": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
   "frameDebaterRequirement": "Receive {count} “Well argued” reactions.",
-  "@frameDebaterRequirement": {"placeholders": {"count": {"type": "int"}}},
+  "@frameDebaterRequirement": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "frameEquipped": "Equipped",
   "frameTapToEquip": "Tap to equip",
   "frameUnlocked": "Unlocked",
   "frameLocked": "Locked",
   "frameUpdateFailed": "Couldn't equip that frame. Try again.",
   "profileLevelLabel": "LEVEL {level}",
-  "@profileLevelLabel": {"placeholders": {"level": {"type": "int"}}},
+  "@profileLevelLabel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
   "profileStatComments": "Comments",
   "profileStatReactions": "Reactions",
   "profileFramesTitle": "Frames",
   "profileXpProgress": "{into} / {span} XP to level {next}",
-  "@profileXpProgress": {"placeholders": {"into": {"type": "int"}, "span": {"type": "int"}, "next": {"type": "int"}}},
+  "@profileXpProgress": {
+    "placeholders": {
+      "into": {
+        "type": "int"
+      },
+      "span": {
+        "type": "int"
+      },
+      "next": {
+        "type": "int"
+      }
+    }
+  },
   "topicDetailTitle": "Topic",
   "topicCommentsHeading": "{count, plural, =0{No comments yet} =1{1 comment} other{{count} comments}}",
   "@topicCommentsHeading": {
@@ -975,10 +1089,1390 @@
   "authClose": "Close",
   "authReasonSearch": "Log in to search and add films",
   "authReasonProfile": "Log in to open your profile",
-  "authReasonExplore": "Log in to explore reviews and takes",
+  "authReasonExplore": "Log in to explore takes and topics",
   "authReasonNotifications": "Log in to see your notifications",
   "authReasonFilm": "Log in to open film details",
   "authReasonHome": "Log in to see your films, friends and takes",
   "authGuestPromptTitle": "Sign in to see your films and friends",
-  "authGuestPromptBody": "Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation."
+  "authGuestPromptBody": "Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.",
+  "browseSectionDiscover": "Discover",
+  "browseTopTakes": "Top 100 takes",
+  "browsePopularFilms": "Most popular films",
+  "browseByYear": "Browse by year",
+  "browseByStreaming": "Browse by streaming service",
+  "browseSectionTopics": "Most popular topics",
+  "browsePolls": "Polls",
+  "browseConversations": "Conversations",
+  "browseScenes": "Scenes",
+  "browseQuestions": "Questions",
+  "browseHotTakes": "Hot takes",
+  "browseSectionFilmSage": "FilmSage",
+  "browseNewHere": "New here?",
+  "browseSocialMedia": "Social media",
+  "browseFollowUs": "Follow us",
+  "browseGifts": "Gifts",
+  "browseContact": "Contact",
+  "browseTerms": "Terms of use / Community policy",
+  "browseYearsTitle": "Pick a year",
+  "browseDecade": "{decade}s",
+  "@browseDecade": {
+    "description": "Decade heading on the Browse by year page, e.g. 1990s.",
+    "placeholders": {
+      "decade": {
+        "type": "String"
+      }
+    }
+  },
+  "browseServicesTitle": "Pick a streaming service",
+  "browseServicesEmpty": "No streaming services available.",
+  "browseFilmsEmpty": "No films here yet.",
+  "browseTakesEmpty": "Nothing posted here yet.",
+  "browseComingSoonTitle": "Coming soon",
+  "browseComingSoonBody": "We're still working on this page. Check back soon.",
+  "browseByGenre": "Browse by genre",
+  "browseByCountry": "Browse by country",
+  "browseByLanguage": "Browse by language",
+  "browseGenresTitle": "Pick a genre",
+  "browseCountriesTitle": "Pick a country",
+  "browseCountriesHint": "Popular films streaming in each country.",
+  "browseStreamingIn": "Streaming in {country}",
+  "@browseStreamingIn": {
+    "description": "Title of the film list for one country.",
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "browseLanguagesTitle": "Pick a language",
+  "browsePickEmpty": "Nothing to pick from right now.",
+  "browseLanguageEn": "English",
+  "browseLanguageFr": "French",
+  "browseLanguageEs": "Spanish",
+  "browseLanguageIt": "Italian",
+  "browseLanguageDe": "German",
+  "browseLanguagePt": "Portuguese",
+  "browseLanguageRu": "Russian",
+  "browseLanguageAr": "Arabic",
+  "browseLanguageTr": "Turkish",
+  "browseLanguageHi": "Hindi",
+  "browseLanguageKo": "Korean",
+  "browseLanguageJa": "Japanese",
+  "browseLanguageZh": "Chinese",
+  "browseLanguageSv": "Swedish",
+  "overviewPlayTrailer": "Play trailer",
+  "overviewTrailerUnavailable": "Couldn't open the trailer.",
+  "overviewLoading": "Loading…",
+  "overviewNoCastCrew": "No cast and crew information yet.",
+  "overviewOfferStream": "Stream",
+  "overviewOfferFree": "Free",
+  "overviewOfferTvProvider": "With a TV provider",
+  "overviewOfferRent": "Rent",
+  "overviewOfferBuy": "Buy",
+  "overviewCloseTrailer": "Close trailer",
+  "filmSuggest": "Suggest",
+  "filmListFailed": "Couldn't update your list. Try again.",
+  "filmFeelingsEmpty": "Tap to say how it made you feel",
+  "filmFeelingsHint": "Pick up to 3 feelings.",
+  "filmFeelingsCount": "{count} of 3 picked",
+  "filmFeelingsSave": "Save",
+  "filmFeelingsClear": "Clear",
+  "filmAudienceTitle": "The audience",
+  "filmAudienceEmpty": "No reactions yet. Be the first to say how it made you feel.",
+  "filmAudiencePositive": "enjoyed it",
+  "filmAudiencePeople": "{count, plural, =1{1 person reacted} other{{count} people reacted}}",
+  "filmYourTakeTitle": "Your take",
+  "filmTakeCount": "{count, plural, =1{1 take} other{{count} takes}}",
+  "@filmTakeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filmTopTake": "TOP TAKE",
+  "filmShowMoreTakes": "{count, plural, =1{Show 1 more take} other{Show {count} more takes}}",
+  "@filmShowMoreTakes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filmShowLessTakes": "Show less",
+  "filmShareYourTake": "Share your take",
+  "filmAddTake": "Add take",
+  "overviewFriendStoryNew": "{name}, new: {feeling}",
+  "@overviewFriendStoryNew": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "feeling": {
+        "type": "String"
+      }
+    }
+  },
+  "overviewFriendStorySeen": "{name}: {feeling}",
+  "@overviewFriendStorySeen": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "feeling": {
+        "type": "String"
+      }
+    }
+  },
+  "filmPersonFeelings": "Felt: {feelings}",
+  "@filmPersonFeelings": {
+    "placeholders": {
+      "feelings": {
+        "type": "String"
+      }
+    }
+  },
+  "filmTakeComments": "{count, plural, =0{No comments} =1{1 comment} other{{count} comments}}",
+  "@filmTakeComments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filmFeelingsDone": "Done",
+  "@filmFeelingsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@filmAudiencePeople": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "personBiography": "Biography",
+  "personFilmography": "Movies",
+  "personHeight": "Height",
+  "personBorn": "Born",
+  "personDied": "Died",
+  "personNoFilms": "No movies found for this person yet.",
+  "personLoadFailed": "Couldn't load this person's page.",
+  "personAsCharacter": "as {character}",
+  "@personAsCharacter": {
+    "placeholders": {
+      "character": {
+        "type": "String"
+      }
+    }
+  },
+  "takeSkinTitle": "Card skin",
+  "takeSkinNormal": "Normal",
+  "takeSkinElectricThunder": "Electric thunder",
+  "takeSkinPreview": "Preview",
+  "takeSkinPreviewEmpty": "Your take will appear here.",
+  "takeSkinWriteTitle": "Write your take",
+  "reviewAlreadyShared": "You already shared a take for this film.",
+  "reviewNeedsFeeling": "Pick how the film made you feel first, then share your take.",
+  "reviewYourTake": "Your take — others react to it",
+  "reviewBeFirstComment": "Be the first to comment on this take.",
+  "takeMenuTooltip": "More options",
+  "takeActionShare": "Send to friends",
+  "takeActionEdit": "Edit",
+  "takeActionDelete": "Delete",
+  "takeActionReport": "Report",
+  "takeEdited": "edited",
+  "takeCancel": "Cancel",
+  "takeEditTitle": "Edit your take",
+  "takeEditSave": "Save",
+  "takeEditSaved": "Your take was updated.",
+  "takeEditFailed": "Couldn't save your changes. Try again.",
+  "takeDeleteTitle": "Delete this take?",
+  "takeDeleteBody": "It will be removed for everyone, along with its comments.",
+  "takeDeleted": "Take deleted.",
+  "takeDeleteFailed": "Couldn't delete it. Try again.",
+  "takeReportTitle": "Report this take",
+  "takeReportHint": "Why are you reporting it? Only moderators see reports.",
+  "takeReportSpam": "Spam",
+  "takeReportHarassment": "Harassment or bullying",
+  "takeReportHate": "Hate speech",
+  "takeReportSpoiler": "Unmarked spoiler",
+  "takeReportOther": "Something else",
+  "takeReportDetailsHint": "Add details (optional)",
+  "takeReportSend": "Send report",
+  "takeReportThanks": "Thanks. Our team will review it.",
+  "takeReportFailed": "Couldn't send the report. Try again.",
+  "takeShareTitle": "Send to friends",
+  "takeShareMessageHint": "Add a message (optional)",
+  "takeShareNoFriends": "Add friends to send them takes.",
+  "takeShareFriendsFailed": "Couldn't load your friends.",
+  "takeShareFailed": "Couldn't send it. Try again.",
+  "notificationTakeGone": "This take is no longer available.",
+  "mentionSuggestionsLabel": "Mention a friend",
+  "takeShareSend": "{count, plural, =0{Send} =1{Send to 1 friend} other{Send to {count} friends}}",
+  "@takeShareSend": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "takeShareSent": "{count, plural, =1{Sent to 1 friend} other{Sent to {count} friends}}",
+  "@takeShareSent": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationTakeShared": "{name} sent you a take",
+  "@notificationTakeShared": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTakeMention": "{name} mentioned you in a comment",
+  "@notificationTakeMention": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "takeSpoilerTitle": "Does it have spoilers?",
+  "@takeSpoilerTitle": {
+    "description": "Spoiler question shown when sharing a take."
+  },
+  "takeSpoilerNo": "No spoilers",
+  "@takeSpoilerNo": {
+    "description": "Spoiler question shown when sharing a take."
+  },
+  "takeSpoilerHint": "Pick one so readers know what to expect.",
+  "@takeSpoilerHint": {
+    "description": "Spoiler question shown when sharing a take."
+  },
+  "takeSpoilerRequired": "Say whether your take has spoilers before sharing.",
+  "@takeSpoilerRequired": {
+    "description": "Spoiler question shown when sharing a take."
+  },
+  "takeSpoilerBlurNote": "Others will see it blurred until they tap to reveal.",
+  "@takeSpoilerBlurNote": {
+    "description": "Spoiler question shown when sharing a take."
+  },
+  "reviewVoteUp": "Up",
+  "reviewVoteDraw": "Draw",
+  "reviewVoteDown": "Down",
+  "@reviewVoteUp": {
+    "description": "Name of a review vote, read by screen readers and tooltips; the button shows only an icon."
+  },
+  "@reviewVoteDraw": {
+    "description": "Name of a review vote, read by screen readers and tooltips; the button shows only an icon."
+  },
+  "@reviewVoteDown": {
+    "description": "Name of a review vote, read by screen readers and tooltips; the button shows only an icon."
+  },
+  "storyTake": "Shared a take on {film}",
+  "@storyTake": {
+    "placeholders": {
+      "film": {
+        "type": "String"
+      }
+    }
+  },
+  "storyQuestion": "Asked about {film}",
+  "@storyQuestion": {
+    "placeholders": {
+      "film": {
+        "type": "String"
+      }
+    }
+  },
+  "storyDiscussion": "Started a discussion on {film}",
+  "@storyDiscussion": {
+    "placeholders": {
+      "film": {
+        "type": "String"
+      }
+    }
+  },
+  "storyHotTake": "Dropped a hot take on {film}",
+  "@storyHotTake": {
+    "placeholders": {
+      "film": {
+        "type": "String"
+      }
+    }
+  },
+  "storyPoll": "Made a poll about {film}",
+  "@storyPoll": {
+    "placeholders": {
+      "film": {
+        "type": "String"
+      }
+    }
+  },
+  "storyScene": "Shared a scene from {film}",
+  "@storyScene": {
+    "placeholders": {
+      "film": {
+        "type": "String"
+      }
+    }
+  },
+  "storyComment": "Commented on a post about {film}",
+  "@storyComment": {
+    "placeholders": {
+      "film": {
+        "type": "String"
+      }
+    }
+  },
+  "storyUnknownFilm": "a film",
+  "storyOpen": "Open",
+  "storyClose": "Close",
+  "storyRingLabel": "{name}'s story",
+  "@storyRingLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "storiesTitle": "Friends' stories",
+  "inboxSearch": "Search",
+  "inboxSearchHint": "Search conversations",
+  "inboxCloseSearch": "Close search",
+  "inboxUnreadOnly": "Show only unread",
+  "inboxAddFriend": "Add friend",
+  "inboxCreate": "New chat",
+  "inboxNewMessage": "New message",
+  "inboxCreateGroup": "Create a group",
+  "inboxCreateTopic": "Create a private topic",
+  "inboxPrivateTopics": "Private topics",
+  "inboxNoTopics": "No topics yet. Start one with friends.",
+  "inboxNewTopic": "New private topic",
+  "inboxAllChats": "All chats",
+  "inboxEmptyTitle": "No conversations yet",
+  "inboxEmptyBody": "Message a friend to start chatting.",
+  "inboxNoResults": "No conversations found",
+  "inboxLoadFailed": "Couldn't load your messages.",
+  "inboxYouSaid": "You: {text}",
+  "@inboxYouSaid": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxNoMessagesYet": "No messages yet",
+  "inboxGroupName": "Group name",
+  "inboxTopicName": "Topic name",
+  "inboxPickFriends": "Choose friends",
+  "inboxPickFriend": "Message a friend",
+  "inboxNoFriends": "Add friends first to chat with them.",
+  "inboxCreateAction": "Create",
+  "inboxCancel": "Cancel",
+  "inboxCreateFailed": "Couldn't create it. Try again.",
+  "inboxMembers": "{count} members",
+  "@inboxMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inboxGroupPhoto": "Add a group photo",
+  "inboxGroupDescription": "Description (optional)",
+  "inboxPhotoFailed": "Created, but the photo didn't upload.",
+  "chatOpenInfo": "Group info",
+  "groupInfoTitle": "Group info",
+  "groupInfoTopicTitle": "Topic info",
+  "groupInfoDescription": "Description",
+  "groupInfoNoDescription": "No description yet.",
+  "groupInfoMembers": "Members · {count}",
+  "@groupInfoMembers": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "groupInfoYou": "You",
+  "groupInfoCreator": "Creator",
+  "inboxUnreadLabel": "{count} unread",
+  "@inboxUnreadLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatHint": "Send a message",
+  "chatSend": "Send",
+  "chatStart": "Start the conversation",
+  "chatSendFailed": "Message not sent. Try again.",
+  "chatPrivateTopic": "Private topic · only members can see it",
+  "inboxSelectChat": "Pick a conversation to start chatting",
+  "chatMenu": "Group menu",
+  "chatShareGroup": "Share group",
+  "chatBoostGroup": "Boost group",
+  "chatReport": "Report",
+  "chatLeaveGroup": "Leave group",
+  "chatShareBody": "Send the group to a conversation.",
+  "chatSharedTo": "Shared to {name}",
+  "@chatSharedTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBoosted": "Boost started for {name}",
+  "@chatBoosted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatReportTitle": "Report this group",
+  "chatReportBody": "Tell us what is wrong. Members are not notified.",
+  "chatReportSpam": "Spam or scam",
+  "chatReportHarassment": "Harassment",
+  "chatReportOther": "Something else",
+  "chatReportSent": "Report sent",
+  "chatCancel": "Cancel",
+  "chatClose": "Close",
+  "chatBack": "Back",
+  "chatActionFailed": "That didn't work. Try again.",
+  "chatPinned": "Pinned",
+  "chatPinnedCount": "Pinned ({count})",
+  "@chatPinnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatReply": "Reply",
+  "chatReplyingTo": "Replying to {name}",
+  "@chatReplyingTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCancelReply": "Cancel reply",
+  "chatPin": "Pin message",
+  "chatUnpin": "Unpin message",
+  "chatMessagePinned": "Message pinned",
+  "chatMessageUnpinned": "Message unpinned",
+  "chatMention": "Mention {name}",
+  "@chatMention": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatViewProfile": "View profile",
+  "chatMoreReactions": "More reactions",
+  "chatNotified": "Notified {names}",
+  "@chatNotified": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoMatch": "No one matches",
+  "chatAdd": "Add photo, video, movie or poll",
+  "chatEmojiButton": "Emoji, GIFs and stickers",
+  "chatAddTitle": "Add to chat",
+  "chatPhoto": "Photo",
+  "chatPhotoBody": "Choose a photo from your device.",
+  "chatVideo": "Video",
+  "chatVideoBody": "Choose a video from your device.",
+  "chatMovie": "Movie",
+  "chatMovieBody": "Search a film and share it as a card.",
+  "chatPoll": "Poll",
+  "chatPollBody": "Ask the group a question.",
+  "chatSendPhoto": "Send photo",
+  "chatSendVideo": "Send video",
+  "chatShareMovie": "Share movie",
+  "chatNewPoll": "New poll",
+  "chatCaption": "Add a caption",
+  "chatPollQuestion": "Ask a question",
+  "chatPollOption": "Option {number}",
+  "@chatPollOption": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "chatAddOption": "Add option",
+  "chatAllowedReactions": "Reactions allowed on this post",
+  "chatAllowedReactionsBody": "Members can react with the emojis you choose. They hold a message to see them.",
+  "chatPollInvalid": "Add a question and at least two options",
+  "chatFileTooBig": "That file is too big (12 MB max)",
+  "chatSearchMovie": "Search a movie",
+  "chatSearchMovieHint": "Film title",
+  "chatNoMovie": "No movie found.",
+  "chatVotes": "{count, plural, =1{1 vote} other{{count} votes}}",
+  "@chatVotes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatPlayVideo": "Play video",
+  "chatGif": "GIF",
+  "chatSticker": "Sticker",
+  "chatTabEmoji": "Emoji",
+  "chatTabGif": "GIF",
+  "chatTabStickers": "Stickers",
+  "chatSearchEmoji": "Find the perfect emoji",
+  "chatSearchGif": "Search GIFs",
+  "chatSearchStickers": "Search stickers",
+  "chatNothingFound": "Nothing found for “{query}”.",
+  "@chatNothingFound": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "chatCatFrequent": "Frequently used",
+  "chatCatFaces": "Faces",
+  "chatCatHands": "Hands",
+  "chatCatObjects": "Objects",
+  "chatCatSymbols": "Symbols",
+  "chatClosePicker": "Close picker",
+  "sysPinned": "{name} pinned a message",
+  "@sysPinned": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysRemoved": "{name} removed {target} from the group",
+  "@sysRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "sysLeft": "{name} left the group",
+  "@sysLeft": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysHeritage": "{name} made {target} Heritage creator",
+  "@sysHeritage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "sysPassed": "{name} passed the creator tag to {target} and left",
+  "@sysPassed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "sysVoteStarted": "{name} started a vote on keeping this group",
+  "@sysVoteStarted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysVoteCancelled": "{name} cancelled the vote",
+  "@sysVoteCancelled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sysVoteKeep": "Most members voted to keep the group. Now choose a new owner.",
+  "sysVoteOwnerWon": "{target} won the vote and is now Heritage creator",
+  "@sysVoteOwnerWon": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "voteKeepTitle": "Keep this group?",
+  "voteKeepBody": "{name} asked to leave. Members have {time} left to vote. Most votes decide; a tie keeps the group.",
+  "@voteKeepBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "voteStay": "Stay",
+  "voteDelete": "Delete",
+  "voteKeepTally": "Stay {stay} · Delete {delete}",
+  "@voteKeepTally": {
+    "placeholders": {
+      "stay": {
+        "type": "int"
+      },
+      "delete": {
+        "type": "int"
+      }
+    }
+  },
+  "voteOwnPoll": "You can't vote on your own poll.",
+  "voteCancel": "Cancel poll and stay creator",
+  "voteOwnerTitle": "Who should own this group?",
+  "voteOwnerBody": "The group is staying. Pick one member other than yourself. {time} left.",
+  "@voteOwnerBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "voteOwnerHint": "Tap a member to vote.",
+  "voteOwnerChange": "You can change your vote until the poll ends.",
+  "voteTimeLeft": "{hours}h {minutes}m",
+  "@voteTimeLeft": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "voteRunning": "A vote is already running",
+  "leaveCreatorTitle": "You created this group",
+  "leaveCreatorBody": "Before you leave, choose what happens to the group.",
+  "leavePass": "Pass the creator tag",
+  "leavePassBody": "Pick a member. They take over right away.",
+  "leaveVote": "Let the group decide",
+  "leaveVoteBody": "Members vote on keeping or deleting the group, then on who owns it. Each vote takes 24 hours.",
+  "leavePickTitle": "Who takes over?",
+  "leavePickBody": "They get the Heritage creator tag and keep report, share and boost.",
+  "leaveContinue": "Continue",
+  "leavePassConfirmTitle": "Pass the tag to {name} and leave?",
+  "@leavePassConfirmTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "leavePassConfirmBody": "{name} becomes Heritage creator right away. You will leave the group.",
+  "@leavePassConfirmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "leavePassConfirm": "Pass tag and leave",
+  "leaveVoteConfirmTitle": "Start the group vote?",
+  "leaveVoteConfirmBody": "Step 1: members vote to keep or delete the group for 24 hours. If most vote Stay, step 2 lets them choose the new owner for another 24 hours. You stay creator until it ends.",
+  "leaveVoteConfirm": "Start vote",
+  "leaveSimpleTitle": "Leave {group}?",
+  "@leaveSimpleTitle": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "leaveSimpleBody": "You will stop seeing messages from this group.",
+  "confirmType": "To confirm, type {name}",
+  "@confirmType": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "groupInfoSearch": "Search members",
+  "groupInfoNoMatch": "No members match “{query}”.",
+  "@groupInfoNoMatch": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "groupInfoHeritage": "Heritage creator",
+  "memberViewProfileBody": "See {name}'s films and collections.",
+  "@memberViewProfileBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberMakeHeritage": "Make Heritage creator",
+  "memberMakeHeritageBody": "{name} takes over the group. You become a regular member.",
+  "@memberMakeHeritageBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberRemove": "Remove from group",
+  "memberRemoveBody": "{name} loses access to the group and its messages.",
+  "@memberRemoveBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberMakeHeritageTitle": "Make {name} Heritage creator?",
+  "@memberMakeHeritageTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberMakeHeritageConfirmBody": "{name} gets the Heritage creator tag and can report, share and boost the group. You stay in the group as a regular member.",
+  "@memberMakeHeritageConfirmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberRemoveTitle": "Remove {name}?",
+  "@memberRemoveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "memberRemoveConfirmBody": "{name} will lose access to {group} and won't see new messages.",
+  "@memberRemoveConfirmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "group": {
+        "type": "String"
+      }
+    }
+  },
+  "memberRemoveConfirm": "Remove {name}",
+  "@memberRemoveConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatVideoFailed": "Couldn't play this video.",
+  "chatPauseVideo": "Pause video",
+  "chatFullScreen": "Full screen",
+  "chatMute": "Mute",
+  "chatUnmute": "Unmute",
+  "chatMutedToast": "Chat muted",
+  "chatUnmutedToast": "Chat unmuted",
+  "chatPinChat": "Pin to top",
+  "chatUnpinChat": "Unpin from top",
+  "chatMarkUnread": "Mark as unread",
+  "chatMarkRead": "Mark as read",
+  "chatClearHistory": "Clear history",
+  "chatClearTitle": "Clear the history?",
+  "chatClearBody": "Every message so far disappears for you. The others still see them.",
+  "chatCleared": "History cleared",
+  "chatDeleteChat": "Delete chat",
+  "chatDeleteChatTitle": "Delete this chat?",
+  "chatDeleteChatBody": "It leaves your inbox and its history is cleared for you. It comes back if {name} writes again.",
+  "@chatDeleteChatBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatChatDeleted": "Chat deleted",
+  "chatBlock": "Block {name}",
+  "@chatBlock": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnblock": "Unblock {name}",
+  "@chatUnblock": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockTitle": "Block {name}?",
+  "@chatBlockTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockBody": "Neither of you can message the other until you unblock them. They won't be told.",
+  "chatBlockedToast": "{name} is blocked",
+  "@chatBlockedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatUnblockedToast": "{name} is unblocked",
+  "@chatUnblockedToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatYouBlocked": "You blocked {name}.",
+  "@chatYouBlocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatBlockedYou": "You can't reply to this conversation.",
+  "chatBlockedPeople": "Blocked people",
+  "chatNoBlocked": "You haven't blocked anyone.",
+  "chatUnblockShort": "Unblock",
+  "chatCopy": "Copy text",
+  "chatCopied": "Copied",
+  "chatEdit": "Edit",
+  "chatEditing": "Editing message",
+  "chatCancelEdit": "Cancel editing",
+  "chatDeleteMessage": "Delete",
+  "chatDeleteMessageTitle": "Delete this message?",
+  "chatDeleteMessageBody": "It's deleted for everyone in the chat.",
+  "chatMessageDeleted": "This message was deleted",
+  "chatEdited": "edited",
+  "chatReportMessage": "Report message",
+  "chatReportHate": "Hate speech",
+  "chatReportNsfw": "Sexual content",
+  "chatSeen": "Seen",
+  "chatAddMembers": "Add members",
+  "chatAddMembersTitle": "Add to {name}",
+  "@chatAddMembersTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAddMembersNone": "All your friends are already here.",
+  "chatAddSelected": "Add",
+  "chatMembersAdded": "Members added",
+  "chatConfirm": "Confirm",
+  "chatViewProfileMenu": "View profile",
+  "inboxChatOptions": "Options for {name}",
+  "@inboxChatOptions": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxPinnedLabel": "Pinned",
+  "inboxMutedLabel": "Muted",
+  "sysAdded": "{name} added {target}",
+  "@sysAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTopicFirstReply": "Be the first to reply",
+  "homeFriendsActivityTitle": "Friends Activity",
+  "homeFriendsActivityResize": "Resize friends activity",
+  "topicTitleHint": "Title (optional)",
+  "topicSeeMore": "See more",
+  "topicCommentsExpand": "Expand comments",
+  "topicCommentsShrink": "Shrink comments",
+  "chatTakeShared": "Shared a take",
+  "chatTopicShared": "Shared a topic",
+  "chatTaggedYou": "Tagged you in a comment",
+  "chatYouTagged": "You tagged them in a comment",
+  "chatTaggedThem": "Tagged them in a comment",
+  "chatYouSharedTopic": "You shared a topic",
+  "chatYouSharedTake": "You shared a take",
+  "commentAddPhoto": "Add a photo",
+  "commentRemovePhoto": "Remove photo",
+  "takeFeltLabel": "Felt",
+  "homeEditList": "Edit {list}",
+  "@homeEditList": {
+    "description": "Title and pen-button label for editing a home film list.",
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "homeEditListAdd": "Add a film",
+  "@homeEditListAdd": {
+    "description": "Edit film list page."
+  },
+  "homeEditListRemove": "Remove {title}",
+  "@homeEditListRemove": {
+    "description": "Remove button label on the edit list page.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "homeEditListEmpty": "No films here yet.",
+  "@homeEditListEmpty": {
+    "description": "Edit film list page."
+  },
+  "homeEditListFull": "Your Top 5 is full. Remove a film to add another.",
+  "@homeEditListFull": {
+    "description": "Edit film list page."
+  },
+  "homeWatchedHint": "Films you've already seen",
+  "@homeWatchedHint": {
+    "description": "Small line under the Watched section title."
+  },
+  "homeWatchlistHint": "Films you want to watch",
+  "@homeWatchlistHint": {
+    "description": "Small line under the Watchlist section title."
+  },
+  "homeLensHint": "Drag your finger over the covers",
+  "homeLensOpen": "Open {title}",
+  "@homeLensHint": {
+    "description": "Hint on the Watchlist edit page's cover wall before the first touch."
+  },
+  "@homeLensOpen": {
+    "description": "Open button for the picked film on the cover wall.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "homeListMore": "More options",
+  "@homeListMore": {
+    "description": "Tooltip of the ⋮ menu on the edit list page."
+  },
+  "homeListShare": "Share your list",
+  "@homeListShare": {
+    "description": "Menu item that shares the list as text."
+  },
+  "homeListRandom": "Pick at random",
+  "@homeListRandom": {
+    "description": "Menu item and page title: the cover wall that lands on a random film."
+  },
+  "homeListShuffle": "Pick another",
+  "@homeListShuffle": {
+    "description": "Button on the random page that picks another film."
+  },
+  "homeListShareText": "My {list} on FilmSage:",
+  "@homeListShareText": {
+    "description": "First line of a shared list.",
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "takeHeartLike": "Like",
+  "takeHeartCount": "{count, plural, =0{No likes} =1{1 like} other{{count} likes}}",
+  "@takeHeartLike": {
+    "description": "The heart reaction on takes and topics (tooltip and screen reader)."
+  },
+  "@takeHeartCount": {
+    "description": "Screen reader count of hearts.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "myListsTitle": "My lists",
+  "@myListsTitle": {
+    "description": "Movie lists: myListsTitle"
+  },
+  "myListsHint": "Lists you made and posted",
+  "@myListsHint": {
+    "description": "Movie lists: myListsHint"
+  },
+  "friendsListsTitle": "Friends' lists",
+  "@friendsListsTitle": {
+    "description": "Movie lists: friendsListsTitle"
+  },
+  "friendsListsHint": "What your friends put together",
+  "@friendsListsHint": {
+    "description": "Movie lists: friendsListsHint"
+  },
+  "listNew": "New list",
+  "@listNew": {
+    "description": "Movie lists: listNew"
+  },
+  "listsEmptyMine": "Make your first list: give it a name and pick some films.",
+  "@listsEmptyMine": {
+    "description": "Movie lists: listsEmptyMine"
+  },
+  "listCreateTitle": "New list",
+  "@listCreateTitle": {
+    "description": "Movie lists: listCreateTitle"
+  },
+  "listNameLabel": "List name",
+  "@listNameLabel": {
+    "description": "Movie lists: listNameLabel"
+  },
+  "listNameHint": "Best heist films",
+  "@listNameHint": {
+    "description": "Movie lists: listNameHint"
+  },
+  "listSearchHint": "Search films to add",
+  "@listSearchHint": {
+    "description": "Movie lists: listSearchHint"
+  },
+  "listAddFilm": "Add {title}",
+  "@listAddFilm": {
+    "description": "Movie lists: listAddFilm",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "listRemoveFilm": "Remove {title}",
+  "@listRemoveFilm": {
+    "description": "Movie lists: listRemoveFilm",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "listPost": "Post list",
+  "@listPost": {
+    "description": "Movie lists: listPost"
+  },
+  "listFilmCount": "{count, plural, =1{1 film} other{{count} films}}",
+  "@listFilmCount": {
+    "description": "Movie lists: listFilmCount",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "listBy": "By {name}",
+  "@listBy": {
+    "description": "Movie lists: listBy",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "listCommentsTitle": "Comments",
+  "@listCommentsTitle": {
+    "description": "Movie lists: listCommentsTitle"
+  },
+  "listCommentHint": "Add a comment",
+  "@listCommentHint": {
+    "description": "Movie lists: listCommentHint"
+  },
+  "listCommentsEmpty": "No comments yet. Say what you think of this list.",
+  "@listCommentsEmpty": {
+    "description": "Movie lists: listCommentsEmpty"
+  },
+  "listCommentCount": "{count, plural, =0{No comments} =1{1 comment} other{{count} comments}}",
+  "@listCommentCount": {
+    "description": "Movie lists: listCommentCount",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "listDelete": "Delete list",
+  "@listDelete": {
+    "description": "Movie lists: listDelete"
+  },
+  "listDeleteConfirm": "Delete this list? This can't be undone.",
+  "@listDeleteConfirm": {
+    "description": "Movie lists: listDeleteConfirm"
+  },
+  "listCancel": "Cancel",
+  "@listCancel": {
+    "description": "Movie lists: listCancel"
+  },
+  "listPostFailed": "Couldn't post the list. Try again.",
+  "@listPostFailed": {
+    "description": "Movie lists: listPostFailed"
+  },
+  "listLoadFailed": "Couldn't load lists.",
+  "@listLoadFailed": {
+    "description": "Movie lists: listLoadFailed"
+  },
+  "listPicked": "{count, plural, =0{No films yet} =1{1 film picked} other{{count} films picked}}",
+  "@listPicked": {
+    "description": "Movie lists: listPicked",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "listSearchEmpty": "No films found.",
+  "@listSearchEmpty": {
+    "description": "Movie lists: listSearchEmpty"
+  },
+  "listSendFailed": "Couldn't send. Try again.",
+  "@listSendFailed": {
+    "description": "Movie lists: listSendFailed"
+  },
+  "takeActionSave": "Save",
+  "@takeActionSave": {
+    "description": "Top-right button on a topic you did not write: save it to your profile."
+  },
+  "takeActionUnsave": "Remove from saved",
+  "@takeActionUnsave": {
+    "description": "Tooltip of the Save button once the topic is saved."
+  },
+  "takeSavedToast": "Saved to your profile",
+  "@takeSavedToast": {
+    "description": "Shown after saving a topic."
+  },
+  "takeUnsavedToast": "Removed from your saved topics",
+  "@takeUnsavedToast": {
+    "description": "Shown after unsaving a topic."
+  },
+  "takeSaveFailed": "Couldn't save. Try again.",
+  "@takeSaveFailed": {
+    "description": "Shown when saving a topic failed."
+  },
+  "profileSavedTitle": "Saved",
+  "@profileSavedTitle": {
+    "description": "Profile section with the topics you saved."
+  },
+  "profileSavedEmpty": "Topics you save show up here.",
+  "@profileSavedEmpty": {
+    "description": "Empty state of the saved topics section."
+  },
+  "listShare": "Share list",
+  "@listShare": {
+    "description": "Top-right button on a list page: share it."
+  },
+  "listShareText": "{name} — a list by {owner} on Film Wise",
+  "@listShareText": {
+    "description": "First line of the shared text of a list; the films follow, one per line.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "owner": {
+        "type": "String"
+      }
+    }
+  },
+  "listSave": "Save list",
+  "@listSave": {
+    "description": "Top-right button on someone else's list: save it to your profile."
+  },
+  "listUnsave": "Remove from saved",
+  "@listUnsave": {
+    "description": "Tooltip of the Save button once the list is saved."
+  },
+  "listSavedToast": "List saved to your profile",
+  "@listSavedToast": {
+    "description": "Shown after saving a list."
+  },
+  "listUnsavedToast": "List removed from your saved lists",
+  "@listUnsavedToast": {
+    "description": "Shown after unsaving a list."
+  },
+  "listSaveFailed": "Couldn't save the list. Try again.",
+  "@listSaveFailed": {
+    "description": "Shown when saving a list failed."
+  },
+  "listEdit": "Edit list",
+  "@listEdit": {
+    "description": "Top-right button on your own list: edit it."
+  },
+  "listEditTitle": "Edit list",
+  "@listEditTitle": {
+    "description": "Title of the screen that edits a list."
+  },
+  "listSaveChanges": "Save changes",
+  "@listSaveChanges": {
+    "description": "Button that saves the edited list."
+  },
+  "savedListsTitle": "Saved lists",
+  "@savedListsTitle": {
+    "description": "Profile section with the lists you saved."
+  },
+  "savedListsHint": "Lists you kept from others",
+  "@savedListsHint": {
+    "description": "Subtitle of the saved lists section."
+  },
+  "listMenuTooltip": "More",
+  "@listMenuTooltip": {
+    "description": "Tooltip of the ⋮ menu on a list page (Share, Edit, Delete, Save)."
+  },
+  "listShareNoFriends": "Add friends to send them lists.",
+  "@listShareNoFriends": {
+    "description": "Share sheet of a list when you have no friends yet."
+  },
+  "chatListShared": "Shared a list",
+  "@chatListShared": {
+    "description": "Label on a list card a friend sent you in the chat."
+  },
+  "chatYouSharedList": "You shared a list",
+  "@chatYouSharedList": {
+    "description": "Label on a list card you sent in the chat."
+  },
+  "notificationsMarkAllRead": "Mark all read",
+  "@notificationsMarkAllRead": {
+    "description": "Notifications: top-right action that marks every notification read."
+  },
+  "notificationsTabAll": "All",
+  "@notificationsTabAll": {
+    "description": "Notifications: filter tab showing everything."
+  },
+  "notificationsTabTakes": "Takes",
+  "@notificationsTabTakes": {
+    "description": "Notifications: filter tab for takes friends sent you."
+  },
+  "notificationsTabMentions": "Mentions",
+  "@notificationsTabMentions": {
+    "description": "Notifications: filter tab for comments that tagged you."
+  },
+  "notificationsTabRequests": "Requests",
+  "@notificationsTabRequests": {
+    "description": "Notifications: filter tab for friend requests."
+  },
+  "notificationsGroupRequests": "Friend requests",
+  "@notificationsGroupRequests": {
+    "description": "Notifications: section heading over pending friend requests."
+  },
+  "notificationsGroupNew": "New",
+  "@notificationsGroupNew": {
+    "description": "Notifications: section heading over unread notifications."
+  },
+  "notificationsGroupEarlier": "Earlier",
+  "@notificationsGroupEarlier": {
+    "description": "Notifications: section heading over read notifications."
+  },
+  "notificationsNowFriends": "You're now friends",
+  "@notificationsNowFriends": {
+    "description": "Notifications: shown on a friend request after accepting it."
+  },
+  "notificationsRequestDeclined": "Request from {name} declined",
+  "@notificationsRequestDeclined": {
+    "description": "Notifications: toast after declining a friend request, with Undo.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationsUndo": "Undo",
+  "@notificationsUndo": {
+    "description": "Notifications: action on the decline toast that brings the request back."
+  },
+  "notificationsNothingHere": "Nothing here yet.",
+  "@notificationsNothingHere": {
+    "description": "Notifications: empty state of a filter tab."
+  },
+  "notificationsTimeNow": "now",
+  "@notificationsTimeNow": {
+    "description": "Notifications: short time for something under a minute old."
+  },
+  "notificationsTimeMinutes": "{count}m",
+  "@notificationsTimeMinutes": {
+    "description": "Notifications: short time in minutes, like 5m.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsTimeHours": "{count}h",
+  "@notificationsTimeHours": {
+    "description": "Notifications: short time in hours, like 3h.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsTimeYesterday": "Yesterday",
+  "@notificationsTimeYesterday": {
+    "description": "Notifications: time for something from yesterday."
+  },
+  "notificationsTimeDays": "{count}d",
+  "@notificationsTimeDays": {
+    "description": "Notifications: short time in days, like 4d.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationsUnreadCount": "{count} unread",
+  "@notificationsUnreadCount": {
+    "description": "Notifications: screen-reader label for a tab's unread count.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

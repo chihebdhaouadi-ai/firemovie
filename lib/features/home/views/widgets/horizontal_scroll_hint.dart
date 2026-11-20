@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -65,7 +66,7 @@ class _HorizontalScrollHintState extends State<HorizontalScrollHint> {
           children: [
             Positioned.fill(child: widget.child),
             if (_hasMore)
-              const PositionedDirectional(
+              PositionedDirectional(
                 end: 0,
                 top: 0,
                 bottom: 0,
@@ -78,15 +79,17 @@ class _HorizontalScrollHintState extends State<HorizontalScrollHint> {
                           begin: AlignmentDirectional.centerStart,
                           end: AlignmentDirectional.centerEnd,
                           colors: [
-                            Color(0x00121414),
-                            Color(0xE6121214),
+                            themed(const Color(0x00121414),
+                                const Color(0x00F2EEE6)),
+                            themed(const Color(0xE6121214),
+                                const Color(0xE6F2EEE6)),
                           ],
                         ),
                       ),
                       child: Align(
                         alignment: AlignmentDirectional.centerEnd,
                         child: Icon(
-                          Icons.chevron_right_rounded,
+                          BootstrapIcons.chevron_right,
                           color: AppColors.textPrimary,
                           size: 24,
                         ),

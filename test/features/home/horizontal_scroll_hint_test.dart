@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/horizontal_scroll_hint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,11 +39,11 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byIcon(Icons.chevron_right_rounded), findsOneWidget);
+    expect(find.byIcon(BootstrapIcons.chevron_right), findsOneWidget);
 
     await tester.drag(find.byType(ListView), const Offset(-500, 0));
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.chevron_right_rounded), findsNothing);
+    expect(find.byIcon(BootstrapIcons.chevron_right), findsNothing);
   });
 }

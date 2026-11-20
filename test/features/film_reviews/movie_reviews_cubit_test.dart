@@ -26,7 +26,8 @@ void main() {
 
   tearDown(() => cubit.close());
 
-  List<Take> loadedTakes() => (cubit.state.takes as AsyncReady<List<Take>>).value;
+  List<Take> loadedTakes() =>
+      (cubit.state.takes as AsyncReady<List<Take>>).value;
 
   test('load fills the summary and the takes', () async {
     await cubit.load();
@@ -101,35 +102,59 @@ void main() {
     expect(loadedTakes(), hasLength(1));
   });
 
+  test('shareTakeOutcome says when a feeling is missing', () async {
+    await cubit.load();
+    api.failing.add('postTakeNoFeeling');
+
+    expect(await cubit.shareTakeOutcome('Hmm'), ShareTakeOutcome.needsFeeling);
+    expect(loadedTakes(), hasLength(1));
+  });
+
+  test('shareTakeOutcome says when a review was already shared', () async {
+    await cubit.load();
+    api.failing.add('postTake');
+
+    expect(
+        await cubit.shareTakeOutcome('Again'), ShareTakeOutcome.alreadyShared);
+  });
+
+  test('shareTakeOutcome reports a share', () async {
+    await cubit.load();
+
+    expect(await cubit.shareTakeOutcome('Yes'), ShareTakeOutcome.shared);
+  });
+
   test('setVote adds a vote the viewer has not cast yet', () async {
     await cubit.load();
 
-    final ok = await cubit.setVote(1, VoteKind.wellArgued);
+    final ok = await cubit.setVote(1, VoteKind.draw);
 
     expect(ok, isTrue);
     final put = api.requests.singleWhere((r) => r.method == 'PUT');
     expect(jsonDecode(put.body), {'active': true});
-    expect(loadedTakes().single.hasVoted(VoteKind.wellArgued), isTrue);
-    expect(loadedTakes().single.votesOf(VoteKind.wellArgued), 3);
+    expect(loadedTakes().single.hasVoted(VoteKind.draw), isTrue);
+    expect(loadedTakes().single.votesOf(VoteKind.draw), 3);
   });
 
   test('setVote removes a vote the viewer already cast', () async {
-    startWith([takeJson(id: 1, wellArgued: 2, myVotes: ['well_argued'])]);
+    startWith([
+      takeJson(id: 1, wellArgued: 2, myVotes: ['draw'])
+    ]);
     await cubit.load();
 
-    final ok = await cubit.setVote(1, VoteKind.wellArgued);
+    final ok = await cubit.setVote(1, VoteKind.draw);
 
     expect(ok, isTrue);
     final put = api.requests.singleWhere((r) => r.method == 'PUT');
     expect(jsonDecode(put.body), {'active': false});
-    expect(loadedTakes().single.hasVoted(VoteKind.wellArgued), isFalse);
-    expect(loadedTakes().single.votesOf(VoteKind.wellArgued), 1);
+    expect(loadedTakes().single.hasVoted(VoteKind.draw), isFalse);
+    expect(loadedTakes().single.votesOf(VoteKind.draw), 1);
   });
 
   test('setVote returns false for an unknown take', () async {
     await cubit.load();
 
-    expect(await cubit.setVote(999, VoteKind.wellArgued), isFalse);
+    expect(await cubit.setVote(999, VoteKind.draw), isFalse);
     expect(api.requests.where((r) => r.method == 'PUT'), isEmpty);
   });
 

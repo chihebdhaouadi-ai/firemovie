@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,7 +45,7 @@ class AddTile extends StatelessWidget {
               child: ExcludeSemantics(
                 child: Center(
                   child: Icon(
-                    Icons.add,
+                    BootstrapIcons.plus_lg,
                     color: AppColors.textSecondary,
                     size: tokens.iconLarge,
                   ),

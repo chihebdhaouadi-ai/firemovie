@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -75,7 +76,9 @@ class _ScoreCardState extends State<ScoreCard> {
               children: [
                 for (final item in summary.mostFelt)
                   OverviewChip(
-                    label: reactionChipLabel(l10n, item.reaction),
+                    leading: reactionIcon(item.reaction),
+                    label:
+                        '${reactionLabel(l10n, item.reaction)} ${item.count}',
                   ),
               ],
             ),
@@ -97,7 +100,9 @@ class _ScoreCardState extends State<ScoreCard> {
                     ),
                   ),
                   Icon(
-                    _trustOpen ? Icons.expand_less : Icons.expand_more,
+                    _trustOpen
+                        ? BootstrapIcons.chevron_up
+                        : BootstrapIcons.chevron_down,
                     size: tokens.iconSmall,
                     color: AppColors.accentGlow,
                   ),

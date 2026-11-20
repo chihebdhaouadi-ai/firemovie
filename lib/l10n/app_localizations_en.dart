@@ -61,10 +61,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homePopularThisWeekTitle => 'Popular Films';
 
   @override
-  String get homeFriendsFilmsTitle => 'Friends\' films this week';
+  String get homeFriendsFilmsTitle => 'Popular with Friends';
 
   @override
-  String get homeFriendsReviewsTitle => 'Friends\' latest reviews';
+  String get homeFriendsReviewsTitle => 'Friends\' latest takes';
 
   @override
   String get homeMyTakesTitle => 'My takes';
@@ -73,8 +73,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeComingSoon => 'Coming soon';
 
   @override
+  String get homeInboxTitle => 'Inbox';
+
+  @override
+  String get homeInboxSoonTitle => 'Under construction';
+
+  @override
+  String get homeInboxSoonBody =>
+      'Messages with your friends will land here soon.';
+
+  @override
   String get homeFriendsReviewsEmpty =>
-      'Your friends haven\'t posted any reviews yet.';
+      'Your friends haven\'t posted any takes yet.';
 
   @override
   String get homeMyTakesEmpty => 'You haven\'t shared any takes yet.';
@@ -92,11 +102,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreCaughtUp => 'You are all caught up';
 
   @override
-  String get exploreReviewButton => 'Review';
+  String get exploreReviewButton => 'Take';
 
   @override
   String get exploreSubtitle =>
-      'Discover reviews, conversations and questions about films.';
+      'Discover takes, conversations and questions about films.';
 
   @override
   String get createSceneMovieHint =>
@@ -121,7 +131,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreFilterQuestions => 'Questions';
 
   @override
-  String get exploreFilterReviews => 'Reviews';
+  String get exploreFilterReviews => 'Takes';
 
   @override
   String get exploreSpoilerReveal => 'Tap to reveal';
@@ -281,11 +291,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeCollectionsResizeLabel => 'Resize collections';
 
   @override
-  String get homeFeedTitle => 'Reviews From Your Collections';
+  String get homeFeedTitle => 'Takes From Your Collections';
 
   @override
-  String get homeFeedEmpty =>
-      'No reviews on the films in your collections yet.';
+  String get homeFeedEmpty => 'No takes on the films in your collections yet.';
 
   @override
   String get homeFeedShowAsRow => 'Show as row';
@@ -624,19 +633,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get overviewShowLess => 'less';
 
   @override
-  String get overviewReviewsTitle => 'Reviews';
+  String get overviewReviewsTitle => 'Takes';
 
   @override
-  String get overviewAddReviewHint => 'Add a review...';
+  String get overviewAddReviewHint => 'Add a take...';
 
   @override
-  String get overviewYourReview => 'Your Review';
+  String get overviewYourReview => 'Your Take';
 
   @override
-  String get overviewFriendsReviews => 'Friends Reviews';
+  String get overviewFriendsReviews => 'Friends\' Takes';
 
   @override
-  String get overviewPopularReviews => 'Popular Reviews';
+  String get overviewPopularReviews => 'Popular Takes';
 
   @override
   String get overviewSeeAll => 'See All';
@@ -732,7 +741,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewSummaryFailed => 'Couldn\'t load the reactions.';
 
   @override
-  String get reviewDetailTitle => 'Reviews';
+  String get reviewDetailTitle => 'Take';
 
   @override
   String get reviewTakesTitle => 'What people said';
@@ -844,7 +853,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String overviewReviewBy(String name, String date) {
-    return 'Review by $name on $date';
+    return 'Take by $name on $date';
   }
 
   @override
@@ -916,7 +925,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileStatWatchlist => 'Watchlist';
 
   @override
-  String get profileStatReviews => 'Reviews';
+  String get profileStatReviews => 'Takes';
 
   @override
   String get profileStatRewards => 'Rewards';
@@ -947,6 +956,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileLanguageSystem => 'System default';
+
+  @override
+  String get profileThemeButton => 'Appearance';
+
+  @override
+  String get profileThemeDialogTitle => 'Appearance';
+
+  @override
+  String get profileThemeSystem => 'Match system';
+
+  @override
+  String get profileThemeLight => 'Light';
+
+  @override
+  String get profileThemeDark => 'Dark';
 
   @override
   String get onboardingFinishLater => 'Finish later';
@@ -1218,18 +1242,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get angelBirdReviewQuestion =>
-      'Want to open a debate about this review? Pick someone from this conversation to talk with.';
+      'Want to open a debate about this take? Pick someone from this conversation to talk with.';
 
   @override
   String get angelBirdPickPerson => 'Who do you want to debate with?';
 
   @override
   String get angelBirdNoPeople =>
-      'Nobody to debate with yet. Wait for a comment on this review.';
+      'Nobody to debate with yet. Wait for a comment on this take.';
 
   @override
-  String get angelBirdPeopleFailed =>
-      'Could not load the people in this review.';
+  String get angelBirdPeopleFailed => 'Could not load the people in this take.';
 
   @override
   String debateWaitingTitle(String name) {
@@ -1446,7 +1469,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topicTypeLabel => 'Type';
 
   @override
-  String get topicTagReview => 'Review';
+  String get topicTagReview => 'Take';
 
   @override
   String get topicTagQuestion => 'Question';
@@ -1459,10 +1482,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get topicReviewHint =>
-      'Reviews are about one movie and need how it made you feel.';
+      'Takes are about one movie and need how it made you feel.';
 
   @override
-  String get topicBodyHint => 'Write your review, question or discussion';
+  String get topicBodyHint => 'Write your take, question or discussion';
 
   @override
   String get topicPostButton => 'Post';
@@ -1492,7 +1515,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createTypeHotTakeSubtitle => 'Share a bold take about a film.';
 
   @override
-  String get createWriteReviewTitle => 'Write your review';
+  String get createWriteReviewTitle => 'Write your take';
 
   @override
   String get createWriteQuestionTitle => 'Write your question';
@@ -1508,13 +1531,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createReviewMovieHint =>
-      'Your review appears on that movie\'s page.';
+      'Your take appears on that movie\'s page.';
 
   @override
   String get createFeelTitle => 'How did it make you feel?';
 
   @override
-  String get createFeelHint => 'Pick one reaction. It shows with your review.';
+  String get createFeelHint => 'Pick one reaction. It shows with your take.';
 
   @override
   String get createSubjectTitle => 'What is it about?';
@@ -1542,10 +1565,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get leaderboardTabLabel => 'Leaderboard';
 
   @override
-  String get leaderboardTitle => 'Top reviewers';
+  String get leaderboardTitle => 'Top critics';
 
   @override
-  String get leaderboardSubtitle => 'Ranked by reactions on their reviews';
+  String get leaderboardSubtitle => 'Ranked by reactions on their takes';
 
   @override
   String get leaderboardHowItWorks => 'How it works';
@@ -1578,8 +1601,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count reviews',
-      one: '1 review',
+      other: '$count takes',
+      one: '1 take',
     );
     return '$_temp0';
   }
@@ -1600,11 +1623,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howRankingTitle => 'How ranking works';
 
   @override
-  String get howStep1Title => 'Write a review';
+  String get howStep1Title => 'Write a take';
 
   @override
   String get howStep1Body =>
-      'Review any film. It shows up in Explore and Friends.';
+      'Share a take on any film. It shows up in Explore and Friends.';
 
   @override
   String get howStep2Title => 'Collect reactions';
@@ -1618,7 +1641,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howStep3Body =>
-      'The reviewers with the most reactions in the period take the podium.';
+      'The critics with the most reactions in the period take the podium.';
 
   @override
   String get howNoteReset =>
@@ -1626,11 +1649,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howNoteOncePerReview =>
-      'Each person can react once per review. Reacting to your own review doesn\'t count.';
+      'Each person can react once per take. Reacting to your own take doesn\'t count.';
 
   @override
   String get howNoteTie =>
-      'If two reviewers tie, the one who reached the total first ranks higher.';
+      'If two critics tie, the one who reached the total first ranks higher.';
 
   @override
   String get howNotePodium =>
@@ -1640,7 +1663,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howLevelsTitle => 'Levels and XP';
 
   @override
-  String get howXpReview => 'Write a review';
+  String get howXpReview => 'Write a take';
 
   @override
   String get howXpComment => 'Write a comment';
@@ -1693,14 +1716,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get badgeFirstTakeTitle => 'First take';
 
   @override
-  String get badgeFirstTakeDesc => 'Be the first person to review a film.';
+  String get badgeFirstTakeDesc =>
+      'Be the first person to share a take on a film.';
 
   @override
   String get achFilmCriticTitle => 'Film critic';
 
   @override
   String achFilmCriticDesc(int count) {
-    return 'Write $count reviews.';
+    return 'Write $count takes.';
   }
 
   @override
@@ -1716,7 +1740,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String achLocalCinemaDesc(int count) {
-    return 'Review $count Tunisian films.';
+    return 'Share takes on $count Tunisian films.';
   }
 
   @override
@@ -1815,7 +1839,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authReasonProfile => 'Log in to open your profile';
 
   @override
-  String get authReasonExplore => 'Log in to explore reviews and takes';
+  String get authReasonExplore => 'Log in to explore takes and topics';
 
   @override
   String get authReasonNotifications => 'Log in to see your notifications';
@@ -1832,4 +1856,1732 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authGuestPromptBody =>
       'Upcoming films and news are open to everyone. Sign in to build your lists and join the conversation.';
+
+  @override
+  String get browseSectionDiscover => 'Discover';
+
+  @override
+  String get browseTopTakes => 'Top 100 takes';
+
+  @override
+  String get browsePopularFilms => 'Most popular films';
+
+  @override
+  String get browseByYear => 'Browse by year';
+
+  @override
+  String get browseByStreaming => 'Browse by streaming service';
+
+  @override
+  String get browseSectionTopics => 'Most popular topics';
+
+  @override
+  String get browsePolls => 'Polls';
+
+  @override
+  String get browseConversations => 'Conversations';
+
+  @override
+  String get browseScenes => 'Scenes';
+
+  @override
+  String get browseQuestions => 'Questions';
+
+  @override
+  String get browseHotTakes => 'Hot takes';
+
+  @override
+  String get browseSectionFilmSage => 'FilmSage';
+
+  @override
+  String get browseNewHere => 'New here?';
+
+  @override
+  String get browseSocialMedia => 'Social media';
+
+  @override
+  String get browseFollowUs => 'Follow us';
+
+  @override
+  String get browseGifts => 'Gifts';
+
+  @override
+  String get browseContact => 'Contact';
+
+  @override
+  String get browseTerms => 'Terms of use / Community policy';
+
+  @override
+  String get browseYearsTitle => 'Pick a year';
+
+  @override
+  String browseDecade(String decade) {
+    return '${decade}s';
+  }
+
+  @override
+  String get browseServicesTitle => 'Pick a streaming service';
+
+  @override
+  String get browseServicesEmpty => 'No streaming services available.';
+
+  @override
+  String get browseFilmsEmpty => 'No films here yet.';
+
+  @override
+  String get browseTakesEmpty => 'Nothing posted here yet.';
+
+  @override
+  String get browseComingSoonTitle => 'Coming soon';
+
+  @override
+  String get browseComingSoonBody =>
+      'We\'re still working on this page. Check back soon.';
+
+  @override
+  String get browseByGenre => 'Browse by genre';
+
+  @override
+  String get browseByCountry => 'Browse by country';
+
+  @override
+  String get browseByLanguage => 'Browse by language';
+
+  @override
+  String get browseGenresTitle => 'Pick a genre';
+
+  @override
+  String get browseCountriesTitle => 'Pick a country';
+
+  @override
+  String get browseCountriesHint => 'Popular films streaming in each country.';
+
+  @override
+  String browseStreamingIn(String country) {
+    return 'Streaming in $country';
+  }
+
+  @override
+  String get browseLanguagesTitle => 'Pick a language';
+
+  @override
+  String get browsePickEmpty => 'Nothing to pick from right now.';
+
+  @override
+  String get browseLanguageEn => 'English';
+
+  @override
+  String get browseLanguageFr => 'French';
+
+  @override
+  String get browseLanguageEs => 'Spanish';
+
+  @override
+  String get browseLanguageIt => 'Italian';
+
+  @override
+  String get browseLanguageDe => 'German';
+
+  @override
+  String get browseLanguagePt => 'Portuguese';
+
+  @override
+  String get browseLanguageRu => 'Russian';
+
+  @override
+  String get browseLanguageAr => 'Arabic';
+
+  @override
+  String get browseLanguageTr => 'Turkish';
+
+  @override
+  String get browseLanguageHi => 'Hindi';
+
+  @override
+  String get browseLanguageKo => 'Korean';
+
+  @override
+  String get browseLanguageJa => 'Japanese';
+
+  @override
+  String get browseLanguageZh => 'Chinese';
+
+  @override
+  String get browseLanguageSv => 'Swedish';
+
+  @override
+  String get overviewPlayTrailer => 'Play trailer';
+
+  @override
+  String get overviewTrailerUnavailable => 'Couldn\'t open the trailer.';
+
+  @override
+  String get overviewLoading => 'Loading…';
+
+  @override
+  String get overviewNoCastCrew => 'No cast and crew information yet.';
+
+  @override
+  String get overviewOfferStream => 'Stream';
+
+  @override
+  String get overviewOfferFree => 'Free';
+
+  @override
+  String get overviewOfferTvProvider => 'With a TV provider';
+
+  @override
+  String get overviewOfferRent => 'Rent';
+
+  @override
+  String get overviewOfferBuy => 'Buy';
+
+  @override
+  String get overviewCloseTrailer => 'Close trailer';
+
+  @override
+  String get filmSuggest => 'Suggest';
+
+  @override
+  String get filmListFailed => 'Couldn\'t update your list. Try again.';
+
+  @override
+  String get filmFeelingsEmpty => 'Tap to say how it made you feel';
+
+  @override
+  String get filmFeelingsHint => 'Pick up to 3 feelings.';
+
+  @override
+  String filmFeelingsCount(String count) {
+    return '$count of 3 picked';
+  }
+
+  @override
+  String get filmFeelingsSave => 'Save';
+
+  @override
+  String get filmFeelingsClear => 'Clear';
+
+  @override
+  String get filmAudienceTitle => 'The audience';
+
+  @override
+  String get filmAudienceEmpty =>
+      'No reactions yet. Be the first to say how it made you feel.';
+
+  @override
+  String get filmAudiencePositive => 'enjoyed it';
+
+  @override
+  String filmAudiencePeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people reacted',
+      one: '1 person reacted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmYourTakeTitle => 'Your take';
+
+  @override
+  String filmTakeCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count takes',
+      one: '1 take',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmTopTake => 'TOP TAKE';
+
+  @override
+  String filmShowMoreTakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Show $count more takes',
+      one: 'Show 1 more take',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmShowLessTakes => 'Show less';
+
+  @override
+  String get filmShareYourTake => 'Share your take';
+
+  @override
+  String get filmAddTake => 'Add take';
+
+  @override
+  String overviewFriendStoryNew(String name, String feeling) {
+    return '$name, new: $feeling';
+  }
+
+  @override
+  String overviewFriendStorySeen(String name, String feeling) {
+    return '$name: $feeling';
+  }
+
+  @override
+  String filmPersonFeelings(String feelings) {
+    return 'Felt: $feelings';
+  }
+
+  @override
+  String filmTakeComments(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count comments',
+      one: '1 comment',
+      zero: 'No comments',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filmFeelingsDone => 'Done';
+
+  @override
+  String get personBiography => 'Biography';
+
+  @override
+  String get personFilmography => 'Movies';
+
+  @override
+  String get personHeight => 'Height';
+
+  @override
+  String get personBorn => 'Born';
+
+  @override
+  String get personDied => 'Died';
+
+  @override
+  String get personNoFilms => 'No movies found for this person yet.';
+
+  @override
+  String get personLoadFailed => 'Couldn\'t load this person\'s page.';
+
+  @override
+  String personAsCharacter(String character) {
+    return 'as $character';
+  }
+
+  @override
+  String get takeSkinTitle => 'Card skin';
+
+  @override
+  String get takeSkinNormal => 'Normal';
+
+  @override
+  String get takeSkinElectricThunder => 'Electric thunder';
+
+  @override
+  String get takeSkinPreview => 'Preview';
+
+  @override
+  String get takeSkinPreviewEmpty => 'Your take will appear here.';
+
+  @override
+  String get takeSkinWriteTitle => 'Write your take';
+
+  @override
+  String get reviewAlreadyShared => 'You already shared a take for this film.';
+
+  @override
+  String get reviewNeedsFeeling =>
+      'Pick how the film made you feel first, then share your take.';
+
+  @override
+  String get reviewYourTake => 'Your take — others react to it';
+
+  @override
+  String get reviewBeFirstComment => 'Be the first to comment on this take.';
+
+  @override
+  String get takeMenuTooltip => 'More options';
+
+  @override
+  String get takeActionShare => 'Send to friends';
+
+  @override
+  String get takeActionEdit => 'Edit';
+
+  @override
+  String get takeActionDelete => 'Delete';
+
+  @override
+  String get takeActionReport => 'Report';
+
+  @override
+  String get takeEdited => 'edited';
+
+  @override
+  String get takeCancel => 'Cancel';
+
+  @override
+  String get takeEditTitle => 'Edit your take';
+
+  @override
+  String get takeEditSave => 'Save';
+
+  @override
+  String get takeEditSaved => 'Your take was updated.';
+
+  @override
+  String get takeEditFailed => 'Couldn\'t save your changes. Try again.';
+
+  @override
+  String get takeDeleteTitle => 'Delete this take?';
+
+  @override
+  String get takeDeleteBody =>
+      'It will be removed for everyone, along with its comments.';
+
+  @override
+  String get takeDeleted => 'Take deleted.';
+
+  @override
+  String get takeDeleteFailed => 'Couldn\'t delete it. Try again.';
+
+  @override
+  String get takeReportTitle => 'Report this take';
+
+  @override
+  String get takeReportHint =>
+      'Why are you reporting it? Only moderators see reports.';
+
+  @override
+  String get takeReportSpam => 'Spam';
+
+  @override
+  String get takeReportHarassment => 'Harassment or bullying';
+
+  @override
+  String get takeReportHate => 'Hate speech';
+
+  @override
+  String get takeReportSpoiler => 'Unmarked spoiler';
+
+  @override
+  String get takeReportOther => 'Something else';
+
+  @override
+  String get takeReportDetailsHint => 'Add details (optional)';
+
+  @override
+  String get takeReportSend => 'Send report';
+
+  @override
+  String get takeReportThanks => 'Thanks. Our team will review it.';
+
+  @override
+  String get takeReportFailed => 'Couldn\'t send the report. Try again.';
+
+  @override
+  String get takeShareTitle => 'Send to friends';
+
+  @override
+  String get takeShareMessageHint => 'Add a message (optional)';
+
+  @override
+  String get takeShareNoFriends => 'Add friends to send them takes.';
+
+  @override
+  String get takeShareFriendsFailed => 'Couldn\'t load your friends.';
+
+  @override
+  String get takeShareFailed => 'Couldn\'t send it. Try again.';
+
+  @override
+  String get notificationTakeGone => 'This take is no longer available.';
+
+  @override
+  String get mentionSuggestionsLabel => 'Mention a friend';
+
+  @override
+  String takeShareSend(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Send to $count friends',
+      one: 'Send to 1 friend',
+      zero: 'Send',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String takeShareSent(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Sent to $count friends',
+      one: 'Sent to 1 friend',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String notificationTakeShared(String name) {
+    return '$name sent you a take';
+  }
+
+  @override
+  String notificationTakeMention(String name) {
+    return '$name mentioned you in a comment';
+  }
+
+  @override
+  String get takeSpoilerTitle => 'Does it have spoilers?';
+
+  @override
+  String get takeSpoilerNo => 'No spoilers';
+
+  @override
+  String get takeSpoilerHint => 'Pick one so readers know what to expect.';
+
+  @override
+  String get takeSpoilerRequired =>
+      'Say whether your take has spoilers before sharing.';
+
+  @override
+  String get takeSpoilerBlurNote =>
+      'Others will see it blurred until they tap to reveal.';
+
+  @override
+  String get reviewVoteUp => 'Up';
+
+  @override
+  String get reviewVoteDraw => 'Draw';
+
+  @override
+  String get reviewVoteDown => 'Down';
+
+  @override
+  String storyTake(String film) {
+    return 'Shared a take on $film';
+  }
+
+  @override
+  String storyQuestion(String film) {
+    return 'Asked about $film';
+  }
+
+  @override
+  String storyDiscussion(String film) {
+    return 'Started a discussion on $film';
+  }
+
+  @override
+  String storyHotTake(String film) {
+    return 'Dropped a hot take on $film';
+  }
+
+  @override
+  String storyPoll(String film) {
+    return 'Made a poll about $film';
+  }
+
+  @override
+  String storyScene(String film) {
+    return 'Shared a scene from $film';
+  }
+
+  @override
+  String storyComment(String film) {
+    return 'Commented on a post about $film';
+  }
+
+  @override
+  String get storyUnknownFilm => 'a film';
+
+  @override
+  String get storyOpen => 'Open';
+
+  @override
+  String get storyClose => 'Close';
+
+  @override
+  String storyRingLabel(String name) {
+    return '$name\'s story';
+  }
+
+  @override
+  String get storiesTitle => 'Friends\' stories';
+
+  @override
+  String get inboxSearch => 'Search';
+
+  @override
+  String get inboxSearchHint => 'Search conversations';
+
+  @override
+  String get inboxCloseSearch => 'Close search';
+
+  @override
+  String get inboxUnreadOnly => 'Show only unread';
+
+  @override
+  String get inboxAddFriend => 'Add friend';
+
+  @override
+  String get inboxCreate => 'New chat';
+
+  @override
+  String get inboxNewMessage => 'New message';
+
+  @override
+  String get inboxCreateGroup => 'Create a group';
+
+  @override
+  String get inboxCreateTopic => 'Create a private topic';
+
+  @override
+  String get inboxPrivateTopics => 'Private topics';
+
+  @override
+  String get inboxNoTopics => 'No topics yet. Start one with friends.';
+
+  @override
+  String get inboxNewTopic => 'New private topic';
+
+  @override
+  String get inboxAllChats => 'All chats';
+
+  @override
+  String get inboxEmptyTitle => 'No conversations yet';
+
+  @override
+  String get inboxEmptyBody => 'Message a friend to start chatting.';
+
+  @override
+  String get inboxNoResults => 'No conversations found';
+
+  @override
+  String get inboxLoadFailed => 'Couldn\'t load your messages.';
+
+  @override
+  String inboxYouSaid(String text) {
+    return 'You: $text';
+  }
+
+  @override
+  String get inboxNoMessagesYet => 'No messages yet';
+
+  @override
+  String get inboxGroupName => 'Group name';
+
+  @override
+  String get inboxTopicName => 'Topic name';
+
+  @override
+  String get inboxPickFriends => 'Choose friends';
+
+  @override
+  String get inboxPickFriend => 'Message a friend';
+
+  @override
+  String get inboxNoFriends => 'Add friends first to chat with them.';
+
+  @override
+  String get inboxCreateAction => 'Create';
+
+  @override
+  String get inboxCancel => 'Cancel';
+
+  @override
+  String get inboxCreateFailed => 'Couldn\'t create it. Try again.';
+
+  @override
+  String inboxMembers(int count) {
+    return '$count members';
+  }
+
+  @override
+  String get inboxGroupPhoto => 'Add a group photo';
+
+  @override
+  String get inboxGroupDescription => 'Description (optional)';
+
+  @override
+  String get inboxPhotoFailed => 'Created, but the photo didn\'t upload.';
+
+  @override
+  String get chatOpenInfo => 'Group info';
+
+  @override
+  String get groupInfoTitle => 'Group info';
+
+  @override
+  String get groupInfoTopicTitle => 'Topic info';
+
+  @override
+  String get groupInfoDescription => 'Description';
+
+  @override
+  String get groupInfoNoDescription => 'No description yet.';
+
+  @override
+  String groupInfoMembers(int count) {
+    return 'Members · $count';
+  }
+
+  @override
+  String get groupInfoYou => 'You';
+
+  @override
+  String get groupInfoCreator => 'Creator';
+
+  @override
+  String inboxUnreadLabel(int count) {
+    return '$count unread';
+  }
+
+  @override
+  String get chatHint => 'Send a message';
+
+  @override
+  String get chatSend => 'Send';
+
+  @override
+  String get chatStart => 'Start the conversation';
+
+  @override
+  String get chatSendFailed => 'Message not sent. Try again.';
+
+  @override
+  String get chatPrivateTopic => 'Private topic · only members can see it';
+
+  @override
+  String get inboxSelectChat => 'Pick a conversation to start chatting';
+
+  @override
+  String get chatMenu => 'Group menu';
+
+  @override
+  String get chatShareGroup => 'Share group';
+
+  @override
+  String get chatBoostGroup => 'Boost group';
+
+  @override
+  String get chatReport => 'Report';
+
+  @override
+  String get chatLeaveGroup => 'Leave group';
+
+  @override
+  String get chatShareBody => 'Send the group to a conversation.';
+
+  @override
+  String chatSharedTo(String name) {
+    return 'Shared to $name';
+  }
+
+  @override
+  String chatBoosted(String name) {
+    return 'Boost started for $name';
+  }
+
+  @override
+  String get chatReportTitle => 'Report this group';
+
+  @override
+  String get chatReportBody =>
+      'Tell us what is wrong. Members are not notified.';
+
+  @override
+  String get chatReportSpam => 'Spam or scam';
+
+  @override
+  String get chatReportHarassment => 'Harassment';
+
+  @override
+  String get chatReportOther => 'Something else';
+
+  @override
+  String get chatReportSent => 'Report sent';
+
+  @override
+  String get chatCancel => 'Cancel';
+
+  @override
+  String get chatClose => 'Close';
+
+  @override
+  String get chatBack => 'Back';
+
+  @override
+  String get chatActionFailed => 'That didn\'t work. Try again.';
+
+  @override
+  String get chatPinned => 'Pinned';
+
+  @override
+  String chatPinnedCount(int count) {
+    return 'Pinned ($count)';
+  }
+
+  @override
+  String get chatReply => 'Reply';
+
+  @override
+  String chatReplyingTo(String name) {
+    return 'Replying to $name';
+  }
+
+  @override
+  String get chatCancelReply => 'Cancel reply';
+
+  @override
+  String get chatPin => 'Pin message';
+
+  @override
+  String get chatUnpin => 'Unpin message';
+
+  @override
+  String get chatMessagePinned => 'Message pinned';
+
+  @override
+  String get chatMessageUnpinned => 'Message unpinned';
+
+  @override
+  String chatMention(String name) {
+    return 'Mention $name';
+  }
+
+  @override
+  String get chatViewProfile => 'View profile';
+
+  @override
+  String get chatMoreReactions => 'More reactions';
+
+  @override
+  String chatNotified(String names) {
+    return 'Notified $names';
+  }
+
+  @override
+  String get chatNoMatch => 'No one matches';
+
+  @override
+  String get chatAdd => 'Add photo, video, movie or poll';
+
+  @override
+  String get chatEmojiButton => 'Emoji, GIFs and stickers';
+
+  @override
+  String get chatAddTitle => 'Add to chat';
+
+  @override
+  String get chatPhoto => 'Photo';
+
+  @override
+  String get chatPhotoBody => 'Choose a photo from your device.';
+
+  @override
+  String get chatVideo => 'Video';
+
+  @override
+  String get chatVideoBody => 'Choose a video from your device.';
+
+  @override
+  String get chatMovie => 'Movie';
+
+  @override
+  String get chatMovieBody => 'Search a film and share it as a card.';
+
+  @override
+  String get chatPoll => 'Poll';
+
+  @override
+  String get chatPollBody => 'Ask the group a question.';
+
+  @override
+  String get chatSendPhoto => 'Send photo';
+
+  @override
+  String get chatSendVideo => 'Send video';
+
+  @override
+  String get chatShareMovie => 'Share movie';
+
+  @override
+  String get chatNewPoll => 'New poll';
+
+  @override
+  String get chatCaption => 'Add a caption';
+
+  @override
+  String get chatPollQuestion => 'Ask a question';
+
+  @override
+  String chatPollOption(int number) {
+    return 'Option $number';
+  }
+
+  @override
+  String get chatAddOption => 'Add option';
+
+  @override
+  String get chatAllowedReactions => 'Reactions allowed on this post';
+
+  @override
+  String get chatAllowedReactionsBody =>
+      'Members can react with the emojis you choose. They hold a message to see them.';
+
+  @override
+  String get chatPollInvalid => 'Add a question and at least two options';
+
+  @override
+  String get chatFileTooBig => 'That file is too big (12 MB max)';
+
+  @override
+  String get chatSearchMovie => 'Search a movie';
+
+  @override
+  String get chatSearchMovieHint => 'Film title';
+
+  @override
+  String get chatNoMovie => 'No movie found.';
+
+  @override
+  String chatVotes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count votes',
+      one: '1 vote',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatPlayVideo => 'Play video';
+
+  @override
+  String get chatGif => 'GIF';
+
+  @override
+  String get chatSticker => 'Sticker';
+
+  @override
+  String get chatTabEmoji => 'Emoji';
+
+  @override
+  String get chatTabGif => 'GIF';
+
+  @override
+  String get chatTabStickers => 'Stickers';
+
+  @override
+  String get chatSearchEmoji => 'Find the perfect emoji';
+
+  @override
+  String get chatSearchGif => 'Search GIFs';
+
+  @override
+  String get chatSearchStickers => 'Search stickers';
+
+  @override
+  String chatNothingFound(String query) {
+    return 'Nothing found for “$query”.';
+  }
+
+  @override
+  String get chatCatFrequent => 'Frequently used';
+
+  @override
+  String get chatCatFaces => 'Faces';
+
+  @override
+  String get chatCatHands => 'Hands';
+
+  @override
+  String get chatCatObjects => 'Objects';
+
+  @override
+  String get chatCatSymbols => 'Symbols';
+
+  @override
+  String get chatClosePicker => 'Close picker';
+
+  @override
+  String sysPinned(String name) {
+    return '$name pinned a message';
+  }
+
+  @override
+  String sysRemoved(String name, String target) {
+    return '$name removed $target from the group';
+  }
+
+  @override
+  String sysLeft(String name) {
+    return '$name left the group';
+  }
+
+  @override
+  String sysHeritage(String name, String target) {
+    return '$name made $target Heritage creator';
+  }
+
+  @override
+  String sysPassed(String name, String target) {
+    return '$name passed the creator tag to $target and left';
+  }
+
+  @override
+  String sysVoteStarted(String name) {
+    return '$name started a vote on keeping this group';
+  }
+
+  @override
+  String sysVoteCancelled(String name) {
+    return '$name cancelled the vote';
+  }
+
+  @override
+  String get sysVoteKeep =>
+      'Most members voted to keep the group. Now choose a new owner.';
+
+  @override
+  String sysVoteOwnerWon(String target) {
+    return '$target won the vote and is now Heritage creator';
+  }
+
+  @override
+  String get voteKeepTitle => 'Keep this group?';
+
+  @override
+  String voteKeepBody(String name, String time) {
+    return '$name asked to leave. Members have $time left to vote. Most votes decide; a tie keeps the group.';
+  }
+
+  @override
+  String get voteStay => 'Stay';
+
+  @override
+  String get voteDelete => 'Delete';
+
+  @override
+  String voteKeepTally(int stay, int delete) {
+    return 'Stay $stay · Delete $delete';
+  }
+
+  @override
+  String get voteOwnPoll => 'You can\'t vote on your own poll.';
+
+  @override
+  String get voteCancel => 'Cancel poll and stay creator';
+
+  @override
+  String get voteOwnerTitle => 'Who should own this group?';
+
+  @override
+  String voteOwnerBody(String time) {
+    return 'The group is staying. Pick one member other than yourself. $time left.';
+  }
+
+  @override
+  String get voteOwnerHint => 'Tap a member to vote.';
+
+  @override
+  String get voteOwnerChange => 'You can change your vote until the poll ends.';
+
+  @override
+  String voteTimeLeft(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String get voteRunning => 'A vote is already running';
+
+  @override
+  String get leaveCreatorTitle => 'You created this group';
+
+  @override
+  String get leaveCreatorBody =>
+      'Before you leave, choose what happens to the group.';
+
+  @override
+  String get leavePass => 'Pass the creator tag';
+
+  @override
+  String get leavePassBody => 'Pick a member. They take over right away.';
+
+  @override
+  String get leaveVote => 'Let the group decide';
+
+  @override
+  String get leaveVoteBody =>
+      'Members vote on keeping or deleting the group, then on who owns it. Each vote takes 24 hours.';
+
+  @override
+  String get leavePickTitle => 'Who takes over?';
+
+  @override
+  String get leavePickBody =>
+      'They get the Heritage creator tag and keep report, share and boost.';
+
+  @override
+  String get leaveContinue => 'Continue';
+
+  @override
+  String leavePassConfirmTitle(String name) {
+    return 'Pass the tag to $name and leave?';
+  }
+
+  @override
+  String leavePassConfirmBody(String name) {
+    return '$name becomes Heritage creator right away. You will leave the group.';
+  }
+
+  @override
+  String get leavePassConfirm => 'Pass tag and leave';
+
+  @override
+  String get leaveVoteConfirmTitle => 'Start the group vote?';
+
+  @override
+  String get leaveVoteConfirmBody =>
+      'Step 1: members vote to keep or delete the group for 24 hours. If most vote Stay, step 2 lets them choose the new owner for another 24 hours. You stay creator until it ends.';
+
+  @override
+  String get leaveVoteConfirm => 'Start vote';
+
+  @override
+  String leaveSimpleTitle(String group) {
+    return 'Leave $group?';
+  }
+
+  @override
+  String get leaveSimpleBody =>
+      'You will stop seeing messages from this group.';
+
+  @override
+  String confirmType(String name) {
+    return 'To confirm, type $name';
+  }
+
+  @override
+  String get groupInfoSearch => 'Search members';
+
+  @override
+  String groupInfoNoMatch(String query) {
+    return 'No members match “$query”.';
+  }
+
+  @override
+  String get groupInfoHeritage => 'Heritage creator';
+
+  @override
+  String memberViewProfileBody(String name) {
+    return 'See $name\'s films and collections.';
+  }
+
+  @override
+  String get memberMakeHeritage => 'Make Heritage creator';
+
+  @override
+  String memberMakeHeritageBody(String name) {
+    return '$name takes over the group. You become a regular member.';
+  }
+
+  @override
+  String get memberRemove => 'Remove from group';
+
+  @override
+  String memberRemoveBody(String name) {
+    return '$name loses access to the group and its messages.';
+  }
+
+  @override
+  String memberMakeHeritageTitle(String name) {
+    return 'Make $name Heritage creator?';
+  }
+
+  @override
+  String memberMakeHeritageConfirmBody(String name) {
+    return '$name gets the Heritage creator tag and can report, share and boost the group. You stay in the group as a regular member.';
+  }
+
+  @override
+  String memberRemoveTitle(String name) {
+    return 'Remove $name?';
+  }
+
+  @override
+  String memberRemoveConfirmBody(String name, String group) {
+    return '$name will lose access to $group and won\'t see new messages.';
+  }
+
+  @override
+  String memberRemoveConfirm(String name) {
+    return 'Remove $name';
+  }
+
+  @override
+  String get chatVideoFailed => 'Couldn\'t play this video.';
+
+  @override
+  String get chatPauseVideo => 'Pause video';
+
+  @override
+  String get chatFullScreen => 'Full screen';
+
+  @override
+  String get chatMute => 'Mute';
+
+  @override
+  String get chatUnmute => 'Unmute';
+
+  @override
+  String get chatMutedToast => 'Chat muted';
+
+  @override
+  String get chatUnmutedToast => 'Chat unmuted';
+
+  @override
+  String get chatPinChat => 'Pin to top';
+
+  @override
+  String get chatUnpinChat => 'Unpin from top';
+
+  @override
+  String get chatMarkUnread => 'Mark as unread';
+
+  @override
+  String get chatMarkRead => 'Mark as read';
+
+  @override
+  String get chatClearHistory => 'Clear history';
+
+  @override
+  String get chatClearTitle => 'Clear the history?';
+
+  @override
+  String get chatClearBody =>
+      'Every message so far disappears for you. The others still see them.';
+
+  @override
+  String get chatCleared => 'History cleared';
+
+  @override
+  String get chatDeleteChat => 'Delete chat';
+
+  @override
+  String get chatDeleteChatTitle => 'Delete this chat?';
+
+  @override
+  String chatDeleteChatBody(String name) {
+    return 'It leaves your inbox and its history is cleared for you. It comes back if $name writes again.';
+  }
+
+  @override
+  String get chatChatDeleted => 'Chat deleted';
+
+  @override
+  String chatBlock(String name) {
+    return 'Block $name';
+  }
+
+  @override
+  String chatUnblock(String name) {
+    return 'Unblock $name';
+  }
+
+  @override
+  String chatBlockTitle(String name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String get chatBlockBody =>
+      'Neither of you can message the other until you unblock them. They won\'t be told.';
+
+  @override
+  String chatBlockedToast(String name) {
+    return '$name is blocked';
+  }
+
+  @override
+  String chatUnblockedToast(String name) {
+    return '$name is unblocked';
+  }
+
+  @override
+  String chatYouBlocked(String name) {
+    return 'You blocked $name.';
+  }
+
+  @override
+  String get chatBlockedYou => 'You can\'t reply to this conversation.';
+
+  @override
+  String get chatBlockedPeople => 'Blocked people';
+
+  @override
+  String get chatNoBlocked => 'You haven\'t blocked anyone.';
+
+  @override
+  String get chatUnblockShort => 'Unblock';
+
+  @override
+  String get chatCopy => 'Copy text';
+
+  @override
+  String get chatCopied => 'Copied';
+
+  @override
+  String get chatEdit => 'Edit';
+
+  @override
+  String get chatEditing => 'Editing message';
+
+  @override
+  String get chatCancelEdit => 'Cancel editing';
+
+  @override
+  String get chatDeleteMessage => 'Delete';
+
+  @override
+  String get chatDeleteMessageTitle => 'Delete this message?';
+
+  @override
+  String get chatDeleteMessageBody => 'It\'s deleted for everyone in the chat.';
+
+  @override
+  String get chatMessageDeleted => 'This message was deleted';
+
+  @override
+  String get chatEdited => 'edited';
+
+  @override
+  String get chatReportMessage => 'Report message';
+
+  @override
+  String get chatReportHate => 'Hate speech';
+
+  @override
+  String get chatReportNsfw => 'Sexual content';
+
+  @override
+  String get chatSeen => 'Seen';
+
+  @override
+  String get chatAddMembers => 'Add members';
+
+  @override
+  String chatAddMembersTitle(String name) {
+    return 'Add to $name';
+  }
+
+  @override
+  String get chatAddMembersNone => 'All your friends are already here.';
+
+  @override
+  String get chatAddSelected => 'Add';
+
+  @override
+  String get chatMembersAdded => 'Members added';
+
+  @override
+  String get chatConfirm => 'Confirm';
+
+  @override
+  String get chatViewProfileMenu => 'View profile';
+
+  @override
+  String inboxChatOptions(String name) {
+    return 'Options for $name';
+  }
+
+  @override
+  String get inboxPinnedLabel => 'Pinned';
+
+  @override
+  String get inboxMutedLabel => 'Muted';
+
+  @override
+  String sysAdded(String name, String target) {
+    return '$name added $target';
+  }
+
+  @override
+  String get homeTopicFirstReply => 'Be the first to reply';
+
+  @override
+  String get homeFriendsActivityTitle => 'Friends Activity';
+
+  @override
+  String get homeFriendsActivityResize => 'Resize friends activity';
+
+  @override
+  String get topicTitleHint => 'Title (optional)';
+
+  @override
+  String get topicSeeMore => 'See more';
+
+  @override
+  String get topicCommentsExpand => 'Expand comments';
+
+  @override
+  String get topicCommentsShrink => 'Shrink comments';
+
+  @override
+  String get chatTakeShared => 'Shared a take';
+
+  @override
+  String get chatTopicShared => 'Shared a topic';
+
+  @override
+  String get chatTaggedYou => 'Tagged you in a comment';
+
+  @override
+  String get chatYouTagged => 'You tagged them in a comment';
+
+  @override
+  String get chatTaggedThem => 'Tagged them in a comment';
+
+  @override
+  String get chatYouSharedTopic => 'You shared a topic';
+
+  @override
+  String get chatYouSharedTake => 'You shared a take';
+
+  @override
+  String get commentAddPhoto => 'Add a photo';
+
+  @override
+  String get commentRemovePhoto => 'Remove photo';
+
+  @override
+  String get takeFeltLabel => 'Felt';
+
+  @override
+  String homeEditList(String list) {
+    return 'Edit $list';
+  }
+
+  @override
+  String get homeEditListAdd => 'Add a film';
+
+  @override
+  String homeEditListRemove(String title) {
+    return 'Remove $title';
+  }
+
+  @override
+  String get homeEditListEmpty => 'No films here yet.';
+
+  @override
+  String get homeEditListFull =>
+      'Your Top 5 is full. Remove a film to add another.';
+
+  @override
+  String get homeWatchedHint => 'Films you\'ve already seen';
+
+  @override
+  String get homeWatchlistHint => 'Films you want to watch';
+
+  @override
+  String get homeLensHint => 'Drag your finger over the covers';
+
+  @override
+  String homeLensOpen(String title) {
+    return 'Open $title';
+  }
+
+  @override
+  String get homeListMore => 'More options';
+
+  @override
+  String get homeListShare => 'Share your list';
+
+  @override
+  String get homeListRandom => 'Pick at random';
+
+  @override
+  String get homeListShuffle => 'Pick another';
+
+  @override
+  String homeListShareText(String list) {
+    return 'My $list on FilmSage:';
+  }
+
+  @override
+  String get takeHeartLike => 'Like';
+
+  @override
+  String takeHeartCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count likes',
+      one: '1 like',
+      zero: 'No likes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myListsTitle => 'My lists';
+
+  @override
+  String get myListsHint => 'Lists you made and posted';
+
+  @override
+  String get friendsListsTitle => 'Friends\' lists';
+
+  @override
+  String get friendsListsHint => 'What your friends put together';
+
+  @override
+  String get listNew => 'New list';
+
+  @override
+  String get listsEmptyMine =>
+      'Make your first list: give it a name and pick some films.';
+
+  @override
+  String get listCreateTitle => 'New list';
+
+  @override
+  String get listNameLabel => 'List name';
+
+  @override
+  String get listNameHint => 'Best heist films';
+
+  @override
+  String get listSearchHint => 'Search films to add';
+
+  @override
+  String listAddFilm(String title) {
+    return 'Add $title';
+  }
+
+  @override
+  String listRemoveFilm(String title) {
+    return 'Remove $title';
+  }
+
+  @override
+  String get listPost => 'Post list';
+
+  @override
+  String listFilmCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count films',
+      one: '1 film',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String listBy(String name) {
+    return 'By $name';
+  }
+
+  @override
+  String get listCommentsTitle => 'Comments';
+
+  @override
+  String get listCommentHint => 'Add a comment';
+
+  @override
+  String get listCommentsEmpty =>
+      'No comments yet. Say what you think of this list.';
+
+  @override
+  String listCommentCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count comments',
+      one: '1 comment',
+      zero: 'No comments',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listDelete => 'Delete list';
+
+  @override
+  String get listDeleteConfirm => 'Delete this list? This can\'t be undone.';
+
+  @override
+  String get listCancel => 'Cancel';
+
+  @override
+  String get listPostFailed => 'Couldn\'t post the list. Try again.';
+
+  @override
+  String get listLoadFailed => 'Couldn\'t load lists.';
+
+  @override
+  String listPicked(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count films picked',
+      one: '1 film picked',
+      zero: 'No films yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get listSearchEmpty => 'No films found.';
+
+  @override
+  String get listSendFailed => 'Couldn\'t send. Try again.';
+
+  @override
+  String get takeActionSave => 'Save';
+
+  @override
+  String get takeActionUnsave => 'Remove from saved';
+
+  @override
+  String get takeSavedToast => 'Saved to your profile';
+
+  @override
+  String get takeUnsavedToast => 'Removed from your saved topics';
+
+  @override
+  String get takeSaveFailed => 'Couldn\'t save. Try again.';
+
+  @override
+  String get profileSavedTitle => 'Saved';
+
+  @override
+  String get profileSavedEmpty => 'Topics you save show up here.';
+
+  @override
+  String get listShare => 'Share list';
+
+  @override
+  String listShareText(String name, String owner) {
+    return '$name — a list by $owner on Film Wise';
+  }
+
+  @override
+  String get listSave => 'Save list';
+
+  @override
+  String get listUnsave => 'Remove from saved';
+
+  @override
+  String get listSavedToast => 'List saved to your profile';
+
+  @override
+  String get listUnsavedToast => 'List removed from your saved lists';
+
+  @override
+  String get listSaveFailed => 'Couldn\'t save the list. Try again.';
+
+  @override
+  String get listEdit => 'Edit list';
+
+  @override
+  String get listEditTitle => 'Edit list';
+
+  @override
+  String get listSaveChanges => 'Save changes';
+
+  @override
+  String get savedListsTitle => 'Saved lists';
+
+  @override
+  String get savedListsHint => 'Lists you kept from others';
+
+  @override
+  String get listMenuTooltip => 'More';
+
+  @override
+  String get listShareNoFriends => 'Add friends to send them lists.';
+
+  @override
+  String get chatListShared => 'Shared a list';
+
+  @override
+  String get chatYouSharedList => 'You shared a list';
+
+  @override
+  String get notificationsMarkAllRead => 'Mark all read';
+
+  @override
+  String get notificationsTabAll => 'All';
+
+  @override
+  String get notificationsTabTakes => 'Takes';
+
+  @override
+  String get notificationsTabMentions => 'Mentions';
+
+  @override
+  String get notificationsTabRequests => 'Requests';
+
+  @override
+  String get notificationsGroupRequests => 'Friend requests';
+
+  @override
+  String get notificationsGroupNew => 'New';
+
+  @override
+  String get notificationsGroupEarlier => 'Earlier';
+
+  @override
+  String get notificationsNowFriends => 'You\'re now friends';
+
+  @override
+  String notificationsRequestDeclined(String name) {
+    return 'Request from $name declined';
+  }
+
+  @override
+  String get notificationsUndo => 'Undo';
+
+  @override
+  String get notificationsNothingHere => 'Nothing here yet.';
+
+  @override
+  String get notificationsTimeNow => 'now';
+
+  @override
+  String notificationsTimeMinutes(int count) {
+    return '${count}m';
+  }
+
+  @override
+  String notificationsTimeHours(int count) {
+    return '${count}h';
+  }
+
+  @override
+  String get notificationsTimeYesterday => 'Yesterday';
+
+  @override
+  String notificationsTimeDays(int count) {
+    return '${count}d';
+  }
+
+  @override
+  String notificationsUnreadCount(int count) {
+    return '$count unread';
+  }
 }

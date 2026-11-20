@@ -7,12 +7,25 @@ import '../../../../core/theme/app_theme.dart';
 class CollectionsBox extends StatefulWidget {
   const CollectionsBox({
     super.key,
-    required this.title,
+    this.title,
     required this.resizeLabel,
     required this.children,
+    this.initialHeight = defaultHeight,
   });
 
-  final String title;
+  /// The content area's height when the box first appears.
+  static const defaultHeight = 360.0;
+
+  /// The smallest the box can be dragged to.
+  static const minHeight = 200.0;
+
+  /// Height of the content area when the box first shows; it can then be
+  /// dragged between [minHeight] and most of the screen.
+  final double initialHeight;
+
+  /// Shown inside the box at the top; leave null when the title sits above
+  /// the box instead.
+  final String? title;
   final String resizeLabel;
   final List<Widget> children;
 
@@ -21,10 +34,9 @@ class CollectionsBox extends StatefulWidget {
 }
 
 class _CollectionsBoxState extends State<CollectionsBox> {
-  static const _initialHeight = 360.0;
-  static const _minHeight = 200.0;
+  static const _minHeight = CollectionsBox.minHeight;
 
-  double _height = _initialHeight;
+  late double _height = widget.initialHeight;
 
   double _maxHeight(BuildContext context) =>
       math.max(_minHeight, MediaQuery.sizeOf(context).height * 0.8);
@@ -47,21 +59,24 @@ class _CollectionsBoxState extends State<CollectionsBox> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              tokens.spaceLg,
-              tokens.spaceLg,
-              tokens.spaceLg,
-              0,
-            ),
-            child: Text(
-              widget.title,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: AppColors.textPrimary,
+          if (widget.title case final title?) ...[
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                tokens.spaceLg,
+                tokens.spaceLg,
+                tokens.spaceLg,
+                0,
+              ),
+              child: Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: AppColors.textPrimary,
+                ),
               ),
             ),
-          ),
-          SizedBox(height: tokens.spaceMd),
+            SizedBox(height: tokens.spaceMd),
+          ] else
+            SizedBox(height: tokens.spaceMd),
           SizedBox(
             height: _clampedHeight(context),
             child: SingleChildScrollView(

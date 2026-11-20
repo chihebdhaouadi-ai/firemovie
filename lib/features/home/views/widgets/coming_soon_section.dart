@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -17,7 +18,7 @@ class ComingSoonSection extends StatelessWidget {
         SectionHeader(title: title),
         SectionStatusCard(
           message: context.l10n.homeComingSoon,
-          actionIcon: Icons.schedule,
+          actionIcon: BootstrapIcons.clock,
         ),
       ],
     );

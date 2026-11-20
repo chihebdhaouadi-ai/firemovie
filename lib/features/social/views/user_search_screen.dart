@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -115,12 +116,12 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
                     onChanged: _onChanged,
                     decoration: InputDecoration(
                       hintText: l10n.searchPeopleHint,
-                      prefixIcon: const Icon(Icons.search),
+                      prefixIcon: const Icon(BootstrapIcons.search),
                     ),
                   ),
                 ),
                 if (_loading)
-                  const LinearProgressIndicator(
+                  LinearProgressIndicator(
                     color: AppColors.accentGlow,
                     backgroundColor: AppColors.surfaceRaised,
                   ),
@@ -178,7 +179,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
               color: AppColors.textPrimary,
             ),
           ),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(BootstrapIcons.chevron_right),
           onTap: () => widget.onOpenUser(user),
         );
       },

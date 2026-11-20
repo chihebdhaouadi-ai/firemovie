@@ -1,5 +1,7 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/game_button.dart';
 
 /// Game-style building blocks for the SAGE profile.
@@ -16,8 +18,8 @@ import '../../../../core/widgets/game_button.dart';
 ///   GameAchievementCard(icon: yourIcon, title: 'Film critic', subtitle: 'Write 10 reviews.', progress: 13, goal: 10),
 ///   GameChip(label: 'helmi90', avatar: NetworkImage(url), onTap: () {}),
 
-const _edge = Color(0xFF10141D);
-const _deep = Color(0xFF0B0E14);
+Color get _edge => themed(const Color(0xFF10141D), const Color(0xFFD6CFC2));
+Color get _deep => themed(const Color(0xFF0B0E14), const Color(0xFFCFC8BA));
 const _blue1 = Color(0xFF4A8CF0);
 const _blue2 = Color(0xFF1D4CB5);
 const _blueEdge = Color(0xFF12306F);
@@ -26,7 +28,10 @@ const _blueEdge = Color(0xFF12306F);
 class GameCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
-  const GameCard({super.key, required this.child, this.padding = const EdgeInsets.all(14)});
+  const GameCard(
+      {super.key,
+      required this.child,
+      this.padding = const EdgeInsets.all(14)});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -35,13 +40,21 @@ class GameCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: _edge, width: 2),
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter, end: Alignment.bottomCenter,
-            colors: [Color(0xFF2A3142), Color(0xFF1B2030)],
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              themed(const Color(0xFF2A3142), const Color(0xFFEEEAE1)),
+              themed(const Color(0xFF1B2030), const Color(0xFFE6E0D5)),
+            ],
           ),
           boxShadow: [
-            const BoxShadow(color: _deep, offset: Offset(0, 5)),
-            BoxShadow(color: Colors.black.withValues(alpha: .4), offset: const Offset(0, 9), blurRadius: 12),
+            BoxShadow(color: _deep, offset: Offset(0, 5)),
+            BoxShadow(
+                color: themed(Colors.black.withValues(alpha: .4),
+                    const Color(0x221A1814)),
+                offset: const Offset(0, 9),
+                blurRadius: 12),
           ],
         ),
         child: child,
@@ -52,14 +65,24 @@ class GameCard extends StatelessWidget {
 class GameStatCard extends StatelessWidget {
   final String label, value;
   final Color color;
-  const GameStatCard({super.key, required this.label, required this.value, required this.color});
+  const GameStatCard(
+      {super.key,
+      required this.label,
+      required this.value,
+      required this.color});
 
   @override
   Widget build(BuildContext context) => GameCard(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFFAAB2C5))),
-          Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: color)),
+          Text(label,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: themed(
+                      const Color(0xFFAAB2C5), const Color(0xFF615B50)))),
+          Text(value,
+              style: TextStyle(
+                  fontSize: 26, fontWeight: FontWeight.w800, color: color)),
         ]),
       );
 }
@@ -75,13 +98,19 @@ class LevelPill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [_blue1, _blue2]),
+          gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [_blue1, _blue2]),
           border: Border.all(color: _blueEdge, width: 2),
           boxShadow: const [BoxShadow(color: _blueEdge, offset: Offset(0, 3))],
         ),
         child: Text(label ?? 'LEVEL $level',
             style: const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12, letterSpacing: 2.4,
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              fontSize: 12,
+              letterSpacing: 2.4,
               shadows: [Shadow(color: Color(0x66000000), offset: Offset(0, 1))],
             )),
       );
@@ -105,8 +134,13 @@ class GameProgressBar extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(height),
           border: Border.all(color: _edge, width: 2),
-          gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
-              colors: [Color(0xFF05070B), _deep]), // darker at the top = sunk in
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                themed(const Color(0xFF05070B), const Color(0xFFCFC8BA)),
+                _deep
+              ]), // darker at the top = sunk in
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(height),
@@ -118,12 +152,17 @@ class GameProgressBar extends StatelessWidget {
               child: Stack(fit: StackFit.expand, children: [
                 const DecoratedBox(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                         colors: [Color(0xFF5B9BFF), Color(0xFF2B5FD0)]),
                   ),
                 ),
                 Positioned(
-                  left: 4, right: 4, top: 2, height: height * .3,
+                  left: 4,
+                  right: 4,
+                  top: 2,
+                  height: height * .3,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: .3),
@@ -145,7 +184,12 @@ class GameFrameTile extends StatelessWidget {
   final Widget child; // your Lottie frame / avatar
   final bool equipped, locked;
   final VoidCallback? onTap;
-  const GameFrameTile({super.key, required this.child, this.equipped = false, this.locked = false, this.onTap});
+  const GameFrameTile(
+      {super.key,
+      required this.child,
+      this.equipped = false,
+      this.locked = false,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -156,21 +200,35 @@ class GameFrameTile extends StatelessWidget {
         opacity: locked ? .6 : 1,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 120),
-          width: 92, height: 92,
-          margin: EdgeInsets.only(top: equipped ? 3 : 0, bottom: equipped ? 2 : 5),
+          width: 92,
+          height: 92,
+          margin:
+              EdgeInsets.only(top: equipped ? 3 : 0, bottom: equipped ? 2 : 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: edge, width: 2),
             gradient: LinearGradient(
-              begin: Alignment.topCenter, end: Alignment.bottomCenter,
-              colors: equipped ? const [_blue1, _blue2] : const [Color(0xFF2A3142), Color(0xFF1B2030)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: equipped
+                  ? const [_blue1, _blue2]
+                  : [
+                      themed(const Color(0xFF2A3142), const Color(0xFFEEEAE1)),
+                      themed(const Color(0xFF1B2030), const Color(0xFFE6E0D5))
+                    ],
             ),
-            boxShadow: [BoxShadow(color: edge, offset: Offset(0, equipped ? 2 : 5))],
+            boxShadow: [
+              BoxShadow(color: edge, offset: Offset(0, equipped ? 2 : 5))
+            ],
           ),
           child: Stack(alignment: Alignment.center, children: [
             child,
             if (locked)
-              const Positioned(right: 6, bottom: 4, child: Icon(Icons.lock_rounded, size: 16, color: Colors.white70)),
+              const Positioned(
+                  right: 6,
+                  bottom: 4,
+                  child: Icon(BootstrapIcons.lock_fill,
+                      size: 16, color: Colors.white70)),
           ]),
         ),
       ),
@@ -182,30 +240,55 @@ class GameFrameTile extends StatelessWidget {
 class GameBadge extends StatelessWidget {
   final Widget child; // your Lottie badge / icon
   final bool locked, owned;
-  const GameBadge({super.key, required this.child, this.locked = false, this.owned = false});
+  const GameBadge(
+      {super.key,
+      required this.child,
+      this.locked = false,
+      this.owned = false});
 
   static const _gray = ColorFilter.matrix([
-    .2126, .7152, .0722, 0, 0,
-    .2126, .7152, .0722, 0, 0,
-    .2126, .7152, .0722, 0, 0,
-    0, 0, 0, 1, 0,
+    .2126,
+    .7152,
+    .0722,
+    0,
+    0,
+    .2126,
+    .7152,
+    .0722,
+    0,
+    0,
+    .2126,
+    .7152,
+    .0722,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
   ]);
 
   @override
   Widget build(BuildContext context) {
     Widget w = Container(
-      width: 62, height: 62,
+      width: 62,
+      height: 62,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: owned ? _blue1 : _edge, width: 3),
         boxShadow: [
-          BoxShadow(color: owned ? _blueEdge : _edge, offset: const Offset(0, 4)),
-          if (owned) BoxShadow(color: _blue1.withValues(alpha: .7), blurRadius: 18),
+          BoxShadow(
+              color: owned ? _blueEdge : _edge, offset: const Offset(0, 4)),
+          if (owned)
+            BoxShadow(color: _blue1.withValues(alpha: .7), blurRadius: 18),
         ],
       ),
       child: ClipOval(child: child),
     );
-    if (locked) w = Opacity(opacity: .55, child: ColorFiltered(colorFilter: _gray, child: w));
+    if (locked)
+      w = Opacity(
+          opacity: .55, child: ColorFiltered(colorFilter: _gray, child: w));
     return w;
   }
 }
@@ -219,8 +302,14 @@ class GameAchievementCard extends StatelessWidget {
   final bool comingSoon;
   final String comingSoonLabel;
   const GameAchievementCard({
-    super.key, required this.icon, required this.title, required this.subtitle,
-    this.progress = 0, this.goal = 1, this.comingSoon = false, this.comingSoonLabel = 'Coming soon',
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.progress = 0,
+    this.goal = 1,
+    this.comingSoon = false,
+    this.comingSoonLabel = 'Coming soon',
   });
 
   @override
@@ -231,32 +320,49 @@ class GameAchievementCard extends StatelessWidget {
       child: GameCard(
         child: Row(children: [
           Container(
-            width: 48, height: 48,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: done ? const Color(0xFFFFD75E) : _edge, width: 3),
+              border: Border.all(
+                  color: done ? const Color(0xFFFFD75E) : _edge, width: 3),
               boxShadow: [
-                const BoxShadow(color: _edge, offset: Offset(0, 3)),
-                if (done) BoxShadow(color: const Color(0xFFFFC83C).withValues(alpha: .5), blurRadius: 14),
+                BoxShadow(color: _edge, offset: Offset(0, 3)),
+                if (done)
+                  BoxShadow(
+                      color: const Color(0xFFFFC83C).withValues(alpha: .5),
+                      blurRadius: 14),
               ],
             ),
             child: ClipOval(child: icon),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(title,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w700)),
               const SizedBox(height: 2),
-              Text(subtitle, style: const TextStyle(fontSize: 13, color: Color(0xFFAAB2C5))),
+              Text(subtitle,
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: themed(
+                          const Color(0xFFAAB2C5), const Color(0xFF615B50)))),
               const SizedBox(height: 8),
               if (comingSoon)
-                Text(comingSoonLabel, style: const TextStyle(fontSize: 12, color: Color(0xFF9A9CA6)))
+                Text(comingSoonLabel,
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: themed(
+                            const Color(0xFF9A9CA6), const Color(0xFF615B50))))
               else
                 Row(children: [
                   Expanded(child: GameProgressBar(value: progress / goal)),
                   const SizedBox(width: 8),
                   Text('$progress/$goal${done ? ' ✓' : ''}',
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w600)),
                 ]),
             ]),
           ),
@@ -284,13 +390,22 @@ class GameChip extends StatelessWidget {
             backgroundColor: const Color(0xFF2D4D78),
             backgroundImage: avatar,
             child: avatar == null
-                ? Text(label.isEmpty ? '?' : label[0].toUpperCase(), style: const TextStyle(fontSize: 11, color: Colors.white))
+                ? Text(label.isEmpty ? '?' : label[0].toUpperCase(),
+                    style: const TextStyle(fontSize: 11, color: Colors.white))
                 : null,
           ),
           const SizedBox(width: 8),
           Text(label,
-              style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600,
-                  shadows: [Shadow(color: Color(0x73000000), offset: Offset(0, 1.5))])),
+              style: TextStyle(
+                  color: themed(Colors.white, const Color(0xFF1A1814)),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  shadows: AppPalette.current.isDark
+                      ? const [
+                          Shadow(
+                              color: Color(0x73000000), offset: Offset(0, 1.5))
+                        ]
+                      : null)),
         ]),
       );
 }
@@ -305,8 +420,13 @@ class GameIconButton extends StatelessWidget {
   final String? tooltip;
   final VoidCallback? onPressed;
   const GameIconButton({
-    super.key, this.icon, this.child, this.style = GameButtonStyle.dark, this.size = 22,
-    this.tooltip, this.onPressed,
+    super.key,
+    this.icon,
+    this.child,
+    this.style = GameButtonStyle.dark,
+    this.size = 22,
+    this.tooltip,
+    this.onPressed,
   }) : assert(icon != null || child != null);
 
   @override
@@ -316,7 +436,16 @@ class GameIconButton extends StatelessWidget {
       radius: 30,
       padding: const EdgeInsets.all(9),
       onPressed: onPressed,
-      child: child ?? Icon(icon, size: size, color: Colors.white),
+      child: child ??
+          Icon(
+            icon,
+            size: size,
+            // Quiet buttons are paper in light mode, so the icon is ink;
+            // the blue (black in light mode) style keeps a white icon.
+            color: identical(style, GameButtonStyle.dark)
+                ? themed(Colors.white, const Color(0xFF1A1814))
+                : Colors.white,
+          ),
     );
     final message = tooltip;
     return message == null ? button : Tooltip(message: message, child: button);

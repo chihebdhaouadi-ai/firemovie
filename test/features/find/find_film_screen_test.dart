@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:film_wise_mobile/core/theme/app_theme.dart';
 import 'package:film_wise_mobile/features/find/data/find_repository.dart';
 import 'package:film_wise_mobile/features/find/data/in_memory_lists_repository.dart';
@@ -154,8 +155,8 @@ void main() {
     await tester.pumpAndSettle();
 
     // The check icon (already added) is shown instead of a "+".
-    expect(find.byIcon(Icons.check_rounded), findsWidgets);
-    expect(find.byIcon(Icons.add_rounded), findsNothing);
+    expect(find.byIcon(BootstrapIcons.check_lg), findsWidgets);
+    expect(find.byIcon(BootstrapIcons.plus_lg), findsNothing);
   });
 
   testWidgets('a failed search shows the error view with retry',

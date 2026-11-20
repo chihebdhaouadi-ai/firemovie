@@ -270,17 +270,16 @@ void main() {
     expect(find.text(_en.reviewWhyPrompt), findsNothing);
   });
 
-  testWidgets('tapping a vote chip records the vote', (tester) async {
+  testWidgets('tapping the heart records an up vote', (tester) async {
     final api = ReviewApi(takes: [takeJson(id: 7, wellArgued: 2)]);
     await _pump(tester, api);
 
-    await tester.tap(
-      find.widgetWithText(FilterChip, '${_en.reviewVoteWellArgued} 2'),
-    );
+    expect(find.byType(FilterChip), findsNothing);
+    await tester.tap(find.byKey(const Key('take-heart-7')));
     await tester.pumpAndSettle();
 
     final put = api.requests.singleWhere((r) => r.method == 'PUT');
-    expect(put.url.path, '/api/takes/takes/7/votes/well_argued/');
+    expect(put.url.path, '/api/takes/takes/7/votes/up/');
     expect(jsonDecode(put.body), {'active': true});
   });
 

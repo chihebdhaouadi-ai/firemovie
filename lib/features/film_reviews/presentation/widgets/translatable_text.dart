@@ -13,12 +13,21 @@ class TranslatableText extends StatefulWidget {
     this.style,
     this.format,
     this.repository,
+    this.linkStyle,
+    this.collapsedMaxLines,
   });
 
   final String text;
   final TextStyle? style;
   final String Function(String text)? format;
   final TranslationRepository? repository;
+
+  /// Style of the Translate / Show original link; underlined blue if null.
+  final TextStyle? linkStyle;
+
+  /// When set, longer text folds to this many lines with a "more" link
+  /// that opens the rest (and "less" to fold it again).
+  final int? collapsedMaxLines;
 
   @override
   State<TranslatableText> createState() => _TranslatableTextState();
@@ -108,7 +117,15 @@ class _TranslatableTextState extends State<TranslatableText> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(display, style: widget.style),
+        if (widget.collapsedMaxLines case final lines?)
+          _ExpandableText(
+            text: display,
+            style: widget.style,
+            maxLines: lines,
+            linkStyle: widget.linkStyle,
+          )
+        else
+          Text(display, style: widget.style),
         if (!_sameLanguage)
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -122,16 +139,17 @@ class _TranslatableTextState extends State<TranslatableText> {
                     showingTranslation
                         ? l10n.reviewShowOriginal
                         : l10n.reviewTranslate,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: AppColors.accentGlow,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColors.accentGlow,
-                    ),
+                    style: widget.linkStyle ??
+                        theme.textTheme.labelSmall?.copyWith(
+                          color: AppColors.accentGlow,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.accentGlow,
+                        ),
                   ),
                 ),
               ),
               if (_loading)
-                const SizedBox(
+                SizedBox(
                   width: 12,
                   height: 12,
                   child: CircularProgressIndicator(
@@ -149,6 +167,80 @@ class _TranslatableTextState extends State<TranslatableText> {
             ],
           ),
       ],
+    );
+  }
+}
+
+/// Text clamped to [maxLines] with a "more" / "less" toggle, shown only when
+/// the text is actually longer than that.
+class _ExpandableText extends StatefulWidget {
+  const _ExpandableText({
+    required this.text,
+    required this.maxLines,
+    this.style,
+    this.linkStyle,
+  });
+
+  final String text;
+  final int maxLines;
+  final TextStyle? style;
+  final TextStyle? linkStyle;
+
+  @override
+  State<_ExpandableText> createState() => _ExpandableTextState();
+}
+
+class _ExpandableTextState extends State<_ExpandableText> {
+  bool _expanded = false;
+
+  @override
+  void didUpdateWidget(_ExpandableText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.text != widget.text) _expanded = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final style = DefaultTextStyle.of(context).style.merge(widget.style);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final painter = TextPainter(
+          text: TextSpan(text: widget.text, style: style),
+          maxLines: widget.maxLines,
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout(maxWidth: constraints.maxWidth);
+        final overflows = painter.didExceedMaxLines;
+        painter.dispose();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.text,
+              style: widget.style,
+              maxLines: _expanded ? null : widget.maxLines,
+              overflow: _expanded ? null : TextOverflow.ellipsis,
+            ),
+            if (overflows)
+              InkWell(
+                onTap: () => setState(() => _expanded = !_expanded),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    _expanded ? l10n.overviewShowLess : l10n.overviewShowMore,
+                    style: (widget.linkStyle ?? const TextStyle()).copyWith(
+                      color: AppColors.accentGlow,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -46,21 +47,21 @@ class _TakeListSectionState extends State<TakeListSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(title: widget.title),
-        SizedBox(height: tokens.spaceSm),
+        const SizedBox(height: SectionHeader.contentGap),
         FutureBuilder<List<FeedItem>>(
           future: _items,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return SectionStatusCard(
                 message: l10n.homeSectionErrorTitle,
-                actionIcon: Icons.refresh,
+                actionIcon: BootstrapIcons.arrow_clockwise,
                 actionLabel: l10n.homeSectionErrorRetry,
                 onAction: _retry,
               );
             }
             final items = snapshot.data;
             if (items == null) {
-              return const LinearProgressIndicator(
+              return LinearProgressIndicator(
                 color: AppColors.accentGlow,
                 backgroundColor: AppColors.surfaceRaised,
               );
@@ -68,7 +69,7 @@ class _TakeListSectionState extends State<TakeListSection> {
             if (items.isEmpty) {
               return SectionStatusCard(
                 message: widget.emptyMessage,
-                actionIcon: Icons.rate_review_outlined,
+                actionIcon: BootstrapIcons.pencil_square,
               );
             }
             return LayoutBuilder(
@@ -85,6 +86,7 @@ class _TakeListSectionState extends State<TakeListSection> {
                           child: SizedBox(
                             width: constraints.maxWidth * 0.8,
                             child: FeedTakeCard(
+                              fillHeight: true,
                               key: ValueKey(item.take.id),
                               item: item,
                               heroScope: widget.title,

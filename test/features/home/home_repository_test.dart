@@ -5,6 +5,7 @@ import 'package:film_wise_mobile/features/film_reviews/domain/film_reaction.dart
 import 'package:film_wise_mobile/features/film_reviews/domain/movie_review_summary.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/review_stance.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/take.dart';
+import 'package:film_wise_mobile/features/film_reviews/domain/take_skin.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/take_tag.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/topic_vote.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/vote_kind.dart';
@@ -71,6 +72,8 @@ class _FakeReviews implements ReviewRepository {
     String? scene,
     String? timecode,
     bool spoiler = false,
+    TakeSkin skin = TakeSkin.normal,
+    String title = '',
   }) =>
       throw UnimplementedError();
 
@@ -83,6 +86,8 @@ class _FakeReviews implements ReviewRepository {
     String filmId, {
     required String body,
     TakeTag tag = TakeTag.review,
+    TakeSkin skin = TakeSkin.normal,
+    bool spoiler = false,
   }) =>
       throw UnimplementedError();
 
@@ -108,6 +113,13 @@ class _FakeReviews implements ReviewRepository {
       throw UnimplementedError();
 
   @override
+  Future<Take> setSaved(int takeId, {required bool active}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<List<FeedItem>> fetchSavedTakes() => throw UnimplementedError();
+
+  @override
   Future<List<TakeComment>> fetchComments(int takeId) =>
       throw UnimplementedError();
 
@@ -125,6 +137,7 @@ class _FakeReviews implements ReviewRepository {
     required String body,
     int? parentId,
     ReviewStance? stance,
+    XFile? image,
   }) =>
       throw UnimplementedError();
 

@@ -127,7 +127,7 @@ class _SummaryLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LinearProgressIndicator(
+    return LinearProgressIndicator(
       color: AppColors.accentGlow,
       backgroundColor: AppColors.surfaceRaised,
     );

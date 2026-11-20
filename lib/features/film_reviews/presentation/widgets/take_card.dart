@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,8 +10,8 @@ import '../../../angel_bird/hold_gesture.dart';
 import '../../../debate/presentation/debate_waiting_page.dart';
 import '../../../overview/views/widgets/overview_panel.dart';
 import '../../domain/take.dart';
-import '../../domain/vote_kind.dart';
 import 'comment_thread.dart';
+import 'take_heart.dart';
 import 'take_photo.dart';
 import 'translatable_text.dart';
 import '../reaction_labels.dart';
@@ -122,15 +123,6 @@ class _TakeCardState extends State<TakeCard> {
 
   void _cancelReply() => setState(() => _replyTo = null);
 
-  Future<void> _vote(VoteKind kind) async {
-    final ok =
-        await context.read<MovieReviewsCubit>().setVote(widget.take.id, kind);
-    if (!mounted || ok) return;
-    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-      SnackBar(content: Text(context.l10n.reviewVoteFailed)),
-    );
-  }
-
   void _summonBird() {
     final l10n = context.l10n;
     final cubit = context.read<MovieReviewsCubit>();
@@ -201,7 +193,7 @@ class _TakeCardState extends State<TakeCard> {
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundColor: AppColors.surfaceRaised,
+                  backgroundColor: AppColors.accent,
                   child: Text(
                     initial,
                     style: theme.textTheme.labelLarge?.copyWith(
@@ -220,7 +212,14 @@ class _TakeCardState extends State<TakeCard> {
                   ),
                 ),
                 SizedBox(width: tokens.spaceSm),
-                OverviewChip(label: takeBadgeLabel(l10n, take)),
+                OverviewChip(
+                  leading: take.reaction == null
+                      ? null
+                      : reactionIcon(take.reaction!),
+                  label: take.reaction == null
+                      ? takeBadgeLabel(l10n, take)
+                      : reactionLabel(l10n, take.reaction!),
+                ),
               ],
             ),
             SizedBox(height: tokens.spaceSm),
@@ -228,41 +227,45 @@ class _TakeCardState extends State<TakeCard> {
               TakePhoto(url: take.imageUrl!),
               SizedBox(height: tokens.spaceSm),
             ],
-            TranslatableText(
-              text: take.body,
-              format: l10n.reviewQuote,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
+            Container(
+              width: double.infinity,
+              padding: EdgeInsetsDirectional.only(
+                start: tokens.spaceMd,
+                top: tokens.spaceXs,
+                bottom: tokens.spaceXs,
+              ),
+              decoration: BoxDecoration(
+                border: BorderDirectional(
+                  start: BorderSide(color: AppColors.accentGlow, width: 2),
+                ),
+              ),
+              child: TranslatableText(
+                text: take.body,
+                format: l10n.reviewQuote,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: AppColors.textPrimary,
+                  height: 1.4,
+                ),
               ),
             ),
             SizedBox(height: tokens.spaceSm),
           ],
-          Wrap(
-            spacing: tokens.spaceSm,
-            runSpacing: tokens.spaceSm,
-            children: [
-              for (final kind in VoteKind.values)
-                FilterChip(
-                  label: Text('${voteLabel(l10n, kind)} ${take.votesOf(kind)}'),
-                  selected: take.hasVoted(kind),
-                  showCheckmark: false,
-                  selectedColor: AppColors.accent,
-                  backgroundColor: AppColors.surfaceRaised,
-                  disabledColor: AppColors.surfaceRaised,
-                  side: BorderSide.none,
-                  labelStyle: theme.textTheme.labelMedium?.copyWith(
-                    color: take.hasVoted(kind)
-                        ? AppColors.textPrimary
-                        : AppColors.textSecondary,
-                  ),
-                  onSelected: take.isMine ? null : (_) => _vote(kind),
-                ),
-            ],
+          // The one reaction on takes: a heart.
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TakeHeart(
+              take: take,
+              reviews: context.read<MovieReviewsCubit>().repository,
+              onChanged: context.read<MovieReviewsCubit>().takeChanged,
+            ),
           ),
-          SizedBox(height: tokens.spaceXs),
-          TextButton(
-            onPressed: _toggleComments,
-            child: Text(l10n.reviewCommentsButton(take.commentCount)),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: _toggleComments,
+              icon: const Icon(BootstrapIcons.chat, size: 16),
+              label: Text(l10n.reviewCommentsButton(take.commentCount)),
+            ),
           ),
           if (_commentsOpen) _commentsPanel(l10n, tokens, theme),
         ],
@@ -302,7 +305,7 @@ class _TakeCardState extends State<TakeCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_commentsLoading)
-            const LinearProgressIndicator(
+            LinearProgressIndicator(
               color: AppColors.accentGlow,
               backgroundColor: AppColors.surfaceRaised,
             )

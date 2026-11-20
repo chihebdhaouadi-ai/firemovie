@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class FriendActionRow extends StatelessWidget {
           width: double.infinity,
           child: GameButton(
             onPressed: busy ? null : onAdd,
-            icon: Icons.person_add_alt_1_outlined,
+            icon: BootstrapIcons.person_plus,
             label: l10n.friendAdd,
             style: GameButtonStyle.blue,
           ),
@@ -74,7 +75,7 @@ class FriendActionRow extends StatelessWidget {
             Expanded(
               child: GameButton(
                 onPressed: null,
-                icon: Icons.people_alt_outlined,
+                icon: BootstrapIcons.people,
                 label: l10n.friendFriends,
               ),
             ),
@@ -82,7 +83,7 @@ class FriendActionRow extends StatelessWidget {
             Expanded(
               child: GameButton(
                 onPressed: busy ? null : onSuggest,
-                icon: Icons.movie_filter_outlined,
+                icon: BootstrapIcons.camera_reels,
                 label: l10n.suggestMovieAction,
                 style: GameButtonStyle.blue,
               ),
@@ -93,7 +94,7 @@ class FriendActionRow extends StatelessWidget {
           width: double.infinity,
           child: GameButton(
             onPressed: null,
-            icon: Icons.people_alt_outlined,
+            icon: BootstrapIcons.people,
             label: l10n.friendFriends,
           ),
         ),

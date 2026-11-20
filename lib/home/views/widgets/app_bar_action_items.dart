@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:film_wise_mobile/home/data/home_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class AppBarActionItems extends StatelessWidget {
               onPressed: () {
                 drawerKey.currentState?.openDrawer();
               },
-              icon: Icon(Icons.menu,
+              icon: Icon(BootstrapIcons.list,
                   size: 35, color: Color.fromARGB(255, 93, 90, 90))),
         ),
 
@@ -72,7 +73,7 @@ class AppBarActionItems extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom:15),
                   child: Icon(
-                    Icons.search,
+                    BootstrapIcons.search,
                     color: Color.fromARGB(255, 93, 90, 90),
                     size: 35,
                   ),

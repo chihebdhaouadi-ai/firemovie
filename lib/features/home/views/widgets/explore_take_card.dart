@@ -3,32 +3,42 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../film_reviews/data/review_repository.dart';
 import '../../../film_reviews/domain/take.dart';
 import '../../../film_reviews/domain/take_tag.dart';
 import '../../../film_reviews/domain/topic_vote.dart';
-import '../../../film_reviews/domain/vote_kind.dart';
+import '../../../film_reviews/presentation/widgets/take_heart.dart';
 import '../../../film_reviews/presentation/reaction_labels.dart';
 import '../../data/home_models.dart';
 import 'film_tile.dart';
 import 'take_summary_card.dart';
 
 const _cardRadius = 22.0;
-const _cardSurface = Color(0xFF1B1D23);
-const _cardLine = Color(0xFF2A2D36);
-const _fieldSurface = Color(0xFF14151A);
-const _text = Color(0xFFE8E9EE);
-const _mute = Color(0xFF8D919D);
-const _blue = Color(0xFF4A86D8);
-const _gold = Color(0xFFE0B15E);
-const _agreeGreen = Color(0xFF4AA66D);
-const _disagreeRed = Color(0xFFC75050);
-const _voteFill = Color(0xFF1F3250);
-const _stripConversation = Color(0xFF1F3A5C);
-const _stripHotTake = Color(0xFF5C2A2A);
-const _stripQuestion = Color(0xFF2D5A45);
-const _stripPoll = Color(0xFF4A4020);
-const _stripScene = Color(0xFF5A3A24);
+Color get _cardSurface =>
+    themed(const Color(0xFF1B1D23), const Color(0xFFE9E4DA));
+Color get _cardLine => themed(const Color(0xFF2A2D36), const Color(0xFFD6CFC2));
+Color get _fieldSurface =>
+    themed(const Color(0xFF14151A), const Color(0xFFF2EEE6));
+Color get _text => themed(const Color(0xFFE8E9EE), const Color(0xFF1A1814));
+Color get _mute => themed(const Color(0xFF8D919D), const Color(0xFF615B50));
+Color get _blue => themed(const Color(0xFF4A86D8), const Color(0xFF1C5FB0));
+Color get _gold => themed(const Color(0xFFE0B15E), const Color(0xFF7A5600));
+Color get _agreeGreen =>
+    themed(const Color(0xFF4AA66D), const Color(0xFF276B40));
+Color get _disagreeRed =>
+    themed(const Color(0xFFC75050), const Color(0xFFA83A3A));
+Color get _voteFill => themed(const Color(0xFF1F3250), const Color(0xFFD5DFEC));
+Color get _stripConversation =>
+    themed(const Color(0xFF1F3A5C), const Color(0xFFD6E1EE));
+Color get _stripHotTake =>
+    themed(const Color(0xFF5C2A2A), const Color(0xFFEED6D2));
+Color get _stripQuestion =>
+    themed(const Color(0xFF2D5A45), const Color(0xFFD3E6DA));
+Color get _stripPoll =>
+    themed(const Color(0xFF4A4020), const Color(0xFFECE2C4));
+Color get _stripScene =>
+    themed(const Color(0xFF5A3A24), const Color(0xFFEEDCCB));
 const _answerChips = [
   Color(0xFF8A5A8C),
   Color(0xFF2C6F8F),
@@ -36,14 +46,14 @@ const _answerChips = [
   Color(0xFF4A8A5C),
 ];
 
-const _stripStyle = TextStyle(
-  color: _text,
-  fontSize: 11,
-  fontWeight: FontWeight.w700,
-  letterSpacing: .9,
-);
+TextStyle get _stripStyle => TextStyle(
+      color: _text,
+      fontSize: 11,
+      fontWeight: FontWeight.w700,
+      letterSpacing: .9,
+    );
 
-const _muteSmall = TextStyle(color: _mute, fontSize: 12);
+TextStyle get _muteSmall => TextStyle(color: _mute, fontSize: 12);
 
 /// A card for the explore carousel. Each tag gets the layout from the
 /// explore prototype, backed by the real take and its replies.
@@ -227,7 +237,7 @@ class _ExploreTakeCardState extends State<ExploreTakeCard> {
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsetsDirectional.only(start: 10),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             border:
                 BorderDirectional(start: BorderSide(color: _blue, width: 3)),
           ),
@@ -243,22 +253,14 @@ class _ExploreTakeCardState extends State<ExploreTakeCard> {
           ),
         ),
         const SizedBox(height: 12),
-        Row(
-          children: [
-            Flexible(
-              child: _ReactionCount(
-                value: take.votesOf(VoteKind.changedMyMind),
-                label: l10n.reviewVoteChangedMyMind,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Flexible(
-              child: _ReactionCount(
-                value: take.votesOf(VoteKind.disagreeButFair),
-                label: l10n.reviewVoteDisagreeFair,
-              ),
-            ),
-          ],
+        // The one reaction on takes: a heart.
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: TakeHeart(
+            take: take,
+            reviews: widget.repository,
+            onChanged: (updated) => setState(() => _take = updated),
+          ),
         ),
         const SizedBox(height: 10),
         _PeekBox(
@@ -344,17 +346,17 @@ class _ExploreTakeCardState extends State<ExploreTakeCard> {
             height: 10,
             child: Row(
               children: fresh
-                  ? const [
+                  ? [
                       Expanded(child: ColoredBox(color: _cardLine)),
                     ]
                   : [
                       Expanded(
                         flex: agree.clamp(1, 99).toInt(),
-                        child: const ColoredBox(color: _agreeGreen),
+                        child: ColoredBox(color: _agreeGreen),
                       ),
                       Expanded(
                         flex: (100 - agree).clamp(1, 99).toInt(),
-                        child: const ColoredBox(color: _disagreeRed),
+                        child: ColoredBox(color: _disagreeRed),
                       ),
                     ],
             ),
@@ -525,7 +527,7 @@ class _ExploreTakeCardState extends State<ExploreTakeCard> {
             take.body,
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: _text, fontSize: 15, height: 1.45),
+            style: TextStyle(color: _text, fontSize: 15, height: 1.45),
           ),
         ),
         _PeekBox(
@@ -576,7 +578,7 @@ class _CardShell extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               onTap: onReveal,
               child: ColoredBox(
-                color: const Color(0x991B1D23),
+                color: themed(const Color(0x991B1D23), const Color(0x99E9E4DA)),
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -584,7 +586,7 @@ class _CardShell extends StatelessWidget {
                       Text(
                         l10n.topicSpoilerLabel,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: _text,
                           fontWeight: FontWeight.w700,
                         ),
@@ -608,7 +610,7 @@ class _CardShell extends StatelessWidget {
       color: _cardSurface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_cardRadius),
-        side: const BorderSide(color: _cardLine),
+        side: BorderSide(color: _cardLine),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -750,7 +752,7 @@ class _PeekBox extends StatelessWidget {
             if (comment == null)
               Text(
                 l10n.exploreNoRepliesYet,
-                style: const TextStyle(
+                style: TextStyle(
                   color: _text,
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
@@ -769,7 +771,7 @@ class _PeekBox extends StatelessWidget {
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   color: _text,
                   fontSize: 13,
                   height: 1.3,
@@ -812,7 +814,7 @@ class _MovieHead extends StatelessWidget {
                   film.displayTitle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: _text,
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
@@ -862,7 +864,7 @@ class _WhoRow extends StatelessWidget {
                 name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style: TextStyle(
                   color: _text,
                   fontWeight: FontWeight.w600,
                   fontSize: 15,
@@ -903,7 +905,7 @@ class _TopicText extends StatelessWidget {
         text,
         maxLines: 4,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
+        style: TextStyle(
           color: _text,
           fontSize: 16,
           fontWeight: FontWeight.w600,
@@ -932,7 +934,7 @@ class _Pill extends StatelessWidget {
         label,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
+        style: TextStyle(
           color: _text,
           fontSize: 12,
           fontWeight: FontWeight.w600,
@@ -960,7 +962,7 @@ class _OutlineTag extends StatelessWidget {
         text,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(color: _text, fontSize: 12),
+        style: TextStyle(color: _text, fontSize: 12),
       ),
     );
   }
@@ -1041,7 +1043,7 @@ class _ThreadLine extends StatelessWidget {
           children: [
             TextSpan(
               text: '${comment.authorName} ',
-              style: const TextStyle(
+              style: TextStyle(
                 color: _text,
                 fontWeight: FontWeight.w600,
               ),
@@ -1051,8 +1053,8 @@ class _ThreadLine extends StatelessWidget {
         ),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          color: Color(0xFFD9D9D9),
+        style: TextStyle(
+          color: themed(const Color(0xFFD9D9D9), const Color(0xFF36322B)),
           fontSize: 13,
           height: 1.35,
         ),
@@ -1090,7 +1092,7 @@ class _SideReply extends StatelessWidget {
                 : '$label · ${reply.authorName}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               color: _text,
               fontWeight: FontWeight.w600,
               fontSize: 12,
@@ -1108,31 +1110,6 @@ class _SideReply extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _ReactionCount extends StatelessWidget {
-  const _ReactionCount({required this.value, required this.label});
-
-  final int value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: '$value ',
-            style: const TextStyle(color: _blue, fontWeight: FontWeight.w700),
-          ),
-          TextSpan(text: label),
-        ],
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(color: _mute, fontSize: 12),
     );
   }
 }
@@ -1171,7 +1148,7 @@ class _PollOption extends StatelessWidget {
                 duration: const Duration(milliseconds: 500),
                 alignment: AlignmentDirectional.centerStart,
                 widthFactor: showShare ? share.clamp(0.0, 1.0) : 0,
-                child: const ColoredBox(color: _voteFill),
+                child: ColoredBox(color: _voteFill),
               ),
             ),
             Padding(
@@ -1183,14 +1160,14 @@ class _PollOption extends StatelessWidget {
                       label,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: _text, fontSize: 14),
+                      style: TextStyle(color: _text, fontSize: 14),
                     ),
                   ),
                   if (showShare) ...[
                     const SizedBox(width: 8),
                     Text(
                       '$percent%',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: _gold,
                         fontWeight: FontWeight.w700,
                       ),

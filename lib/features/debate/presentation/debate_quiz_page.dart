@@ -103,7 +103,7 @@ class _DebateQuizPageState extends State<DebateQuizPage> {
           padding: EdgeInsets.all(context.tokens.spaceMd * 2),
           child: switch (_phase) {
             _QuizPhase.answering => _questionView(context),
-            _QuizPhase.submitting => const Center(
+            _QuizPhase.submitting => Center(
                 child: CircularProgressIndicator(color: AppColors.accent),
               ),
             _QuizPhase.result => _resultView(context, _result!),

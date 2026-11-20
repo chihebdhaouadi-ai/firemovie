@@ -11,6 +11,7 @@ import 'package:film_wise_mobile/features/home/views/explore_page.dart';
 import 'package:film_wise_mobile/features/home/views/tabs/explore_tab.dart';
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _en = lookupAppLocalizations(const Locale('en'));
@@ -32,9 +33,9 @@ FeedItem _item({
       reaction: tag == TakeTag.review ? FilmReaction.loved : null,
       body: '$title topic body',
       votes: const {
-        VoteKind.changedMyMind: 3,
-        VoteKind.wellArgued: 2,
-        VoteKind.disagreeButFair: 1,
+        VoteKind.up: 3,
+        VoteKind.draw: 2,
+        VoteKind.down: 1,
       },
       myVotes: const {},
       commentCount: commentCount,
@@ -71,6 +72,7 @@ class _ExploreRepository implements ReviewRepository {
     required String body,
     int? parentId,
     ReviewStance? stance,
+    XFile? image,
   }) async {
     lastTakeId = takeId;
     lastParentId = parentId;
@@ -368,8 +370,7 @@ void main() {
     expect(find.text('A lower voted reply', findRichText: true), findsNothing);
   });
 
-  testWidgets(
-      'review root replies can choose a stance and show it on the thread',
+  testWidgets('review replies show old stances but offer no stance picker',
       (tester) async {
     tester.view.physicalSize = const Size(360, 800);
     tester.view.devicePixelRatio = 1;
@@ -397,26 +398,19 @@ void main() {
 
     await tester.tap(find.text(_en.exploreRepliesButton(1)));
     await tester.pumpAndSettle();
-    expect(find.text(_en.reviewVoteChangedMyMind), findsNWidgets(3));
-
-    await tester.tap(
+    // Old comments keep their stance label; new ones can't pick one.
+    expect(find.text(_en.reviewVoteChangedMyMind), findsOneWidget);
+    expect(
       find.byKey(const ValueKey('review-stance-disagree_but_fair')),
+      findsNothing,
     );
+
     await tester.enterText(find.byType(TextField), 'Fair disagreement');
     await tester.tap(find.byTooltip(_en.reviewSend));
     await tester.pumpAndSettle();
 
     expect(repository.lastTakeId, 5);
     expect(repository.lastParentId, isNull);
-    expect(repository.lastStance, ReviewStance.disagreeButFair);
-    expect(
-      tester
-          .widget<ChoiceChip>(
-            find.byKey(const ValueKey('review-stance-disagree_but_fair')),
-          )
-          .selected,
-      isFalse,
-    );
-    expect(find.text(_en.reviewVoteDisagreeFair), findsWidgets);
+    expect(repository.lastStance, isNull);
   });
 }

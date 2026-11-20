@@ -1,3 +1,4 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/l10n_context.dart';
@@ -19,13 +20,13 @@ class StatusRow extends StatelessWidget {
       children: [
         _StatusChip(
           label: l10n.homeWatchedTitle,
-          icon: Icons.visibility,
+          icon: BootstrapIcons.eye_fill,
           active: movie.isWatched,
         ),
         SizedBox(height: tokens.spaceSm),
         _StatusChip(
           label: l10n.homeWatchlistTitle,
-          icon: Icons.bookmark,
+          icon: BootstrapIcons.bookmark_fill,
           active: movie.isWatchlist,
         ),
       ],

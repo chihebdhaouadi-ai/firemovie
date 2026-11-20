@@ -9,7 +9,8 @@ import 'session.dart';
 /// `--dart-define=API_BASE_URL=...` overrides both.
 /// Never put secrets, API keys, or credentials here.
 abstract final class ApiConfig {
-  static const String _defaultBaseUrl = 'https://filwise-7a4ee29afcff.herokuapp.com';
+  static const String _defaultBaseUrl =
+      'https://filwise-7a4ee29afcff.herokuapp.com';
   static const String _localBaseUrl = 'http://127.0.0.1:8000';
 
   /// The base URL of the Django backend, without a trailing slash.

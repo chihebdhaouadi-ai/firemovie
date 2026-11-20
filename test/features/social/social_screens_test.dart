@@ -191,91 +191,185 @@ void main() {
           NotificationsScreen(
             repository: _repo(client),
             onOpenUser: (_) {},
+            onOpenTake: (_, __) {},
           ),
         ),
       );
     }
 
-    testWidgets('shows messages and marks notifications read', (tester) async {
-      final calls = <String>[];
-      final client = MockClient((request) async {
-        calls.add('${request.method} ${request.url.path}');
-        if (request.url.path == '/api/social/notifications') {
-          return http.Response(
-            jsonEncode({
-              'unread_count': 1,
-              'results': [_notif(1)],
-            }),
-            200,
-            headers: _json,
-          );
-        }
-        return http.Response('', 204);
-      });
+    Map<String, dynamic> takeNotif(int id,
+            {String kind = 'take_shared', bool read = false}) =>
+        {
+          'id': id,
+          'kind': kind,
+          'actor': {'id': 3, 'username': 'sim', 'avatar': null},
+          'take': {
+            'id': 70 + id,
+            'film_id': 'tt0137523',
+            'tag': 'question',
+            'body': 'Are we free?',
+            'spoiler': false,
+          },
+          'message': kind == 'take_shared' ? 'koi' : '',
+          'read': read,
+          'created_at': DateTime.now()
+              .subtract(const Duration(hours: 3))
+              .toUtc()
+              .toIso8601String(),
+        };
 
-      await pumpNotifications(tester, client);
+    /// Serves [results] and records every call; [onCall] can answer others.
+    MockClient serve(
+      List<Map<String, dynamic>> results,
+      List<String> calls, {
+      http.Response? Function(http.Request)? onCall,
+    }) =>
+        MockClient((request) async {
+          calls.add('${request.method} ${request.url.path}');
+          if (request.url.path == '/api/social/notifications') {
+            return http.Response(
+              jsonEncode({
+                'unread_count': results.where((r) => r['read'] != true).length,
+                'results': results,
+              }),
+              200,
+              headers: _json,
+            );
+          }
+          return onCall?.call(request) ?? http.Response('', 204);
+        });
+
+    testWidgets(
+        'groups requests, new and earlier, with unread counts on the tabs',
+        (tester) async {
+      final calls = <String>[];
+      await pumpNotifications(
+        tester,
+        serve([
+          _notif(1),
+          takeNotif(2),
+          takeNotif(3, kind: 'take_mention'),
+          takeNotif(4, read: true),
+        ], calls),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text(_en.notificationFriendRequest('kira')), findsOneWidget);
-      expect(calls, contains('POST /api/social/notifications/read'));
+      expect(find.text(_en.notificationsGroupRequests), findsOneWidget);
+      expect(find.text(_en.notificationsGroupNew), findsOneWidget);
+      expect(find.text(_en.notificationsGroupEarlier), findsOneWidget);
+      expect(find.text(_en.reviewQuote('koi')), findsNWidgets(2));
+      // Each row says how long ago, short: "3h".
+      expect(find.text(_en.notificationsTimeHours(3)), findsNWidgets(3));
+      // Opening the list no longer marks everything read.
+      expect(calls, isNot(contains('POST /api/social/notifications/read')));
+      // All 3 unread, Takes 1, Mentions 1, Requests 1.
+      expect(
+          find.descendant(
+              of: find.byKey(const Key('notifications-tab-all')),
+              matching: find.text('3')),
+          findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('notifications-tab-mentions')));
+      await tester.pumpAndSettle();
+      expect(find.text(_en.notificationTakeMention('sim')), findsOneWidget);
+      expect(find.text(_en.notificationTakeShared('sim')), findsNothing);
+      expect(find.text(_en.notificationFriendRequest('kira')), findsNothing);
     });
 
-    testWidgets('accept posts the response and removes the notification',
+    testWidgets(
+        'opening a row marks only it read; Mark all read clears the rest',
         (tester) async {
-      var accepted = false;
-      final client = MockClient((request) async {
-        if (request.url.path == '/api/social/notifications') {
-          return http.Response(
-            jsonEncode({
-              'unread_count': 1,
-              'results': [_notif(1)],
-            }),
-            200,
-            headers: _json,
-          );
-        }
-        if (request.url.path == '/api/social/friend-requests/5/accept') {
-          accepted = true;
-          return http.Response('', 204);
-        }
-        return http.Response('', 204);
-      });
+      final calls = <String>[];
+      await pumpNotifications(
+          tester, serve([takeNotif(2), takeNotif(3)], calls));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('notification-unread-2')), findsOneWidget);
 
-      await pumpNotifications(tester, client);
+      await tester.tap(find.text(_en.notificationTakeShared('sim')).first);
+      await tester.pumpAndSettle();
+      expect(calls, contains('POST /api/social/notifications/2/read'));
+      expect(find.byKey(const Key('notification-unread-2')), findsNothing);
+      expect(find.byKey(const Key('notification-unread-3')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('notifications-mark-all')));
+      await tester.pumpAndSettle();
+      expect(calls, contains('POST /api/social/notifications/read'));
+      expect(find.byKey(const Key('notification-unread-3')), findsNothing);
+      final markAll = tester
+          .widget<TextButton>(find.byKey(const Key('notifications-mark-all')));
+      expect(markAll.onPressed, isNull);
+    });
+
+    testWidgets('accept posts the response and says you are now friends',
+        (tester) async {
+      final calls = <String>[];
+      await pumpNotifications(tester, serve([_notif(1)], calls));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text(_en.friendAccept));
       await tester.pumpAndSettle();
 
-      expect(accepted, isTrue);
+      expect(calls, contains('POST /api/social/friend-requests/5/accept'));
+      expect(find.text(_en.notificationsNowFriends), findsOneWidget);
+      expect(find.text(_en.friendAccept), findsNothing);
+    });
+
+    testWidgets('a request already answered shows no buttons, just friends',
+        (tester) async {
+      final calls = <String>[];
+      await pumpNotifications(
+          tester, serve([_notif(1)..['friend_request_id'] = null], calls));
+      await tester.pumpAndSettle();
+
+      expect(find.text(_en.notificationFriendRequest('kira')), findsOneWidget);
+      expect(find.text(_en.notificationsNowFriends), findsOneWidget);
+      expect(find.text(_en.friendAccept), findsNothing);
+      expect(find.text(_en.notificationsGroupRequests), findsNothing);
+    });
+
+    testWidgets('decline can be undone, and is only sent once the toast closes',
+        (tester) async {
+      final calls = <String>[];
+      await pumpNotifications(tester, serve([_notif(1)], calls));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text(_en.friendDecline));
+      await tester.pumpAndSettle();
       expect(find.text(_en.notificationFriendRequest('kira')), findsNothing);
-      expect(find.text(_en.notificationsEmpty), findsOneWidget);
+      expect(
+          find.text(_en.notificationsRequestDeclined('kira')), findsOneWidget);
+
+      await tester.tap(find.text(_en.notificationsUndo));
+      await tester.pumpAndSettle();
+      expect(find.text(_en.notificationFriendRequest('kira')), findsOneWidget);
+      expect(
+          calls, isNot(contains('POST /api/social/friend-requests/5/decline')));
+
+      await tester.tap(find.text(_en.friendDecline));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
+      expect(calls, contains('POST /api/social/friend-requests/5/decline'));
+      expect(find.text(_en.notificationFriendRequest('kira')), findsNothing);
     });
 
     testWidgets('a request that no longer exists is removed with a notice',
         (tester) async {
-      final client = MockClient((request) async {
-        if (request.url.path == '/api/social/notifications') {
-          return http.Response(
-            jsonEncode({
-              'unread_count': 1,
-              'results': [_notif(1)],
-            }),
-            200,
-            headers: _json,
-          );
-        }
-        if (request.url.path == '/api/social/friend-requests/5/accept') {
-          return http.Response(
-            jsonEncode({'detail': 'Not found.', 'code': 'not_found'}),
-            404,
-            headers: _json,
-          );
-        }
-        return http.Response('', 204);
-      });
-
-      await pumpNotifications(tester, client);
+      final calls = <String>[];
+      await pumpNotifications(
+        tester,
+        serve([_notif(1)], calls, onCall: (request) {
+          if (request.url.path == '/api/social/friend-requests/5/accept') {
+            return http.Response(
+              jsonEncode({'detail': 'Not found.', 'code': 'not_found'}),
+              404,
+              headers: _json,
+            );
+          }
+          return null;
+        }),
+      );
       await tester.pumpAndSettle();
 
       await tester.tap(find.text(_en.friendAccept));
@@ -318,7 +412,8 @@ void main() {
         _app(
           MovieSuggestionScreen(
             socialRepository: _repo(client),
-            findRepository: FindRepository(client: ApiClient(httpClient: client)),
+            findRepository:
+                FindRepository(client: ApiClient(httpClient: client)),
             preselectedUserIds: preselected,
           ),
         ),
@@ -363,7 +458,8 @@ void main() {
       expect(item.suggestion!.comment, 'Watch this one');
     });
 
-    test('sendMovieSuggestion posts the film, comment and recipients', () async {
+    test('sendMovieSuggestion posts the film, comment and recipients',
+        () async {
       late http.Request sent;
       final client = MockClient((request) async {
         sent = request;
@@ -531,7 +627,8 @@ void main() {
       expect(find.text('open'), findsOneWidget);
     });
 
-    testWidgets('a recipient who is no longer a friend keeps the screen open with a notice',
+    testWidgets(
+        'a recipient who is no longer a friend keeps the screen open with a notice',
         (tester) async {
       final client = MockClient((request) async {
         switch (request.url.path) {
@@ -548,7 +645,12 @@ void main() {
                 'total_pages': 1,
                 'total_results': 1,
                 'results': [
-                  {'film_id': 603, 'title': 'The Matrix', 'year': 1999, 'poster_url': null},
+                  {
+                    'film_id': 603,
+                    'title': 'The Matrix',
+                    'year': 1999,
+                    'poster_url': null
+                  },
                 ],
               }),
               200,

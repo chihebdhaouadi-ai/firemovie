@@ -3,6 +3,7 @@ import '../../home/data/home_models.dart';
 import '../domain/film_reaction.dart';
 import '../domain/movie_review_summary.dart';
 import '../domain/poll_option.dart';
+import '../domain/take_skin.dart';
 import '../domain/review_stance.dart';
 import '../domain/take.dart';
 import '../domain/take_tag.dart';
@@ -26,6 +27,20 @@ class ReviewParser {
       ],
       everyonePercent: (json['everyone_percent'] as num?)?.toInt(),
       trustedPercent: (json['trusted_percent'] as num?)?.toInt(),
+      myReactions: [
+        for (final value
+            in (json['my_reactions'] as List<dynamic>? ?? const []))
+          for (final reaction in FilmReaction.values)
+            if (reaction.apiValue == value) reaction,
+      ],
+      total: (json['total'] as num?)?.toInt() ?? 0,
+      counts: [
+        if (json['counts'] case final Map<String, dynamic> counts)
+          for (final reaction in FilmReaction.values)
+            if ((counts[reaction.apiValue] as num?)?.toInt() case final count?
+                when count > 0)
+              ReactionCount(reaction: reaction, count: count),
+      ],
     );
   }
 
@@ -42,6 +57,13 @@ class ReviewParser {
       authorName: json['author_name'] as String,
       isMine: json['is_mine'] as bool? ?? false,
       reaction: _reactionOrNull(json['reaction'] as String?),
+      authorReactions: [
+        for (final value
+            in (json['author_reactions'] as List<dynamic>? ?? const []))
+          for (final reaction in FilmReaction.values)
+            if (reaction.apiValue == value) reaction,
+      ],
+      authorFrame: json['author_frame'] as String?,
       body: json['body'] as String,
       tag: TakeTag.fromApi(json['tag'] as String?),
       imageUrl: json['image_url'] as String?,
@@ -66,7 +88,11 @@ class ReviewParser {
       createdAt: DateTime.tryParse(json['created_at'] as String? ?? ''),
       authorAvatarUrl: json['author_avatar'] as String?,
       spoiler: json['spoiler'] as bool? ?? false,
+      skin: TakeSkin.fromApi(json['skin'] as String?),
+      edited: json['edited'] as bool? ?? false,
+      isSaved: json['is_saved'] as bool? ?? false,
       scene: json['scene'] as String? ?? '',
+      title: json['title'] as String? ?? '',
       timecode: json['timecode'] as String? ?? '',
       pollOptions: [
         for (final option
@@ -115,6 +141,9 @@ class ReviewParser {
       dislikes: (json['dislikes'] as num?)?.toInt() ?? 0,
       myVote: _topicVoteOrNull(json['my_vote']),
       stance: ReviewStance.fromApi(json['stance']),
+      imageUrl: json['image_url'] as String?,
+      authorAvatarUrl: json['author_avatar'] as String?,
+      authorFrame: json['author_frame'] as String?,
     );
   }
 
@@ -129,6 +158,8 @@ class ReviewParser {
     return FriendFilmActivity(
       userId: (user['id'] as num).toInt(),
       username: user['username'] as String,
+      avatarUrl: user['avatar'] as String?,
+      frame: user['equipped_frame'] as String?,
       reaction: _reaction(json['reaction'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
       takeId: (take?['id'] as num?)?.toInt(),

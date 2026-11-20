@@ -1,4 +1,6 @@
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +12,7 @@ import '../../../core/l10n_context.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/game_button.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../film_reviews/data/review_repository.dart';
 import '../../find/data/find_repository.dart';
 import '../../find/data/movie.dart';
 import '../../leaderboard/views/leaderboard_how_it_works_screen.dart';
@@ -22,6 +25,9 @@ import '../../social/views/notifications_screen.dart';
 import '../../social/views/user_search_screen.dart';
 import '../data/profile_models.dart';
 import '../data/profile_repository.dart';
+import '../../movie_lists/data/movie_list_repository.dart';
+import '../../movie_lists/presentation/widgets/movie_lists_section.dart';
+import 'widgets/saved_takes_section.dart';
 import 'widgets/profile_game_kit.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/profile_hero.dart';
@@ -34,11 +40,19 @@ class ProfileScreen extends StatefulWidget {
     this.repository,
     this.socialRepository,
     this.pickImage,
+    this.reviews,
+    this.movieLists,
   });
 
   final int? userId;
   final ProfileRepository? repository;
   final SocialRepository? socialRepository;
+
+  /// Where your saved topics load from; the real API when left out.
+  final ReviewRepository? reviews;
+
+  /// Where your saved lists load from; the real API when left out.
+  final MovieListRepository? movieLists;
   final Future<XFile?> Function()? pickImage;
 
   @override
@@ -188,6 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 'assets/svg/back.svg',
                 width: 24,
                 height: 24,
+                colorFilter: inkIconFilter,
               ),
             ),
           ),
@@ -224,6 +239,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: ProfileAchievementsSection(items: items),
         ),
       ),
+    );
+  }
+
+  void _openThemePicker() {
+    showDialog<void>(
+      context: context,
+      builder: (_) => const _ThemePicker(),
     );
   }
 
@@ -409,14 +431,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         leading: IconButton(
           tooltip: l10n.profileBack,
           onPressed: () => Navigator.of(context).pop(),
-          icon: SvgPicture.asset('assets/svg/back.svg', width: 24, height: 24),
+          icon: SvgPicture.asset('assets/svg/back.svg',
+              width: 24, height: 24, colorFilter: inkIconFilter),
         ),
         actions: _isOwn
             ? [
                 GameIconButton(
                   tooltip: l10n.profileSearchTooltip,
                   onPressed: _openSearch,
-                  icon: Icons.search,
+                  icon: BootstrapIcons.search,
                 ),
                 GameIconButton(
                   tooltip: l10n.leaderboardTabLabel,
@@ -433,10 +456,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Badge(
                     isLabelVisible: _unreadCount > 0,
                     label: Text('$_unreadCount'),
-                    child: const Icon(
-                      Icons.notifications_outlined,
+                    child: Icon(
+                      BootstrapIcons.bell,
                       size: 22,
-                      color: Colors.white,
+                      color: themed(Colors.white, AppColors.textPrimary),
                     ),
                   ),
                 ),
@@ -454,14 +477,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 GameIconButton(
                   tooltip: l10n.profileLogout,
                   onPressed: _logout,
-                  icon: Icons.logout,
+                  icon: BootstrapIcons.box_arrow_right,
                 ),
               ]
             : [
                 GameIconButton(
                   tooltip: l10n.profileMoreTooltip,
                   onPressed: () => showProfileBlockDialog(context),
-                  icon: Icons.more_vert,
+                  icon: BootstrapIcons.three_dots_vertical,
                 ),
               ],
       ),
@@ -529,13 +552,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onSelect: _equipFrame,
           ),
         ProfileAchievementsSection(items: progress.achievements),
+        // Topics you saved, only on your own profile.
+        if (isOwn) SavedTakesSection(reviews: widget.reviews),
+        // Lists you saved; hides itself until there is one.
+        if (isOwn)
+          Padding(
+            padding: EdgeInsets.only(top: tokens.spaceXl),
+            child: MovieListsSection(
+              owner: MovieListsOwner.saved,
+              repository: widget.movieLists,
+            ),
+          ),
         if (isOwn) ...[
           SizedBox(height: tokens.spaceLg),
           SizedBox(
             width: double.infinity,
             child: GameButton(
               onPressed: () => _openSuggest(),
-              icon: Icons.movie_filter_outlined,
+              icon: BootstrapIcons.camera_reels,
               label: l10n.suggestMovieAction,
               style: GameButtonStyle.blue,
             ),
@@ -553,8 +587,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             width: double.infinity,
             child: GameButton(
               onPressed: _openLanguagePicker,
-              icon: Icons.translate,
+              icon: BootstrapIcons.translate,
               label: l10n.profileLanguageButton,
+            ),
+          ),
+          SizedBox(height: tokens.spaceMd),
+          SizedBox(
+            width: double.infinity,
+            child: GameButton(
+              onPressed: _openThemePicker,
+              icon: BootstrapIcons.circle_half,
+              label: l10n.profileThemeButton,
             ),
           ),
         ],
@@ -567,7 +610,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         if (_loading) ...[
           SizedBox(height: tokens.spaceMd),
-          const LinearProgressIndicator(
+          LinearProgressIndicator(
             color: AppColors.accentGlow,
             backgroundColor: AppColors.surfaceRaised,
           ),
@@ -655,10 +698,57 @@ class _LanguagePicker extends StatelessWidget {
               ListTile(
                 title: Text(name),
                 trailing: locale?.languageCode == current?.languageCode
-                    ? const Icon(Icons.check, color: AppColors.accentGlow)
+                    ? Icon(BootstrapIcons.check_lg, color: AppColors.accentGlow)
                     : null,
                 onTap: () {
                   AppLocale.select(locale);
+                  Navigator.of(context).pop();
+                },
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.profileCancel),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ThemePicker extends StatelessWidget {
+  const _ThemePicker();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final options = <(ThemeMode, String, IconData)>[
+      (ThemeMode.system, l10n.profileThemeSystem, BootstrapIcons.circle_half),
+      (ThemeMode.light, l10n.profileThemeLight, BootstrapIcons.sun),
+      (ThemeMode.dark, l10n.profileThemeDark, BootstrapIcons.moon),
+    ];
+
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppThemeMode.current,
+      builder: (context, current, child) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(l10n.profileThemeDialogTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final (mode, name, icon) in options)
+              ListTile(
+                leading: Icon(icon, color: AppColors.textSecondary),
+                title: Text(name),
+                selected: mode == current,
+                selectedColor: AppColors.textPrimary,
+                trailing: mode == current
+                    ? Icon(BootstrapIcons.check_lg, color: AppColors.accentGlow)
+                    : null,
+                onTap: () {
+                  AppThemeMode.select(mode);
                   Navigator.of(context).pop();
                 },
               ),

@@ -98,7 +98,7 @@ class _FilmcardState extends State<Filmcard> with TickerProviderStateMixin  {
               children: [
                 SlidableAction(
                   backgroundColor: Color.fromARGB(199, 184, 21, 0),
-                  icon: Icons.delete,
+                  icon: BootstrapIcons.trash_fill,
                   onPressed: (context2) {
                    
 

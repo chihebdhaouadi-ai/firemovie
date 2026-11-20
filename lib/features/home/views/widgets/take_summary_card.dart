@@ -1,100 +1,245 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../../../core/api_config.dart';
 import '../../../../core/l10n_context.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/widgets/game_parts.dart';
+import '../../../../core/widgets/luxe_palette.dart';
+import '../../../film_reviews/data/review_repository.dart';
 import '../../../film_reviews/domain/take.dart';
-import '../../../film_reviews/domain/vote_kind.dart';
 import '../../../film_reviews/presentation/reaction_labels.dart';
+import '../../../film_reviews/presentation/widgets/take_heart.dart';
 import '../../data/home_models.dart';
 import 'film_tile.dart';
 
-const _avatarSize = 36.0;
-const _avatarRing = 2.0;
-const _posterWidth = 32.0;
+const _avatarSize = 30.0;
+const _avatarRing = 0.0;
+const _posterWidth = 24.0;
 const _posterHeight = _posterWidth * 3 / 2;
-const _quoteBarWidth = 3.0;
 
+/// A friend's take in the home carousels and lists: a flat tonal card with
+/// no border or shadow. A quiet line with who and when (and their reaction
+/// as plain text), the take itself as the largest thing on the card, then a
+/// small poster and the film's title.
 class TakeSummaryCard extends StatelessWidget {
   const TakeSummaryCard({
     super.key,
     required this.take,
     this.film,
     this.onTap,
+    this.fillHeight = false,
+    this.reviews,
   });
 
   final Take take;
   final Film? film;
   final VoidCallback? onTap;
 
+  /// Where the card's heart saves.
+  final ReviewRepository? reviews;
+
+  /// In a row of cards stretched to the same height: keeps the film row at
+  /// the bottom. Leave false where the height is unbounded (lists).
+  final bool fillHeight;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final tokens = context.tokens;
-    final theme = Theme.of(context);
-    final createdAt = take.createdAt;
     final film = this.film;
 
-    return GameCard(
-      onTap: onTap,
-      padding: EdgeInsets.all(tokens.spaceLg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Material(
+      // Same as the trending topic cards.
+      color: LuxeColors.surface,
+      borderRadius: BorderRadius.circular(18),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TakeAvatar(
-                name: take.authorName,
-                url: take.authorAvatarUrl,
-                size: _avatarSize,
+              _MetaLine(take: take),
+              const SizedBox(height: 12),
+              _SeeMoreText(
+                text: l10n.reviewQuote(take.body),
+                seeMoreKey: Key('take-see-more-${take.id}'),
+                onSeeMore: onTap,
               ),
-              SizedBox(width: tokens.spaceMd),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      take.authorName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: AppColors.textPrimary,
-                      ),
+              if (fillHeight) const Spacer(),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  if (film != null) ...[
+                    FilmPoster(
+                      film: film,
+                      width: _posterWidth,
+                      height: _posterHeight,
+                      radius: 3,
                     ),
-                    if (createdAt != null)
-                      Text(
-                        relativeTakeTime(context, createdAt),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppColors.textMuted,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        film.displayTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: LuxeColors.text,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                  ],
-                ),
-              ),
-              SizedBox(width: tokens.spaceSm),
-              _ReactionBadge(
-                label: takeBadgeLabel(l10n, take),
+                    ),
+                  ] else
+                    const Spacer(),
+                  // The one reaction on takes and topics.
+                  TakeHeart(take: take, reviews: reviews, size: 16),
+                ],
               ),
             ],
           ),
-          SizedBox(height: tokens.spaceMd),
-          _Quote(text: l10n.reviewQuote(take.body)),
-          if (film != null) ...[
-            SizedBox(height: tokens.spaceMd),
-            _FilmStrip(film: film),
-          ],
-          if (take.totalVotes > 0) ...[
-            SizedBox(height: tokens.spaceMd),
-            Container(height: 2, color: GameColors.edge),
-            SizedBox(height: tokens.spaceMd),
-            _VoteStats(take: take),
-          ],
-        ],
+        ),
       ),
     );
   }
+}
+
+/// The take's text, cut at four lines with a "See more" link under it when
+/// it is longer. The cut is read from the laid-out paragraph, so it works
+/// inside intrinsic-height rows where a LayoutBuilder can't.
+class _SeeMoreText extends StatefulWidget {
+  const _SeeMoreText({
+    required this.text,
+    required this.seeMoreKey,
+    this.onSeeMore,
+  });
+
+  final String text;
+  final Key seeMoreKey;
+  final VoidCallback? onSeeMore;
+
+  static const maxLines = 4;
+
+  @override
+  State<_SeeMoreText> createState() => _SeeMoreTextState();
+}
+
+class _SeeMoreTextState extends State<_SeeMoreText> {
+  final _textKey = GlobalKey();
+  bool _cut = false;
+
+  void _check() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final paragraph = _textKey.currentContext?.findRenderObject();
+      final cut = paragraph is RenderParagraph && paragraph.didExceedMaxLines;
+      if (cut != _cut) setState(() => _cut = cut);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _check();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.text,
+          key: _textKey,
+          maxLines: _SeeMoreText.maxLines,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: LuxeColors.text,
+            fontSize: 14,
+            height: 1.45,
+          ),
+        ),
+        if (_cut)
+          GestureDetector(
+            key: widget.seeMoreKey,
+            onTap: widget.onSeeMore,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                context.l10n.topicSeeMore,
+                style: TextStyle(
+                  color: LuxeColors.text,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Avatar, then the name with a quiet second line: when, and the reaction
+/// or tag as plain text.
+class _MetaLine extends StatelessWidget {
+  const _MetaLine({required this.take});
+
+  final Take take;
+
+  @override
+  Widget build(BuildContext context) {
+    final createdAt = take.createdAt;
+    final details = [
+      if (createdAt != null) relativeTakeTime(context, createdAt),
+      _reactionText(context, take),
+    ].join('  ·  ');
+    return Row(
+      children: [
+        TakeAvatar(
+          name: take.authorName,
+          url: take.authorAvatarUrl,
+          size: _avatarSize,
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                take.authorName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: LuxeColors.text,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                ),
+              ),
+              Text(
+                details,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: LuxeColors.muted,
+                  fontSize: 11.5,
+                  height: 1.3,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// The take's reaction (or its tag) as words only: emoji don't render on
+/// every device and the line reads calmer without them.
+String _reactionText(BuildContext context, Take take) {
+  final l10n = context.l10n;
+  final reaction = take.reaction;
+  return reaction == null
+      ? topicTagLabel(l10n, take.tag)
+      : reactionLabel(l10n, reaction);
 }
 
 String relativeTakeTime(BuildContext context, DateTime createdAt) {
@@ -143,8 +288,8 @@ class TakeAvatar extends StatelessWidget {
       width: size,
       height: size,
       padding: const EdgeInsets.all(_avatarRing),
-      decoration: const BoxDecoration(
-        color: AppColors.accent,
+      decoration: BoxDecoration(
+        color: _avatarRing > 0 ? AppColors.accent : Colors.transparent,
         shape: BoxShape.circle,
       ),
       child: ClipOval(
@@ -159,148 +304,6 @@ class TakeAvatar extends StatelessWidget {
                 errorWidget: (_, __, ___) => fallback,
               ),
       ),
-    );
-  }
-}
-
-class _ReactionBadge extends StatelessWidget {
-  const _ReactionBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.tokens;
-    final theme = Theme.of(context);
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: GameColors.deep,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: GameColors.edge, width: 2),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: tokens.spaceMd,
-          vertical: tokens.spaceXs,
-        ),
-        child: Text(
-          label,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: AppColors.textPrimary,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Quote extends StatelessWidget {
-  const _Quote({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.tokens;
-    final theme = Theme.of(context);
-
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        border: Border(
-          left: BorderSide(color: GameColors.blue1, width: _quoteBarWidth),
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsetsDirectional.only(start: tokens.spaceMd),
-        child: Text(
-          text,
-          maxLines: 4,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: AppColors.textSecondary,
-            height: 1.5,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FilmStrip extends StatelessWidget {
-  const _FilmStrip({required this.film});
-
-  final Film film;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.tokens;
-    final theme = Theme.of(context);
-
-    return Row(
-      children: [
-        FilmPoster(
-          film: film,
-          width: _posterWidth,
-          height: _posterHeight,
-          radius: tokens.radiusSm,
-        ),
-        SizedBox(width: tokens.spaceMd),
-        Expanded(
-          child: Text(
-            film.displayTitle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _VoteStats extends StatelessWidget {
-  const _VoteStats({required this.take});
-
-  final Take take;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final tokens = context.tokens;
-    final theme = Theme.of(context);
-    final style = theme.textTheme.bodySmall?.copyWith(fontSize: 12);
-
-    return Wrap(
-      spacing: tokens.spaceMd,
-      runSpacing: tokens.spaceXs,
-      children: [
-        for (final kind in VoteKind.values)
-          if (take.votesOf(kind) > 0)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '${take.votesOf(kind)}',
-                  style: style?.copyWith(
-                    color: AppColors.accentGlow,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(width: tokens.spaceXs),
-                Text(
-                  voteLabel(l10n, kind),
-                  style: style?.copyWith(color: AppColors.textMuted),
-                ),
-              ],
-            ),
-      ],
     );
   }
 }

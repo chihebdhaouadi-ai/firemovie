@@ -9,7 +9,7 @@ import '../../core/session.dart';
 import '../../core/theme/app_theme.dart';
 import '../home/data/home_models.dart';
 import '../home/data/home_repository.dart';
-import '../overview/views/movie_overview_screen.dart';
+import '../home/views/home_navigation.dart';
 import '../overview/views/widgets/overview_panel.dart';
 import 'hold_gesture.dart';
 import '../../core/widgets/game_button.dart';
@@ -131,7 +131,7 @@ class _AngelBirdHostState extends State<AngelBirdHost>
           for (final film in films)
             BirdOption(
               label: film.displayTitle,
-              page: (_) => MovieOverviewScreen(film: film),
+              page: (_) => filmPage(film),
             ),
         ];
       },
@@ -260,7 +260,10 @@ class _BirdBubble extends StatelessWidget {
             spacing: tokens.spaceSm,
             runSpacing: tokens.spaceSm,
             children: [
-              GameButton(label: l10n.angelBirdYes, style: GameButtonStyle.blue, onPressed: onYes),
+              GameButton(
+                  label: l10n.angelBirdYes,
+                  style: GameButtonStyle.blue,
+                  onPressed: onYes),
               notNow,
             ],
           ),
@@ -302,7 +305,10 @@ class _BirdBubble extends StatelessWidget {
             spacing: tokens.spaceSm,
             runSpacing: tokens.spaceSm,
             children: [
-              GameButton(label: l10n.angelBirdRetry, style: GameButtonStyle.blue, onPressed: onYes),
+              GameButton(
+                  label: l10n.angelBirdRetry,
+                  style: GameButtonStyle.blue,
+                  onPressed: onYes),
               notNow,
             ],
           ),

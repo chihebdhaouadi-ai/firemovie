@@ -29,9 +29,11 @@ class SignInPrompt extends StatefulWidget {
 
 class _SignInPromptState extends State<SignInPrompt>
     with SingleTickerProviderStateMixin {
-  static const _surface = Color(0xFF1B1C21);
+  static Color get _surface =>
+      themed(const Color(0xFF1B1C21), const Color(0xFFE9E4DA));
   static const _hot = Color(0xFFFF3D2E);
-  static const _edge = Color(0xFF4A2420);
+  static Color get _edge =>
+      themed(const Color(0xFF4A2420), const Color(0xFFD9B8AE));
 
   late final AnimationController _animation = AnimationController(
     vsync: this,
@@ -78,13 +80,16 @@ class _SignInPromptState extends State<SignInPrompt>
             ),
           ),
         ),
-        const Positioned.fill(
+        Positioned.fill(
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: AlignmentDirectional.centerStart,
                 end: AlignmentDirectional.centerEnd,
-                colors: [Color(0xC71B1C21), Color(0x591B1C21)],
+                colors: [
+                  themed(const Color(0xC71B1C21), const Color(0xD9E9E4DA)),
+                  themed(const Color(0x591B1C21), const Color(0x73E9E4DA)),
+                ],
               ),
             ),
           ),
@@ -117,7 +122,8 @@ class _SignInPromptState extends State<SignInPrompt>
                   child: Text(
                     body,
                     style: textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFFC9CBD6),
+                      color: themed(
+                          const Color(0xFFC9CBD6), const Color(0xFF36322B)),
                       height: 1.5,
                     ),
                   ),
@@ -167,8 +173,9 @@ class _SignInPromptState extends State<SignInPrompt>
                       blurRadius: 8 + 36 * glow,
                       spreadRadius: 4 * glow,
                     ),
-                    const BoxShadow(
-                      color: Color(0xFF10141D),
+                    BoxShadow(
+                      color: themed(
+                          const Color(0xFF10141D), const Color(0x40000000)),
                       offset: Offset(0, 5),
                     ),
                     BoxShadow(
@@ -228,14 +235,18 @@ class _SignInPromptButtonState extends State<_SignInPromptButton> {
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(22),
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFF4F7BE8), Color(0xFF2B49A8)],
+                colors: [
+                  themed(const Color(0xFF4F7BE8), const Color(0xFF34302A)),
+                  themed(const Color(0xFF2B49A8), const Color(0xFF0B0A08)),
+                ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF1B2F78),
+                  color:
+                      themed(const Color(0xFF1B2F78), const Color(0xFF000000)),
                   offset: Offset(0, _down ? 1 : 6),
                 ),
                 BoxShadow(

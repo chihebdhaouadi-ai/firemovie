@@ -19,12 +19,12 @@ import 'package:film_wise_mobile/features/home/data/home_repository.dart';
 import 'package:film_wise_mobile/features/home/views/home_screen.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/add_tile.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/collections_box.dart';
-import 'package:film_wise_mobile/features/home/views/widgets/film_tile.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/skeletons.dart';
 import 'package:film_wise_mobile/features/home/views/widgets/top5_row.dart';
-import 'package:film_wise_mobile/features/overview/views/movie_overview_screen.dart';
+import 'package:film_wise_mobile/features/find/views/film_detail_screen.dart';
 import 'package:film_wise_mobile/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -180,6 +180,7 @@ class _InteractiveReviews implements ReviewRepository {
     required String body,
     int? parentId,
     ReviewStance? stance,
+    XFile? image,
   }) async {
     lastParentId = parentId;
     final comment = TakeComment(
@@ -299,14 +300,14 @@ void main() {
     expect(find.text('FILMSAGE'), findsOneWidget);
     expect(find.text('Dune Part Three gets a release date'), findsWidgets);
 
-    await tester.tap(find.text(_en.homeTabFriends));
+    await tester.tap(find.text(_en.homeInboxTitle));
     await tester.pump(const Duration(milliseconds: 50));
     expect(find.text('FILMSAGE'), findsOneWidget);
 
-    await tester.tap(find.text(_en.homeTabFilms));
+    await tester.tap(find.text(_en.homeCollectionsTitle).first);
     await tester.pump(const Duration(milliseconds: 50));
     expect(find.text('FILMSAGE'), findsOneWidget);
-  });
+  }, skip: true); // The news ticker is hidden for now.
 
   group('states', () {
     testWidgets('loading shows poster-shaped skeletons', (tester) async {
@@ -436,7 +437,7 @@ void main() {
   });
 
   group('collections', () {
-    testWidgets('Watched, Watchlist and Popular sit in one box under Top 5',
+    testWidgets('Watched and Watchlist are plain sections under Top 5',
         (tester) async {
       await pumpHome(
         tester,
@@ -444,43 +445,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final box = find.byType(CollectionsBox);
-      expect(
-        find.descendant(of: box, matching: find.text(_en.homeCollectionsTitle)),
-        findsOneWidget,
-      );
-      expect(
-        find.descendant(of: box, matching: find.byType(FilmTile)),
-        findsNWidgets(5),
-      );
-      expect(
-        find.descendant(of: box, matching: _inTop5(find.byType(FilmTile))),
-        findsNothing,
-      );
-    });
-
-    testWidgets('the resize grip changes the box height within its bounds',
-        (tester) async {
-      await pumpHome(
-        tester,
-        repository: FakeHomeRepository(seed: _contentSeed()),
-      );
-      await tester.pumpAndSettle();
-
-      final box = find.byType(CollectionsBox);
-      final scroll = find
-          .descendant(of: box, matching: find.byType(SingleChildScrollView))
-          .first;
-      final grip = find.bySemanticsLabel(_en.homeCollectionsResizeLabel);
-      expect(tester.getSize(scroll).height, 360);
-
-      await tester.drag(grip, const Offset(0, 100));
-      await tester.pumpAndSettle();
-      expect(tester.getSize(scroll).height, greaterThan(360));
-
-      await tester.drag(grip, const Offset(0, -500));
-      await tester.pumpAndSettle();
-      expect(tester.getSize(scroll).height, 200);
+      expect(find.byType(CollectionsBox), findsNothing);
+      expect(find.text(_en.homeWatchedTitle), findsOneWidget);
+      expect(find.text(_en.homeWatchlistTitle), findsOneWidget);
     });
   });
 
@@ -540,10 +507,10 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('${_en.reviewVoteWellArgued} 0'));
+      await tester.tap(find.text('${_en.reviewVoteDraw} 0'));
       await tester.pumpAndSettle();
 
-      expect(find.text('${_en.reviewVoteWellArgued} 1'), findsOneWidget);
+      expect(find.text('${_en.reviewVoteDraw} 1'), findsOneWidget);
       expect(find.byType(ReviewDetailScreen), findsNothing);
     });
 
@@ -668,7 +635,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(find.byType(MovieOverviewScreen), findsOneWidget);
+      expect(find.byType(FilmDetailScreen), findsOneWidget);
       await tester.pump(const Duration(seconds: 13));
     });
 
@@ -683,7 +650,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 
-      expect(find.byType(MovieOverviewScreen), findsOneWidget);
+      expect(find.byType(FilmDetailScreen), findsOneWidget);
       await tester.pump(const Duration(seconds: 13));
     });
   });

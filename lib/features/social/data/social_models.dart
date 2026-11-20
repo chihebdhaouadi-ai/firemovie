@@ -30,7 +30,50 @@ class Connections {
   final List<SocialUser> friends;
 }
 
-enum NotificationKind { friendRequest, friendAccepted, movieSuggestion }
+enum NotificationKind {
+  friendRequest,
+  friendAccepted,
+  movieSuggestion,
+
+  /// A friend sent the viewer a take.
+  takeShared,
+
+  /// A friend tagged the viewer with `@name` in a comment.
+  takeMention,
+}
+
+/// The take a share or mention leads to.
+class TakeRef {
+  const TakeRef({
+    required this.id,
+    required this.filmId,
+    required this.tag,
+    this.body = '',
+    this.spoiler = false,
+  });
+
+  factory TakeRef.fromJson(Map<String, dynamic> json) => TakeRef(
+        id: (json['id'] as num).toInt(),
+        filmId: json['film_id'] as String? ?? '',
+        tag: json['tag'] as String? ?? 'review',
+        body: json['body'] as String? ?? '',
+        spoiler: json['spoiler'] as bool? ?? false,
+      );
+
+  final int id;
+  final String filmId;
+
+  /// The take's tag as the server sends it (`review`, `question`…).
+  final String tag;
+
+  /// The start of the take, for a preview.
+  final String body;
+
+  /// Whether the author marked the take as a spoiler; previews hide [body].
+  final bool spoiler;
+
+  bool get isReview => tag == 'review';
+}
 
 class MovieSuggestion {
   const MovieSuggestion({
@@ -41,7 +84,8 @@ class MovieSuggestion {
     this.comment = '',
   });
 
-  factory MovieSuggestion.fromJson(Map<String, dynamic> json) => MovieSuggestion(
+  factory MovieSuggestion.fromJson(Map<String, dynamic> json) =>
+      MovieSuggestion(
         filmId: '${json['film_id']}',
         title: json['film_title'] as String? ?? '',
         year: json['film_year'] as int?,
@@ -64,6 +108,10 @@ class NotificationItem {
     required this.read,
     this.friendRequestId,
     this.suggestion,
+    this.take,
+    this.commentId,
+    this.message = '',
+    this.createdAt,
   });
 
   final int id;
@@ -72,6 +120,31 @@ class NotificationItem {
   final bool read;
   final int? friendRequestId;
   final MovieSuggestion? suggestion;
+
+  /// Shares and mentions: the take to open.
+  final TakeRef? take;
+
+  /// Mentions: the comment that tagged the viewer.
+  final int? commentId;
+
+  /// Shares: the sender's note.
+  final String message;
+
+  /// When it happened, for the time shown on the row.
+  final DateTime? createdAt;
+
+  NotificationItem copyWith({bool? read}) => NotificationItem(
+        id: id,
+        kind: kind,
+        actor: actor,
+        read: read ?? this.read,
+        friendRequestId: friendRequestId,
+        suggestion: suggestion,
+        take: take,
+        commentId: commentId,
+        message: message,
+        createdAt: createdAt,
+      );
 }
 
 class NotificationsPage {
@@ -99,13 +172,16 @@ List<SocialUser> _users(Object? raw) => [
         SocialUser.fromJson(entry as Map<String, dynamic>),
     ];
 
-String? _nonEmpty(String? value) => (value == null || value.isEmpty) ? null : value;
+String? _nonEmpty(String? value) =>
+    (value == null || value.isEmpty) ? null : value;
 
 NotificationItem? _notification(Map<String, dynamic> json) {
   final kind = switch (json['kind']) {
     'friend_request' => NotificationKind.friendRequest,
     'friend_accepted' => NotificationKind.friendAccepted,
     'movie_suggestion' => NotificationKind.movieSuggestion,
+    'take_shared' => NotificationKind.takeShared,
+    'take_mention' => NotificationKind.takeMention,
     _ => null,
   };
   if (kind == null) return null;
@@ -116,6 +192,12 @@ NotificationItem? _notification(Map<String, dynamic> json) {
   if (kind == NotificationKind.movieSuggestion && suggestion == null) {
     return null;
   }
+  final rawTake = json['take'];
+  final take =
+      rawTake is Map<String, dynamic> ? TakeRef.fromJson(rawTake) : null;
+  final aboutTake = kind == NotificationKind.takeShared ||
+      kind == NotificationKind.takeMention;
+  if (aboutTake && take == null) return null;
   return NotificationItem(
     id: json['id'] as int,
     kind: kind,
@@ -123,5 +205,10 @@ NotificationItem? _notification(Map<String, dynamic> json) {
     read: json['read'] as bool? ?? false,
     friendRequestId: json['friend_request_id'] as int?,
     suggestion: suggestion,
+    take: take,
+    commentId: json['comment_id'] as int?,
+    message: json['message'] as String? ?? '',
+    createdAt:
+        DateTime.tryParse(json['created_at'] as String? ?? '')?.toLocal(),
   );
 }

@@ -5,6 +5,7 @@ import 'package:film_wise_mobile/features/film_reviews/data/review_repository.da
 import 'package:film_wise_mobile/features/film_reviews/domain/film_reaction.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/movie_review_summary.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/take.dart';
+import 'package:film_wise_mobile/features/film_reviews/domain/take_skin.dart';
 import 'package:film_wise_mobile/features/film_reviews/domain/take_tag.dart';
 import 'package:film_wise_mobile/features/find/data/find_repository.dart';
 import 'package:film_wise_mobile/features/find/data/movie.dart';
@@ -33,6 +34,7 @@ class _Calls {
   String? topicScene;
   String? topicTimecode;
   bool? topicSpoiler;
+  bool? takeSpoiler;
 }
 
 class _FakeReviews implements ReviewRepository {
@@ -61,8 +63,11 @@ class _FakeReviews implements ReviewRepository {
     String filmId, {
     required String body,
     TakeTag tag = TakeTag.review,
+    TakeSkin skin = TakeSkin.normal,
+    bool spoiler = false,
   }) async {
     calls.log.add('take');
+    calls.takeSpoiler = spoiler;
     calls.takeFilm = filmId;
     calls.takeBody = body;
     calls.takeTag = tag;
@@ -79,6 +84,8 @@ class _FakeReviews implements ReviewRepository {
     String? scene,
     String? timecode,
     bool spoiler = false,
+    TakeSkin skin = TakeSkin.normal,
+    String title = '',
   }) async {
     calls.log.add('topic');
     calls.topicFilm = filmId;
@@ -160,9 +167,24 @@ Future<void> _searchAndPickPulp(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> _writeBody(WidgetTester tester, String text) async {
-  await tester.enterText(find.byType(TextField).first, text);
+Future<void> _answerSpoiler(WidgetTester tester,
+    {required bool spoiler}) async {
+  final choice = find.byKey(Key(spoiler ? 'spoiler-yes' : 'spoiler-no'));
+  await tester.ensureVisible(choice);
+  await tester.tap(choice);
   await tester.pumpAndSettle();
+}
+
+/// Types the body and answers the required spoiler question.
+Future<void> _writeBody(
+  WidgetTester tester,
+  String text, {
+  bool? spoiler = false,
+}) async {
+  // The body is the last field; topics other than polls have a title first.
+  await tester.enterText(find.byType(TextField).last, text);
+  await tester.pumpAndSettle();
+  if (spoiler != null) await _answerSpoiler(tester, spoiler: spoiler);
 }
 
 void main() {
@@ -204,6 +226,34 @@ void main() {
     expect(calls.takeFilm, 'tt0110912');
     expect(calls.takeBody, 'Still gripping');
     expect(calls.takeTag, TakeTag.review);
+    expect(calls.takeSpoiler, isFalse);
+  });
+
+  testWidgets('review: Next waits for the spoiler answer, then sends it',
+      (tester) async {
+    final calls = _Calls();
+    await _pump(tester, calls);
+
+    await _chooseType(tester, _en.topicTagReview);
+    await _writeBody(tester, 'Bruce Willis was dead.', spoiler: null);
+    expect(tester.widget<GameButton>(_next()).onPressed, isNull);
+
+    await _answerSpoiler(tester, spoiler: true);
+    expect(find.text(_en.takeSpoilerBlurNote), findsOneWidget);
+    await tester.tap(_next());
+    await tester.pumpAndSettle();
+    await _searchAndPickPulp(tester);
+    await tester.tap(_next());
+    await tester.pumpAndSettle();
+    await tester
+        .tap(find.widgetWithText(GameButton, _en.reviewReactionTapToReact));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(reactionEmoji(FilmReaction.loved)).last);
+    await tester.pumpAndSettle();
+    await tester.tap(_post());
+    await tester.pumpAndSettle();
+
+    expect(calls.takeSpoiler, isTrue);
   });
 
   testWidgets('question about a movie posts a topic with the film and no photo',
@@ -317,8 +367,7 @@ void main() {
     await tester.enterText(find.byType(TextField).at(1), '1h 12m');
     await tester.enterText(
         find.byType(TextField).at(2), 'Nothing moves but the talk.');
-    await tester.tap(find.byType(CheckboxListTile));
-    await tester.pumpAndSettle();
+    await _answerSpoiler(tester, spoiler: true);
     await tester.tap(_post());
     await tester.pumpAndSettle();
 
@@ -331,15 +380,12 @@ void main() {
     expect(calls.topicSpoiler, isTrue);
   });
 
-  testWidgets('hot take spoiler checkbox is sent with the topic',
-      (tester) async {
+  testWidgets('hot take spoiler answer is sent with the topic', (tester) async {
     final calls = _Calls();
     await _pump(tester, calls);
 
     await _chooseType(tester, _en.topicTagHotTake);
-    await _writeBody(tester, 'The twist was obvious.');
-    await tester.tap(find.byType(CheckboxListTile));
-    await tester.pumpAndSettle();
+    await _writeBody(tester, 'The twist was obvious.', spoiler: true);
     await tester.tap(_next());
     await tester.pumpAndSettle();
     await _searchAndPickPulp(tester);

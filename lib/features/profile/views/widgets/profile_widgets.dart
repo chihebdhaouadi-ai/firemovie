@@ -10,9 +10,12 @@ import 'progress_catalog.dart';
 import '../../../../core/widgets/game_button.dart';
 
 /// Stat accents, matching the SAGE game palette.
-const _reviewsColor = Color(0xFF6AA8FF);
-const _reactionsColor = Color(0xFFFFD75E);
-const _commentsColor = Color(0xFFFF8A4A);
+Color get _reviewsColor =>
+    themed(const Color(0xFF6AA8FF), const Color(0xFF1C5FB0));
+Color get _reactionsColor =>
+    themed(const Color(0xFFFFD75E), const Color(0xFF8A5A00));
+Color get _commentsColor =>
+    themed(const Color(0xFFFF8A4A), const Color(0xFFB0481A));
 
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({required this.title, this.trailing});
@@ -289,9 +292,8 @@ class _FrameTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.labelLarge?.copyWith(
-                    color: selected
-                        ? AppColors.textPrimary
-                        : AppColors.textMuted,
+                    color:
+                        selected ? AppColors.textPrimary : AppColors.textMuted,
                   ),
                 ),
                 if (note != null)
@@ -301,9 +303,8 @@ class _FrameTile extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: selected
-                          ? AppColors.accentGlow
-                          : AppColors.textMuted,
+                      color:
+                          selected ? AppColors.accentGlow : AppColors.textMuted,
                     ),
                   ),
               ],
